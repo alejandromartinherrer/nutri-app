@@ -14,7 +14,7 @@ function fakeCanvas(){return {width:0,height:0,getContext(){return fakeCtx()},to
 // Load the app JS straight from the HTML (largest <script> block),
 // so this test needs no build step and runs the shipped file as-is.
 const fs=require('fs'),path=require('path');
-const HTML=path.join(__dirname,'..','planificador-comidas.html');
+const HTML=path.join(__dirname,'..','index.html');
 const html=fs.readFileSync(HTML,'utf8');
 let src=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)]
 	.map(m=>m[1]).sort((a,b)=>b.length-a.length)[0];
@@ -22,7 +22,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v}};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates};\n";
 eval(src);
 const A=global.__api;
 
@@ -41,7 +41,7 @@ ok(A.FmtLong("2026-03-01")==="1 mar","FmtLong local");
 ok(/^\d{4}-\d{2}-\d{2}$/.test(A.TodayISO()),"TodayISO format YYYY-MM-DD");
 ok(A.Ymd(new Date(2026,0,5))==="2026-01-05","Ymd zero-pads");
 // ---- escapeHtml ----
-ok(A.escapeHtml('"&<>\'\')==="&quot;&amp;&lt;&gt;&#39;","escapeHtml full");
+ok(A.escapeHtml('"&<>\'')==="&quot;&amp;&lt;&gt;&#39;","escapeHtml full");
 // ---- Load validation ----
 ok(A.ValidState(null)===false,"ValidState null");
 ok(A.ValidState({members:[]})===false,"ValidState partial rejected");
@@ -114,6 +114,94 @@ const mon=A.CurWeek().days[0];
 ok(mon.slots.Comida.nosotros.dish==="Crema de calabaza · Pollo asado con hierbas","Mon comida nosotros = 1º·2º (sample)");
 const comida=A.SlotSummaryLines(mon,"Comida");
 ok(comida.length===2&&comida.some(l=>l.startsWith("Nosotros: Crema de calabaza · Pollo asado"))&&comida.some(l=>l==="Noah e Iria: Macarrones con tomate"),"slot summary: Mon comida grouped (1º·2º adults)");
+
+// ==================== v2 (1.1.0) ====================
+ok(A.SCHEMA_VERSION===2,"SCHEMA_VERSION is 2");
+ok(A.STORE_KEY==="menu_semana_v2"&&A.LEGACY_STORE_KEY==="menu_semana_v1","store keys v2/v1");
+
+// ---- userDishes upsert via RefreshCatalog (single invalidation point) ----
+A.state=A.SeedState(); A.RefreshCatalog();
+const base=A.state.catalog.length;
+A.state.userDishes.push({name:"Plato De Prueba",course:"segundo",tipo:"Test",kcal:123,prot:10,carb:20,fat:5,receta:"Paso único."});
+A.RefreshCatalog();
+ok(A.state.catalog.length===base+1,"userDishes adds a new dish");
+ok(A.DishMacros("Plato De Prueba")&&A.DishMacros("Plato De Prueba").kcal===123,"user dish macros indexed");
+ok(A.DishRecipe("Plato De Prueba")==="Paso único.","user dish recipe served");
+A.state.userDishes.push({name:"Lentejas estofadas",course:"primero",tipo:"Legumbres",kcal:999,prot:1,carb:1,fat:1});
+A.RefreshCatalog();
+ok(A.state.catalog.length===base+1,"editing a SEED dish upserts (no duplicate)");
+ok(A.DishMacros("Lentejas estofadas").kcal===999,"user edit overrides SEED macros");
+ok(A.state.catalog.find(c=>c.name==="Lentejas estofadas").user===true,"overridden dish flagged user");
+A.state.hidden.push("plato de prueba"); A.RefreshCatalog();
+ok(A.DishMacros("Plato De Prueba")===null,"hidden wins over userDishes");
+A.state.userDishes=[]; A.state.hidden=[]; A.RefreshCatalog();
+ok(A.state.catalog.length===base&&A.DishMacros("Lentejas estofadas").kcal!==999,"clearing userDishes restores SEED");
+
+// ---- built-in recipe book ----
+ok(Object.keys(A.RECETAS).length>=166,"RECETAS has >=166 entries");
+ok(A.state.catalog.every(c=>!!A.RECETAS[c.name.trim().toLowerCase()]),"every catalog dish has a recipe");
+ok(/tomate/i.test(A.DishRecipe("Gazpacho")),"recipe text plausible (Gazpacho)");
+ok(!!A.DishRecipe("Avena con fruta"),"routine breakfast has recipe");
+ok(A.DishRecipe("No Existe XYZ")===null,"unknown dish -> null recipe");
+
+// ---- fixed desayuno/almuerzo routine ----
+const wkNew=A.EnsureWeek("2026-08-03");
+ok(wkNew.days[0].slots.Desayuno.nosotros.dish==="Avena con fruta","new week: Mon desayuno prefilled");
+ok(wkNew.days[1].slots.Desayuno.iria.dish==="Tostada integral con aceite","new week: Tue desayuno kids prefilled");
+ok(wkNew.days[0].slots.Almuerzo.noah.dish==="Fruta","new week: Mon almuerzo Noah = Fruta");
+ok(wkNew.days[0].slots.Almuerzo.nosotros.dish==="","adults almuerzo stays empty (seed null)");
+wkNew.days[0].slots.Desayuno.nosotros.dish="Café solo";
+A.ApplyTemplate(wkNew);
+ok(wkNew.days[0].slots.Desayuno.nosotros.dish==="Café solo","ApplyTemplate never overwrites manual edits");
+wkNew.days[2].slots.Desayuno.nosotros={dish:"",invId:null,away:true};
+A.ApplyTemplate(wkNew);
+ok(wkNew.days[2].slots.Desayuno.nosotros.dish==="","ApplyTemplate skips away cells");
+ok(A.TemplateDish(0,"Desayuno","noah")==="Avena con fruta","TemplateDish reads SEED routine");
+
+// ---- migration v1 -> v2 ----
+const v1={weeks:{},members:[],inventory:{frigo:[],conge:[]},produce:[]};
+(function(){ const s=A.SeedState(); const w=s.weeks[Object.keys(s.weeks)[0]];
+	w.days.forEach(d=>{ if(d.slots.Desayuno) Object.keys(d.slots.Desayuno).forEach(m=>d.slots.Desayuno[m]={dish:"",invId:null,away:false}); });
+	v1.weeks[w.monday]=w; })();
+A.MigrateV1(v1);
+ok(Array.isArray(v1.userDishes)&&Array.isArray(v1.hidden),"migration adds userDishes[]/hidden[]");
+ok(v1.weeks[Object.keys(v1.weeks)[0]].days[0].slots.Desayuno.nosotros.dish==="Avena con fruta","migration backfills empty desayunos");
+// Load() picks up the legacy key when v2 is absent
+localStorage.removeItem(A.STORE_KEY);
+localStorage.setItem(A.LEGACY_STORE_KEY,JSON.stringify(v1));
+ok(A.Load()===true,"Load migrates from legacy v1 key");
+ok(Array.isArray(A.state.userDishes),"migrated state carries userDishes");
+ok(localStorage.getItem(A.LEGACY_STORE_KEY)!==null,"v1 key kept as safety net");
+localStorage.removeItem(A.LEGACY_STORE_KEY);
+A.state=A.SeedState(); A.RefreshCatalog();
+
+// ---- cloud sync payload (pure part; network is not under test) ----
+A.state.updatedAt="2026-07-07T00:00:00.000Z";
+const pay=A.BuildSyncPayload(A.state);
+ok(pay.app==="nutri-app"&&pay.schema===2,"sync payload identity + schema");
+ok(pay.state.catalog===undefined,"sync payload excludes catalog (reference data)");
+ok(pay.state.weeks&&pay.state.members&&Array.isArray(pay.state.userDishes),"sync payload carries user data");
+ok(pay.savedAt==="2026-07-07T00:00:00.000Z","sync savedAt mirrors updatedAt");
+const s64="Ñoño 🍽 ½ albóndigas · AOVE";
+ok(A.B64DecodeUtf8(A.B64EncodeUtf8(s64))===s64,"base64 utf-8 roundtrip");
+ok(A.B64DecodeUtf8(A.B64EncodeUtf8(JSON.stringify(pay))).length===JSON.stringify(pay).length,"base64 roundtrip on full payload");
+
+// ---- Save stamps updatedAt; SaveQuiet doesn't ----
+A.state.updatedAt="2000-01-01T00:00:00.000Z";
+A.SaveQuiet();
+ok(A.state.updatedAt==="2000-01-01T00:00:00.000Z","SaveQuiet keeps updatedAt (boot/adopt writes)");
+A.Save();
+ok(A.state.updatedAt>"2000-01-01","Save stamps updatedAt (user edits)");
+
+// ---- picker: search across all categories ----
+A.picker={slot:"Comida",sub:"pri",tipo:null,search:"",all:false,dayIdx:0,member:"nosotros",applyAll:false};
+const onlyPri=A.PickerCandidates();
+ok(onlyPri.length>0&&onlyPri.every(c=>c.course==="primero"),"picker default scope = slot course");
+A.picker.all=true;
+const allC=A.PickerCandidates();
+ok(new Set(allC.map(c=>c.course)).size>1,"picker.all spans every category");
+ok(allC.length>onlyPri.length,"all-scope yields more candidates");
+A.picker=null;
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);

@@ -3,9 +3,9 @@
    - Online: always serve the freshest HTML and refresh the cached copy,
      so app updates reach users on the next online visit.
    - Offline: serve the last cached copy (true offline after first visit).
-   No precache list: the app is a single HTML file whose name may vary
-   (index.html / planificador-comidas.html), so we cache whatever
-   navigation URLs are actually requested within scope.
+   No precache list: the app is a single HTML file (index.html), so we
+   cache whatever navigation URLs are actually requested within scope.
+   Cloud sync calls (api.github.com) are not navigations -> untouched.
    Bump CACHE on breaking changes to drop stale entries. */
 "use strict";
 

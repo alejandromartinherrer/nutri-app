@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -25,6 +25,8 @@
 	--sh-pop:0 8px 40px rgba(36,27,46,.22);
 	--ff:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
+/* no double-tap zoom (still allows scroll); belt & braces with the viewport meta */
+html{touch-action:manipulation}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
 body{
@@ -65,6 +67,10 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .icon-btn.wa{background:#25D366}
 .icon-btn.wa:active{background:#1da851}
 .icon-btn svg{width:19px;height:19px;display:block}
+.today-btn{width:auto;flex-shrink:0;padding:0 12px;font-size:13px;font-weight:700;letter-spacing:.02em}
+.today-btn.here{opacity:.55}
+.today-btn.away{background:#fff;color:var(--aub)}
+.today-btn.away:active{background:rgba(255,255,255,.85)}
 
 /* ---------- views ---------- */
 .view{padding:14px 14px 24px}
@@ -132,9 +138,20 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .fchips{display:flex;gap:6px;padding:0 14px 12px;overflow-x:auto;flex-wrap:nowrap}
 .fchip{padding:6px 11px;border-radius:18px;background:var(--card);box-shadow:var(--sh);font-size:12px;font-weight:700;white-space:nowrap;color:var(--muted)}
 .fchip.on{background:var(--herb);color:#fff}
-.idea{display:flex;align-items:center;gap:10px;padding:9px 14px;border-top:1px solid var(--line2)}
+.idea{display:flex;align-items:center;gap:10px;padding:9px 14px;border-top:1px solid var(--line2);cursor:pointer}
+.idea:active{background:var(--line2)}
 .idea .nm{flex:1;font-size:14.5px;font-weight:600}
+.idea .nm .ued{font-size:11px;color:var(--aub);opacity:.9}
 .idea .ti{font-size:10.5px;font-weight:800;color:var(--aub-2);background:var(--aub-soft);padding:3px 8px;border-radius:20px;white-space:nowrap}
+.idea .ti.co{color:var(--muted);background:var(--line2)}
+/* dish detail sheet */
+.dm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.dm{background:var(--bg);border-radius:11px;padding:10px 6px;text-align:center}
+.dm b{display:block;font-size:16px}
+.dm span{font-size:10.5px;color:var(--muted);font-weight:600}
+.rec-text{background:var(--bg);border-radius:11px;padding:12px 13px;font-size:14px;line-height:1.55;white-space:pre-wrap}
+.rec-text.muted{color:var(--muted)}
+.field.ta{height:auto;min-height:120px;padding:10px 13px;line-height:1.5;resize:vertical;font-family:inherit;font-size:14px}
 
 /* ---------- bottom nav ---------- */
 .nav{
@@ -245,9 +262,11 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .mc-bar{display:flex;height:10px;border-radius:6px;overflow:hidden;margin:12px 0 8px;background:var(--line2)}
 .mc-bar i{display:block;height:100%}
 .mc-macros{display:flex;gap:14px;font-size:12.5px;font-weight:600}
-.mc-macros .mm{display:flex;align-items:center;gap:6px}
+.mc-macros .mm{display:flex;flex-direction:column;gap:2px;flex:1}
+.mc-macros .mm .hd{display:flex;align-items:center;gap:6px}
 .mc-macros .mm .d{width:9px;height:9px;border-radius:2px}
 .mc-macros .mm b{font-weight:800}
+.mc-macros .mm .wksm{font-size:11px;font-weight:600;color:var(--muted);opacity:.85;padding-left:15px}
 .mc-empty{font-size:13px;color:var(--muted)}
 </style>
 </head>
@@ -255,9 +274,10 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 <div class="app">
 	<div class="top">
 		<div class="top-row">
-			<button class="icon-btn" data-action="today" title="Hoy" aria-label="Ir a hoy">◎</button>
+			<button class="icon-btn today-btn" id="todayBtn" data-action="today" title="Ir a la semana de hoy" aria-label="Ir a la semana de hoy">Hoy</button>
 			<h1>Menú de la semana</h1>
 			<button class="icon-btn wa" data-action="share-week" title="Enviar menú por WhatsApp" aria-label="Enviar menú por WhatsApp"><svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-1.044zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg></button>
+			<button class="icon-btn" id="cloudBtn" data-action="cloud-save" title="Guardar en la nube" aria-label="Guardar en la nube">☁️</button>
 			<button class="icon-btn" data-action="menu" title="Más" aria-label="Más opciones">⋯</button>
 		</div>
 		<div class="wk">
@@ -280,13 +300,19 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 "use strict";
 const SEED = {"catalog": [{"name": "Lentejas estofadas", "course": "primero", "tipo": "Legumbres", "kcal": 560, "prot": 28, "carb": 66, "fat": 18, "estilo": "Casero", "batch": true}, {"name": "Garbanzos con espinacas", "course": "primero", "tipo": "Legumbres", "kcal": 540, "prot": 24, "carb": 62, "fat": 20, "estilo": "Casero", "batch": true}, {"name": "Potaje de alubias y verduras", "course": "primero", "tipo": "Legumbres", "kcal": 520, "prot": 26, "carb": 64, "fat": 14, "estilo": "Casero", "batch": true}, {"name": "Ensalada de garbanzos, tomate y atún", "course": "primero", "tipo": "Legumbres", "kcal": 460, "prot": 28, "carb": 40, "fat": 20, "estilo": "Casero", "batch": false}, {"name": "Ensalada templada de lentejas", "course": "cena", "tipo": "Legumbres", "kcal": 480, "prot": 24, "carb": 54, "fat": 16, "estilo": "Casero", "batch": false}, {"name": "Hummus con crudités", "course": "noah", "tipo": "Legumbres", "kcal": 340, "prot": 12, "carb": 32, "fat": 18, "estilo": "Árabe", "batch": true}, {"name": "Brócoli al vapor con AOVE", "course": "primero", "tipo": "Verduras", "kcal": 220, "prot": 10, "carb": 18, "fat": 13, "estilo": "Mediterráneo", "batch": false}, {"name": "Judías verdes con patata", "course": "primero", "tipo": "Verduras", "kcal": 300, "prot": 10, "carb": 44, "fat": 10, "estilo": "Mediterráneo", "batch": false}, {"name": "Espinacas salteadas con ajo", "course": "primero", "tipo": "Verduras", "kcal": 240, "prot": 10, "carb": 18, "fat": 15, "estilo": "Mediterráneo", "batch": false}, {"name": "Pisto de verduras", "course": "primero", "tipo": "Verduras", "kcal": 300, "prot": 9, "carb": 30, "fat": 16, "estilo": "Español", "batch": false}, {"name": "Menestra de verduras", "course": "primero", "tipo": "Verduras", "kcal": 320, "prot": 15, "carb": 42, "fat": 10, "estilo": "Mediterráneo", "batch": true}, {"name": "Berenjena rellena de verduras", "course": "primero", "tipo": "Verduras", "kcal": 400, "prot": 18, "carb": 32, "fat": 22, "estilo": "Mediterráneo", "batch": true}, {"name": "Calabacín relleno", "course": "primero", "tipo": "Verduras", "kcal": 380, "prot": 20, "carb": 28, "fat": 20, "estilo": "Mediterráneo", "batch": true}, {"name": "Lasaña de calabacín", "course": "primero", "tipo": "Verduras", "kcal": 460, "prot": 26, "carb": 32, "fat": 24, "estilo": "Mediterráneo", "batch": false}, {"name": "Espárragos a la plancha", "course": "primero", "tipo": "Verduras", "kcal": 200, "prot": 9, "carb": 14, "fat": 11, "estilo": "Mediterráneo", "batch": false}, {"name": "Tostada integral de aguacate y huevo", "course": "cena", "tipo": "Verduras", "kcal": 440, "prot": 19, "carb": 36, "fat": 24, "estilo": "Mediterráneo", "batch": false}, {"name": "Ensalada mixta con atún", "course": "primero", "tipo": "Ensaladas", "kcal": 400, "prot": 28, "carb": 22, "fat": 22, "estilo": "Mediterráneo", "batch": false}, {"name": "Ensalada de tomate y mozzarella", "course": "primero", "tipo": "Ensaladas", "kcal": 380, "prot": 19, "carb": 18, "fat": 25, "estilo": "Italiano", "batch": false}, {"name": "Ensalada de quinoa y verduras", "course": "primero", "tipo": "Ensaladas", "kcal": 480, "prot": 17, "carb": 60, "fat": 18, "estilo": "Mediterráneo", "batch": false}, {"name": "Ensalada César con pollo", "course": "primero", "tipo": "Ensaladas", "kcal": 520, "prot": 38, "carb": 24, "fat": 28, "estilo": "Mediterráneo", "batch": false}, {"name": "Ensalada de pimientos asados con atún", "course": "cena", "tipo": "Ensaladas", "kcal": 360, "prot": 24, "carb": 22, "fat": 18, "estilo": "Mediterráneo", "batch": false}, {"name": "Crema de calabaza", "course": "primero", "tipo": "Sopas y cremas", "kcal": 300, "prot": 9, "carb": 36, "fat": 13, "estilo": "Casero", "batch": true}, {"name": "Crema de calabacín", "course": "primero", "tipo": "Sopas y cremas", "kcal": 280, "prot": 9, "carb": 28, "fat": 14, "estilo": "Casero", "batch": true}, {"name": "Gazpacho", "course": "primero", "tipo": "Sopas y cremas", "kcal": 240, "prot": 6, "carb": 26, "fat": 13, "estilo": "Español", "batch": false}, {"name": "Salmorejo", "course": "primero", "tipo": "Sopas y cremas", "kcal": 360, "prot": 11, "carb": 32, "fat": 20, "estilo": "Español", "batch": false}, {"name": "Sopa de verduras", "course": "primero", "tipo": "Sopas y cremas", "kcal": 240, "prot": 11, "carb": 30, "fat": 9, "estilo": "Casero", "batch": true}, {"name": "Espaguetis integrales con tomate", "course": "primero", "tipo": "Pasta", "kcal": 600, "prot": 20, "carb": 96, "fat": 14, "estilo": "Italiano", "batch": false}, {"name": "Macarrones con pesto y calabacín", "course": "primero", "tipo": "Pasta", "kcal": 660, "prot": 22, "carb": 88, "fat": 26, "estilo": "Italiano", "batch": false}, {"name": "Pasta con verduras", "course": "primero", "tipo": "Pasta", "kcal": 600, "prot": 19, "carb": 92, "fat": 16, "estilo": "Italiano", "batch": false}, {"name": "Gnocchi con salsa de setas", "course": "primero", "tipo": "Pasta", "kcal": 580, "prot": 17, "carb": 84, "fat": 20, "estilo": "Italiano", "batch": false}, {"name": "Arroz integral con verduras", "course": "primero", "tipo": "Arroz y cereales", "kcal": 560, "prot": 13, "carb": 100, "fat": 12, "estilo": "Mediterráneo", "batch": false}, {"name": "Quinoa con verduras", "course": "primero", "tipo": "Arroz y cereales", "kcal": 500, "prot": 17, "carb": 70, "fat": 16, "estilo": "Mediterráneo", "batch": false}, {"name": "Risotto de setas", "course": "primero", "tipo": "Arroz y cereales", "kcal": 600, "prot": 16, "carb": 88, "fat": 20, "estilo": "Italiano", "batch": false}, {"name": "Cuscús con verduras", "course": "primero", "tipo": "Arroz y cereales", "kcal": 520, "prot": 15, "carb": 86, "fat": 13, "estilo": "Marroquí", "batch": false}, {"name": "Salmón a la plancha", "course": "segundo", "tipo": "Pescado", "kcal": 560, "prot": 42, "carb": 20, "fat": 32, "estilo": "Mediterráneo", "batch": false}, {"name": "Salmón al papillote con soja", "course": "cena", "tipo": "Pescado", "kcal": 500, "prot": 40, "carb": 16, "fat": 28, "estilo": "Asiático", "batch": false}, {"name": "Lubina al horno", "course": "segundo", "tipo": "Pescado", "kcal": 460, "prot": 42, "carb": 20, "fat": 20, "estilo": "Mediterráneo", "batch": true}, {"name": "Merluza al vapor con verduritas", "course": "segundo", "tipo": "Pescado", "kcal": 400, "prot": 40, "carb": 24, "fat": 14, "estilo": "Mediterráneo", "batch": false}, {"name": "Bacalao al horno", "course": "segundo", "tipo": "Pescado", "kcal": 440, "prot": 44, "carb": 22, "fat": 16, "estilo": "Mediterráneo", "batch": true}, {"name": "Atún a la plancha", "course": "segundo", "tipo": "Pescado", "kcal": 460, "prot": 46, "carb": 20, "fat": 18, "estilo": "Mediterráneo", "batch": false}, {"name": "Dorada a la sal", "course": "segundo", "tipo": "Pescado", "kcal": 440, "prot": 42, "carb": 16, "fat": 19, "estilo": "Mediterráneo", "batch": false}, {"name": "Poke de salmón", "course": "segundo", "tipo": "Pescado", "kcal": 600, "prot": 36, "carb": 58, "fat": 22, "estilo": "Asiático", "batch": false}, {"name": "Boquerones al horno", "course": "cena", "tipo": "Pescado", "kcal": 400, "prot": 30, "carb": 20, "fat": 20, "estilo": "Español", "batch": false}, {"name": "Gambones al horno", "course": "cena", "tipo": "Marisco", "kcal": 340, "prot": 36, "carb": 16, "fat": 13, "estilo": "Mediterráneo", "batch": true}, {"name": "Mejillones al vapor", "course": "cena", "tipo": "Marisco", "kcal": 340, "prot": 28, "carb": 24, "fat": 11, "estilo": "Mediterráneo", "batch": false}, {"name": "Pulpo a la gallega", "course": "cena", "tipo": "Marisco", "kcal": 400, "prot": 32, "carb": 30, "fat": 16, "estilo": "Español", "batch": false}, {"name": "Sepia a la plancha", "course": "cena", "tipo": "Marisco", "kcal": 340, "prot": 34, "carb": 14, "fat": 12, "estilo": "Mediterráneo", "batch": false}, {"name": "Langostinos a la plancha", "course": "cena", "tipo": "Marisco", "kcal": 320, "prot": 34, "carb": 12, "fat": 11, "estilo": "Mediterráneo", "batch": false}, {"name": "Pollo asado con hierbas", "course": "segundo", "tipo": "Pollo", "kcal": 520, "prot": 46, "carb": 18, "fat": 26, "estilo": "Casero", "batch": true}, {"name": "Pechuga de pollo a la plancha", "course": "segundo", "tipo": "Pollo", "kcal": 460, "prot": 48, "carb": 16, "fat": 18, "estilo": "Casero", "batch": false}, {"name": "Pollo al curry", "course": "segundo", "tipo": "Pollo", "kcal": 580, "prot": 42, "carb": 38, "fat": 26, "estilo": "Indio", "batch": true}, {"name": "Pollo al limón", "course": "segundo", "tipo": "Pollo", "kcal": 500, "prot": 46, "carb": 22, "fat": 20, "estilo": "Casero", "batch": false}, {"name": "Pavo a la plancha", "course": "segundo", "tipo": "Pollo", "kcal": 440, "prot": 46, "carb": 16, "fat": 16, "estilo": "Casero", "batch": false}, {"name": "Alitas de pollo al horno", "course": "segundo", "tipo": "Pollo", "kcal": 520, "prot": 40, "carb": 16, "fat": 30, "estilo": "Casero", "batch": true}, {"name": "Pollo en pepitoria", "course": "segundo", "tipo": "Pollo", "kcal": 560, "prot": 44, "carb": 24, "fat": 28, "estilo": "Casero", "batch": true}, {"name": "Pinchos morunos de pollo", "course": "segundo", "tipo": "Pollo", "kcal": 500, "prot": 40, "carb": 20, "fat": 26, "estilo": "Casero", "batch": false}, {"name": "Wok de verduras con pollo", "course": "cena", "tipo": "Pollo", "kcal": 480, "prot": 36, "carb": 40, "fat": 18, "estilo": "Asiático", "batch": false}, {"name": "Ternera a la plancha", "course": "segundo", "tipo": "Carne", "kcal": 500, "prot": 42, "carb": 16, "fat": 26, "estilo": "Casero", "batch": false}, {"name": "Solomillo de cerdo al horno", "course": "segundo", "tipo": "Carne", "kcal": 480, "prot": 44, "carb": 14, "fat": 24, "estilo": "Casero", "batch": true}, {"name": "Lomo de cerdo a la plancha", "course": "segundo", "tipo": "Carne", "kcal": 480, "prot": 42, "carb": 14, "fat": 24, "estilo": "Casero", "batch": false}, {"name": "Albóndigas en salsa de tomate", "course": "segundo", "tipo": "Carne", "kcal": 520, "prot": 32, "carb": 32, "fat": 26, "estilo": "Casero", "batch": false}, {"name": "Carpaccio de ternera", "course": "cena", "tipo": "Carne", "kcal": 360, "prot": 30, "carb": 14, "fat": 20, "estilo": "Casero", "batch": false}, {"name": "Tortilla de calabacín", "course": "cena", "tipo": "Huevos", "kcal": 420, "prot": 22, "carb": 24, "fat": 24, "estilo": "Casero", "batch": false}, {"name": "Tortilla de patatas", "course": "cena", "tipo": "Huevos", "kcal": 500, "prot": 19, "carb": 46, "fat": 24, "estilo": "Español", "batch": false}, {"name": "Revuelto de setas", "course": "cena", "tipo": "Huevos", "kcal": 360, "prot": 19, "carb": 14, "fat": 24, "estilo": "Casero", "batch": false}, {"name": "Huevos al plato con verduras", "course": "cena", "tipo": "Huevos", "kcal": 400, "prot": 22, "carb": 18, "fat": 24, "estilo": "Casero", "batch": false}, {"name": "Tortilla francesa con jamón", "course": "cena", "tipo": "Huevos", "kcal": 380, "prot": 24, "carb": 10, "fat": 24, "estilo": "Casero", "batch": false}, {"name": "Crema de verduras", "course": "noah", "tipo": "Sopas y cremas", "kcal": 280, "prot": 9, "carb": 34, "fat": 12, "estilo": "Casero", "batch": true}, {"name": "Albóndigas de pollo", "course": "noah", "tipo": "Pollo", "kcal": 460, "prot": 30, "carb": 26, "fat": 22, "estilo": "Casero", "batch": false}, {"name": "Merluza rebozada al horno", "course": "noah", "tipo": "Pescado", "kcal": 460, "prot": 30, "carb": 36, "fat": 18, "estilo": "Mediterráneo", "batch": true}, {"name": "Macarrones con tomate", "course": "noah", "tipo": "Pasta", "kcal": 560, "prot": 18, "carb": 92, "fat": 12, "estilo": "Italiano", "batch": false}, {"name": "Arroz con pollo", "course": "noah", "tipo": "Arroz y cereales", "kcal": 580, "prot": 30, "carb": 74, "fat": 18, "estilo": "Mediterráneo", "batch": false}, {"name": "Pollo con patata y verdura", "course": "noah", "tipo": "Pollo", "kcal": 500, "prot": 36, "carb": 40, "fat": 18, "estilo": "Casero", "batch": false}, {"name": "Lentejas en puré", "course": "noah", "tipo": "Legumbres", "kcal": 480, "prot": 24, "carb": 58, "fat": 14, "estilo": "Casero", "batch": true}, {"name": "Tortilla francesa", "course": "noah", "tipo": "Huevos", "kcal": 320, "prot": 19, "carb": 4, "fat": 24, "estilo": "Casero", "batch": false}, {"name": "Chili con carne", "course": "segundo", "tipo": "Legumbres", "kcal": 520, "prot": 34, "carb": 48, "fat": 18, "batch": true, "estilo": "Mexicano"}, {"name": "Curry de garbanzos y espinacas", "course": "primero", "tipo": "Legumbres", "kcal": 480, "prot": 20, "carb": 58, "fat": 16, "batch": true, "estilo": "Indio"}, {"name": "Dal de lentejas rojas", "course": "primero", "tipo": "Legumbres", "kcal": 440, "prot": 22, "carb": 60, "fat": 10, "batch": true, "estilo": "Indio"}, {"name": "Falafel al horno con ensalada", "course": "segundo", "tipo": "Legumbres", "kcal": 460, "prot": 20, "carb": 52, "fat": 18, "batch": true, "estilo": "Árabe"}, {"name": "Alubias con verduras", "course": "primero", "tipo": "Legumbres", "kcal": 460, "prot": 22, "carb": 58, "fat": 12, "batch": true, "estilo": "Casero"}, {"name": "Lentejas a la jardinera", "course": "primero", "tipo": "Legumbres", "kcal": 480, "prot": 24, "carb": 60, "fat": 12, "batch": true, "estilo": "Casero"}, {"name": "Garbanzos con espinacas y bacalao", "course": "primero", "tipo": "Legumbres", "kcal": 500, "prot": 34, "carb": 46, "fat": 16, "batch": true, "estilo": "Casero"}, {"name": "Salteado de tofu y verduras", "course": "segundo", "tipo": "Legumbres", "kcal": 400, "prot": 26, "carb": 28, "fat": 18, "batch": false, "estilo": "Asiático"}, {"name": "Burger de lentejas y remolacha", "course": "segundo", "tipo": "Legumbres", "kcal": 460, "prot": 22, "carb": 54, "fat": 16, "batch": true, "estilo": "Casero"}, {"name": "Wrap de hummus y verduras", "course": "cena", "tipo": "Legumbres", "kcal": 420, "prot": 16, "carb": 52, "fat": 16, "batch": false, "estilo": "Mediterráneo"}, {"name": "Pimientos rellenos de quinoa y pavo", "course": "primero", "tipo": "Verduras", "kcal": 420, "prot": 28, "carb": 40, "fat": 16, "batch": true, "estilo": "Mediterráneo"}, {"name": "Calabaza asada con garbanzos especiados", "course": "primero", "tipo": "Verduras", "kcal": 380, "prot": 16, "carb": 52, "fat": 12, "batch": true, "estilo": "Mediterráneo"}, {"name": "Berenjenas a la parmesana ligera", "course": "primero", "tipo": "Verduras", "kcal": 420, "prot": 22, "carb": 30, "fat": 22, "batch": false, "estilo": "Italiano"}, {"name": "Fingers de berenjena al horno", "course": "cena", "tipo": "Verduras", "kcal": 320, "prot": 14, "carb": 34, "fat": 14, "batch": true, "estilo": "Casero"}, {"name": "Coliflor asada con especias", "course": "primero", "tipo": "Verduras", "kcal": 200, "prot": 9, "carb": 20, "fat": 10, "batch": true, "estilo": "Mediterráneo"}, {"name": "Pizza con base de coliflor", "course": "cena", "tipo": "Verduras", "kcal": 420, "prot": 24, "carb": 28, "fat": 22, "batch": false, "estilo": "Italiano"}, {"name": "Salteado de judías verdes con jamón", "course": "primero", "tipo": "Verduras", "kcal": 260, "prot": 16, "carb": 18, "fat": 14, "batch": false, "estilo": "Casero"}, {"name": "Wok de verduras con anacardos", "course": "primero", "tipo": "Verduras", "kcal": 340, "prot": 12, "carb": 38, "fat": 16, "batch": true, "estilo": "Asiático"}, {"name": "Espárragos trigueros con jamón y huevo", "course": "cena", "tipo": "Verduras", "kcal": 300, "prot": 20, "carb": 12, "fat": 18, "batch": false, "estilo": "Mediterráneo"}, {"name": "Pisto con huevo y garbanzos", "course": "primero", "tipo": "Verduras", "kcal": 420, "prot": 20, "carb": 38, "fat": 20, "batch": true, "estilo": "Casero"}, {"name": "Ensalada griega con feta", "course": "primero", "tipo": "Ensaladas", "kcal": 360, "prot": 14, "carb": 20, "fat": 24, "batch": false, "estilo": "Griego"}, {"name": "Ensalada de pollo, mango y aguacate", "course": "primero", "tipo": "Ensaladas", "kcal": 440, "prot": 32, "carb": 28, "fat": 22, "batch": false, "estilo": "Mediterráneo"}, {"name": "Ensalada templada de quinoa, boniato y feta", "course": "primero", "tipo": "Ensaladas", "kcal": 460, "prot": 16, "carb": 58, "fat": 18, "batch": false, "estilo": "Mediterráneo"}, {"name": "Ensalada de aguacate, tomate y huevo", "course": "primero", "tipo": "Ensaladas", "kcal": 340, "prot": 16, "carb": 16, "fat": 24, "batch": false, "estilo": "Mediterráneo"}, {"name": "Tabulé de quinoa", "course": "primero", "tipo": "Ensaladas", "kcal": 380, "prot": 12, "carb": 56, "fat": 12, "batch": true, "estilo": "Árabe"}, {"name": "Ensalada de garbanzos especiados y pepino", "course": "primero", "tipo": "Ensaladas", "kcal": 380, "prot": 18, "carb": 40, "fat": 16, "batch": true, "estilo": "Mediterráneo"}, {"name": "Crema de lentejas rojas", "course": "primero", "tipo": "Sopas y cremas", "kcal": 320, "prot": 16, "carb": 42, "fat": 8, "batch": true, "estilo": "Casero"}, {"name": "Sopa minestrone", "course": "primero", "tipo": "Sopas y cremas", "kcal": 280, "prot": 12, "carb": 40, "fat": 8, "batch": true, "estilo": "Italiano"}, {"name": "Crema de guisantes y menta", "course": "primero", "tipo": "Sopas y cremas", "kcal": 240, "prot": 12, "carb": 28, "fat": 9, "batch": true, "estilo": "Mediterráneo"}, {"name": "Gazpacho de remolacha", "course": "primero", "tipo": "Sopas y cremas", "kcal": 200, "prot": 5, "carb": 24, "fat": 10, "batch": true, "estilo": "Español"}, {"name": "Sopa de pollo y verduras", "course": "primero", "tipo": "Sopas y cremas", "kcal": 260, "prot": 24, "carb": 20, "fat": 9, "batch": true, "estilo": "Casero"}, {"name": "Pasta integral con boloñesa de lentejas", "course": "primero", "tipo": "Pasta", "kcal": 560, "prot": 22, "carb": 84, "fat": 14, "batch": true, "estilo": "Italiano"}, {"name": "Macarrones integrales con boloñesa de pavo", "course": "primero", "tipo": "Pasta", "kcal": 580, "prot": 30, "carb": 76, "fat": 16, "batch": true, "estilo": "Italiano"}, {"name": "Lasaña boloñesa de pavo", "course": "segundo", "tipo": "Pasta", "kcal": 520, "prot": 34, "carb": 46, "fat": 22, "batch": true, "estilo": "Italiano"}, {"name": "Espaguetis con gambas y calabacín", "course": "primero", "tipo": "Pasta", "kcal": 520, "prot": 28, "carb": 72, "fat": 12, "batch": false, "estilo": "Mediterráneo"}, {"name": "Noodles de arroz con verduras y gambas", "course": "segundo", "tipo": "Pasta", "kcal": 500, "prot": 26, "carb": 66, "fat": 14, "batch": false, "estilo": "Asiático"}, {"name": "Pad thai de pollo ligero", "course": "segundo", "tipo": "Pasta", "kcal": 560, "prot": 32, "carb": 68, "fat": 18, "batch": false, "estilo": "Asiático"}, {"name": "Arroz integral con pollo y verduras", "course": "segundo", "tipo": "Arroz y cereales", "kcal": 520, "prot": 30, "carb": 66, "fat": 12, "batch": true, "estilo": "Casero"}, {"name": "Quinoa con pollo y verduras al curry", "course": "segundo", "tipo": "Arroz y cereales", "kcal": 520, "prot": 30, "carb": 62, "fat": 16, "batch": true, "estilo": "Indio"}, {"name": "Cuscús marroquí de verduras y pollo", "course": "segundo", "tipo": "Arroz y cereales", "kcal": 500, "prot": 28, "carb": 68, "fat": 12, "batch": true, "estilo": "Marroquí"}, {"name": "Risotto de calabaza", "course": "primero", "tipo": "Arroz y cereales", "kcal": 520, "prot": 12, "carb": 80, "fat": 16, "batch": false, "estilo": "Italiano"}, {"name": "Burrito bowl de pavo y frijoles", "course": "segundo", "tipo": "Arroz y cereales", "kcal": 560, "prot": 34, "carb": 64, "fat": 16, "batch": true, "estilo": "Mexicano"}, {"name": "Poke bowl de atún", "course": "segundo", "tipo": "Arroz y cereales", "kcal": 560, "prot": 34, "carb": 58, "fat": 18, "batch": false, "estilo": "Asiático"}, {"name": "Salmón teriyaki", "course": "cena", "tipo": "Pescado", "kcal": 460, "prot": 34, "carb": 18, "fat": 26, "batch": false, "estilo": "Asiático"}, {"name": "Atún con costra de sésamo", "course": "segundo", "tipo": "Pescado", "kcal": 440, "prot": 42, "carb": 8, "fat": 24, "batch": false, "estilo": "Asiático"}, {"name": "Bacalao con tomate y pimientos", "course": "segundo", "tipo": "Pescado", "kcal": 420, "prot": 40, "carb": 18, "fat": 18, "batch": true, "estilo": "Casero"}, {"name": "Merluza en salsa verde", "course": "segundo", "tipo": "Pescado", "kcal": 400, "prot": 38, "carb": 14, "fat": 18, "batch": false, "estilo": "Casero"}, {"name": "Salmón con costra de pistacho", "course": "segundo", "tipo": "Pescado", "kcal": 540, "prot": 38, "carb": 12, "fat": 34, "batch": false, "estilo": "Mediterráneo"}, {"name": "Lubina al horno con verduras", "course": "segundo", "tipo": "Pescado", "kcal": 420, "prot": 40, "carb": 18, "fat": 18, "batch": true, "estilo": "Mediterráneo"}, {"name": "Tartar de atún con aguacate", "course": "cena", "tipo": "Pescado", "kcal": 380, "prot": 32, "carb": 10, "fat": 22, "batch": false, "estilo": "Asiático"}, {"name": "Dorada a la espalda con ajada", "course": "cena", "tipo": "Pescado", "kcal": 400, "prot": 38, "carb": 8, "fat": 22, "batch": false, "estilo": "Casero"}, {"name": "Calamares a la plancha con ajo y perejil", "course": "cena", "tipo": "Marisco", "kcal": 300, "prot": 32, "carb": 8, "fat": 14, "batch": false, "estilo": "Casero"}, {"name": "Chipirones encebollados", "course": "cena", "tipo": "Marisco", "kcal": 320, "prot": 30, "carb": 16, "fat": 14, "batch": true, "estilo": "Casero"}, {"name": "Mejillones en salsa de tomate", "course": "cena", "tipo": "Marisco", "kcal": 300, "prot": 24, "carb": 18, "fat": 12, "batch": true, "estilo": "Mediterráneo"}, {"name": "Brochetas de langostino y verduras", "course": "cena", "tipo": "Marisco", "kcal": 280, "prot": 30, "carb": 12, "fat": 12, "batch": false, "estilo": "Mediterráneo"}, {"name": "Salteado de gambas y verduras al ajillo", "course": "cena", "tipo": "Marisco", "kcal": 300, "prot": 30, "carb": 12, "fat": 14, "batch": false, "estilo": "Mediterráneo"}, {"name": "Fajitas de pollo", "course": "segundo", "tipo": "Pollo", "kcal": 520, "prot": 38, "carb": 42, "fat": 20, "batch": false, "estilo": "Mexicano"}, {"name": "Pollo teriyaki con arroz integral", "course": "segundo", "tipo": "Pollo", "kcal": 560, "prot": 40, "carb": 58, "fat": 16, "batch": true, "estilo": "Asiático"}, {"name": "Pollo tikka masala", "course": "segundo", "tipo": "Pollo", "kcal": 560, "prot": 42, "carb": 30, "fat": 28, "batch": true, "estilo": "Indio"}, {"name": "Curry rojo de pollo", "course": "segundo", "tipo": "Pollo", "kcal": 540, "prot": 40, "carb": 34, "fat": 24, "batch": true, "estilo": "Asiático"}, {"name": "Souvlaki de pollo con tzatziki", "course": "segundo", "tipo": "Pollo", "kcal": 500, "prot": 44, "carb": 22, "fat": 24, "batch": false, "estilo": "Griego"}, {"name": "Shawarma de pollo en wrap integral", "course": "cena", "tipo": "Pollo", "kcal": 520, "prot": 38, "carb": 46, "fat": 20, "batch": false, "estilo": "Árabe"}, {"name": "Pollo al ajillo", "course": "segundo", "tipo": "Pollo", "kcal": 460, "prot": 44, "carb": 8, "fat": 26, "batch": false, "estilo": "Casero"}, {"name": "Muslos de pollo al horno con limón", "course": "segundo", "tipo": "Pollo", "kcal": 500, "prot": 42, "carb": 10, "fat": 30, "batch": true, "estilo": "Casero"}, {"name": "Pollo guisado con patata y zanahoria", "course": "segundo", "tipo": "Pollo", "kcal": 520, "prot": 40, "carb": 42, "fat": 18, "batch": true, "estilo": "Casero"}, {"name": "Nuggets de pollo al horno con boniato", "course": "segundo", "tipo": "Pollo", "kcal": 520, "prot": 38, "carb": 48, "fat": 18, "batch": true, "estilo": "Casero"}, {"name": "Bowl de pollo, arroz y verduras", "course": "segundo", "tipo": "Pollo", "kcal": 560, "prot": 38, "carb": 62, "fat": 16, "batch": true, "estilo": "Casero"}, {"name": "Pavo en salsa de mostaza y miel", "course": "segundo", "tipo": "Pollo", "kcal": 460, "prot": 44, "carb": 18, "fat": 20, "batch": false, "estilo": "Casero"}, {"name": "Quesadilla integral de pollo y verduras", "course": "cena", "tipo": "Pollo", "kcal": 460, "prot": 32, "carb": 38, "fat": 20, "batch": false, "estilo": "Mexicano"}, {"name": "Tacos de ternera", "course": "segundo", "tipo": "Carne", "kcal": 520, "prot": 34, "carb": 40, "fat": 22, "batch": false, "estilo": "Mexicano"}, {"name": "Estofado de ternera con verduras", "course": "segundo", "tipo": "Carne", "kcal": 520, "prot": 40, "carb": 36, "fat": 22, "batch": true, "estilo": "Casero"}, {"name": "Hamburguesa casera de ternera con pan integral", "course": "segundo", "tipo": "Carne", "kcal": 560, "prot": 36, "carb": 42, "fat": 26, "batch": false, "estilo": "Casero"}, {"name": "Albóndigas de pavo en salsa", "course": "segundo", "tipo": "Carne", "kcal": 460, "prot": 32, "carb": 24, "fat": 24, "batch": true, "estilo": "Casero"}, {"name": "Ternera salteada con verduras y soja", "course": "segundo", "tipo": "Carne", "kcal": 480, "prot": 40, "carb": 28, "fat": 22, "batch": false, "estilo": "Asiático"}, {"name": "Lomo de cerdo a la naranja", "course": "segundo", "tipo": "Carne", "kcal": 480, "prot": 40, "carb": 18, "fat": 24, "batch": false, "estilo": "Casero"}, {"name": "Conejo al horno con hierbas", "course": "segundo", "tipo": "Carne", "kcal": 440, "prot": 42, "carb": 8, "fat": 24, "batch": true, "estilo": "Casero"}, {"name": "Shakshuka", "course": "cena", "tipo": "Huevos", "kcal": 380, "prot": 20, "carb": 24, "fat": 22, "batch": true, "estilo": "Árabe"}, {"name": "Frittata de verduras", "course": "cena", "tipo": "Huevos", "kcal": 360, "prot": 22, "carb": 14, "fat": 24, "batch": true, "estilo": "Italiano"}, {"name": "Tortilla de espinacas y queso", "course": "cena", "tipo": "Huevos", "kcal": 360, "prot": 22, "carb": 10, "fat": 26, "batch": false, "estilo": "Casero"}, {"name": "Huevos rellenos de atún", "course": "cena", "tipo": "Huevos", "kcal": 320, "prot": 24, "carb": 6, "fat": 22, "batch": false, "estilo": "Casero"}, {"name": "Huevos rellenos de salmón con salsa de aguacate", "course": "cena", "tipo": "Huevos", "kcal": 380, "prot": 24, "carb": 8, "fat": 28, "batch": false, "estilo": "Mediterráneo"}, {"name": "Quiche de verduras integral", "course": "cena", "tipo": "Huevos", "kcal": 420, "prot": 20, "carb": 30, "fat": 24, "batch": true, "estilo": "Italiano"}, {"name": "Mini hamburguesas de pollo", "course": "noah", "tipo": "Pollo", "kcal": 420, "prot": 28, "carb": 32, "fat": 18, "batch": true, "estilo": "Casero"}, {"name": "Nuggets caseros de pollo", "course": "noah", "tipo": "Pollo", "kcal": 420, "prot": 28, "carb": 34, "fat": 18, "batch": true, "estilo": "Casero"}, {"name": "Pasta con boloñesa de pavo", "course": "noah", "tipo": "Pasta", "kcal": 520, "prot": 26, "carb": 72, "fat": 12, "batch": true, "estilo": "Italiano"}, {"name": "Albóndigas de pavo con puré", "course": "noah", "tipo": "Carne", "kcal": 460, "prot": 28, "carb": 38, "fat": 18, "batch": true, "estilo": "Casero"}, {"name": "Croquetas de pollo al horno", "course": "noah", "tipo": "Pollo", "kcal": 420, "prot": 24, "carb": 40, "fat": 16, "batch": true, "estilo": "Casero"}, {"name": "Pizza casera de verduras", "course": "noah", "tipo": "Pasta", "kcal": 480, "prot": 20, "carb": 60, "fat": 16, "batch": false, "estilo": "Italiano"}, {"name": "Salmón al horno con patata", "course": "noah", "tipo": "Pescado", "kcal": 460, "prot": 32, "carb": 34, "fat": 20, "batch": false, "estilo": "Casero"}, {"name": "Tortilla de patata y calabacín", "course": "noah", "tipo": "Huevos", "kcal": 400, "prot": 16, "carb": 36, "fat": 20, "batch": false, "estilo": "Casero"}, {"name": "Crema de verduras con picatostes integrales", "course": "noah", "tipo": "Sopas y cremas", "kcal": 280, "prot": 10, "carb": 36, "fat": 10, "batch": true, "estilo": "Casero"}], "frigo": [{"name": "Berenjena", "qty": 1}], "conge": [{"name": "Lubina entera", "qty": 1}, {"name": "Atún", "qty": 2}, {"name": "Carne Picada", "qty": 1}, {"name": "Trozos Lomo Adobado", "qty": 10}, {"name": "Pechugas Pollo", "qty": 2}, {"name": "Kebab", "qty": 1}, {"name": "Verduras", "qty": 1}, {"name": "Gnoccis", "qty": 1}, {"name": "Guisantes", "qty": 1}], "produce": [{"name": "Pera conferencia", "qty": 4, "unit": "ud"}, {"name": "Manzana Golden", "qty": 4, "unit": "ud"}, {"name": "Cereza", "qty": 1, "unit": "kg"}, {"name": "Aguacate", "qty": 3, "unit": "ud"}, {"name": "Paraguayo", "qty": 10, "unit": "ud"}, {"name": "Platano", "qty": 8, "unit": "ud"}, {"name": "Melón", "qty": 1, "unit": "ud"}, {"name": "Pepino", "qty": 2, "unit": "ud"}, {"name": "Tomate todo-carne", "qty": 3, "unit": "ud"}, {"name": "Puerro", "qty": 3, "unit": "ud"}, {"name": "Calabacin", "qty": 1, "unit": "ud"}, {"name": "Pimiento Rojo", "qty": 2, "unit": "ud"}, {"name": "Pimiento Verde", "qty": 2, "unit": "ud"}, {"name": "Limón", "qty": 1, "unit": "ud"}, {"name": "Judía verde", "qty": 1, "unit": "Kg"}, {"name": "Brócoli", "qty": 2, "unit": "ud"}], "week": [{"date": "2026-06-22", "slots": {"Desayuno": {"nosotros": "Avena con fruta", "noah": "Avena con fruta", "iria": "Avena con fruta"}, "Almuerzo": {"nosotros": null, "noah": "Fruta", "iria": "Fruta"}, "Comida": {"nosotros": "Crema de calabaza · Pollo asado con hierbas", "noah": "Macarrones con tomate", "iria": "Macarrones con tomate"}, "Cena": {"nosotros": "Tortilla de calabacín", "noah": "Tortilla de calabacín", "iria": "Tortilla de calabacín"}}}, {"date": "2026-06-23", "slots": {"Desayuno": {"nosotros": "Tostada integral con aceite", "noah": "Tostada integral con aceite", "iria": "Tostada integral con aceite"}, "Almuerzo": {"nosotros": null, "noah": "Yogur", "iria": "Yogur"}, "Comida": {"nosotros": "Ensalada de tomate y mozzarella · Salmón a la plancha", "noah": "Albóndigas de pollo", "iria": "Albóndigas de pollo"}, "Cena": {"nosotros": "Gambones al horno", "noah": "Gambones al horno", "iria": "Gambones al horno"}}}, {"date": "2026-06-24", "slots": {"Desayuno": {"nosotros": "Yogur con fruta y nueces", "noah": "Yogur con fruta y nueces", "iria": "Yogur con fruta y nueces"}, "Almuerzo": {"nosotros": null, "noah": "Fruta", "iria": "Fruta"}, "Comida": {"nosotros": "Espaguetis integrales con tomate · Ternera a la plancha", "noah": "Arroz con pollo", "iria": "Arroz con pollo"}, "Cena": {"nosotros": "Salmón al papillote con soja", "noah": "Salmón al papillote con soja", "iria": "Salmón al papillote con soja"}}}, {"date": "2026-06-25", "slots": {"Desayuno": {"nosotros": "Tostada integral con aceite", "noah": "Tostada integral con aceite", "iria": "Tostada integral con aceite"}, "Almuerzo": {"nosotros": null, "noah": "Sándwich integral", "iria": "Sándwich integral"}, "Comida": {"nosotros": "Lentejas estofadas · Merluza al vapor con verduritas", "noah": "Lentejas en puré", "iria": "Lentejas en puré"}, "Cena": {"nosotros": "Wok de verduras con pollo · Tortilla francesa con jamón", "noah": "Wok de verduras con pollo · Tortilla francesa con jamón", "iria": "Wok de verduras con pollo · Tortilla francesa con jamón"}}}, {"date": "2026-06-26", "slots": {"Desayuno": {"nosotros": "Avena con fruta", "noah": "Avena con fruta", "iria": "Avena con fruta"}, "Almuerzo": {"nosotros": null, "noah": "Fruta", "iria": "Fruta"}, "Comida": {"nosotros": "Gazpacho · Pechuga de pollo a la plancha", "noah": "Pollo con patata y verdura", "iria": "Pollo con patata y verdura"}, "Cena": {"nosotros": "Mejillones al vapor", "noah": "Mejillones al vapor", "iria": "Mejillones al vapor"}}}, {"date": "2026-06-27", "slots": {"Desayuno": {"nosotros": "Tostada de tomate", "noah": "Tostada de tomate", "iria": "Tostada de tomate"}, "Almuerzo": {"nosotros": null, "noah": "Yogur", "iria": "Yogur"}, "Comida": {"nosotros": "Pisto de verduras · Bacalao al horno", "noah": "Merluza rebozada al horno", "iria": "Merluza rebozada al horno"}, "Cena": {"nosotros": "Ensalada de pimientos asados con atún · Revuelto de setas", "noah": "Ensalada de pimientos asados con atún · Revuelto de setas", "iria": "Ensalada de pimientos asados con atún · Revuelto de setas"}}}, {"date": "2026-06-28", "slots": {"Desayuno": {"nosotros": "Bizcocho casero", "noah": "Bizcocho casero", "iria": "Bizcocho casero"}, "Almuerzo": {"nosotros": null, "noah": "Fruta", "iria": "Fruta"}, "Comida": {"nosotros": "Judías verdes con patata · Lomo de cerdo a la plancha", "noah": "Tortilla francesa", "iria": "Tortilla francesa"}, "Cena": {"nosotros": "Boquerones al horno", "noah": "Boquerones al horno", "iria": "Boquerones al horno"}}}]};
 
+/* ---- built-in recipe book: name(lower) -> texto (ingredientes + pasos).
+   Reference data like SEED; user-written recipes in state.userDishes win
+   via DishRecipe(). Includes the routine breakfasts/snacks too. ---- */
+const RECETAS = {"alubias con verduras":"Ingredientes (4 raciones): 400 g de alubias blancas cocidas, 1 puerro, 2 zanahorias, 1 calabacín, 1 patata, 1 tomate rallado, laurel, pimentón dulce, AOVE y sal.\n\n1. Sofríe el puerro y la zanahoria picados 5 min en AOVE; añade el tomate y el pimentón.\n2. Incorpora la patata y el calabacín en dados, las alubias, el laurel y agua o caldo hasta cubrir.\n3. Cocina 20 min a fuego suave hasta que la patata esté tierna. Rectifica de sal y reposa 5 min.","burger de lentejas y remolacha":"Ingredientes (4 unidades): 250 g de lentejas cocidas escurridas, 1 remolacha cocida, 40 g de copos de avena, 1 huevo, ajo en polvo, comino, sal y pimienta.\n\n1. Tritura groseramente lentejas y remolacha; mezcla con avena, huevo y especias.\n2. Reposa 15 min en nevera y forma 4 hamburguesas.\n3. Hazlas a la plancha con un hilo de AOVE 3–4 min por cara, o al horno a 200 °C 15 min. Sirve con ensalada.","chili con carne":"Ingredientes (4 raciones): 400 g de carne picada magra (ternera o mixta con pavo), 400 g de alubias rojas cocidas, 1 cebolla, 1 pimiento rojo, 2 dientes de ajo, 400 g de tomate triturado, comino, pimentón y una pizca de cayena.\n\n1. Sofríe cebolla, ajo y pimiento 6 min; sube el fuego y dora la carne.\n2. Añade especias, tomate y un vaso de agua; cocina 20 min a fuego medio.\n3. Incorpora las alubias y guisa 10 min más. Mejor de un día para otro.","curry de garbanzos y espinacas":"Ingredientes (4 raciones): 400 g de garbanzos cocidos, 200 g de espinacas, 1 cebolla, 2 dientes de ajo, jengibre fresco, 400 ml de leche de coco ligera, 1 cda de curry en polvo, tomate triturado.\n\n1. Sofríe cebolla, ajo y jengibre picados; añade el curry y tuesta 1 min.\n2. Agrega 200 g de tomate y la leche de coco; cocina 5 min.\n3. Incorpora garbanzos y espinacas; guisa 10 min hasta espesar. Sirve solo o con arroz integral.","dal de lentejas rojas":"Ingredientes (4 raciones): 300 g de lentejas rojas, 1 cebolla, 2 dientes de ajo, jengibre, 1 cdta de cúrcuma, 1 cdta de comino, 400 g de tomate triturado, 800 ml de agua, cilantro.\n\n1. Sofríe cebolla, ajo y jengibre; añade las especias y tuesta 1 min.\n2. Incorpora lentejas, tomate y agua; cocina 20–25 min removiendo de vez en cuando.\n3. Debe quedar cremoso. Termina con cilantro picado y unas gotas de limón.","ensalada de garbanzos, tomate y atún":"Ingredientes (2 raciones): 250 g de garbanzos cocidos, 2 tomates, 2 latas de atún al natural, ½ cebolla morada, pepino, aceitunas negras, AOVE, vinagre y orégano.\n\n1. Trocea tomate, pepino y cebolla; mezcla con los garbanzos escurridos.\n2. Añade el atún desmigado y las aceitunas.\n3. Aliña con AOVE, vinagre, orégano y sal justo antes de servir.","ensalada templada de lentejas":"Ingredientes (2 raciones): 250 g de lentejas cocidas, 1 pimiento rojo, 1 zanahoria, ½ cebolla, rúcula, queso feta (opcional), AOVE y vinagre de módena.\n\n1. Saltea pimiento, zanahoria y cebolla en juliana 5 min: deben quedar al dente.\n2. Mezcla en caliente con las lentejas escurridas.\n3. Sirve sobre rúcula, desmiga el feta y aliña.","falafel al horno con ensalada":"Ingredientes (4 raciones): 250 g de garbanzos secos remojados 12 h (no cocidos), ½ cebolla, 2 dientes de ajo, perejil y cilantro frescos, 1 cdta de comino, ½ cdta de levadura, sal.\n\n1. Tritura todo hasta obtener una masa granulada; reposa 30 min en frío.\n2. Forma bolitas, píntalas con AOVE y hornea a 200 °C unos 20–25 min, girando a mitad.\n3. Sirve con ensalada de tomate y pepino y salsa de yogur con limón.","garbanzos con espinacas":"Ingredientes (4 raciones): 500 g de garbanzos cocidos, 300 g de espinacas, 3 dientes de ajo, 1 rebanada de pan integral, 1 cdta de pimentón, comino, vinagre.\n\n1. Dora los ajos laminados y el pan en AOVE; retíralos y májalos con comino y una gota de vinagre.\n2. En la misma sartén rehoga las espinacas; añade pimentón y el majado.\n3. Incorpora los garbanzos con un poco de su caldo y guisa 10 min.","garbanzos con espinacas y bacalao":"Ingredientes (4 raciones): 400 g de garbanzos cocidos, 250 g de bacalao desalado en lascas, 200 g de espinacas, 1 cebolla, 2 dientes de ajo, pimentón dulce, laurel.\n\n1. Sofríe cebolla y ajo; añade pimentón y las espinacas hasta que mermen.\n2. Incorpora garbanzos con un vaso de su caldo y el laurel; guisa 10 min.\n3. Añade el bacalao los últimos 4–5 min para que quede jugoso.","hummus con crudités":"Ingredientes: 400 g de garbanzos cocidos, 1 cda de tahini, zumo de ½ limón, 1 diente de ajo pequeño, comino, AOVE y sal. Crudités: zanahoria, pepino, pimiento y apio en bastones.\n\n1. Tritura los garbanzos con tahini, limón, ajo, comino, sal y un poco de agua fría hasta que quede cremoso.\n2. Sirve con un hilo de AOVE y pimentón por encima.\n3. Acompaña con los bastones de verdura para mojar.","lentejas a la jardinera":"Ingredientes (4 raciones): 350 g de lentejas pardinas, 1 cebolla, 1 pimiento verde, 2 zanahorias, 1 patata, 2 dientes de ajo, 1 tomate, laurel, pimentón.\n\n1. Sofríe la verdura picada 8 min; añade pimentón y el tomate rallado.\n2. Incorpora lentejas, patata en dados, laurel y agua que cubra 3 dedos.\n3. Cocina 30–35 min a fuego suave (o 12 min en olla rápida). Sala al final.","lentejas en puré":"Ingredientes (niños, 4 raciones): 200 g de lentejas cocidas con su verdura (zanahoria, patata, calabacín), un chorrito de AOVE.\n\n1. Cocina o aprovecha unas lentejas guisadas suaves, sin embutido.\n2. Tritura con parte del caldo hasta textura fina y cremosa.\n3. Comprueba la temperatura y termina con un hilito de AOVE crudo.","lentejas estofadas":"Ingredientes (4 raciones): 350 g de lentejas, 1 cebolla, 1 pimiento verde, 2 zanahorias, 1 patata, 3 dientes de ajo, 1 hoja de laurel, pimentón dulce, comino, AOVE.\n\n1. Rehoga la verdura picada en AOVE 8 min; añade pimentón fuera del fuego.\n2. Incorpora lentejas, patata, laurel y agua fría que cubra 3 dedos.\n3. Cocina a fuego suave 35 min, removiendo de vez en cuando. Reposa antes de servir.","potaje de alubias y verduras":"Ingredientes (4 raciones): 400 g de alubias blancas cocidas, 1 puerro, 2 zanahorias, 200 g de calabaza, 1 patata, espinacas, 2 dientes de ajo, pimentón, comino.\n\n1. Sofríe puerro, ajo y zanahoria; añade pimentón y comino.\n2. Agrega calabaza y patata en dados con caldo hasta cubrir; cocina 15 min.\n3. Incorpora alubias y espinacas; guisa 10 min más y rectifica de sal.","salteado de tofu y verduras":"Ingredientes (2 raciones): 300 g de tofu firme, 1 brócoli pequeño, 1 zanahoria, 1 pimiento rojo, salsa de soja, jengibre, ajo, sésamo, AOVE u aceite de sésamo.\n\n1. Prensa el tofu 10 min, córtalo en dados y dóralo bien; resérvalo.\n2. Saltea las verduras en trozos a fuego vivo 5 min: deben quedar crujientes.\n3. Devuelve el tofu, añade soja, ajo y jengibre; saltea 2 min y termina con sésamo.","wrap de hummus y verduras":"Ingredientes (2 unidades): 2 tortillas integrales, 4 cdas de hummus, zanahoria rallada, pepino, pimiento, hojas verdes, unas gotas de limón.\n\n1. Unta cada tortilla con una capa generosa de hummus.\n2. Reparte las verduras en bastones y las hojas verdes; añade limón.\n3. Enrolla apretando, corta por la mitad y sirve (o envuelve para llevar).","berenjena rellena de verduras":"Ingredientes (2 raciones): 2 berenjenas, 1 cebolla, 1 pimiento, 1 calabacín pequeño, 200 g de tomate triturado, queso rallado ligero, orégano.\n\n1. Asa las berenjenas a la mitad a 200 °C 25 min; vacía la carne.\n2. Sofríe la verdura picada con la carne de berenjena y el tomate 10 min.\n3. Rellena, cubre con un poco de queso y gratina 5 min.","berenjenas a la parmesana ligera":"Ingredientes (4 raciones): 2 berenjenas grandes, 400 g de tomate triturado, mozzarella light, parmesano, albahaca, ajo.\n\n1. Corta la berenjena en láminas, hornéalas con AOVE a 200 °C 15 min (en vez de freír).\n2. Prepara una salsa rápida de tomate con ajo y albahaca.\n3. Monta capas de berenjena, salsa y queso; hornea 20 min a 190 °C y gratina al final.","brócoli al vapor con aove":"Ingredientes (2 raciones): 1 brócoli grande, 2 dientes de ajo, AOVE, sal en escamas, limón (opcional).\n\n1. Cocina el brócoli en ramilletes al vapor 5–6 min: debe quedar verde y al dente.\n2. Dora el ajo laminado en 2 cdas de AOVE sin quemarlo.\n3. Riega el brócoli con el aceite de ajo, sala y añade limón al gusto.","calabacín relleno":"Ingredientes (2 raciones): 2 calabacines, 1 cebolla, 200 g de pavo o pollo picado (o soja texturizada), tomate triturado, queso rallado ligero.\n\n1. Corta los calabacines a lo largo, vacíalos y hornea las barcas 15 min a 200 °C.\n2. Sofríe cebolla, la carne y la pulpa picada; añade tomate y cocina 8 min.\n3. Rellena, cubre con queso y gratina 5–7 min.","calabaza asada con garbanzos especiados":"Ingredientes (2 raciones): 500 g de calabaza, 250 g de garbanzos cocidos, pimentón ahumado, comino, canela (una pizca), AOVE, yogur natural y semillas.\n\n1. Asa la calabaza en dados con AOVE y sal a 200 °C 25 min.\n2. Añade los garbanzos secados y especiados los últimos 12 min: quedarán crujientes.\n3. Sirve con una cucharada de yogur, un hilo de AOVE y semillas.","coliflor asada con especias":"Ingredientes (2 raciones): 1 coliflor, 2 cdas de AOVE, 1 cdta de cúrcuma, 1 cdta de pimentón, comino, ajo en polvo, limón y perejil.\n\n1. Corta la coliflor en ramilletes y mézclala con el aceite y las especias.\n2. Asa a 210 °C unos 25–30 min, removiendo a mitad, hasta dorar los bordes.\n3. Termina con zumo de limón y perejil picado.","espinacas salteadas con ajo":"Ingredientes (2 raciones): 400 g de espinacas frescas, 3 dientes de ajo, un puñado de piñones o pasas (opcional), AOVE, sal.\n\n1. Dora el ajo laminado en AOVE; añade los piñones si los usas.\n2. Incorpora las espinacas en tandas y saltea 2–3 min hasta que mermen.\n3. Sala al final y sirve inmediatamente.","espárragos a la plancha":"Ingredientes (2 raciones): 2 manojos de espárragos trigueros, AOVE, sal en escamas, limón o vinagreta suave.\n\n1. Corta la parte dura del tallo y seca bien los espárragos.\n2. Plancha fuerte con un hilo de AOVE 4–5 min, girándolos, hasta tostar ligeramente.\n3. Termina con sal en escamas y un toque de limón.","espárragos trigueros con jamón y huevo":"Ingredientes (2 raciones): 1 manojo de espárragos, 2 huevos, 60 g de jamón serrano, AOVE.\n\n1. Saltea los espárragos troceados 4 min; añade el jamón en tiras 1 min más.\n2. Haz los huevos a la plancha o poché.\n3. Sirve los espárragos con el huevo encima; rompe la yema como salsa.","fingers de berenjena al horno":"Ingredientes (2 raciones): 1 berenjena grande, 1 huevo, pan rallado integral, ajo en polvo, pimentón, orégano.\n\n1. Corta la berenjena en bastones, pásalos por huevo y luego por el pan rallado especiado.\n2. Colócalos en bandeja con papel de horno y un hilo de AOVE.\n3. Hornea a 210 °C unos 20 min girando a mitad. Sirve con salsa de yogur o tomate.","judías verdes con patata":"Ingredientes (2 raciones): 400 g de judías verdes, 2 patatas medianas, 2 dientes de ajo, pimentón dulce, AOVE, vinagre (opcional).\n\n1. Cuece las judías troceadas y la patata en dados 15–18 min; escurre.\n2. Dora el ajo laminado en AOVE, aparta del fuego y añade pimentón.\n3. Riega la verdura con el refrito y, si te gusta, unas gotas de vinagre.","lasaña de calabacín":"Ingredientes (4 raciones): 3 calabacines en láminas finas, 400 g de carne picada de pavo (o lentejas cocidas), 400 g de tomate triturado, cebolla, ajo, bechamel ligera o queso batido, queso rallado.\n\n1. Plancha las láminas de calabacín para que suelten agua.\n2. Prepara la boloñesa: sofrito de cebolla y ajo, carne y tomate 15 min.\n3. Monta capas de calabacín y boloñesa; cubre con bechamel ligera y queso, y hornea 20 min a 190 °C.","menestra de verduras":"Ingredientes (4 raciones): alcachofas, judías verdes, guisantes, zanahoria, coliflor (unos 800 g en total), 1 cebolla, 2 dientes de ajo, 60 g de jamón (opcional), harina integral (1 cdta).\n\n1. Cuece cada verdura al dente y reserva un vaso del caldo.\n2. Sofríe cebolla, ajo y jamón; añade la cdta de harina y el caldo.\n3. Incorpora las verduras, liga 5 min y sirve caliente.","pimientos rellenos de quinoa y pavo":"Ingredientes (2 raciones): 4 pimientos medianos, 150 g de quinoa cocida, 250 g de pavo picado, ½ cebolla, tomate triturado, comino, queso rallado ligero.\n\n1. Corta la tapa de los pimientos y hornéalos vacíos 15 min a 190 °C.\n2. Sofríe cebolla y pavo; añade tomate, comino y la quinoa.\n3. Rellena los pimientos, cubre con queso y hornea 15 min más.","pisto con huevo y garbanzos":"Ingredientes (2 raciones): pisto de verduras (calabacín, pimientos, cebolla, tomate), 200 g de garbanzos cocidos, 2 huevos.\n\n1. Calienta el pisto en sartén amplia y mezcla los garbanzos.\n2. Haz dos huecos y casca los huevos dentro.\n3. Tapa y cuaja al gusto 3–4 min. Sirve con pan integral si quieres.","pisto de verduras":"Ingredientes (4 raciones): 2 calabacines, 1 berenjena, 2 pimientos (rojo y verde), 1 cebolla, 600 g de tomate triturado, ajo, AOVE.\n\n1. Sofríe la cebolla y el ajo; añade pimientos 5 min, luego berenjena y calabacín en dados.\n2. Cuando la verdura esté tierna, incorpora el tomate.\n3. Cocina a fuego suave 20–25 min hasta que pierda el agua. Punto de sal y una pizca de azúcar si lo pide el tomate.","pizza con base de coliflor":"Ingredientes (2 raciones): 1 coliflor mediana rallada, 1 huevo, 40 g de queso rallado, orégano; para cubrir: tomate, mozzarella light y verduras al gusto.\n\n1. Cocina la coliflor rallada 4 min en microondas y escúrrela MUY bien en un paño.\n2. Mezcla con huevo, queso y orégano; extiende en redondo y hornea 15 min a 200 °C.\n3. Cubre con tomate, queso y verduras; hornea 10 min más.","salteado de judías verdes con jamón":"Ingredientes (2 raciones): 400 g de judías verdes, 70 g de jamón serrano en taquitos, 2 dientes de ajo, AOVE.\n\n1. Cuece las judías al dente 10 min y escurre bien.\n2. Dora el ajo laminado, añade el jamón 1 min.\n3. Incorpora las judías y saltea 3–4 min a fuego vivo.","tostada integral de aguacate y huevo":"Ingredientes (1 ración): 1–2 rebanadas de pan integral de calidad, ½ aguacate, 1 huevo, tomate (opcional), sal, pimienta y AOVE.\n\n1. Tuesta el pan y machaca encima el aguacate con una pizca de sal.\n2. Haz el huevo a la plancha o poché.\n3. Monta la tostada con el huevo encima, pimienta y un hilo de AOVE.","wok de verduras con anacardos":"Ingredientes (2 raciones): brócoli, zanahoria, pimiento rojo, calabacín, cebolleta (600 g en total), 50 g de anacardos, salsa de soja, jengibre, ajo, aceite de sésamo.\n\n1. Tuesta los anacardos en el wok seco y reserva.\n2. Saltea las verduras en trozos a fuego máximo 5–6 min, empezando por las más duras.\n3. Añade soja, ajo, jengibre y los anacardos; saltea 1 min y sirve.","ensalada césar con pollo":"Ingredientes (2 raciones): 2 cogollos de lechuga romana, 250 g de pechuga de pollo, pan integral para picatostes, parmesano; salsa ligera: yogur natural, 1 cdta de mostaza, anchoa picada, limón y AOVE.\n\n1. Plancha el pollo salpimentado y córtalo en tiras; tuesta el pan en dados.\n2. Mezcla la salsa batiendo yogur, mostaza, anchoa, limón y AOVE.\n3. Monta la lechuga con pollo, picatostes, lascas de parmesano y la salsa.","ensalada de aguacate, tomate y huevo":"Ingredientes (2 raciones): 2 tomates grandes, 1 aguacate, 2 huevos cocidos, cebolleta, hojas verdes, AOVE, vinagre y sal.\n\n1. Cuece los huevos 10 min, enfría y cuartea.\n2. Trocea tomate, aguacate y cebolleta.\n3. Mezcla todo sobre las hojas y aliña justo antes de servir.","ensalada de garbanzos especiados y pepino":"Ingredientes (2 raciones): 300 g de garbanzos cocidos, 1 pepino, ½ cebolla morada, tomate cherry, comino y pimentón, yogur natural, menta o perejil, limón.\n\n1. Saltea los garbanzos secos con pimentón y comino 5 min hasta dorarlos.\n2. Mezcla pepino, cebolla y cherrys troceados.\n3. Une todo con una salsa de yogur, limón y menta.","ensalada de pimientos asados con atún":"Ingredientes (2 raciones): 3 pimientos rojos asados (o en conserva de calidad), 2 latas de atún, ½ cebolla dulce, huevo cocido (opcional), AOVE, vinagre de jerez.\n\n1. Corta los pimientos asados en tiras y la cebolla en juliana fina.\n2. Añade el atún desmigado (y el huevo si lo usas).\n3. Aliña con AOVE, vinagre y sal; mejor tras 15 min de reposo.","ensalada de pollo, mango y aguacate":"Ingredientes (2 raciones): 250 g de pollo a la plancha, 1 mango, 1 aguacate, brotes verdes, cebolla morada, lima, AOVE, cilantro (opcional).\n\n1. Plancha el pollo y córtalo en tiras.\n2. Trocea mango y aguacate; corta la cebolla fina.\n3. Mezcla con los brotes y aliña con lima, AOVE y sal.","ensalada de quinoa y verduras":"Ingredientes (2 raciones): 150 g de quinoa, 1 pepino, tomate cherry, 1 pimiento, ½ cebolla morada, maíz (opcional), perejil, limón y AOVE.\n\n1. Lava la quinoa y cuécela 15 min; enfría.\n2. Pica todas las verduras en dados pequeños.\n3. Mezcla, aliña con limón, AOVE y sal, y termina con perejil.","ensalada de tomate y mozzarella":"Ingredientes (2 raciones): 3 tomates maduros, 2 bolas de mozzarella fresca (o burrata), albahaca fresca, AOVE, sal en escamas, orégano.\n\n1. Corta el tomate en rodajas y la mozzarella en láminas.\n2. Alterna en el plato y añade hojas de albahaca.\n3. Aliña con buen AOVE, sal en escamas y orégano.","ensalada griega con feta":"Ingredientes (2 raciones): 2 tomates, 1 pepino, ½ cebolla morada, 1 pimiento verde, aceitunas kalamata, 100 g de feta, orégano, AOVE.\n\n1. Corta las verduras en trozos grandes.\n2. Añade aceitunas y el feta en dados o en bloque encima.\n3. Aliña con AOVE, orégano y una pizca de sal (el feta ya sala).","ensalada mixta con atún":"Ingredientes (2 raciones): lechuga variada, 2 tomates, 1 zanahoria, ½ cebolla, 2 latas de atún al natural, 2 huevos cocidos, aceitunas, espárragos (opcional), AOVE y vinagre.\n\n1. Cuece los huevos y prepara todas las verduras.\n2. Monta la base de lechuga con el resto de ingredientes por encima.\n3. Aliña en el momento de servir.","ensalada templada de quinoa, boniato y feta":"Ingredientes (2 raciones): 150 g de quinoa, 1 boniato grande, 80 g de feta, espinacas baby o rúcula, nueces, AOVE, vinagre balsámico.\n\n1. Asa el boniato en dados con AOVE a 200 °C 25 min.\n2. Cuece la quinoa 15 min y mézclala templada con las hojas.\n3. Añade el boniato, el feta desmigado y las nueces; aliña con balsámico y AOVE.","tabulé de quinoa":"Ingredientes (2 raciones): 150 g de quinoa cocida y fría, mucho perejil picado, menta, 2 tomates, 1 pepino, cebolleta, zumo de 1 limón, AOVE.\n\n1. Pica muy fino el perejil, la menta y las verduras.\n2. Mezcla con la quinoa fría.\n3. Aliña generosamente con limón, AOVE y sal; reposa 15 min en frío.","crema de calabacín":"Ingredientes (4 raciones): 3 calabacines, 1 puerro, 1 patata pequeña, caldo de verduras, AOVE; queso crema ligero opcional.\n\n1. Rehoga el puerro; añade calabacín y patata en trozos 5 min.\n2. Cubre con caldo y cuece 15 min.\n3. Tritura fino (con el queso si lo usas), ajusta de sal y sirve con un hilo de AOVE.","crema de calabaza":"Ingredientes (4 raciones): 700 g de calabaza, 1 zanahoria, 1 puerro, 1 patata pequeña, caldo, AOVE, pipas de calabaza para servir.\n\n1. Rehoga el puerro; añade calabaza, zanahoria y patata 5 min.\n2. Cubre con caldo y cuece 20 min.\n3. Tritura hasta que quede sedosa; sirve con pipas tostadas y AOVE.","crema de guisantes y menta":"Ingredientes (4 raciones): 500 g de guisantes (frescos o congelados), 1 cebolleta, unas hojas de menta, caldo suave, yogur natural.\n\n1. Sofríe la cebolleta; añade los guisantes y cubre apenas con caldo.\n2. Cuece 8–10 min (no más, para mantener el verde).\n3. Tritura con la menta; sirve con una cucharada de yogur.","crema de lentejas rojas":"Ingredientes (4 raciones): 250 g de lentejas rojas, 1 zanahoria, 1 cebolla, 1 diente de ajo, comino y cúrcuma, caldo de verduras, limón.\n\n1. Sofríe cebolla, ajo y zanahoria; añade especias 1 min.\n2. Incorpora lentejas y caldo (3 partes); cuece 18 min.\n3. Tritura, ajusta con limón y sal, y sirve con AOVE.","crema de verduras":"Ingredientes (niños, 4 raciones): 1 calabacín, 2 zanahorias, 1 patata, 1 puerro, 200 g de calabaza, AOVE.\n\n1. Rehoga el puerro suave; añade el resto de verduras troceadas.\n2. Cubre con agua o caldo suave y cuece 20 min.\n3. Tritura muy fino, comprueba temperatura y añade un hilito de AOVE crudo.","crema de verduras con picatostes integrales":"Ingredientes (niños, 4 raciones): crema de verduras (calabacín, zanahoria, patata, puerro, calabaza) y 1 rebanada de pan integral.\n\n1. Prepara la crema de verduras habitual y tritura fina.\n2. Corta el pan en daditos y tuéstalo al horno 8 min a 180 °C con una gota de AOVE.\n3. Sirve la crema con los picatostes por encima (para mayores de 1 año, enteros solo si ya mastican bien).","gazpacho":"Ingredientes (4 raciones): 1 kg de tomate maduro, 1 pepino pequeño, ½ pimiento verde, ½ diente de ajo, 30 g de pan (opcional), 50 ml de AOVE, vinagre de jerez, sal.\n\n1. Tritura todas las verduras con el pan remojado.\n2. Emulsiona añadiendo el AOVE en hilo con la batidora en marcha; ajusta de vinagre y sal.\n3. Cuela si lo quieres muy fino y enfría al menos 2 h.","gazpacho de remolacha":"Ingredientes (4 raciones): 600 g de tomate, 2 remolachas cocidas, ½ pepino, ½ diente de ajo, AOVE, vinagre, sal.\n\n1. Tritura todo junto hasta que quede muy fino.\n2. Emulsiona con el AOVE y ajusta vinagre y sal.\n3. Sirve muy frío; combina bien con dados de manzana o queso fresco.","salmorejo":"Ingredientes (4 raciones): 1 kg de tomate maduro, 150 g de pan (mejor asentado), 1 diente de ajo pequeño, 80 ml de AOVE, sal. Para servir: huevo cocido y jamón.\n\n1. Tritura el tomate y cuela; remoja el pan en ese jugo 10 min.\n2. Tritura con el ajo y la sal; añade el AOVE en hilo hasta que quede naranja y cremoso.\n3. Enfría y sirve con huevo y jamón picados.","sopa de pollo y verduras":"Ingredientes (4 raciones): 2 contramuslos de pollo sin piel, 1 puerro, 2 zanahorias, 1 rama de apio, fideos integrales o arroz (opcional), laurel.\n\n1. Cuece el pollo con las verduras troceadas, laurel y agua 30 min, desespumando.\n2. Saca el pollo, desmígalo y devuélvelo a la sopa.\n3. Si usas fideos, cuécelos en la sopa los últimos 5 min.","sopa de verduras":"Ingredientes (4 raciones): 1 puerro, 2 zanahorias, 1 calabacín, apio, judías verdes, 1 patata, caldo de verduras, perejil.\n\n1. Rehoga el puerro; añade el resto de verduras en dados 5 min.\n2. Cubre con caldo y cuece 20 min.\n3. Ajusta de sal, añade perejil y sirve caliente.","sopa minestrone":"Ingredientes (4 raciones): 1 cebolla, 1 zanahoria, apio, 1 calabacín, judías verdes, 200 g de alubias cocidas, 400 g de tomate triturado, pasta integral pequeña, parmesano y albahaca.\n\n1. Sofríe cebolla, zanahoria y apio; añade el resto de verduras y el tomate.\n2. Cubre con caldo y cuece 15 min; añade alubias y pasta y cuece lo que pida la pasta.\n3. Sirve con parmesano rallado y albahaca.","espaguetis con gambas y calabacín":"Ingredientes (2 raciones): 160 g de espaguetis integrales, 200 g de gambas peladas, 1 calabacín en medias lunas o espiral, 2 dientes de ajo, guindilla suave, AOVE, perejil.\n\n1. Cuece la pasta al dente; reserva un cazo del agua.\n2. Dora ajo y guindilla, saltea el calabacín 3 min y las gambas 2 min.\n3. Mezcla con la pasta y un poco de agua de cocción; termina con perejil.","espaguetis integrales con tomate":"Ingredientes (2 raciones): 160 g de espaguetis integrales, 400 g de tomate triturado, 1 diente de ajo, albahaca, AOVE, una pizca de azúcar si hace falta.\n\n1. Sofríe el ajo, añade el tomate y cocina 15 min a fuego medio.\n2. Cuece la pasta al dente.\n3. Mezcla pasta y salsa con hojas de albahaca; parmesano opcional.","gnocchi con salsa de setas":"Ingredientes (2 raciones): 400 g de gnocchi, 250 g de setas variadas, 1 chalota, 1 diente de ajo, 100 ml de leche evaporada (o nata ligera), perejil, parmesano.\n\n1. Saltea chalota, ajo y setas a fuego vivo hasta dorar.\n2. Añade la leche evaporada y reduce 3 min; salpimienta.\n3. Cuece los gnocchi (flotan al estar listos), mézclalos con la salsa y termina con perejil.","lasaña boloñesa de pavo":"Ingredientes (4 raciones): placas de lasaña integrales, 500 g de pavo picado, 1 cebolla, 1 zanahoria, apio, 500 g de tomate triturado, bechamel ligera (leche + 1 cda de harina + AOVE), queso rallado.\n\n1. Haz la boloñesa: sofrito de verdura, pavo y tomate, 20 min.\n2. Cuece o hidrata las placas según el paquete.\n3. Monta capas, termina con bechamel y queso, y hornea 25 min a 190 °C.","macarrones con pesto y calabacín":"Ingredientes (2 raciones): 160 g de macarrones integrales, 1 calabacín, pesto: albahaca, 30 g de piñones o nueces, ½ diente de ajo, 30 g de parmesano, AOVE.\n\n1. Tritura los ingredientes del pesto con un poco de agua fría.\n2. Cuece la pasta; saltea el calabacín en dados 4 min.\n3. Mezcla todo fuera del fuego (el pesto no se cocina).","macarrones con tomate":"Ingredientes (niños, 2 raciones): 120 g de macarrones (integrales si ya les gustan), 300 g de tomate triturado, ½ cebolla, AOVE, queso rallado suave.\n\n1. Sofríe la cebolla muy picada hasta transparente; añade el tomate y cocina 15 min.\n2. Cuece la pasta al punto blandito que prefieran.\n3. Mezcla con la salsa y un poco de queso rallado.","macarrones integrales con boloñesa de pavo":"Ingredientes (2 raciones): 160 g de macarrones integrales, 250 g de pavo picado, ½ cebolla, ½ zanahoria rallada, 300 g de tomate triturado, orégano.\n\n1. Sofríe cebolla y zanahoria; añade el pavo y dóralo.\n2. Incorpora el tomate y cocina 15 min.\n3. Mezcla con la pasta cocida al dente y orégano.","noodles de arroz con verduras y gambas":"Ingredientes (2 raciones): 150 g de noodles de arroz, 200 g de gambas, 1 zanahoria, 1 pimiento, col o pak choi, salsa de soja, jengibre, ajo, lima.\n\n1. Hidrata los noodles según el paquete y escurre.\n2. Saltea las verduras en juliana a fuego vivo 4 min; añade las gambas 2 min.\n3. Incorpora noodles y salsa (soja + jengibre + ajo); saltea 2 min y termina con lima.","pad thai de pollo ligero":"Ingredientes (2 raciones): 150 g de noodles de arroz, 250 g de pollo en tiras, 1 huevo, brotes de soja, cebolleta, cacahuetes; salsa: soja, lima, 1 cdta de tamarindo o vinagre de arroz y 1 cdta de miel.\n\n1. Saltea el pollo; aparta a un lado y cuaja el huevo revuelto.\n2. Añade los noodles hidratados y la salsa; saltea 2 min.\n3. Termina con brotes, cebolleta y cacahuete picado, y lima al servir.","pasta con boloñesa de pavo":"Ingredientes (niños, 2 raciones): 120 g de pasta, 200 g de pavo picado, ½ cebolla, ½ zanahoria rallada, 300 g de tomate triturado.\n\n1. Sofríe la verdura muy picada (así no la detectan); añade el pavo.\n2. Incorpora el tomate y cocina 15 min a fuego suave.\n3. Mezcla con la pasta cocida; queso rallado suave por encima.","pasta con verduras":"Ingredientes (2 raciones): 160 g de pasta integral, 1 calabacín, 1 pimiento, tomate cherry, ½ cebolla, ajo, orégano o albahaca, AOVE.\n\n1. Saltea la verdura en dados a fuego medio-alto 6–7 min.\n2. Cuece la pasta al dente; reserva agua de cocción.\n3. Mezcla pasta, verduras y un chorrito del agua; termina con hierbas y AOVE.","pasta integral con boloñesa de lentejas":"Ingredientes (2 raciones): 160 g de pasta integral, 200 g de lentejas cocidas, ½ cebolla, ½ zanahoria, apio, 300 g de tomate triturado, orégano, comino suave.\n\n1. Sofríe la verdura picada 6 min; añade el tomate y especias y cocina 10 min.\n2. Incorpora las lentejas y guisa 5 min; tritura la mitad si quieres textura de \"carne\".\n3. Mezcla con la pasta al dente.","pizza casera de verduras":"Ingredientes (niños, 2 pizzas pequeñas): masa: 200 g de harina (mitad integral), 120 ml de agua, 1 cdta de levadura seca, AOVE; tomate, mozzarella y verduras al gusto.\n\n1. Amasa, deja levar 1 h y estira las bases.\n2. Cubre con tomate, queso y verduras cortadas pequeñas y de colores.\n3. Hornea a 230 °C unos 10–12 min. Deja que los niños monten la suya.","arroz con pollo":"Ingredientes (niños, 2 raciones): 120 g de arroz, 200 g de pollo en taquitos, ½ cebolla, ½ pimiento, guisantes, caldo suave, una hebra de azafrán o cúrcuma.\n\n1. Sofríe la verdura picada y dora el pollo.\n2. Añade el arroz, rehoga 1 min e incorpora el doble de caldo.\n3. Cuece 15 min a fuego medio-bajo y reposa 5 min.","arroz integral con pollo y verduras":"Ingredientes (2 raciones): 140 g de arroz integral, 250 g de pollo, 1 zanahoria, 1 calabacín, ½ pimiento, ajo, salsa de soja (opcional).\n\n1. Cuece el arroz integral (35–40 min o el que indique el paquete).\n2. Saltea el pollo en dados; añade la verdura y saltea 5 min.\n3. Incorpora el arroz cocido, saltea 2 min y ajusta con soja o sal.","arroz integral con verduras":"Ingredientes (2 raciones): 140 g de arroz integral, 1 zanahoria, 1 calabacín, ½ pimiento rojo, guisantes, ajo, AOVE, salsa de soja opcional.\n\n1. Cuece el arroz y escurre.\n2. Saltea el ajo y las verduras en dados 5–6 min a fuego vivo.\n3. Añade el arroz, saltea 2 min y ajusta el punto con soja o sal.","burrito bowl de pavo y frijoles":"Ingredientes (2 raciones): 250 g de pavo picado, 200 g de frijoles o alubias rojas cocidas, 120 g de arroz, maíz, tomate, aguacate, lima, comino y pimentón, yogur natural.\n\n1. Saltea el pavo con comino y pimentón.\n2. Monta el bol: arroz, frijoles calientes, pavo, maíz y tomate picado.\n3. Corona con aguacate, yogur y lima.","cuscús con verduras":"Ingredientes (2 raciones): 140 g de cuscús integral, 1 calabacín, 1 zanahoria, ½ pimiento, cebolla, garbanzos (opcional), ras el hanout o comino, pasas, caldo.\n\n1. Saltea la verdura en dados con las especias 6–7 min.\n2. Hidrata el cuscús con el mismo volumen de caldo caliente, 5 min tapado; suelta con tenedor.\n3. Mezcla todo con las pasas y un hilo de AOVE.","cuscús marroquí de verduras y pollo":"Ingredientes (2 raciones): 140 g de cuscús, 250 g de pollo troceado, 1 zanahoria, 1 calabacín, cebolla, garbanzos cocidos, ras el hanout, canela (pizca), pasas, caldo.\n\n1. Dora el pollo especiado y reserva; sofríe la verdura en la misma sartén.\n2. Devuelve el pollo con garbanzos, pasas y un vaso de caldo; guisa 10 min.\n3. Hidrata el cuscús y sírvelo con el guiso encima.","poke bowl de atún":"Ingredientes (2 raciones): 250 g de atún fresco de calidad (congelado previamente 5 días), 150 g de arroz, edamame, pepino, aguacate, zanahoria rallada, sésamo; marinada: soja, aceite de sésamo, jengibre.\n\n1. Corta el atún en dados y marínalo 10–15 min en frío.\n2. Cuece el arroz y deja templar.\n3. Monta el bol con arroz, atún y verduras; termina con sésamo y la marinada.","quinoa con pollo y verduras al curry":"Ingredientes (2 raciones): 140 g de quinoa, 250 g de pollo, 1 calabacín, 1 zanahoria, ½ cebolla, 1 cda de curry, 150 ml de leche de coco ligera.\n\n1. Cuece la quinoa 15 min y reserva.\n2. Dora el pollo, añade la verdura y el curry; incorpora la leche de coco y guisa 8 min.\n3. Mezcla con la quinoa o sírvela de base.","quinoa con verduras":"Ingredientes (2 raciones): 150 g de quinoa, 1 calabacín, 1 zanahoria, ½ pimiento, cebolleta, ajo, AOVE, perejil o albahaca.\n\n1. Lava y cuece la quinoa 15 min; escurre.\n2. Saltea las verduras en daditos 5–6 min.\n3. Mezcla, salpimienta y termina con hierbas y un hilo de AOVE.","risotto de calabaza":"Ingredientes (2 raciones): 160 g de arroz arborio, 300 g de calabaza en dados, ½ cebolla, caldo de verduras caliente, 30 g de parmesano, vino blanco (opcional).\n\n1. Sofríe la cebolla y la mitad de la calabaza; añade el arroz y nacara 1 min.\n2. Ve añadiendo caldo caliente cazo a cazo, removiendo, 18 min; a mitad añade el resto de calabaza asada o salteada.\n3. Fuera del fuego, manteca con el parmesano. Reposa 2 min.","risotto de setas":"Ingredientes (2 raciones): 160 g de arroz arborio, 250 g de setas, ½ cebolla, 1 diente de ajo, caldo caliente, 30 g de parmesano, perejil.\n\n1. Saltea las setas a fuego fuerte y reserva la mitad para el final.\n2. Sofríe cebolla y ajo, nacara el arroz y añade caldo cazo a cazo 18 min.\n3. Incorpora las setas, manteca con parmesano fuera del fuego y termina con perejil.","atún a la plancha":"Ingredientes (2 raciones): 2 lomos de atún (150–180 g), AOVE, sal en escamas; guarnición: ensalada o pimientos asados.\n\n1. Saca el atún 10 min antes de la nevera y sécalo.\n2. Plancha muy caliente: 1–2 min por cara según grosor (el centro debe quedar rosado, se seca enseguida).\n3. Sal en escamas al final y un hilo de AOVE crudo.","atún con costra de sésamo":"Ingredientes (2 raciones): 2 lomos de atún, sésamo blanco y negro, salsa de soja, aceite de sésamo.\n\n1. Pincela el atún con soja y rebózalo en sésamo presionando.\n2. Marca en sartén muy caliente 1 min por cara: sellado fuera, rosado dentro.\n3. Corta en láminas y sirve con unas gotas de soja y aceite de sésamo.","bacalao al horno":"Ingredientes (2 raciones): 2 lomos de bacalao desalado, 1 patata grande, 1 cebolla, pimiento (opcional), AOVE, pimentón.\n\n1. Hornea la patata y cebolla en rodajas con AOVE a 190 °C 25 min.\n2. Coloca el bacalao encima, piel abajo, y hornea 10–12 min más.\n3. Termina con un refrito de ajo y pimentón por encima.","bacalao con tomate y pimientos":"Ingredientes (2 raciones): 2 lomos de bacalao desalado, 400 g de tomate triturado, 1 pimiento rojo, 1 cebolla, ajo, laurel.\n\n1. Sofríe cebolla, ajo y pimiento en tiras; añade el tomate y laurel y cocina 15 min.\n2. Acomoda el bacalao en la salsa, piel abajo.\n3. Cocina tapado 6–8 min a fuego suave, sin remover (se hace en la salsa).","boquerones al horno":"Ingredientes (2 raciones): 500 g de boquerones limpios, 2 dientes de ajo, perejil, pan rallado integral (1 cda), AOVE, limón.\n\n1. Coloca los boquerones abiertos en una fuente, en una capa.\n2. Cubre con ajo y perejil picados, el pan rallado y un hilo de AOVE.\n3. Hornea a 210 °C solo 8–10 min. Limón al servir.","dorada a la espalda con ajada":"Ingredientes (2 raciones): 2 doradas abiertas a la espalda, 3 dientes de ajo, 1 cdta de pimentón, vinagre, AOVE.\n\n1. Plancha o hornea las doradas con la piel hacia abajo 8–10 min.\n2. Dora los ajos laminados en AOVE; fuera del fuego añade pimentón y un chorrito de vinagre.\n3. Riega el pescado con la ajada al servir.","dorada a la sal":"Ingredientes (2 raciones): 1 dorada grande (600–800 g) sin desescamar, 1,5 kg de sal gruesa, romero (opcional).\n\n1. Cubre la base de una fuente con sal, apoya la dorada y entiérrala con el resto de sal humedecida.\n2. Hornea a 200 °C unos 25–30 min (20 min por kg aprox.).\n3. Rompe la costra, retira la piel y sirve con AOVE.","lubina al horno":"Ingredientes (2 raciones): 2 lubinas de ración (o 1 grande), 1 limón, 2 dientes de ajo, perejil, AOVE, vino blanco (opcional).\n\n1. Haz dos cortes al pescado e introduce rodajas de limón.\n2. Hornea a 190 °C 15–18 min con un chorrito de AOVE y vino.\n3. Termina con ajo y perejil dorados por encima.","lubina al horno con verduras":"Ingredientes (2 raciones): 2 lomos de lubina, 1 patata, 1 calabacín, 1 pimiento, ½ cebolla, AOVE, tomillo.\n\n1. Asa las verduras en rodajas finas con AOVE a 190 °C 25 min.\n2. Pon los lomos encima, piel arriba, y hornea 10–12 min más.\n3. Un hilo de AOVE, tomillo y listo.","merluza al vapor con verduritas":"Ingredientes (2 raciones): 2 lomos de merluza, 1 zanahoria, 1 calabacín, judías verdes, AOVE, limón, eneldo o perejil.\n\n1. Cocina las verduras en juliana al vapor 5 min.\n2. Añade la merluza encima y cocina al vapor 6–8 min más.\n3. Aliña con AOVE, limón y hierbas. Ligero y en 15 min.","merluza en salsa verde":"Ingredientes (2 raciones): 2 lomos de merluza, 3 dientes de ajo, perejil abundante, 1 cdta de harina, 150 ml de caldo de pescado, guisantes y almejas (opcional), vino blanco.\n\n1. Dora el ajo picado, añade la harina y el vino; incorpora el caldo removiendo.\n2. Acomoda la merluza y cocina 4 min por cara moviendo la cazuela para ligar.\n3. Añade perejil (y guisantes/almejas) los últimos minutos.","merluza rebozada al horno":"Ingredientes (niños, 2 raciones): 250 g de merluza sin espinas en tiras, 1 huevo, pan rallado integral, ajo en polvo, AOVE.\n\n1. Pasa las tiras por huevo y pan rallado.\n2. Colócalas en bandeja con papel y un hilo de AOVE.\n3. Hornea a 210 °C 12–15 min girando a mitad. Como \"palitos\" pero de verdad.","poke de salmón":"Ingredientes (2 raciones): 250 g de salmón fresco (congelado previamente), 150 g de arroz, edamame, aguacate, pepino, zanahoria, alga nori o sésamo; marinada: soja, aceite de sésamo, jengibre.\n\n1. Marina el salmón en dados 15 min en frío.\n2. Cuece el arroz y deja templar.\n3. Monta el bol y termina con sésamo y la marinada restante.","salmón a la plancha":"Ingredientes (2 raciones): 2 lomos de salmón con piel, AOVE, sal, limón; guarnición verde al gusto.\n\n1. Sartén bien caliente: coloca el salmón piel abajo 4 min sin tocarlo (piel crujiente).\n2. Gira y cocina 2–3 min más; el centro debe quedar jugoso.\n3. Sal, limón y sirve con ensalada o verdura salteada.","salmón al horno con patata":"Ingredientes (niños, 2 raciones): 2 lomos pequeños de salmón sin espinas, 2 patatas, AOVE, eneldo suave (opcional).\n\n1. Hornea la patata en rodajas con AOVE a 190 °C 25 min.\n2. Añade el salmón y hornea 10 min más.\n3. Desmiga el salmón comprobando espinas y sirve con la patata.","salmón al papillote con soja":"Ingredientes (2 raciones): 2 lomos de salmón, 1 zanahoria, 1 calabacín, puerro, salsa de soja, jengibre, sésamo.\n\n1. Pon cada lomo sobre papel de horno con la verdura en juliana debajo.\n2. Añade 1 cda de soja y jengibre; cierra el paquete bien sellado.\n3. Hornea a 200 °C 12–14 min y abre el papillote en la mesa.","salmón con costra de pistacho":"Ingredientes (2 raciones): 2 lomos de salmón, 40 g de pistachos picados, 1 cdta de mostaza, 1 cdta de miel, pan rallado (1 cda).\n\n1. Mezcla mostaza y miel y pinta la parte superior del salmón.\n2. Cubre con pistacho + pan rallado presionando.\n3. Hornea a 200 °C 12 min: costra dorada, interior jugoso.","salmón teriyaki":"Ingredientes (2 raciones): 2 lomos de salmón; salsa: 3 cdas de soja, 1 cda de mirin o miel, jengibre rallado, sésamo.\n\n1. Marina el salmón 15 min en la mezcla.\n2. Plancha 3 min por cara; añade la marinada y deja que reduzca 1–2 min glaseando.\n3. Sirve con sésamo y arroz o verdura al vapor.","tartar de atún con aguacate":"Ingredientes (2 raciones): 250 g de atún fresco (congelado previamente 5 días), 1 aguacate, cebollino, soja, aceite de sésamo, lima, sésamo.\n\n1. Corta el atún en daditos y adereza con soja, sésamo y lima (10 min en frío).\n2. Machaca el aguacate con lima y sal.\n3. Monta con aro: base de aguacate, atún encima, cebollino y sésamo.","brochetas de langostino y verduras":"Ingredientes (2 raciones): 12 langostinos pelados, 1 pimiento, 1 calabacín, cebolla morada, tomate cherry, AOVE, ajo y perejil.\n\n1. Ensarta alternando langostino y verdura en trozos parejos.\n2. Pinta con AOVE, ajo y perejil.\n3. Plancha o parrilla 2–3 min por lado, hasta que el langostino esté rosado.","calamares a la plancha con ajo y perejil":"Ingredientes (2 raciones): 500 g de calamares limpios, 3 dientes de ajo, perejil, AOVE, limón.\n\n1. Seca muy bien los calamares (clave para que no cuezan).\n2. Plancha muy fuerte 2 min por cara, los cuerpos marcados en cruz.\n3. Riega con majado de ajo, perejil y AOVE, y limón al servir.","chipirones encebollados":"Ingredientes (2 raciones): 500 g de chipirones limpios, 2 cebollas grandes, 2 dientes de ajo, vino blanco, laurel, AOVE.\n\n1. Pocha la cebolla en juliana a fuego suave 20 min hasta dorar.\n2. Sube el fuego, añade los chipirones y saltea 3–4 min.\n3. Vierte un chorro de vino, laurel y reduce 5 min.","gambones al horno":"Ingredientes (2 raciones): 12 gambones, 2 dientes de ajo, perejil, AOVE, limón, una pizca de pimentón.\n\n1. Coloca los gambones en bandeja, en una capa.\n2. Riega con AOVE, ajo picado, pimentón y perejil.\n3. Hornea a 220 °C solo 6–8 min. No los pases: quedan secos.","langostinos a la plancha":"Ingredientes (2 raciones): 12–16 langostinos, sal gruesa, AOVE, limón.\n\n1. Plancha muy caliente con un hilo de AOVE.\n2. Cocina los langostinos 2 min por cara con sal gruesa.\n3. Sirve al momento con limón (y un majado de ajo-perejil si quieres).","mejillones al vapor":"Ingredientes (2 raciones): 1 kg de mejillones limpios, 1 hoja de laurel, ½ vaso de agua o vino blanco, limón.\n\n1. Pon los mejillones en olla amplia con el líquido y el laurel.\n2. Tapa y cocina a fuego fuerte 3–5 min, hasta que se abran (descarta los cerrados).\n3. Sirve con limón y el propio jugo colado.","mejillones en salsa de tomate":"Ingredientes (2 raciones): 1 kg de mejillones, 400 g de tomate triturado, 1 cebolla, ajo, pimentón o una pizca de cayena, laurel.\n\n1. Abre los mejillones al vapor y reserva su jugo colado.\n2. Sofríe cebolla y ajo; añade tomate, pimentón y un poco del jugo; cocina 12 min.\n3. Incorpora los mejillones (con o sin concha) 2 min y listo.","pulpo a la gallega":"Ingredientes (2 raciones): 500 g de pulpo cocido (comprado cocido simplifica), 2 patatas, pimentón (dulce o mezcla), sal gruesa, AOVE.\n\n1. Cuece las patatas en rodajas 15–18 min (si tienes, en agua de cocer pulpo).\n2. Templa el pulpo en rodajas 1 min en agua caliente o plancha.\n3. Monta sobre la patata con sal gruesa, pimentón y buen AOVE.","salteado de gambas y verduras al ajillo":"Ingredientes (2 raciones): 300 g de gambas peladas, 1 calabacín, 1 pimiento, judías verdes o brócoli, 3 dientes de ajo, guindilla suave, AOVE, perejil.\n\n1. Saltea las verduras a fuego vivo 4–5 min y aparta.\n2. Dora el ajo laminado con la guindilla; añade las gambas 2 min.\n3. Junta todo, saltea 1 min y termina con perejil.","sepia a la plancha":"Ingredientes (2 raciones): 2 sepias limpias, 3 dientes de ajo, perejil, AOVE, limón.\n\n1. Seca la sepia y márcala en cuadrícula por la parte interna.\n2. Plancha muy caliente 3 min por cara, presionando al inicio.\n3. Termina con majado de ajo, perejil, AOVE y limón.","albóndigas de pollo":"Ingredientes (niños, 4 raciones): 400 g de pollo picado, 1 rebanada de pan integral mojada en leche, 1 huevo, ajo y perejil muy picados; salsa suave de tomate o de zanahoria.\n\n1. Mezcla el pollo con pan escurrido, huevo, ajo y perejil; forma bolitas.\n2. Dóralas en sartén con AOVE o al horno 12 min a 200 °C.\n3. Termina 10 min en la salsa para que queden tiernas.","alitas de pollo al horno":"Ingredientes (2 raciones): 800 g de alitas, pimentón, ajo en polvo, orégano, limón, AOVE, sal.\n\n1. Adoba las alitas con las especias, limón y AOVE (mejor 1 h o de víspera).\n2. Hornea a 200 °C 35–40 min sobre rejilla, girando a mitad.\n3. Deben quedar doradas y crujientes. Acompaña con ensalada.","bowl de pollo, arroz y verduras":"Ingredientes (2 raciones): 250 g de pollo, 140 g de arroz (mejor integral), brócoli, zanahoria, aguacate, maíz o edamame; salsa de yogur o soja.\n\n1. Cuece el arroz; plancha el pollo especiado y córtalo.\n2. Cocina el brócoli y la zanahoria al vapor 5 min.\n3. Monta el bol por secciones y termina con la salsa.","croquetas de pollo al horno":"Ingredientes (niños, ~16 uds): 200 g de pollo cocido desmigado, bechamel espesa (40 g harina, 400 ml leche, AOVE), pan rallado, 1 huevo.\n\n1. Haz la bechamel, integra el pollo y enfría la masa 4 h o de víspera.\n2. Forma croquetas, pasa por huevo y pan rallado.\n3. Hornea a 210 °C 15–18 min con un hilo de AOVE, girando a mitad.","curry rojo de pollo":"Ingredientes (2 raciones): 300 g de pollo en tiras, 1–2 cdtas de pasta de curry rojo, 200 ml de leche de coco ligera, 1 pimiento, judías verdes o bambú, lima, arroz para acompañar.\n\n1. Sofríe la pasta de curry 1 min; añade el pollo y séllalo.\n2. Incorpora leche de coco y verduras; guisa 10 min.\n3. Ajusta con lima y sirve con arroz.","fajitas de pollo":"Ingredientes (2 raciones): 300 g de pollo en tiras, 1 pimiento rojo, 1 pimiento verde, 1 cebolla, comino y pimentón, tortillas integrales, yogur natural y aguacate.\n\n1. Saltea el pollo especiado a fuego vivo; reserva.\n2. Saltea pimientos y cebolla en tiras 5 min; junta con el pollo.\n3. Sirve en tortillas calientes con yogur y aguacate.","mini hamburguesas de pollo":"Ingredientes (niños, 6 uds): 300 g de pollo picado, ½ zanahoria y ½ calabacín rallados y escurridos, 1 cda de pan rallado, mini panes integrales.\n\n1. Mezcla el pollo con la verdura rallada y el pan rallado.\n2. Forma mini burgers y plancha 3 min por cara.\n3. Monta con tomate en rodaja y una hoja de lechuga.","muslos de pollo al horno con limón":"Ingredientes (2 raciones): 4 muslos o contramuslos sin piel, 1 limón, 3 dientes de ajo, romero o tomillo, 1 patata (opcional), AOVE.\n\n1. Adoba el pollo con limón, ajo, hierbas y AOVE, 30 min.\n2. Hornea a 200 °C 40 min, regando con su jugo a mitad.\n3. Con patata panadera debajo, la guarnición se hace sola.","nuggets caseros de pollo":"Ingredientes (niños, 4 raciones): 400 g de pechuga en tacos, 1 huevo, pan rallado integral mezclado con un poco de queso rallado, ajo en polvo.\n\n1. Salpimienta el pollo y pásalo por huevo y el empanado.\n2. Bandeja con papel, hilo de AOVE por encima.\n3. Hornea a 210 °C 15 min girando a mitad. Salsa de yogur para mojar.","nuggets de pollo al horno con boniato":"Ingredientes (2 raciones): 400 g de pollo en tacos, huevo, pan rallado integral, 1 boniato grande, pimentón, AOVE.\n\n1. Corta el boniato en bastones, especia y hornea a 210 °C 25 min.\n2. Empana el pollo (huevo + pan rallado) y añádelo a la bandeja los últimos 15 min.\n3. Gira ambos a mitad. Sirve con salsa de yogur.","pavo a la plancha":"Ingredientes (2 raciones): 2 filetes gruesos de pavo, AOVE, ajo en polvo, orégano o hierbas provenzales, limón.\n\n1. Atempera y salpimienta el pavo con las hierbas.\n2. Plancha fuerte 3–4 min por cara según grosor; no lo seques.\n3. Reposa 2 min tapado y termina con limón y AOVE.","pavo en salsa de mostaza y miel":"Ingredientes (2 raciones): 300 g de pavo en medallones, 1 cda de mostaza de Dijon, 1 cdta de miel, 100 ml de caldo, 2 cdas de yogur o leche evaporada.\n\n1. Dora el pavo y reserva.\n2. En la sartén, mezcla mostaza, miel y caldo; reduce 3 min.\n3. Añade el yogur y el pavo; cocina 3–4 min a fuego suave sin hervir fuerte.","pechuga de pollo a la plancha":"Ingredientes (2 raciones): 2 pechugas abiertas en libro, AOVE, ajo, perejil o hierbas, limón.\n\n1. Atempera, salpimienta y pinta con AOVE.\n2. Plancha bien caliente 3 min por cara sin moverla (marcada dorada, interior jugoso).\n3. Reposa 2 min; remata con limón o majado de ajo-perejil.","pinchos morunos de pollo":"Ingredientes (2 raciones): 400 g de pollo en dados; adobo: comino, pimentón, cúrcuma, orégano, ajo, limón, AOVE.\n\n1. Adoba el pollo mínimo 1 h (mejor de víspera).\n2. Ensarta en brochetas.\n3. Plancha o parrilla 8–10 min girando. Acompaña con ensalada y yogur.","pollo al ajillo":"Ingredientes (2 raciones): 600 g de pollo troceado, 6 dientes de ajo, laurel, vino blanco o caldo, perejil, AOVE.\n\n1. Dora el pollo salpimentado a fuego medio-alto hasta tostar.\n2. Añade los ajos laminados y el laurel; cuando doren, el vino.\n3. Reduce y guisa 10 min tapado; perejil al final.","pollo al curry":"Ingredientes (2 raciones): 300 g de pollo en tacos, 1 cebolla, 1 cda de curry, 200 ml de leche de coco ligera o yogur, tomate triturado (2 cdas), arroz.\n\n1. Sofríe la cebolla; añade curry y tuesta 1 min.\n2. Sella el pollo, añade tomate y leche de coco.\n3. Guisa 12 min a fuego suave y sirve con arroz.","pollo al limón":"Ingredientes (2 raciones): 300 g de pollo en filetes o tacos, zumo de 1 limón, 1 diente de ajo, 1 cdta de miel (opcional), caldo, perejil.\n\n1. Dora el pollo salpimentado.\n2. Añade ajo, zumo de limón, miel y un chorrito de caldo.\n3. Reduce 5 min hasta que la salsa nape. Perejil y listo.","pollo asado con hierbas":"Ingredientes (4 raciones): 1 pollo entero o cuartos, limón, 4 dientes de ajo, romero, tomillo, AOVE, sal; 1 vaso de caldo o vino.\n\n1. Embadurna el pollo con AOVE, hierbas, ajo y limón (dentro también).\n2. Asa a 190 °C ~1 h (según tamaño), regando cada 20 min.\n3. Sube a 220 °C los últimos 10 min para dorar. Reposa antes de trinchar.","pollo con patata y verdura":"Ingredientes (niños, 2 raciones): 250 g de pollo, 1 patata, zanahoria y guisantes (o la verdura que acepten), caldo suave.\n\n1. Cuece o guisa el pollo con la patata y la verdura en caldo suave 20 min.\n2. Desmiga el pollo y trocea todo a su medida.\n3. Un hilito de AOVE crudo al servir; también funciona semitriturado.","pollo en pepitoria":"Ingredientes (4 raciones): 1 pollo troceado, 1 cebolla, 2 dientes de ajo, 30 g de almendras, 1 huevo cocido, azafrán, vino blanco, caldo, laurel.\n\n1. Dora el pollo y reserva; sofríe cebolla y ajo.\n2. Devuelve el pollo con vino, caldo y laurel; guisa 30 min.\n3. Maja almendras, yema cocida y azafrán; añade y liga 5 min. Clara picada por encima.","pollo guisado con patata y zanahoria":"Ingredientes (4 raciones): 600 g de pollo troceado, 2 patatas, 3 zanahorias, 1 cebolla, 1 pimiento verde, ajo, laurel, pimentón, caldo.\n\n1. Dora el pollo; añade el sofrito de verduras 8 min.\n2. Incorpora pimentón, patata cascada, zanahoria, laurel y caldo hasta casi cubrir.\n3. Guisa 25 min a fuego suave hasta que la patata espese el caldo.","pollo teriyaki con arroz integral":"Ingredientes (2 raciones): 300 g de contramuslos en tiras, 140 g de arroz integral; salsa: 3 cdas de soja, 1 cda de mirin o miel, jengibre, sésamo.\n\n1. Cuece el arroz. Sella el pollo a fuego vivo.\n2. Añade la salsa y reduce 3–4 min hasta glasear.\n3. Sirve sobre el arroz con sésamo y cebolleta.","pollo tikka masala":"Ingredientes (2 raciones): 300 g de pollo; marinada: yogur, garam masala, cúrcuma, ajo y jengibre; salsa: cebolla, 300 g de tomate, garam masala, 100 ml de leche de coco ligera.\n\n1. Marina el pollo 30 min y márcalo a fuego fuerte.\n2. Sofríe cebolla, especias y tomate 10 min; añade la leche de coco.\n3. Incorpora el pollo y guisa 10 min. Con arroz basmati.","quesadilla integral de pollo y verduras":"Ingredientes (2 raciones): 2 tortillas integrales, 150 g de pollo cocinado desmigado, ½ pimiento, ½ cebolla, maíz, queso rallado ligero.\n\n1. Saltea pimiento y cebolla; mezcla con el pollo.\n2. Rellena media tortilla con la mezcla y queso; dobla.\n3. Plancha 2 min por cara hasta dorar y fundir. Corta en triángulos.","shawarma de pollo en wrap integral":"Ingredientes (2 raciones): 300 g de pollo en tiras; adobo: comino, cilantro molido, pimentón, cúrcuma, ajo, limón, yogur; wraps integrales, tomate, lechuga, salsa de yogur.\n\n1. Adoba el pollo 30 min y saltéalo a fuego fuerte hasta dorar.\n2. Calienta los wraps y monta con las verduras.\n3. Salsa de yogur con limón y enrolla.","souvlaki de pollo con tzatziki":"Ingredientes (2 raciones): 400 g de pollo en dados; adobo: limón, orégano, ajo, AOVE; tzatziki: yogur griego, pepino rallado y escurrido, ajo, menta.\n\n1. Adoba el pollo 30 min y ensarta en brochetas.\n2. Plancha 10 min girando hasta dorar.\n3. Mezcla el tzatziki y sirve con pan de pita o ensalada.","wok de verduras con pollo":"Ingredientes (2 raciones): 250 g de pollo en tiras, brócoli, zanahoria, pimiento, calabacín, cebolleta, soja, jengibre, ajo, sésamo.\n\n1. Saltea el pollo a fuego máximo 3 min y reserva.\n2. Saltea las verduras 4–5 min empezando por las duras.\n3. Junta todo con la soja, ajo y jengibre; 1 min más y sésamo al servir.","albóndigas de pavo con puré":"Ingredientes (niños, 2 raciones): 250 g de pavo picado, pan mojado en leche, huevo, perejil; puré: 2 patatas, leche, AOVE.\n\n1. Forma albóndigas pequeñas y dóralas suave o al horno 12 min a 200 °C.\n2. Termínalas 8 min en salsa suave de tomate o caldo.\n3. Cuece la patata, machaca con leche y AOVE, y sirve juntos.","albóndigas de pavo en salsa":"Ingredientes (2 raciones): 300 g de pavo picado, pan rallado (1 cda), huevo, ajo y perejil; salsa: cebolla, zanahoria, tomate o caldo con un toque de vino.\n\n1. Mezcla, bolea y dora las albóndigas; reserva.\n2. Sofríe la verdura, tritura la salsa si la quieres fina.\n3. Guisa las albóndigas en la salsa 12 min.","albóndigas en salsa de tomate":"Ingredientes (2 raciones): 300 g de ternera magra (o mixta) picada, pan rallado, huevo, ajo y perejil; salsa: 400 g de tomate, ½ cebolla, laurel.\n\n1. Bolea y dora las albóndigas a fuego medio-alto.\n2. Prepara la salsa de tomate con la cebolla 12 min y tritura.\n3. Junta y guisa 10 min a fuego suave.","carpaccio de ternera":"Ingredientes (2 raciones): 200 g de solomillo o tapa de ternera (congelado 48 h y cortado finísimo), rúcula, parmesano, limón, AOVE, pimienta.\n\n1. Extiende las láminas casi transparentes en plato frío.\n2. Aliña con limón, AOVE, sal y pimienta.\n3. Corona con rúcula y lascas de parmesano. Sirve muy frío.","conejo al horno con hierbas":"Ingredientes (2–3 raciones): 1 conejo troceado, 4 dientes de ajo, romero y tomillo, vino blanco, 1 patata (opcional), AOVE.\n\n1. Adoba el conejo con ajo, hierbas, AOVE y sal, 30 min.\n2. Hornea a 190 °C 45 min con el vino, girando a mitad.\n3. Los últimos 10 min a 220 °C para dorar. Muy magro y sabroso.","estofado de ternera con verduras":"Ingredientes (4 raciones): 600 g de morcillo o aguja en tacos, 1 cebolla, 2 zanahorias, 1 patata grande, guisantes, ajo, laurel, pimentón, vino tinto o caldo.\n\n1. Sella la carne salpimentada y reserva; sofríe la verdura.\n2. Devuelve la carne con vino, laurel y caldo; guisa tapado 1,5 h (o 35 min en olla rápida).\n3. Añade patata y guisantes y cocina 20 min más.","hamburguesa casera de ternera con pan integral":"Ingredientes (2 raciones): 300 g de ternera picada (sola: solo carne y sal), pan integral, tomate, lechuga, cebolla, queso (opcional).\n\n1. Forma las hamburguesas sin amasar demasiado; sal justo antes de cocinar.\n2. Plancha fuerte 3 min por cara (al punto deseado).\n3. Monta en pan integral tostado con las verduras.","lomo de cerdo a la naranja":"Ingredientes (2 raciones): 300 g de lomo en medallones, zumo de 2 naranjas, 1 cdta de miel, 1 diente de ajo, romero, caldo.\n\n1. Dora los medallones salpimentados y reserva.\n2. Reduce el zumo con miel, ajo y romero 5 min.\n3. Devuelve el lomo 3–4 min hasta que la salsa nape.","lomo de cerdo a la plancha":"Ingredientes (2 raciones): 300 g de lomo fresco en filetes, ajo en polvo, orégano o pimentón, AOVE, limón.\n\n1. Atempera y adoba ligero los filetes.\n2. Plancha fuerte 2–3 min por cara; no lo pases, que se seca.\n3. Sirve con limón y guarnición verde o pimientos.","solomillo de cerdo al horno":"Ingredientes (2–3 raciones): 1 solomillo de cerdo, mostaza (1 cda), ajo, romero, AOVE, vino blanco o caldo.\n\n1. Sella el solomillo entero en sartén por todos los lados.\n2. Pinta con mostaza-ajo-romero y hornea a 200 °C 15–18 min (rosado dentro).\n3. Reposa 5 min tapado, corta en medallones y salsea con el jugo desglasado.","tacos de ternera":"Ingredientes (2 raciones): 300 g de ternera en tiras o picada, comino y pimentón, tortillas de maíz, cebolla morada, tomate, aguacate, lima, cilantro.\n\n1. Saltea la ternera especiada a fuego fuerte 3–4 min.\n2. Calienta las tortillas.\n3. Monta con pico de gallo (tomate, cebolla, lima) y aguacate.","ternera a la plancha":"Ingredientes (2 raciones): 2 filetes de ternera (lomo o babilla), AOVE, sal en escamas, pimienta; guarnición verde o pimientos.\n\n1. Atempera la carne 15 min fuera de la nevera y sécala.\n2. Plancha muy caliente: 2–3 min por cara según grosor y punto.\n3. Reposa 2 min, sal en escamas y sirve.","ternera salteada con verduras y soja":"Ingredientes (2 raciones): 300 g de ternera en tiras finas, 1 pimiento, 1 zanahoria, brócoli, cebolleta, salsa de soja, jengibre, ajo, maicena (1 cdta).\n\n1. Marina la ternera 10 min con soja, jengibre y maicena.\n2. Saltéala a fuego máximo 2 min y reserva; saltea las verduras 4 min.\n3. Junta todo con un chorro más de soja, 1 min y listo.","frittata de verduras":"Ingredientes (2 raciones): 5 huevos, 1 calabacín pequeño, ½ pimiento, ½ cebolla, espinacas, queso rallado (2 cdas), AOVE.\n\n1. Saltea las verduras en sartén apta para horno.\n2. Vierte los huevos batidos con el queso; cuaja 3 min a fuego suave.\n3. Termina al horno/gratinador 8–10 min hasta que esponje.","huevos al plato con verduras":"Ingredientes (2 raciones): 4 huevos, pisto o sofrito de tomate, pimiento y calabacín, guisantes (opcional), pan integral.\n\n1. Calienta el pisto en cazuelitas o fuente de horno.\n2. Casca los huevos encima y sazona.\n3. Hornea a 190 °C 8–10 min: clara cuajada, yema líquida.","huevos rellenos de atún":"Ingredientes (2 raciones): 4 huevos, 2 latas de atún, 2 cdas de tomate frito suave o yogur-mayonesa ligera, aceitunas (opcional).\n\n1. Cuece los huevos 10 min, enfría y parte a lo largo.\n2. Mezcla las yemas (guarda un poco) con atún y la salsa.\n3. Rellena, ralla la yema reservada por encima y enfría antes de servir.","huevos rellenos de salmón con salsa de aguacate":"Ingredientes (2 raciones): 4 huevos, 100 g de salmón ahumado, cebollino; salsa: 1 aguacate, yogur natural, limón, sal.\n\n1. Cuece los huevos, parte y saca las yemas.\n2. Mezcla yemas con salmón picado y cebollino; rellena.\n3. Tritura el aguacate con yogur y limón y nápalos.","quiche de verduras integral":"Ingredientes (4 raciones): base: 150 g de harina integral, 60 ml de AOVE, agua; relleno: 3 huevos, 150 ml de leche evaporada, calabacín, puerro, pimiento, queso rallado.\n\n1. Mezcla la masa, estira y precuece en molde 10 min a 180 °C.\n2. Saltea las verduras y repártelas en la base.\n3. Vierte huevos batidos con leche y queso; hornea 25–30 min a 180 °C.","revuelto de setas":"Ingredientes (2 raciones): 4 huevos, 250 g de setas variadas, 1 diente de ajo, perejil, AOVE; gulas o gambas (opcional).\n\n1. Saltea las setas con el ajo a fuego fuerte hasta dorar.\n2. Baja el fuego, añade los huevos ligeramente batidos.\n3. Remueve fuera y dentro del fuego hasta cuajar cremoso (no seco).","shakshuka":"Ingredientes (2 raciones): 4 huevos, 400 g de tomate triturado, 1 pimiento rojo, 1 cebolla, ajo, comino y pimentón, una pizca de cayena, perejil o cilantro.\n\n1. Sofríe cebolla, pimiento y ajo; añade especias y tomate; reduce 10 min.\n2. Haz 4 huecos y casca los huevos.\n3. Tapa y cuaja 5–6 min. Sirve en la sartén con pan integral.","tortilla de calabacín":"Ingredientes (2 raciones): 5 huevos, 1 calabacín grande, ½ cebolla, AOVE, sal.\n\n1. Pocha el calabacín en medias lunas con la cebolla hasta tierno; escurre.\n2. Mezcla con los huevos batidos y reposa 5 min.\n3. Cuaja en sartén 3 min por lado (jugosa por dentro), con vuelta de plato.","tortilla de espinacas y queso":"Ingredientes (2 raciones): 5 huevos, 200 g de espinacas, ½ cebolla, 50 g de queso (feta o rallado), AOVE.\n\n1. Pocha la cebolla y saltea las espinacas hasta que pierdan el agua.\n2. Mezcla con huevos batidos y el queso.\n3. Cuaja a fuego suave 3–4 min por lado.","tortilla de patata y calabacín":"Ingredientes (niños, 4 raciones): 4 huevos, 2 patatas, 1 calabacín, ½ cebolla, AOVE.\n\n1. Pocha patata, calabacín y cebolla a fuego medio hasta tiernos; escurre bien.\n2. Mezcla con el huevo batido y reposa 5 min.\n3. Cuaja a fuego suave, dale la vuelta y deja jugosa pero cuajada (para niños, sin partes líquidas).","tortilla de patatas":"Ingredientes (4 raciones): 6 huevos, 4 patatas medianas, 1 cebolla (opcional pero rica), AOVE, sal.\n\n1. Pocha la patata en láminas con la cebolla a fuego medio 20 min; escurre.\n2. Mezcla con el huevo batido y sal; reposa 10 min.\n3. Cuaja a fuego medio-suave 3–4 min por lado según el punto que os guste.","tortilla francesa":"Ingredientes (niños, 1 ración): 1–2 huevos, una pizca de sal, AOVE; queso o jamón cocido picado (opcional).\n\n1. Bate bien el huevo.\n2. Sartén antiadherente a fuego medio con unas gotas de AOVE.\n3. Cuaja doblando en tres; para niños, bien cuajada por dentro.","tortilla francesa con jamón":"Ingredientes (1 ración): 2 huevos, 40 g de jamón serrano o cocido picado, cebollino (opcional), AOVE.\n\n1. Bate los huevos con el jamón picado.\n2. Vierte en sartén caliente con poco AOVE.\n3. Cuaja al punto, dobla y sirve; con ensalada verde es cena completa.","avena con fruta":"Ingredientes (1 ración): 40 g de copos de avena, 200 ml de leche o bebida vegetal, ½ plátano o fruta de temporada, canela, nueces o semillas.\n\n1. Cuece la avena en la leche 3–5 min removiendo (o déjala en remojo la noche anterior).\n2. Endulza solo con el plátano machacado o fruta madura.\n3. Termina con fruta troceada, canela y unas nueces.","tostada integral con aceite":"Ingredientes (1 ración): 1–2 rebanadas de pan 100 % integral, AOVE, tomate rallado (opcional), sal.\n\n1. Tuesta el pan.\n2. Riega con buen AOVE (y tomate rallado si apetece).\n3. Pizca de sal. Acompaña con fruta y café o leche.","yogur con fruta y nueces":"Ingredientes (1 ración): 1–2 yogures naturales sin azúcar, fruta de temporada troceada, 4–6 nueces, canela o avena (opcional).\n\n1. Pon el yogur de base.\n2. Añade la fruta troceada y las nueces.\n3. Canela o un puñadito de avena por encima. Sin azúcar añadido.","fruta":"Sugerencia: fruta de temporada lavada y troceada a su medida (plátano, manzana, pera, mandarina, sandía…). Variar colores durante la semana. Para los peques, en trozos seguros según edad; entera mejor que en zumo.","yogur":"Sugerencia: yogur natural sin azúcar (mejor que sabores). Se puede acompañar con fruta troceada o un poco de canela. Evitar los \"de sabores\" y azucarados: un yogur natural con fruta real es la versión buena.","sándwich integral":"Sugerencia (niños): pan 100 % integral con relleno sencillo: queso + tomate, jamón cocido de calidad, atún con tomate, o crema de cacahuete 100 % con plátano. Cortado en triángulos apetece más."};
+
 /* ============================ STATE ============================ */
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
-const COURSE_LABEL = {primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.0.0";
-const SCHEMA_VERSION = 1;          // bump only on breaking state changes
+const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
+const APP_VERSION = "1.1.0";
+const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
+const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
 const SEP = " · ";                 // composite-meal separator (1º · 2º)
 const MEMBER_IDS = ["nosotros","noah","iria"];
 
@@ -360,10 +386,16 @@ function MondayOf(d){
 function AddDays(iso,n){const d=new Date(iso+"T00:00:00");d.setDate(d.getDate()+n);return Ymd(d)}
 function FmtLong(iso){const d=new Date(iso+"T00:00:00");return d.getDate()+" "+["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"][d.getMonth()]}
 
-/* ---- load / save (storage is best-effort; never throws) ---- */
+/* ---- load / save (storage is best-effort; never throws) ----
+   Save() stamps updatedAt (drives cloud-sync conflict resolution: newest wins).
+   SaveQuiet() skips the stamp — for boot/adopt writes that aren't user edits,
+   so a mere app-open never outranks real changes made on another device. */
+let _stampPaused=false;
 function Save(){
+	if(!_stampPaused) state.updatedAt=new Date().toISOString();
 	try{localStorage.setItem(STORE_KEY,JSON.stringify(state))}catch(e){/* in-memory only */}
 }
+function SaveQuiet(){ _stampPaused=true; Save(); _stampPaused=false; }
 /* Reference data (catalog) is rebuilt from SEED on every boot and never
    trusted from storage; otherwise catalog updates never reach an already
    installed user. Only user data (weeks/inventory/produce/members/theme)
@@ -381,12 +413,48 @@ function ValidState(s){
 }
 function Load(){
 	try{
-		const raw = localStorage.getItem(STORE_KEY);
+		let raw = localStorage.getItem(STORE_KEY), legacy=false;
+		if(!raw){ raw = localStorage.getItem(LEGACY_STORE_KEY); legacy = !!raw; }
 		if(!raw) return false;
 		const s = JSON.parse(raw);
 		if(!ValidState(s)) return false;   // partial/corrupt -> re-seed
+		if(legacy) MigrateV1(s);           // v1 store found: upgrade in place
 		state = s; return true;
 	}catch(e){ return false; }
+}
+/* v1 -> v2: user-editable recipe book + fixed breakfast/snack routine.
+   The v1 key is left untouched as a safety net; Save() writes to the v2 key. */
+function MigrateV1(s){
+	if(!Array.isArray(s.userDishes)) s.userDishes=[];
+	if(!Array.isArray(s.hidden)) s.hidden=[];
+	if(!Array.isArray(s.extras)) s.extras=[];
+	Object.values(s.weeks||{}).forEach(w=>ApplyTemplate(w));
+	return s;
+}
+
+/* ---- fixed routine: breakfasts & mid-morning snacks ----
+   Reference data straight from SEED (same philosophy as the catalog).
+   ApplyTemplate only fills EMPTY cells, so manual edits and deliberate
+   deletions always win over the template. */
+const TEMPLATE_SLOTS = ["Desayuno","Almuerzo"];
+function TemplateDish(dow,slot,mid){
+	const src = SEED.week[dow];
+	if(!src || !src.slots[slot]) return "";
+	return src.slots[slot][mid] || "";
+}
+function ApplyTemplate(week){
+	let n=0;
+	(week.days||[]).forEach((d,i)=>TEMPLATE_SLOTS.forEach(s=>{
+		if(!d.slots[s]) return;
+		MEMBER_IDS.forEach(mid=>{
+			const c=d.slots[s][mid];
+			if(c && !c.dish && !c.away){
+				const t=TemplateDish(i,s,mid);
+				if(t){ c.dish=t; n++; }
+			}
+		});
+	}));
+	return n;
 }
 
 function SeedState(){
@@ -407,7 +475,7 @@ function SeedState(){
 	return {
 		members, catalog,
 		inventory:{frigo,conge},
-		produce, extras:[],
+		produce, extras:[], userDishes:[], hidden:[],
 		weeks, current: wk.monday
 	};
 }
@@ -443,6 +511,7 @@ function EnsureWeek(monday){
 		days.push({date,slots});
 	}
 	state.weeks[monday] = {monday,days};
+	ApplyTemplate(state.weeks[monday]);   // routine desayunos/almuerzos come pre-filled
 	return state.weeks[monday];
 }
 
@@ -494,6 +563,13 @@ function RenderTop(){
 	document.getElementById("wkLabel").innerHTML =
 		`<div class="r1">${FmtLong(wk.monday)} – ${FmtLong(end)}</div>`+
 		`<div class="r2">${CountPlanned()} comidas planificadas</div>`;
+	// "Hoy": dimmed on the current week, highlighted when viewing another one
+	const tb=document.getElementById("todayBtn");
+	if(tb){
+		const here = wk.monday===MondayOf(TodayISO());
+		tb.classList.remove("here","away");
+		tb.classList.add(here?"here":"away");
+	}
 }
 
 /* ============================ RENDER: NAV ============================ */
@@ -688,11 +764,32 @@ function MacroIndex(){
 	});
 	return _macroIndex;
 }
+/* catalog = (SEED upserted with state.userDishes, keyed by name) − hidden.
+   A user dish whose name matches a SEED dish overrides it ("edit");
+   a new name extends the catalog ("add"). SEED itself is never mutated. */
 function RefreshCatalog(){
 	const hidden = new Set(state.hidden||[]);
-	state.catalog = BuildCatalog()
+	const byName = new Map();
+	BuildCatalog().forEach(c=>byName.set(c.name.trim().toLowerCase(),c));
+	(state.userDishes||[]).forEach(u=>{
+		if(!u || !u.name) return;
+		byName.set(u.name.trim().toLowerCase(),{
+			id:Uid(), name:u.name, tipo:u.tipo||null, course:u.course||"primero",
+			kcal:u.kcal, prot:u.prot, carb:u.carb, fat:u.fat,
+			estilo:u.estilo||null, batch:!!u.batch, receta:u.receta||null, user:true
+		});
+	});
+	state.catalog = [...byName.values()]
 		.filter(c=>!hidden.has(c.name.trim().toLowerCase()));
 	_macroIndex = null;
+}
+/* recipe text for a dish: user-written first, then the built-in recipe book */
+function DishRecipe(name){
+	if(!name) return null;
+	const key=name.trim().toLowerCase();
+	const u=(state.userDishes||[]).find(d=>d.name&&d.name.trim().toLowerCase()===key);
+	if(u && u.receta) return u.receta;
+	return RECETAS[key] || null;
 }
 function DishMacros(name){
 	if(!name) return null;
@@ -732,61 +829,134 @@ function RenderMacros(){
 		const pc=t.prot*4,cc=t.carb*4,fc=t.fat*9,sum=Math.max(1,pc+cc+fc);
 		const pp=Math.round(pc/sum*100),cp=Math.round(cc/sum*100),fp=Math.max(0,100-pp-cp);
 		const sub=mem.factor!==1?`ración ${Math.round(mem.factor*100)} %`:"por adulto";
+		const mm=(color,label,val)=>`<span class="mm">
+			<span class="hd"><span class="d" style="background:${color}"></span>${label} <b>${Math.round(val/days)} g/día</b></span>
+			<span class="wksm">${Math.round(val)} g/semana</span>
+		</span>`;
 		return `<div class="mc-card">
 			<div class="mc-top">
 				<div class="mc-name"><span class="tag" style="background:${hex}"></span>${mem.name}</div>
 				<div class="mc-sub">${sub}</div>
 			</div>
 			<div class="mc-kcal">${dayK}<small>kcal/día</small></div>
-			<div class="mc-week">${Math.round(t.kcal).toLocaleString("es-ES")} kcal en la semana · ${counted}/${planned} platos con datos</div>
+			<div class="mc-week">${Math.round(t.kcal).toLocaleString("es-ES")} kcal/semana · ${counted}/${planned} platos con datos</div>
 			<div class="mc-bar">
 				<i style="width:${pp}%;background:#4C8BB0"></i>
 				<i style="width:${cp}%;background:#E0A93B"></i>
 				<i style="width:${fp}%;background:#CC6666"></i>
 			</div>
 			<div class="mc-macros">
-				<span class="mm"><span class="d" style="background:#4C8BB0"></span>Proteína <b>${Math.round(t.prot/days)} g</b></span>
-				<span class="mm"><span class="d" style="background:#E0A93B"></span>Hidratos <b>${Math.round(t.carb/days)} g</b></span>
-				<span class="mm"><span class="d" style="background:#CC6666"></span>Grasa <b>${Math.round(t.fat/days)} g</b></span>
+				${mm("#4C8BB0","Proteína",t.prot)}
+				${mm("#E0A93B","Hidratos",t.carb)}
+				${mm("#CC6666","Grasa",t.fat)}
 			</div>
 		</div>`;
 	}).join("");
 	return `<div class="view-title">Macros por persona</div>
-		<div class="mc-note">Estimación por ración estándar (no es medición). Suma <b>comida y cena</b> del catálogo; desayunos/almuerzos rutinarios y platos escritos a mano no cuentan. «Nosotros» = por adulto; Noah e Iria al 60 %. Medias por día sobre 7 días.</div>
+		<div class="mc-note">Estimación por ración estándar (no es medición). Suma <b>comida y cena</b> del catálogo; desayunos/almuerzos rutinarios y platos escritos a mano no cuentan. «Nosotros» = por adulto; Noah e Iria al 60 %. En negrita, la media <b>por día</b> (sobre 7 días); en gris atenuado, el total <b>semanal</b>.</div>
 		${cards}`;
 }
 
 /* ============================ RENDER: IDEAS ============================ */
 function RenderIdeas(){
-	const course = ui.ideasCourse;
-	let items = state.catalog.filter(c=>c.course===course);
+	const course = ui.ideasCourse;                       // "todos" = search everywhere
+	let items = course==="todos"? state.catalog.slice() : state.catalog.filter(c=>c.course===course);
 	const tipos = [...new Set(items.map(i=>i.tipo).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
 	if(ui.ideasTipo) items=items.filter(i=>i.tipo===ui.ideasTipo);
 	if(ui.ideasSearch){const q=ui.ideasSearch.toLowerCase();items=items.filter(i=>i.name.toLowerCase().includes(q))}
 	items.sort((a,b)=>a.name.localeCompare(b.name,"es"));
 
-	const tabs = ["primero","segundo","cena","noah"].map(c=>
+	const tabs = ["todos","primero","segundo","cena","noah"].map(c=>
 		`<button class="tab ${course===c?'on':''}" data-action="ideas-course" data-c="${c}">${COURSE_LABEL[c]}</button>`).join("");
 	const chips = `<button class="fchip ${!ui.ideasTipo?'on':''}" data-action="ideas-tipo" data-t="">Todos</button>`+
 		tipos.map(t=>`<button class="fchip ${ui.ideasTipo===t?'on':''}" data-action="ideas-tipo" data-t="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("");
 
 	const list = items.length? items.map(i=>`
-		<div class="idea">
-			<div class="nm">${escapeHtml(i.name)}</div>
+		<div class="idea" data-action="idea-open" data-id="${i.id}" role="button">
+			<div class="nm">${escapeHtml(i.name)}${i.user?' <span class="ued" title="Editado por ti">✎</span>':''}</div>
+			${course==="todos"?`<span class="ti co">${COURSE_LABEL[i.course]||i.course}</span>`:''}
 			${i.tipo?`<span class="ti">${escapeHtml(i.tipo)}</span>`:''}
 			<button class="del" data-action="idea-del" data-id="${i.id}">✕</button>
 		</div>`).join("") : `<div class="empty-msg">Nada aquí todavía.</div>`;
 
 	return `<div class="view-title">Ideas de comidas</div>
-		<p class="hint">Tu recetario. Lo que añadas aquí aparece al planear y en “Sorpréndeme”. ${state.catalog.length} platos.</p>
-		<input class="field" data-action="ideas-search" id="ideasSearch" placeholder="Buscar plato…" value="${escapeHtml(ui.ideasSearch)}" style="margin:0 2px 12px;width:calc(100% - 4px)">
+		<p class="hint">Tu recetario. Toca un plato para ver su receta y macros; lo que añadas aparece al planear y en “Sorpréndeme”. ${state.catalog.length} platos.</p>
+		<input class="field" data-action="ideas-search" id="ideasSearch" placeholder="${course==="todos"?"Buscar en todo el recetario…":"Buscar plato…"}" value="${escapeHtml(ui.ideasSearch)}" style="margin:0 2px 12px;width:calc(100% - 4px)">
 		<div class="tabs">${tabs}</div>
 		<div class="fchips">${chips}</div>
 		<div class="sec">
 			<div class="sec-h"><h3>${COURSE_LABEL[course]}</h3><span class="sub">${items.length}</span>
-				<button class="add-x" data-action="idea-add" data-c="${course}">+ nuevo</button></div>
+				<button class="add-x" data-action="idea-add" data-c="${course==="todos"?"primero":course}">+ nuevo</button></div>
 			${list}
 		</div>`;
+}
+
+/* ---- dish detail sheet: macros + recipe + edit ---- */
+function OpenDish(id){
+	const d=state.catalog.find(x=>x.id===id); if(!d) return;
+	const rec=DishRecipe(d.name);
+	const m=(typeof d.kcal==="number")?d:null;
+	const chips=[COURSE_LABEL[d.course]||d.course,d.tipo,d.estilo,d.batch?"Batch/Tupper":null]
+		.filter(Boolean).map(t=>`<span class="fchip on" style="pointer-events:none">${escapeHtml(t)}</span>`).join(" ");
+	const macros=m?`
+		<div class="dm-grid">
+			<div class="dm"><b>${d.kcal}</b><span>kcal</span></div>
+			<div class="dm"><b>${d.prot} g</b><span>proteína</span></div>
+			<div class="dm"><b>${d.carb} g</b><span>hidratos</span></div>
+			<div class="dm"><b>${d.fat} g</b><span>grasa</span></div>
+		</div>
+		<p class="hint" style="margin:6px 2px 0">Por ración adulta estimada; niños ≈ ×0,6.</p>`
+		:`<p class="hint" style="margin:6px 2px 0">Sin macros — edita el plato para añadirlas.</p>`;
+	const recHtml=rec?`<div class="lab" style="margin-top:14px">Receta</div><div class="rec-text">${escapeHtml(rec)}</div>`
+		:`<div class="lab" style="margin-top:14px">Receta</div><div class="rec-text muted">Aún sin receta. Pulsa «Editar» y escríbela una vez: quedará guardada.</div>`;
+	document.getElementById("sheetContent").innerHTML=`
+		<div class="grip"></div>
+		<div class="sheet-h"><div class="t1">${escapeHtml(d.name)}</div><div class="x" data-action="close-sheet">✕</div></div>
+		<div class="sheet-body">
+			<div class="fchips" style="padding:0 0 10px">${chips}</div>
+			${macros}
+			${recHtml}
+			<div class="act-row" style="margin-top:16px">
+				<button class="btn prim" data-action="idea-edit" data-id="${d.id}">✏️ Editar</button>
+				<button class="btn danger" data-action="idea-del" data-id="${d.id}" data-close="1">Quitar</button>
+			</div>
+		</div>`;
+	ShowSheet();
+}
+
+/* ---- dish editor (add + edit). Writes to state.userDishes, keyed by name. ---- */
+function EditDish(dish,defCourse){
+	const isEdit=!!dish;
+	const orig=isEdit?dish.name:null;
+	AddPrompt({title:isEdit?"Editar plato":"Nuevo plato",fields:[
+		{key:"name",label:"Nombre del plato",ph:"p.ej. Lasaña de calabacín",value:isEdit?dish.name:""},
+		{key:"course",label:"Categoría",type:"select",value:isEdit?dish.course:defCourse,options:[
+			{value:"primero",label:"Primeros"},{value:"segundo",label:"Segundos"},{value:"cena",label:"Cenas"},{value:"noah",label:"Comidas Noah"}]},
+		{key:"tipo",label:"Tipo (opcional)",ph:"Pasta, Pollo, Verduras…",value:isEdit?(dish.tipo||""):""},
+		{key:"estilo",label:"Estilo (opcional)",ph:"Casero, Italiano, Asiático…",value:isEdit?(dish.estilo||""):""},
+		{key:"batch",label:"¿Batch/Tupper?",type:"select",value:isEdit&&dish.batch?"1":"0",options:[{value:"0",label:"No"},{value:"1",label:"Sí"}]},
+		{key:"kcal",label:"Kcal por ración",type:"number",ph:"450",value:isEdit&&typeof dish.kcal==="number"?dish.kcal:""},
+		{key:"prot",label:"Proteína (g)",type:"number",ph:"25",value:isEdit&&typeof dish.prot==="number"?dish.prot:""},
+		{key:"carb",label:"Hidratos (g)",type:"number",ph:"40",value:isEdit&&typeof dish.carb==="number"?dish.carb:""},
+		{key:"fat",label:"Grasa (g)",type:"number",ph:"15",value:isEdit&&typeof dish.fat==="number"?dish.fat:""},
+		{key:"receta",label:"Receta (ingredientes y pasos)",type:"textarea",ph:"Escríbela una vez y quedará guardada…",value:isEdit?(DishRecipe(dish.name)||""):""}
+	],onSave:v=>{
+		if(!v.name) return Toast("Pon un nombre");
+		const num=x=>{const n=parseFloat(String(x).replace(",","."));return isFinite(n)?n:undefined};
+		const u={name:v.name,course:v.course,tipo:v.tipo||null,estilo:v.estilo||null,batch:v.batch==="1",
+			kcal:num(v.kcal),prot:num(v.prot),carb:num(v.carb),fat:num(v.fat),receta:v.receta||null};
+		const key=v.name.trim().toLowerCase();
+		const okey=orig?orig.trim().toLowerCase():null;
+		state.userDishes=(state.userDishes||[]).filter(d=>{
+			const k=(d.name||"").trim().toLowerCase();
+			return k!==key && k!==okey;
+		});
+		state.userDishes.push(u);
+		state.hidden=(state.hidden||[]).filter(h=>h!==key);        // resurrect if it was hidden
+		if(okey && okey!==key && !state.hidden.includes(okey)) state.hidden.push(okey);  // rename: hide old SEED name
+		RefreshCatalog(); Save(); CloseSheet();
+		ui.ideasCourse=v.course; Render(); Toast(isEdit?"Plato actualizado":"Plato añadido");
+	}});
 }
 
 /* ============================ MASTER RENDER ============================ */
@@ -827,8 +997,10 @@ function OpenPicker(dayIdx,slot,member,applyAll){
 }
 function PickerCandidates(){
 	let items=state.catalog.slice();
-	if(picker.slot==="Comida") items=items.filter(c=>c.course===(picker.sub==="pri"?"primero":"segundo"));
-	else if(picker.slot==="Cena") items=items.filter(c=>c.course==="cena");
+	if(!picker.all){                     // scope toggle: restrict to the slot's course
+		if(picker.slot==="Comida") items=items.filter(c=>c.course===(picker.sub==="pri"?"primero":"segundo"));
+		else if(picker.slot==="Cena") items=items.filter(c=>c.course==="cena");
+	}
 	// other slots (Desayuno/Almuerzo): all courses
 	if(picker.tipo) items=items.filter(c=>c.tipo===picker.tipo);
 	if(picker.search){const q=picker.search.toLowerCase();items=items.filter(c=>c.name.toLowerCase().includes(q))}
@@ -857,7 +1029,12 @@ function RenderPicker(){
 				${picker.seg?`<span class="cm-x" data-paction="pclrsub" data-c="seg">✕</span>`:''}
 			</button>
 		</div>` : "";
-	const recLab = isComposite ? (isComida ? (picker.sub==="pri"?"Primeros":"Segundos") : "Cenas") : "Del recetario";
+	const baseLab = isComposite ? (isComida ? (picker.sub==="pri"?"Primeros":"Segundos") : "Cenas") : "Del recetario";
+	const recLab = picker.all ? "Todo el recetario" : baseLab;
+	const scopeChips = isComposite ? `<div class="fchips" style="padding:12px 0 0">
+		<button class="fchip ${!picker.all?'on':''}" data-paction="pall" data-v="0">Solo ${baseLab.toLowerCase()}</button>
+		<button class="fchip ${picker.all?'on':''}" data-paction="pall" data-v="1">Todas las categorías</button>
+	</div>` : "";
 	const tipos=[...new Set(PickerCandidatesAllTipos())].sort((a,b)=>a.localeCompare(b,"es"));
 	const tipoChips = `<div class="fchips" style="padding:0 0 12px">
 		<button class="fchip ${!picker.tipo?'on':''}" data-paction="ptipo" data-t="">Todos</button>
@@ -891,6 +1068,7 @@ function RenderPicker(){
 			</div>
 			${composerHtml}
 			<input class="field" id="pickSearch" placeholder="Buscar o escribir plato…" value="${escapeHtml(picker.search)}" style="margin-top:12px">
+			${scopeChips}
 			${courseTabs}
 			${invHtml}
 			${tipoChips}
@@ -911,8 +1089,10 @@ function RenderPicker(){
 }
 function PickerCandidatesAllTipos(){
 	let items=state.catalog.slice();
-	if(picker.slot==="Comida") items=items.filter(c=>c.course===(picker.sub==="pri"?"primero":"segundo"));
-	else if(picker.slot==="Cena") items=items.filter(c=>c.course==="cena");
+	if(!picker.all){
+		if(picker.slot==="Comida") items=items.filter(c=>c.course===(picker.sub==="pri"?"primero":"segundo"));
+		else if(picker.slot==="Cena") items=items.filter(c=>c.course==="cena");
+	}
 	return items.map(c=>c.tipo).filter(Boolean);
 }
 
@@ -1038,6 +1218,126 @@ function Tokens(s){
 		.filter(w=>w.length>3 && !["con","las","los","una","del","sin","pan"].includes(w));
 }
 
+/* ============================ CLOUD SYNC (GitHub) ============================
+   "Guardar" commits data/sync.json to the app's own repo via the GitHub
+   Contents API; on boot (online, non-blocking) the newest copy wins by
+   updatedAt. Offline-first is untouched: sync is a layer on top, the app
+   never waits for the network. The fine-grained PAT lives ONLY in its own
+   localStorage key — never inside state, exports or the synced file. */
+const GH_OWNER="alejandromartinherrer", GH_REPO="nutri-app", GH_BRANCH="main";
+const GH_SYNC_PATH="data/sync.json";
+const GH_TOKEN_KEY="nutri_gh_token";
+
+function GhToken(){ try{return localStorage.getItem(GH_TOKEN_KEY)||""}catch(e){return ""} }
+function SetGhToken(t){ try{ if(t) localStorage.setItem(GH_TOKEN_KEY,t); else localStorage.removeItem(GH_TOKEN_KEY); }catch(e){} }
+
+/* UTF-8-safe base64 (chunked: state JSON can exceed the arg-spread limit) */
+function B64EncodeUtf8(str){
+	const bytes=new TextEncoder().encode(str); let bin="";
+	for(let i=0;i<bytes.length;i+=0x8000) bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+0x8000));
+	return btoa(bin);
+}
+function B64DecodeUtf8(b64){
+	const bin=atob((b64||"").replace(/\s/g,"")); const bytes=new Uint8Array(bin.length);
+	for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+	return new TextDecoder().decode(bytes);
+}
+
+/* pure & testable: what gets synced. catalog is reference data (rebuilt from
+   SEED + userDishes on every device) — syncing it would freeze updates. */
+function BuildSyncPayload(s){
+	const st={}; Object.keys(s).forEach(k=>{ if(k!=="catalog") st[k]=s[k]; });
+	return {app:"nutri-app", schema:SCHEMA_VERSION, savedAt:st.updatedAt||null, state:st};
+}
+
+async function CloudGet(){
+	const url=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_SYNC_PATH}?ref=${GH_BRANCH}`;
+	const headers={Accept:"application/vnd.github+json"};
+	const tok=GhToken(); if(tok) headers.Authorization="Bearer "+tok;
+	const r=await fetch(url,{headers,cache:"no-store"});
+	if(r.status===404) return {payload:null,sha:null};
+	if(!r.ok) throw new Error("HTTP "+r.status);
+	const j=await r.json();
+	return {payload:JSON.parse(B64DecodeUtf8(j.content)), sha:j.sha};
+}
+
+let _cloudBusy=false;
+function SetCloudBusy(b){
+	_cloudBusy=b;
+	const el=document.getElementById("cloudBtn");
+	if(el){ el.style.opacity=b?".45":""; el.textContent=b?"⏳":"☁️"; }
+}
+async function CloudSave(){
+	if(_cloudBusy) return;
+	if(!GhToken()){ OpenCloudSettings(); return; }
+	SetCloudBusy(true);
+	try{
+		const {sha}=await CloudGet();                       // fresh sha → no lost-update
+		const body={message:"app: sync "+(state.updatedAt||TodayISO()),
+			content:B64EncodeUtf8(JSON.stringify(BuildSyncPayload(state),null,1)), branch:GH_BRANCH};
+		if(sha) body.sha=sha;
+		const r=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_SYNC_PATH}`,{
+			method:"PUT",
+			headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+GhToken(),"Content-Type":"application/json"},
+			body:JSON.stringify(body)});
+		if(r.status===401||r.status===403) throw {code:"auth"};
+		if(r.status===409||r.status===422) throw {code:"conflict"};
+		if(!r.ok) throw new Error("HTTP "+r.status);
+		state.lastSync=new Date().toISOString(); SaveQuiet();
+		Toast("Guardado en la nube ☁️✓");
+	}catch(e){
+		if(e&&e.code==="auth") Toast("Token no válido o caducado — Opciones → Nube");
+		else if(e&&e.code==="conflict") Toast("Conflicto de guardado — reintenta");
+		else Toast(navigator.onLine===false?"Sin conexión — guardado solo local":"No se pudo guardar en la nube");
+	}finally{ SetCloudBusy(false); }
+}
+
+/* boot pull: fire-and-forget, never blocks first paint, silent on failure */
+async function CloudPullOnBoot(){
+	try{
+		const {payload}=await CloudGet();
+		if(!payload || !payload.state || !ValidState(payload.state)) return;
+		const remote=payload.state.updatedAt||payload.savedAt||"";
+		if(!remote || remote<=(state.updatedAt||"")) return;   // local is newer or equal
+		state=payload.state;
+		if(!Array.isArray(state.userDishes)) state.userDishes=[];
+		if(!Array.isArray(state.hidden)) state.hidden=[];
+		if(!Array.isArray(state.extras)) state.extras=[];
+		RefreshCatalog(); SaveQuiet();
+		ApplyTheme(); BuildManifest();
+		if(!state.current) state.current=MondayOf(TodayISO());
+		EnsureWeek(state.current); Render();
+		Toast("Actualizado desde la nube ☁️");
+	}catch(e){/* offline / rate-limited → keep local, that's the contract */}
+}
+
+function OpenCloudSettings(){
+	const has=!!GhToken();
+	document.getElementById("sheetContent").innerHTML=`
+		<div class="grip"></div>
+		<div class="sheet-h"><div class="t1">Nube (GitHub)</div><div class="x" data-action="close-sheet">✕</div></div>
+		<div class="sheet-body">
+			<div class="about-b">
+				<p>El botón <b>☁️ Guardar</b> sube tus datos al repositorio
+				<b>${GH_OWNER}/${GH_REPO}</b> y cada dispositivo carga la última
+				copia al abrir la app con conexión.</p>
+				<p>Necesita un <b>token fine-grained</b> de GitHub: Settings →
+				Developer settings → Fine-grained tokens → solo el repositorio
+				<b>${GH_REPO}</b>, permiso <b>Contents: Read and write</b>, con
+				caducidad. El token se guarda solo en este dispositivo y nunca
+				se incluye en copias ni en la nube.</p>
+				<p>Estado: ${has?"🟢 token configurado":"⚪ sin token"}${state.lastSync?` · última subida ${state.lastSync.slice(0,16).replace("T"," ")}`:""}</p>
+			</div>
+			<div class="lab">Token de acceso</div>
+			<input class="field" id="ghTokenInput" type="password" placeholder="github_pat_…" autocomplete="off">
+			<div class="act-row" style="margin-top:14px">
+				${has?'<button class="btn danger" data-action="cloud-forget">Borrar token</button>':'<button class="btn ghost" data-action="close-sheet">Cancelar</button>'}
+				<button class="btn prim" data-action="cloud-token-save">Guardar token</button>
+			</div>
+		</div>`;
+	ShowSheet();
+}
+
 /* ============================ MENU / EXPORT ============================ */
 function OpenAbout(){
 	document.getElementById("sheetContent").innerHTML=`
@@ -1049,9 +1349,9 @@ function OpenAbout(){
 				<p>Recetario: ${state.catalog.length} platos con macros estimadas por
 				ración estándar de adulto (no es una medición; niños ≈ ×0,6).
 				Solo se contabilizan comida y cena del recetario.</p>
-				<p>Alimentación real e ideas inspiradas en el enfoque Futurlife21.</p>
-				<p>Tus datos viven solo en este dispositivo (almacenamiento local).
-				Usa <b>Exportar copia</b> para respaldarlos o moverlos.</p>
+				<p>Tus datos viven en este dispositivo (almacenamiento local).
+				Usa <b>☁️ Guardar</b> para sincronizarlos entre dispositivos
+				vía GitHub, o <b>Exportar copia</b> para un respaldo manual.</p>
 			</div>
 		</div>`;
 	ShowSheet();
@@ -1072,6 +1372,8 @@ function OpenMenu(){
 				<div class="lbl">Apariencia</div>
 				<div class="sw-row">${sw}</div>
 			</div>
+			<button class="menu-item" data-action="cloud-save-menu"><span class="mi">☁️</span> Guardar en la nube ahora</button>
+			<button class="menu-item" data-action="cloud-settings"><span class="mi">🔑</span> Nube (GitHub) — configurar</button>
 			<button class="menu-item" data-action="export"><span class="mi">📤</span> Exportar copia (guardar/compartir)</button>
 			<button class="menu-item" data-action="import"><span class="mi">📥</span> Importar copia</button>
 			<button class="menu-item" data-action="new-week"><span class="mi">🧹</span> Vaciar esta semana</button>
@@ -1085,7 +1387,7 @@ function OpenMenu(){
 	if(f) f.onchange=ev=>{
 		const file=ev.target.files[0]; if(!file) return;
 		const r=new FileReader();
-		r.onload=()=>{try{const data=JSON.parse(r.result);if(ValidState(data)){state=data;RefreshCatalog();if(!Array.isArray(state.extras))state.extras=[];Save();CloseSheet();ApplyTheme();BuildManifest();Render();Toast("Copia importada")}else Toast("Archivo no válido")}catch(e){Toast("No se pudo leer el archivo")}};
+		r.onload=()=>{try{const data=JSON.parse(r.result);if(ValidState(data)){state=data;if(!Array.isArray(state.userDishes))state.userDishes=[];if(!Array.isArray(state.hidden))state.hidden=[];RefreshCatalog();if(!Array.isArray(state.extras))state.extras=[];Save();CloseSheet();ApplyTheme();BuildManifest();Render();Toast("Copia importada")}else Toast("Archivo no válido")}catch(e){Toast("No se pudo leer el archivo")}};
 		r.readAsText(file);
 	};
 }
@@ -1139,11 +1441,15 @@ function AddPrompt(opts){
 		const lab=document.createElement("div");lab.className="lab";lab.textContent=f.label;body.appendChild(lab);
 		if(f.type==="select"){
 			const sel=document.createElement("select");sel.className="field";sel.id="f_"+f.key;
-			f.options.forEach(o=>{const op=document.createElement("option");op.value=o.value;op.textContent=o.label;if(o.value===f.value)op.selected=true;sel.appendChild(op)});
+			f.options.forEach(o=>{const op=document.createElement("option");op.value=o.value;op.textContent=o.label;if(String(o.value)===String(f.value))op.selected=true;sel.appendChild(op)});
 			body.appendChild(sel);
+		}else if(f.type==="textarea"){
+			const ta=document.createElement("textarea");ta.className="field ta";ta.id="f_"+f.key;ta.placeholder=f.ph||"";
+			ta.rows=6;if(f.value!=null)ta.value=f.value;body.appendChild(ta);
 		}else{
 			const inp=document.createElement("input");inp.className="field";inp.id="f_"+f.key;inp.placeholder=f.ph||"";
-			inp.type=f.type||"text";if(f.value!=null)inp.value=f.value;body.appendChild(inp);
+			inp.type=f.type||"text";if(f.type==="number")inp.inputMode="decimal";
+			if(f.value!=null)inp.value=f.value;body.appendChild(inp);
 		}
 	});
 	const row=document.createElement("div");row.className="act-row";
@@ -1382,7 +1688,7 @@ document.addEventListener("click",e=>{
 	const a=t.dataset.action, ds=t.dataset;
 	switch(a){
 		case "view": ui.view=ds.v; Render(); break;
-		case "today": { state.current=MondayOf(TodayISO()); EnsureWeek(state.current); ui.view="semana"; Render(); const td=TodayISO(); ui.collapsed[td]=false; Render(); break; }
+		case "today": { state.current=MondayOf(TodayISO()); EnsureWeek(state.current); ui.view="semana"; ui.collapsed[TodayISO()]=false; Save(); Render(); break; }
 		case "wk-prev": state.current=AddDays(state.current,-7); EnsureWeek(state.current); Save(); Render(); break;
 		case "wk-next": state.current=AddDays(state.current,7); EnsureWeek(state.current); Save(); Render(); break;
 		case "toggle-day": ui.collapsed[ds.date]=!ui.collapsed[ds.date]; Render(); break;
@@ -1391,6 +1697,13 @@ document.addEventListener("click",e=>{
 		case "surprise": Surprise(); break;
 		case "menu": OpenMenu(); break;
 		case "about": OpenAbout(); break;
+		case "cloud-save": CloudSave(); break;
+		case "cloud-save-menu": CloseSheet(); CloudSave(); break;
+		case "cloud-settings": OpenCloudSettings(); break;
+		case "cloud-token-save": { const v=(document.getElementById("ghTokenInput")||{}).value||"";
+			if(!v.trim()) return Toast("Pega el token primero");
+			SetGhToken(v.trim()); CloseSheet(); Toast("Token guardado — ya puedes usar ☁️"); break; }
+		case "cloud-forget": SetGhToken(""); CloseSheet(); Toast("Token borrado de este dispositivo"); break;
 		case "set-theme": SetTheme(ds.theme); break;
 		case "close-sheet": CloseSheet(); break;
 		case "export": ExportData(); break;
@@ -1425,13 +1738,15 @@ document.addEventListener("click",e=>{
 		/* ideas */
 		case "ideas-course": ui.ideasCourse=ds.c; ui.ideasTipo=null; Render(); break;
 		case "ideas-tipo": ui.ideasTipo=ds.t||null; Render(); break;
-		case "idea-del": { const i=state.catalog.findIndex(x=>x.id===ds.id); if(i>=0){ const nm=state.catalog[i].name.trim().toLowerCase(); (state.hidden=state.hidden||[]).includes(nm)||state.hidden.push(nm); state.catalog.splice(i,1); _macroIndex=null; } Save(); Render(); break; }
-		case "idea-add": AddPrompt({title:"Nuevo plato",fields:[
-			{key:"name",label:"Nombre del plato",ph:"p.ej. Lasaña de calabacín"},
-			{key:"course",label:"Categoría",type:"select",value:ds.c,options:[
-				{value:"primero",label:"Primeros"},{value:"segundo",label:"Segundos"},{value:"cena",label:"Cenas"},{value:"noah",label:"Comidas Noah"}]},
-			{key:"tipo",label:"Tipo (opcional)",ph:"Pasta, Pollo, Verduras…"}
-		],onSave:v=>{if(!v.name)return Toast("Pon un nombre");state.catalog.push({id:Uid(),name:v.name,course:v.course,tipo:v.tipo||null});Save();CloseSheet();ui.ideasCourse=v.course;Render()}}); break;
+		case "idea-open": OpenDish(ds.id); break;
+		case "idea-edit": { const d=state.catalog.find(x=>x.id===ds.id); if(d) EditDish(d,d.course); break; }
+		case "idea-del": { const d=state.catalog.find(x=>x.id===ds.id);
+			if(d){ const nm=d.name.trim().toLowerCase();
+				(state.hidden=state.hidden||[]).includes(nm)||state.hidden.push(nm);
+				state.userDishes=(state.userDishes||[]).filter(x=>(x.name||"").trim().toLowerCase()!==nm);
+				RefreshCatalog(); }
+			Save(); if(ds.close) CloseSheet(); Render(); Toast("Plato quitado del recetario"); break; }
+		case "idea-add": EditDish(null, ds.c||"primero"); break;
 	}
 });
 
@@ -1445,6 +1760,7 @@ document.addEventListener("click",e=>{
 		case "psub": picker.sub=ds.c; picker.tipo=null; RenderPicker(); break;
 		case "pclrsub": picker[ds.c]=null; RenderPicker(); break;
 		case "ptipo": picker.tipo=ds.t||null; RenderPicker(); break;
+		case "pall": picker.all=ds.v==="1"; picker.tipo=null; RenderPicker(); break;
 		case "pinv": { const it=InvById(ds.id); if(!it) break;
 			if(picker.slot==="Comida"||picker.slot==="Cena"){ picker[picker.sub]=it.name; picker.invId=it.id; if(picker.sub==="pri")picker.sub="seg"; RenderPicker(); }
 			else ApplyDish(it.name,it.id); break; }
@@ -1475,9 +1791,10 @@ document.addEventListener("keydown",e=>{
 /* ============================ INIT ============================ */
 (function init(){
 	if(!Load()){ state=SeedState(); }
-	RefreshCatalog();                 // reference data: always from SEED
 	if(!Array.isArray(state.extras)) state.extras=[];
 	if(!Array.isArray(state.hidden)) state.hidden=[];
+	if(!Array.isArray(state.userDishes)) state.userDishes=[];
+	RefreshCatalog();                 // reference data: SEED + userDishes − hidden
 	// guarantee current week + members exist
 	if(!state.current) state.current=MondayOf(TodayISO());
 	if(!state.members) state.members=[{id:"nosotros",name:"Nosotros",color:"var(--m-nosotros)",factor:1},{id:"noah",name:"Noah",color:"var(--m-noah)",factor:0.6},{id:"iria",name:"Iria",color:"var(--m-iria)",factor:0.6}];
@@ -1486,7 +1803,8 @@ document.addEventListener("keydown",e=>{
 	ApplyTheme();
 	BuildManifest();
 	EnsureWeek(state.current);
-	Save(); Render();
+	SaveQuiet(); Render();
+	CloudPullOnBoot();               // async, never blocks offline start
 	/* Offline: best-effort SW registration. Silently skipped on file://,
 	   unsupported browsers, or when sw.js is not deployed next to the app. */
 	if("serviceWorker" in navigator){

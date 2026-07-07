@@ -1,5 +1,41 @@
 # Changelog
 
+## 1.1.0 — 2026-07-07 (Recetario vivo + Nube)
+### Características
+- **Recetario editable**: tocar un plato en Ideas abre su ficha (macros +
+  receta); botón Editar para cambiar nombre, categoría, macros y receta.
+  Los cambios viven en `state.userDishes` y sobreviven a cada arranque.
+- **Recetas incluidas**: las 166 fichas traen receta (ingredientes + pasos),
+  también las rutinas de desayuno/almuerzo. La receta escrita por el usuario
+  siempre gana a la incluida.
+- **Desayunos y almuerzos fijos**: cada semana nueva llega pre-rellenada con
+  la rutina semanal (avena/tostada/yogur; fruta/yogur/sándwich niños).
+  La plantilla nunca pisa celdas editadas ni «fuera de casa».
+- **Guardar en la nube (☁️)**: commit de `data/sync.json` al propio repo vía
+  GitHub API con token fine-grained (solo este repo, Contents: write).
+  Al abrir con red, gana la copia más reciente (`updatedAt`). El token vive
+  solo en `localStorage` (clave aparte) y nunca se exporta ni se sube.
+- **Macros por día y por semana**: cada macro muestra g/día (negrita) y
+  g/semana (atenuado); nota explicativa actualizada.
+- **Buscar en todas las categorías**: pestaña «Todas» en Ideas y conmutador
+  «Solo X / Todas las categorías» en el picker de Comida/Cena.
+- Botón **Hoy** rediseñado (píldora con texto; resaltado al estar en otra
+  semana) y ahora persiste el salto (faltaba `Save()`).
+- Sin zoom por doble toque (viewport + `touch-action: manipulation`).
+- Retirada la mención a Futurlife21 en «Acerca de».
+
+### Implementación
+- `SCHEMA_VERSION 2` (`menu_semana_v2`) con migración automática desde v1
+  (añade `userDishes[]`, rellena rutinas vacías; la clave v1 se conserva).
+- `RefreshCatalog()` sigue siendo el punto único de invalidación:
+  `catalog = (SEED ∪ userDishes por nombre) − hidden`.
+- `Save()` estampa `updatedAt`; `SaveQuiet()` para escrituras de arranque
+  y adopción de nube (una simple apertura nunca gana a una edición real).
+- Fix: `test/test.js` apuntaba a `planificador-comidas.html` (roto desde el
+  rename a index.html) y tenía un error de sintaxis en la línea 44 — la
+  suite nunca había compilado. Corregida y ampliada: **80 asserts** en verde
+  en UTC / Europe/Madrid / America/Los_Angeles.
+
 ## 1.0.0 — 2026-07-02 (Nutri APP Launch)
 ### Características
 - Planificador semanal (lun–dom), 4 slots: Desayuno, Almuerzo, Comida, Cena.

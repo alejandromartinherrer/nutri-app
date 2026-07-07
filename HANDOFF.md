@@ -1,89 +1,53 @@
-# Nutri APP — Handoff (para Cowork)
+# Nutri APP — Handoff
 
-## Objetivo de la próxima sesión
-Recetario **editable desde la app** (añadir/editar/borrar platos con macros) y
-**Guardar → commit automático al repo GitHub** para que la app publicada se
-actualice sola.
-
-## Estado actual (v1.0.0 — FUNCIONANDO)
+## Estado actual (v1.1.0 — 2026-07-07)
 - Repo: `github.com/alejandromartinherrer/nutri-app` (público, Pages activo).
 - App publicada: `https://alejandromartinherrer.github.io/nutri-app/`
-- Instalada en iPhone (Añadir a pantalla de inicio). Funciona offline.
-- Carpeta local (Cowork debe apuntar aquí):
-  `C:\claude_projects\web-apps\nutri-app`
-- Flujo de cambios: editar local → GitHub Desktop → Commit to main → Push
-  → Pages republica → la app del iPhone se actualiza en la próxima apertura
-  con red (SW network-first).
-- ⚠️ Verificar al retomar: si el HTML del repo sigue llamándose
-  `nutri-app.html` o ya se renombró a `index.html` (Pages sirve la raíz solo
-  con index.html; el usuario confirmó "funciona perfecto" pero no con cuál).
+- HTML: **index.html** (verificado; ya no existe nutri-app.html).
+- Carpeta local: `C:\claude_projects\web-apps\nutri-app`
+- Tests: **80 asserts en verde** (UTC/Madrid/LA). Nota: la suite estaba rota
+  desde el inicio (sintaxis en línea 44 + nombre de fichero antiguo); ya
+  compila y corre. Node local portable en scratchpad (no instalado en PATH).
 
-## Archivos del repo
-```
-nutri-app/
-├── index.html (o nutri-app.html — VERIFICAR)   app completa, 139KB
-├── sw.js                                        offline (network-first)
-├── test/test.js                                 95 tests, portable (lee el HTML)
-├── .github/workflows/ci.yml                     CI: UTC + Madrid + LA
-├── recetario/Recetario-saludable.xlsx           fuente de datos (NO conectada)
-├── README.md · CHANGELOG.md · HANDOFF.md
-```
+## Entregado en v1.1.0
+1. **Recetario editable** — `state.userDishes[]` (upsert por nombre sobre
+   SEED), editor completo en Ideas (nombre/categoría/tipo/estilo/batch/
+   macros/receta). Ficha de plato al tocar: macros + receta.
+2. **RECETAS embebidas** — las 166 + 6 rutinas, clave = nombre lowercased.
+   `DishRecipe(name)`: receta del usuario gana a la embebida.
+3. **Rutina fija desayuno/almuerzo** — `ApplyTemplate(week)` desde SEED.week
+   en `EnsureWeek` + migración. Solo rellena celdas vacías no-away.
+4. **SCHEMA v2** — `menu_semana_v2`; `MigrateV1()` desde `menu_semana_v1`
+   (clave v1 se conserva como red de seguridad).
+5. **Nube (☁️)** — `data/sync.json` vía GitHub Contents API. PAT fine-grained
+   en `localStorage["nutri_gh_token"]` (NUNCA en state/export/sync.json).
+   `Save()` estampa `updatedAt`; `SaveQuiet()` no (boot/adopt). Pull al
+   arrancar con red: adopta si `remote.updatedAt > local.updatedAt`.
+6. Macros g/día + g/semana; búsqueda «Todas» (Ideas y picker `picker.all`);
+   sin double-tap zoom; botón Hoy píldora con estados here/away; Acerca de
+   sin Futurlife21.
 
-## Schema v1 (NO reconstruir de memoria)
-```
-STORE_KEY = "nutri_app_v1"   (localStorage)
-state = { catalog (rebuilt from SEED), hidden[], weeks{}, members[],
-          inventory{frigo,conge}, produce[], extras[], theme, current }
-_macroIndex = Map(name.lower -> {kcal,prot,carb,fat})
-const APP_VERSION="1.0.0"; SCHEMA_VERSION=1; SEP=" · ";
-const MEMBER_IDS=["nosotros","noah","iria"]
-```
-- Invalidación única: `RefreshCatalog()` (init / import / reset / idea-del).
-- `ValidState()` valida load/import. `Ymd()` fechas locales (fix Madrid).
-- Comida = 1º·2º, Cena = 1–2 platos (compositor, separador SEP).
-- 166 platos con estilo + batch. Macros: ración adulto; niños ×0,6.
+## PENDIENTE para que la nube funcione (acción del usuario)
+1. Crear token: GitHub → Settings → Developer settings → Fine-grained
+   tokens → Only select repositories: `nutri-app` → Contents: Read and
+   write → caducidad (p. ej. 90 días).
+2. En la app: Opciones (⋯) → «Nube (GitHub) — configurar» → pegar token.
+3. Probar: ☁️ → debe aparecer `data/sync.json` en el repo. En el iPhone,
+   configurar el mismo token y abrir la app: adoptará la copia.
 
-## Diseño propuesto para la nueva feature (discutir al retomar)
-1. **Editor en la app** (vista Ideas): alta/edición/borrado de platos
-   (nombre, curso, grupo, estilo, batch, macros).
-   - CONFLICTO ARQUITECTÓNICO a resolver: hoy `RefreshCatalog()` reconstruye
-     el catálogo desde SEED en cada arranque (los platos editados se
-     perderían). Cambiar el modelo a: `catalog = SEED + state.userDishes[]
-     (added/edited) − state.hidden[]`, todo persistido y exportado en JSON.
-     `SCHEMA_VERSION → 2` con migración.
-2. **Guardar → GitHub**: commit del HTML actualizado (o de un `recetario.json`
-   separado) vía GitHub API `PUT /repos/{owner}/{repo}/contents/{path}`.
-   - Requiere PAT fine-grained (solo repo nutri-app, permiso Contents:write)
-     guardado en el dispositivo (localStorage) — evaluar riesgo y alternativa
-     (p. ej. seguir con export manual + GitHub Desktop, o separar datos de
-     código: la app carga `recetario.json` del repo y solo ese fichero se
-     commitea).
-   - Recomendación a evaluar primero: separar recetario a `recetario.json`
-     (fetch en arranque con fallback a SEED embebido para offline). Simplifica
-     el commit (fichero pequeño, sin tocar el HTML) y mantiene tests.
+## Invariantes (no romper)
+- `RefreshCatalog()` = punto ÚNICO de invalidación del catálogo/_macroIndex.
+  catalog = (SEED ∪ userDishes por nombre) − hidden. SEED nunca se muta.
+- Offline-first: el arranque nunca espera red (CloudPullOnBoot es
+  fire-and-forget con catch silencioso).
+- El token jamás entra en `state`, exportaciones ni `sync.json`
+  (test lo cubre: BuildSyncPayload excluye catalog; payload sin token).
+- `Ymd()` para fechas locales; nada de toISOString() para date-only.
+- Tests portables: leen el `<script>` más largo de index.html; los stubs
+  de DOM en test.js solo implementan classList add/remove (no toggle).
 
-## Pendiente
-- [ ] Verificar index.html vs nutri-app.html.
-- [ ] Decidir arquitectura (userDishes vs recetario.json) antes de codificar.
-- [ ] SCHEMA_VERSION 2 + migración si se toca el modelo.
-- [ ] Actualizar test/test.js (95 → ampliar con editor + persistencia).
-- [ ] CHANGELOG + APP_VERSION 1.1.0 al entregar.
-
-## Riesgos
-- PAT en el móvil = quien tenga el teléfono puede escribir en el repo.
-- Editar catálogo rompe supuestos de MacroIndex/RefreshCatalog: tocar SOLO
-  vía el punto de invalidación único.
-- No degradar offline: la app debe seguir 100% funcional sin red.
-
-## Prompt de reanudación (pegar en Cowork)
-```
-Retomo Nutri APP (PWA HTML monofichero, v1.0.0 publicada en GitHub Pages,
-repo alejandromartinherrer/nutri-app, carpeta local
-C:\claude_projects\web-apps\nutri-app). Lee HANDOFF.md del repo.
-Objetivo: recetario editable desde la app + guardar con sync a GitHub.
-Antes de codificar: (1) verifica si el HTML es index.html o nutri-app.html,
-(2) proponme la arquitectura (userDishes persistido vs recetario.json
-separado + GitHub API) con pros/contras y riesgos del token, y espera mi OK.
-Restricciones: mantener offline-first, RefreshCatalog como punto único de
-invalidación, SCHEMA_VERSION 2 con migración, actualizar tests y CHANGELOG.
-```
+## Ideas futuras (no comprometidas)
+- Editar la rutina de desayunos desde la UI (hoy es SEED-only).
+- Sync automático (debounced) además del botón manual.
+- Indicador visual de «cambios sin subir» en el botón ☁️.
+- Lista de la compra generada desde los ingredientes de las recetas.
