@@ -22,7 +22,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks};\n";
 eval(src);
 const A=global.__api;
 
@@ -202,6 +202,21 @@ const allC=A.PickerCandidates();
 ok(new Set(allC.map(c=>c.course)).size>1,"picker.all spans every category");
 ok(allC.length>onlyPri.length,"all-scope yields more candidates");
 A.picker=null;
+
+// ---- accent-insensitive search + rename propagation ----
+ok(A.Norm("Atún África")==="atun africa","Norm strips accents + case");
+A.state=A.SeedState(); A.RefreshCatalog();
+A.picker={slot:"Cena",sub:"pri",tipo:null,search:"atun",all:true,dayIdx:0,member:"nosotros",applyAll:false};
+ok(A.PickerCandidates().some(c=>/Atún/.test(c.name)),"search 'atun' finds 'Atún' dishes");
+A.picker={slot:"Cena",sub:"pri",tipo:null,search:"ALBÓNDIGAS",all:true,dayIdx:0,member:"nosotros",applyAll:false};
+ok(A.PickerCandidates().length>0,"uppercase accented query still matches");
+A.picker=null;
+const wkR=A.CurWeek();
+wkR.days[0].slots.Comida.nosotros.dish="Lentejas estofadas · Atún a la plancha";
+const nR=A.RenameDishInWeeks("Atún a la plancha","Atún plancha familiar");
+ok(nR>=1,"rename touches planned cells");
+ok(wkR.days[0].slots.Comida.nosotros.dish==="Lentejas estofadas · Atún plancha familiar","rename follows into composite cells");
+ok(A.RenameDishInWeeks("No Existe Nada","X")===0,"rename with no matches is a no-op");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);

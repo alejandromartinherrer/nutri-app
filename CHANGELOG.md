@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.1.1 — 2026-07-08 (Fixes móvil + auditoría)
+- **Fix scroll en sheets (móvil)**: el contenido largo (fichas de receta,
+  editor de platos) se salía por debajo de la pantalla sin poder llegar a
+  «Guardar». Causa: `#sheetContent` sin `min-height:0` dentro del flex.
+  Ahora el cuerpo scrollea dentro del sheet (88dvh máx.) y los campos se
+  centran al enfocarse (teclado iOS).
+- **Icono 📖 en Ideas**: cada plato con receta lo muestra junto al nombre —
+  invita a tocar la fila para abrir la ficha.
+- **Búsqueda sin tildes**: «atun» encuentra «Atún» (Ideas y picker).
+- **Renombrar un plato actualiza las semanas planificadas** (también dentro
+  de composiciones «1º · 2º»); antes quedaban referencias huérfanas cuyas
+  macros dejaban de contar en silencio.
+- Tests: 86 asserts (6 nuevos).
+
 ## 1.1.0 — 2026-07-07 (Recetario vivo + Nube)
 ### Características
 - **Recetario editable**: tocar un plato en Ideas abre su ficha (macros +
