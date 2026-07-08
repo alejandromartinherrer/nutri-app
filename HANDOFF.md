@@ -7,7 +7,7 @@
 - Carpeta local: `C:\claude_projects\web-apps\nutri-app`
 - Tests: **80 asserts en verde** (UTC/Madrid/LA). Nota: la suite estaba rota
   desde el inicio (sintaxis en línea 44 + nombre de fichero antiguo); ya
-  compila y corre. Node local portable en scratchpad (no instalado en PATH).
+  compila y corre. Node LTS v24 instalado en el sistema (`node test/test.js`).
 
 ## Entregado en v1.1.0
 1. **Recetario editable** — `state.userDishes[]` (upsert por nombre sobre
