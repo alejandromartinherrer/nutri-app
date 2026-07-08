@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-08T06:12:38.002Z",
+ "savedAt": "2026-07-08T16:37:06.403Z",
  "state": {
   "members": [
    {
@@ -1144,522 +1144,6 @@
         },
         "iria": {
          "dish": "",
-         "invId": null,
-         "away": false
-        }
-       }
-      }
-     }
-    ]
-   },
-   "2026-07-06": {
-    "monday": "2026-07-06",
-    "days": [
-     {
-      "date": "2026-07-06",
-      "slots": {
-       "Desayuno": {
-        "nosotros": {
-         "dish": "Avena con fruta",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Avena con fruta",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Avena con fruta",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Almuerzo": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Comida": {
-        "nosotros": {
-         "dish": "Berenjena rellena de verduras · Pollo tikka masala",
-         "invId": "3u22qz8",
-         "away": false
-        },
-        "noah": {
-         "dish": "Crema de verduras",
-         "invId": "ese3uw9",
-         "away": false
-        },
-        "iria": {
-         "dish": "Berenjena rellena de verduras · Pollo tikka masala",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Cena": {
-        "nosotros": {
-         "dish": "Fingers de berenjena al horno",
-         "invId": "rph3wuk",
-         "away": false
-        },
-        "noah": {
-         "dish": "Fingers de berenjena al horno",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Fingers de berenjena al horno",
-         "invId": null,
-         "away": false
-        }
-       }
-      }
-     },
-     {
-      "date": "2026-07-07",
-      "slots": {
-       "Desayuno": {
-        "nosotros": {
-         "dish": "Tostada integral con aceite",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Tostada integral con aceite",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Tostada integral con aceite",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Almuerzo": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Yogur",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Yogur",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Comida": {
-        "nosotros": {
-         "dish": "Ensalada de garbanzos, tomate y atún · Lubina al horno",
-         "invId": "y9if1r8",
-         "away": false
-        },
-        "noah": {
-         "dish": "Albóndigas de pollo",
-         "invId": "3u22qz8",
-         "away": false
-        },
-        "iria": {
-         "dish": "Ensalada de garbanzos, tomate y atún · Lubina al horno",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Cena": {
-        "nosotros": {
-         "dish": "Shawarma de pollo en wrap integral",
-         "invId": "3u22qz8",
-         "away": false
-        },
-        "noah": {
-         "dish": "Shawarma de pollo en wrap integral",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Shawarma de pollo en wrap integral",
-         "invId": null,
-         "away": false
-        }
-       }
-      }
-     },
-     {
-      "date": "2026-07-08",
-      "slots": {
-       "Desayuno": {
-        "nosotros": {
-         "dish": "Yogur con fruta y nueces",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Yogur con fruta y nueces",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Yogur con fruta y nueces",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Almuerzo": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Comida": {
-        "nosotros": {
-         "dish": "Chicken Curry (Versión Thermomix)",
-         "invId": "3u22qz8",
-         "away": false
-        },
-        "noah": {
-         "dish": "Chicken Curry (Versión Thermomix)",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Chicken Curry (Versión Thermomix)",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Cena": {
-        "nosotros": {
-         "dish": "Quiche de verduras integral",
-         "invId": "ese3uw9",
-         "away": false
-        },
-        "noah": {
-         "dish": "Quiche de verduras integral",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Quiche de verduras integral",
-         "invId": null,
-         "away": false
-        }
-       }
-      }
-     },
-     {
-      "date": "2026-07-09",
-      "slots": {
-       "Desayuno": {
-        "nosotros": {
-         "dish": "Tostada integral con aceite",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Tostada integral con aceite",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Tostada integral con aceite",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Almuerzo": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Sándwich integral",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Sándwich integral",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Comida": {
-        "nosotros": {
-         "dish": "Ensalada de pollo, mango y aguacate · Ternera a la plancha",
-         "invId": "afq5nwi",
-         "away": false
-        },
-        "noah": {
-         "dish": "Arroz con pollo",
-         "invId": "3u22qz8",
-         "away": false
-        },
-        "iria": {
-         "dish": "Ensalada de pollo, mango y aguacate · Ternera a la plancha",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Cena": {
-        "nosotros": {
-         "dish": "Ensalada de pimientos asados con atún",
-         "invId": "1qrlz3z",
-         "away": false
-        },
-        "noah": {
-         "dish": "Ensalada de pimientos asados con atún",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Ensalada de pimientos asados con atún",
-         "invId": null,
-         "away": false
-        }
-       }
-      }
-     },
-     {
-      "date": "2026-07-10",
-      "slots": {
-       "Desayuno": {
-        "nosotros": {
-         "dish": "Avena con fruta",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Avena con fruta",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Avena con fruta",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Almuerzo": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Comida": {
-        "nosotros": {
-         "dish": "Cuscús con verduras · Souvlaki de pollo con tzatziki",
-         "invId": "3u22qz8",
-         "away": false
-        },
-        "noah": {
-         "dish": "Pollo con patata y verdura",
-         "invId": "3u22qz8",
-         "away": false
-        },
-        "iria": {
-         "dish": "Cuscús con verduras · Souvlaki de pollo con tzatziki",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Cena": {
-        "nosotros": {
-         "dish": "Espárragos trigueros con jamón y huevo",
-         "invId": "ese3uw9",
-         "away": false
-        },
-        "noah": {
-         "dish": "Espárragos trigueros con jamón y huevo",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Espárragos trigueros con jamón y huevo",
-         "invId": null,
-         "away": false
-        }
-       }
-      }
-     },
-     {
-      "date": "2026-07-11",
-      "slots": {
-       "Desayuno": {
-        "nosotros": {
-         "dish": "Tostada de tomate",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Tostada de tomate",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Tostada de tomate",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Almuerzo": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Yogur",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Yogur",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Comida": {
-        "nosotros": {
-         "dish": "Crema de guisantes y menta · Pollo asado con hierbas",
-         "invId": "3u22qz8",
-         "away": false
-        },
-        "noah": {
-         "dish": "Crema de verduras con picatostes integrales",
-         "invId": "ese3uw9",
-         "away": false
-        },
-        "iria": {
-         "dish": "Crema de guisantes y menta · Pollo asado con hierbas",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Cena": {
-        "nosotros": {
-         "dish": "Wok de verduras con pollo",
-         "invId": "3u22qz8",
-         "away": false
-        },
-        "noah": {
-         "dish": "Wok de verduras con pollo",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Wok de verduras con pollo",
-         "invId": null,
-         "away": false
-        }
-       }
-      }
-     },
-     {
-      "date": "2026-07-12",
-      "slots": {
-       "Desayuno": {
-        "nosotros": {
-         "dish": "Bizcocho casero",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Bizcocho casero",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Bizcocho casero",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Almuerzo": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Comida": {
-        "nosotros": {
-         "dish": "Pisto con huevo y garbanzos · Solomillo de cerdo al horno",
-         "invId": "afq5nwi",
-         "away": false
-        },
-        "noah": {
-         "dish": "Mini hamburguesas de pollo",
-         "invId": "3u22qz8",
-         "away": false
-        },
-        "iria": {
-         "dish": "Pisto con huevo y garbanzos · Solomillo de cerdo al horno",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Cena": {
-        "nosotros": {
-         "dish": "Tostada integral de aguacate y huevo",
-         "invId": "ese3uw9",
-         "away": false
-        },
-        "noah": {
-         "dish": "Tostada integral de aguacate y huevo",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Tostada integral de aguacate y huevo",
          "invId": null,
          "away": false
         }
@@ -3731,6 +3215,522 @@
       }
      }
     ]
+   },
+   "2026-07-06": {
+    "monday": "2026-07-06",
+    "days": [
+     {
+      "date": "2026-07-06",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-07",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-08",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Yogur con fruta y nueces",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Yogur con fruta y nueces",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Yogur con fruta y nueces",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-09",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Sándwich integral",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Sándwich integral",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-10",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-11",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Tostada de tomate",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Tostada de tomate",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Tostada de tomate",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-12",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Bizcocho casero",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Bizcocho casero",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Bizcocho casero",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     }
+    ]
    }
   },
   "current": "2026-07-06",
@@ -3750,7 +3750,7 @@
     "receta": "Ingredientes:\n500g de pollo cortado en dados\n2 puerros grandes\n1 cebolla\n80g AOVE\n4 zanahorias\n250-300 ml de leche fresca\n250-300 ml de leche de coco (o caldo de pollo, también queda muy rico)\nCurry al gusto\nPimienta\nSal\n\nPreparación paso a paso:\nSofríe la base: Corta el puerro y la cebolla, añade AOVE y sofríe en la Thermomix a velocidad cuchara durante 15 minutos a 100 grados.\n\nCocina la salsa: Añade las zanahorias cortadas y las leches (fresca y de coco). Programa 45 minutos a 120 grados.\n\nCondimenta y tritura: Incorpora el curry, la pimienta y la sal. Bate todo a velocidad 9 durante 2 minutos para que quede una salsa fina.\n\nPrepara el pollo: Saltea los dados de pollo en una sartén aparte.\n\nMezcla final: Incorpora la salsa de la Thermomix a la sartén con el pollo y deja hervir todo junto durante unos minutos para que se integren los sabores."
    }
   ],
-  "updatedAt": "2026-07-08T06:12:38.002Z",
-  "lastSync": "2026-07-08T06:09:43.396Z"
+  "updatedAt": "2026-07-08T16:37:06.403Z",
+  "lastSync": "2026-07-08T06:13:09.934Z"
  }
 }
