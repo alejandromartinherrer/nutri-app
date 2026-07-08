@@ -1,5 +1,36 @@
 # Changelog
 
+## 1.2.0 — 2026-07-08 (Sync sin fricción + recetas escalables)
+### Características
+- **Raciones escalables**: en la ficha de cada plato, chips ×1/×2/×4/×6 que
+  multiplican las cantidades de los ingredientes (tiempos, temperaturas y
+  porcentajes no se tocan). Fracciones bonitas (½, ¼, 1½).
+- **Ingredientes en la compra**: cada plato «sin stock» tiene un botón 🧾 que
+  despliega sus ingredientes (las composiciones 1º·2º suman ambos platos).
+- **Rutina semanal editable**: Opciones → 🥣 Rutina semanal. 7 días ×
+  (desayuno todos / almuerzo niños / almuerzo adultos). Vacío = no rellenar;
+  «Restaurar original» vuelve a la rutina del SEED. Viaja con la nube.
+- **Auto-guardado en la nube**: ~30 s después del último cambio (con token y
+  con red), en silencio. El botón ☁️ sigue como acción manual.
+- **Punto naranja en ☁️** cuando hay cambios sin subir (`updatedAt` >
+  `lastSync`). Solo con token configurado.
+- **Deshacer al adoptar la nube**: si al abrir llega una copia más reciente,
+  el aviso lleva botón «Deshacer» (8 s) que restaura tu copia local y la
+  marca como más nueva (se re-sube sola).
+- **Los datos viven en la rama `data`**: los guardados ya no reconstruyen
+  Pages ni ensucian el historial de `main`.
+
+### Implementación
+- `RecipeParts()` parsea la propia receta (sin duplicar datos);
+  `ScaleQty()` escala cantidades respetando h/min/°C/%/días;
+  `IngredientesDe()` fusiona composiciones.
+- `state.plantilla` (opcional) con fallback a `DefaultPlantilla()` del SEED;
+  `TemplateDish()` mantiene su firma.
+- `CloudDirty()`/`UpdateCloudDot()`/`ScheduleAutoSync()`; adopción de nube
+  fija `lastSync=updatedAt` para no marcar sucio lo recién bajado.
+- Rama `data` creada desde `main` (incluye el último sync.json).
+- Tests: **114 asserts** (28 nuevos).
+
 ## 1.1.1 — 2026-07-08 (Fixes móvil + auditoría)
 - **Fix scroll en sheets (móvil)**: el contenido largo (fichas de receta,
   editor de platos) se salía por debajo de la pantalla sin poder llegar a

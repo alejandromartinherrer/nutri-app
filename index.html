@@ -231,6 +231,13 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 /* toast */
 .toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom));transform:translate(-50%,20px);z-index:60;background:var(--ink);color:#fff;padding:11px 16px;border-radius:12px;font-size:13.5px;font-weight:600;box-shadow:var(--sh-pop);opacity:0;pointer-events:none;transition:all .22s;max-width:90%;text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.act{pointer-events:auto}
+.toast .t-act{margin-left:10px;background:rgba(255,255,255,.18);border:0;color:#fff;font-weight:800;font-size:13px;padding:6px 12px;border-radius:9px;font-family:inherit;cursor:pointer}
+/* cloud button: unsaved-changes dot */
+.icon-btn{position:relative}
+.icon-btn.dirty::after{content:"";position:absolute;top:3px;right:3px;width:9px;height:9px;border-radius:50%;background:#F6B93B;border:2px solid var(--aub);box-sizing:content-box}
+/* shopping: expandable ingredient list */
+.ing-list{width:100%;font-size:12.5px;color:var(--muted);padding:6px 0 2px 28px;line-height:1.55}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 :focus-visible{outline:3px solid var(--aub-2);outline-offset:2px}
 .ver-foot{text-align:center;font-size:11px;color:var(--muted);padding:10px 0 2px}
@@ -315,7 +322,7 @@ const RECETAS = {"alubias con verduras":"Ingredientes (4 raciones): 400 g de alu
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.1.1";
+const APP_VERSION = "1.2.0";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -400,6 +407,7 @@ let _stampPaused=false;
 function Save(){
 	if(!_stampPaused) state.updatedAt=new Date().toISOString();
 	try{localStorage.setItem(STORE_KEY,JSON.stringify(state))}catch(e){/* in-memory only */}
+	if(!_stampPaused && typeof UpdateCloudDot==="function"){ UpdateCloudDot(); ScheduleAutoSync(); }
 }
 function SaveQuiet(){ _stampPaused=true; Save(); _stampPaused=false; }
 /* Reference data (catalog) is rebuilt from SEED on every boot and never
@@ -438,15 +446,30 @@ function MigrateV1(s){
 	return s;
 }
 
-/* ---- fixed routine: breakfasts & mid-morning snacks ----
-   Reference data straight from SEED (same philosophy as the catalog).
+/* ---- weekly routine: breakfasts & mid-morning snacks ----
+   Editable since 1.2.0 (state.plantilla); defaults derived from SEED.week.
    ApplyTemplate only fills EMPTY cells, so manual edits and deliberate
    deletions always win over the template. */
 const TEMPLATE_SLOTS = ["Desayuno","Almuerzo"];
+function DefaultPlantilla(){
+	const P={desayuno:[],almKids:[],almAdults:[]};
+	for(let i=0;i<7;i++){
+		const s=(SEED.week[i]&&SEED.week[i].slots)||{};
+		P.desayuno.push((s.Desayuno&&(s.Desayuno.nosotros||s.Desayuno.noah))||"");
+		P.almKids.push((s.Almuerzo&&s.Almuerzo.noah)||"");
+		P.almAdults.push((s.Almuerzo&&s.Almuerzo.nosotros)||"");
+	}
+	return P;
+}
+function Plantilla(){
+	const p=state&&state.plantilla;
+	return (p&&Array.isArray(p.desayuno)&&p.desayuno.length===7)?p:DefaultPlantilla();
+}
 function TemplateDish(dow,slot,mid){
-	const src = SEED.week[dow];
-	if(!src || !src.slots[slot]) return "";
-	return src.slots[slot][mid] || "";
+	const P=Plantilla();
+	if(slot==="Desayuno") return P.desayuno[dow]||"";
+	if(slot==="Almuerzo") return (mid==="nosotros"?P.almAdults[dow]:P.almKids[dow])||"";
+	return "";
 }
 function ApplyTemplate(week){
 	let n=0;
@@ -576,6 +599,7 @@ function RenderTop(){
 		tb.classList.remove("here","away");
 		tb.classList.add(here?"here":"away");
 	}
+	UpdateCloudDot();
 }
 
 /* ============================ RENDER: NAV ============================ */
@@ -719,11 +743,16 @@ function RenderCompra(){
 			<button class="del" data-action="prod-del" data-id="${p.id}">✕</button>
 		</div>`).join("") : `<div class="empty-msg">Lista vacía.</div>`;
 
-	const needItems = need.length? need.map(n=>`
-		<div class="it">
+	ui.shopIng=ui.shopIng||{};
+	const needItems = need.length? need.map(n=>{
+		const ing=IngredientesDe(n);
+		const open=!!ui.shopIng[n];
+		return `<div class="it" style="flex-wrap:wrap">
 			<div class="nm" style="color:var(--amber);font-weight:700">⚠︎ ${escapeHtml(n)}</div>
+			${ing?`<button class="del" data-action="shop-ing" data-name="${escapeHtml(n)}" title="Ver ingredientes" style="color:var(--aub);font-size:14px">${open?"▴":"🧾"}</button>`:""}
 			<button class="del" data-action="need-to-extra" data-name="${escapeHtml(n)}" title="Mover a Otros" style="color:var(--aub)">＋</button>
-		</div>`).join("") : `<div class="empty-msg">Todo lo planificado está cubierto por la despensa 🎉</div>`;
+			${open&&ing?`<div class="ing-list">${ing.map(x=>`• ${escapeHtml(x)}`).join("<br>")}</div>`:""}
+		</div>`;}).join("") : `<div class="empty-msg">Todo lo planificado está cubierto por la despensa 🎉</div>`;
 
 	const extras = state.extras;
 	const exItems = extras.length? extras.map(x=>`
@@ -809,6 +838,45 @@ function RenameDishInWeeks(oldName,newName){
 		});
 	})));
 	return n;
+}
+
+/* ---- recipe text utilities: the recipe IS the data (no duplicate store) ---- */
+/* "Ingredientes (2 raciones): a, b, c.\n\n1. ..." -> {base, items[], steps} */
+function RecipeParts(rec){
+	if(!rec) return null;
+	const i=rec.indexOf("\n\n");
+	const head=(i>=0?rec.slice(0,i):rec).trim();
+	const steps=i>=0?rec.slice(i+2).trim():"";
+	const m=head.match(/^Ingredientes\s*(?:\(([^)]*)\))?\s*:\s*([\s\S]+)$/i);
+	if(!m) return null;                        // "Sugerencia: …" -> not structured
+	const items=m[2].replace(/\.\s*$/,"")
+		.split(/,\s+(?![^()]*\))/)               // top-level commas only (not inside parens)
+		.map(s=>s.trim()).filter(Boolean);
+	return {base:m[1]||"", items, steps};
+}
+/* scale "250 g de lentejas" ×2 -> "500 g…"; times/temps/percentages stay put */
+function ScaleQty(text,f){
+	if(!f||f===1) return text;
+	const FR={"½":.5,"¼":.25,"¾":.75,"⅓":1/3,"⅔":2/3};
+	const fmt=n=>{
+		const r=Math.round(n*100)/100;
+		if(Math.abs(r-Math.round(r))<1e-9) return String(Math.round(r));
+		if(Math.abs(r-.5)<1e-9) return "½"; if(Math.abs(r-.25)<1e-9) return "¼"; if(Math.abs(r-.75)<1e-9) return "¾";
+		if(Math.abs(r-1.5)<1e-9) return "1½";
+		return String(r).replace(".",",");
+	};
+	return text.replace(/(\d+(?:[.,]\d+)?|[½¼¾⅓⅔])(?!\d)(\s*(?:h\b|min\b|°C|º|%|d[ií]as?\b|noche\b))?/g,(m,num,unit)=>{
+		if(unit) return m;
+		const v=FR[num]!==undefined?FR[num]:parseFloat(num.replace(",","."));
+		return isFinite(v)?fmt(v*f):m;
+	});
+}
+/* shopping helper: ingredients of a planned cell (composites merge parts) */
+function IngredientesDe(name){
+	const parts=(name||"").split(SEP).map(s=>s.trim()).filter(Boolean);
+	let out=[];
+	parts.forEach(p=>{const r=RecipeParts(DishRecipe(p)); if(r) out=out.concat(r.items);});
+	return out.length?out:null;
 }
 
 /* recipe text for a dish: user-written first, then the built-in recipe book */
@@ -919,10 +987,12 @@ function RenderIdeas(){
 		</div>`;
 }
 
-/* ---- dish detail sheet: macros + recipe + edit ---- */
-function OpenDish(id){
+/* ---- dish detail sheet: macros + recipe (scalable servings) + edit ---- */
+function OpenDish(id,scale){
 	const d=state.catalog.find(x=>x.id===id); if(!d) return;
+	const f=scale||1;
 	const rec=DishRecipe(d.name);
+	const rp=RecipeParts(rec);
 	const m=(typeof d.kcal==="number")?d:null;
 	const chips=[COURSE_LABEL[d.course]||d.course,d.tipo,d.estilo,d.batch?"Batch/Tupper":null]
 		.filter(Boolean).map(t=>`<span class="fchip on" style="pointer-events:none">${escapeHtml(t)}</span>`).join(" ");
@@ -935,8 +1005,20 @@ function OpenDish(id){
 		</div>
 		<p class="hint" style="margin:6px 2px 0">Por ración adulta estimada; niños ≈ ×0,6.</p>`
 		:`<p class="hint" style="margin:6px 2px 0">Sin macros — edita el plato para añadirlas.</p>`;
-	const recHtml=rec?`<div class="lab" style="margin-top:14px">Receta</div><div class="rec-text">${escapeHtml(rec)}</div>`
-		:`<div class="lab" style="margin-top:14px">Receta</div><div class="rec-text muted">Aún sin receta. Pulsa «Editar» y escríbela una vez: quedará guardada.</div>`;
+	let recHtml;
+	if(rp){
+		const scaleChips=[1,2,4,6].map(x=>
+			`<button class="fchip ${f===x?'on':''}" data-action="rec-scale" data-id="${d.id}" data-f="${x}">×${x}</button>`).join("");
+		recHtml=`
+			<div class="lab" style="margin-top:14px">Ingredientes${rp.base?` <span style="font-weight:600;color:var(--muted);text-transform:none">· base: ${escapeHtml(rp.base)}${f>1?` · viendo ×${f}`:""}</span>`:""}</div>
+			<div class="fchips" style="padding:4px 0 8px">${scaleChips}</div>
+			<div class="rec-text">${rp.items.map(x=>"• "+escapeHtml(ScaleQty(x,f))).join("\n")}</div>
+			${rp.steps?`<div class="lab" style="margin-top:12px">Elaboración</div><div class="rec-text">${escapeHtml(rp.steps)}</div>`:""}`;
+	}else if(rec){
+		recHtml=`<div class="lab" style="margin-top:14px">Receta</div><div class="rec-text">${escapeHtml(rec)}</div>`;
+	}else{
+		recHtml=`<div class="lab" style="margin-top:14px">Receta</div><div class="rec-text muted">Aún sin receta. Pulsa «Editar» y escríbela una vez: quedará guardada.</div>`;
+	}
 	document.getElementById("sheetContent").innerHTML=`
 		<div class="grip"></div>
 		<div class="sheet-h"><div class="t1">${escapeHtml(d.name)}</div><div class="x" data-action="close-sheet">✕</div></div>
@@ -1255,7 +1337,8 @@ function Tokens(s){
    updatedAt. Offline-first is untouched: sync is a layer on top, the app
    never waits for the network. The fine-grained PAT lives ONLY in its own
    localStorage key — never inside state, exports or the synced file. */
-const GH_OWNER="alejandromartinherrer", GH_REPO="nutri-app", GH_BRANCH="main";
+/* data lives on its own branch: saves don't rebuild Pages nor pollute main */
+const GH_OWNER="alejandromartinherrer", GH_REPO="nutri-app", GH_BRANCH="data";
 const GH_SYNC_PATH="data/sync.json";
 const GH_TOKEN_KEY="nutri_gh_token";
 
@@ -1298,9 +1381,26 @@ function SetCloudBusy(b){
 	const el=document.getElementById("cloudBtn");
 	if(el){ el.style.opacity=b?".45":""; el.textContent=b?"⏳":"☁️"; }
 }
-async function CloudSave(){
+/* unsaved-changes indicator: edits newer than the last successful upload */
+function CloudDirty(){
+	return !!(state.updatedAt && (!state.lastSync || state.updatedAt>state.lastSync));
+}
+function UpdateCloudDot(){
+	const el=document.getElementById("cloudBtn");
+	if(!el) return;
+	if(GhToken() && CloudDirty()) el.classList.add("dirty");
+	else el.classList.remove("dirty");
+}
+/* auto-sync: quiet upload ~30 s after the last edit (token + online only) */
+let _autoSync=null;
+function ScheduleAutoSync(){
+	if(!GhToken() || navigator.onLine===false) return;
+	clearTimeout(_autoSync);
+	_autoSync=setTimeout(()=>{ if(CloudDirty() && !_cloudBusy) CloudSave(true); },30000);
+}
+async function CloudSave(auto){
 	if(_cloudBusy) return;
-	if(!GhToken()){ OpenCloudSettings(); return; }
+	if(!GhToken()){ if(!auto) OpenCloudSettings(); return; }
 	SetCloudBusy(true);
 	try{
 		const {sha}=await CloudGet();                       // fresh sha → no lost-update
@@ -1315,12 +1415,13 @@ async function CloudSave(){
 		if(r.status===409||r.status===422) throw {code:"conflict"};
 		if(!r.ok) throw new Error("HTTP "+r.status);
 		state.lastSync=new Date().toISOString(); SaveQuiet();
-		Toast("Guardado en la nube ☁️✓");
+		if(!auto) Toast("Guardado en la nube ☁️✓");
 	}catch(e){
-		if(e&&e.code==="auth") Toast("Token no válido o caducado — Opciones → Nube");
+		if(auto){/* quiet: the dot stays on and the next edit reschedules */}
+		else if(e&&e.code==="auth") Toast("Token no válido o caducado — Opciones → Nube");
 		else if(e&&e.code==="conflict") Toast("Conflicto de guardado — reintenta");
 		else Toast(navigator.onLine===false?"Sin conexión — guardado solo local":"No se pudo guardar en la nube");
-	}finally{ SetCloudBusy(false); }
+	}finally{ SetCloudBusy(false); UpdateCloudDot(); }
 }
 
 /* boot pull: fire-and-forget, never blocks first paint, silent on failure */
@@ -1330,15 +1431,25 @@ async function CloudPullOnBoot(){
 		if(!payload || !payload.state || !ValidState(payload.state)) return;
 		const remote=payload.state.updatedAt||payload.savedAt||"";
 		if(!remote || remote<=(state.updatedAt||"")) return;   // local is newer or equal
+		const prev=JSON.stringify(state);                      // undo slot (one level)
 		state=payload.state;
 		if(!Array.isArray(state.userDishes)) state.userDishes=[];
 		if(!Array.isArray(state.hidden)) state.hidden=[];
 		if(!Array.isArray(state.extras)) state.extras=[];
+		state.lastSync=state.updatedAt;                        // it IS the cloud copy
 		RefreshCatalog(); SaveQuiet();
 		ApplyTheme(); BuildManifest();
 		if(!state.current) state.current=MondayOf(TodayISO());
 		EnsureWeek(state.current); Render();
-		Toast("Actualizado desde la nube ☁️");
+		ToastAction("Actualizado desde la nube ☁️","Deshacer",()=>{
+			try{
+				const p=JSON.parse(prev);
+				if(!ValidState(p)) return Toast("No se pudo deshacer");
+				state=p; RefreshCatalog(); Save();               // stamp: local now wins
+				ApplyTheme(); BuildManifest(); Render();
+				Toast("Restaurada tu copia local — se subirá sola");
+			}catch(e){ Toast("No se pudo deshacer"); }
+		});
 	}catch(e){/* offline / rate-limited → keep local, that's the contract */}
 }
 
@@ -1364,6 +1475,31 @@ function OpenCloudSettings(){
 			<div class="act-row" style="margin-top:14px">
 				${has?'<button class="btn danger" data-action="cloud-forget">Borrar token</button>':'<button class="btn ghost" data-action="close-sheet">Cancelar</button>'}
 				<button class="btn prim" data-action="cloud-token-save">Guardar token</button>
+			</div>
+		</div>`;
+	ShowSheet();
+}
+
+/* ============================ WEEKLY ROUTINE EDITOR ============================ */
+function OpenRutina(){
+	const P=Plantilla();
+	const rows=DOW.map((d,i)=>`
+		<div class="lab" style="margin-top:14px;text-transform:capitalize">${d}</div>
+		<input class="field" id="rt_d_${i}" placeholder="Desayuno (todos)" value="${escapeHtml(P.desayuno[i]||"")}">
+		<div style="display:flex;gap:8px;margin-top:8px">
+			<input class="field" id="rt_k_${i}" placeholder="Almuerzo niños" value="${escapeHtml(P.almKids[i]||"")}">
+			<input class="field" id="rt_a_${i}" placeholder="Almuerzo adultos" value="${escapeHtml(P.almAdults[i]||"")}">
+		</div>`).join("");
+	document.getElementById("sheetContent").innerHTML=`
+		<div class="grip"></div>
+		<div class="sheet-h"><div class="t1">Rutina semanal</div><div class="x" data-action="close-sheet">✕</div></div>
+		<div class="sheet-body">
+			<p class="hint" style="margin:0 2px">Desayunos y almuerzos fijos: se rellenan solos en cada semana nueva
+			(nunca pisan lo que ya hayas puesto a mano). Deja un campo vacío para no rellenar ese hueco.</p>
+			${rows}
+			<div class="act-row" style="margin-top:18px">
+				<button class="btn ghost" data-action="rutina-reset">Restaurar original</button>
+				<button class="btn prim" data-action="rutina-save">Guardar rutina</button>
 			</div>
 		</div>`;
 	ShowSheet();
@@ -1403,6 +1539,7 @@ function OpenMenu(){
 				<div class="lbl">Apariencia</div>
 				<div class="sw-row">${sw}</div>
 			</div>
+			<button class="menu-item" data-action="menu-rutina"><span class="mi">🥣</span> Rutina semanal (desayunos/almuerzos)</button>
 			<button class="menu-item" data-action="cloud-save-menu"><span class="mi">☁️</span> Guardar en la nube ahora</button>
 			<button class="menu-item" data-action="cloud-settings"><span class="mi">🔑</span> Nube (GitHub) — configurar</button>
 			<button class="menu-item" data-action="export"><span class="mi">📤</span> Exportar copia (guardar/compartir)</button>
@@ -1701,7 +1838,18 @@ function ShareShoppingImage(){
 }
 
 /* ============================ EVENTS ============================ */
-function Toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(Toast._t);Toast._t=setTimeout(()=>t.classList.remove("show"),1900)}
+function Toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.remove("act");t.classList.add("show");clearTimeout(Toast._t);Toast._t=setTimeout(()=>t.classList.remove("show"),1900)}
+/* toast with one action button (e.g. "Deshacer"); longer-lived than Toast */
+function ToastAction(msg,label,fn){
+	const t=document.getElementById("toast");
+	t.textContent=msg;
+	const b=document.createElement("button"); b.className="t-act"; b.textContent=label;
+	b.onclick=()=>{ t.classList.remove("show","act"); clearTimeout(Toast._t); fn(); };
+	t.appendChild(b);
+	t.classList.add("show","act");
+	clearTimeout(Toast._t);
+	Toast._t=setTimeout(()=>t.classList.remove("show","act"),8000);
+}
 let _lastFocus = null;
 function ShowSheet(){
 	_lastFocus = document.activeElement;
@@ -1732,6 +1880,21 @@ document.addEventListener("click",e=>{
 		case "surprise": Surprise(); break;
 		case "menu": OpenMenu(); break;
 		case "about": OpenAbout(); break;
+		case "menu-rutina": OpenRutina(); break;
+		case "rutina-save": {
+			const val=id=>{const el=document.getElementById(id);return el?el.value.trim():""};
+			const P={desayuno:[],almKids:[],almAdults:[]};
+			for(let i=0;i<7;i++){P.desayuno.push(val("rt_d_"+i));P.almKids.push(val("rt_k_"+i));P.almAdults.push(val("rt_a_"+i));}
+			state.plantilla=P;
+			const n=ApplyTemplate(CurWeek());
+			Save(); CloseSheet(); Render();
+			Toast(n?`Rutina guardada — ${n} huecos rellenados`:"Rutina guardada");
+			break; }
+		case "rutina-reset": state.plantilla=null; Save(); OpenRutina(); Toast("Rutina original restaurada"); break;
+		case "shop-ing": ui.shopIng=ui.shopIng||{}; ui.shopIng[ds.name]=!ui.shopIng[ds.name]; Render(); break;
+		case "rec-scale": { const sb=document.querySelector(".sheet-body"); const st=sb?sb.scrollTop:0;
+			OpenDish(ds.id, parseInt(ds.f,10)||1);
+			const sb2=document.querySelector(".sheet-body"); if(sb2) sb2.scrollTop=st; break; }
 		case "cloud-save": CloudSave(); break;
 		case "cloud-save-menu": CloseSheet(); CloudSave(); break;
 		case "cloud-settings": OpenCloudSettings(); break;

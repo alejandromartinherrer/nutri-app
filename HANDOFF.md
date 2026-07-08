@@ -1,13 +1,26 @@
 # Nutri APP — Handoff
 
-## Estado actual (v1.1.0 — 2026-07-07)
+## Estado actual (v1.2.0 — 2026-07-08)
 - Repo: `github.com/alejandromartinherrer/nutri-app` (público, Pages activo).
 - App publicada: `https://alejandromartinherrer.github.io/nutri-app/`
-- HTML: **index.html** (verificado; ya no existe nutri-app.html).
-- Carpeta local: `C:\claude_projects\web-apps\nutri-app`
-- Tests: **80 asserts en verde** (UTC/Madrid/LA). Nota: la suite estaba rota
-  desde el inicio (sintaxis en línea 44 + nombre de fichero antiguo); ya
-  compila y corre. Node LTS v24 instalado en el sistema (`node test/test.js`).
+- HTML: **index.html**. Carpeta local: `C:\claude_projects\web-apps\nutri-app`
+- Tests: **114 asserts en verde** (UTC/Madrid/LA). Node LTS v24 en el sistema.
+- Nube OPERATIVA: token configurado por el usuario; la app ya ha subido
+  sync.json varias veces. Desde v1.2.0 los datos van a la rama **`data`**
+  (GH_BRANCH="data"); si esa rama se borra, recrear con
+  `git push origin main:data`.
+
+## Entregado en v1.2.0
+- Raciones escalables ×1/×2/×4/×6 en la ficha (`ScaleQty`, respeta
+  h/min/°C/%/días). `RecipeParts()` parsea la receta como datos.
+- Ingredientes desplegables (🧾) en la compra (`IngredientesDe`, fusiona 1º·2º).
+- Rutina semanal editable (`state.plantilla`, fallback `DefaultPlantilla()`
+  del SEED; UI en Opciones → 🥣). Viaja con la nube.
+- Auto-guardado a la nube (30 s debounce, silencioso), punto naranja en ☁️
+  (`CloudDirty`: `updatedAt`>`lastSync`), Deshacer 8 s al adoptar la nube
+  (la adopción fija `lastSync=updatedAt`).
+- OJO tests: el stub de classList NO tiene toggle; UpdateCloudDot usa
+  add/remove a propósito.
 
 ## Entregado en v1.1.0
 1. **Recetario editable** — `state.userDishes[]` (upsert por nombre sobre

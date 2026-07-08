@@ -22,7 +22,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH};\n";
 eval(src);
 const A=global.__api;
 
@@ -217,6 +217,56 @@ const nR=A.RenameDishInWeeks("Atún a la plancha","Atún plancha familiar");
 ok(nR>=1,"rename touches planned cells");
 ok(wkR.days[0].slots.Comida.nosotros.dish==="Lentejas estofadas · Atún plancha familiar","rename follows into composite cells");
 ok(A.RenameDishInWeeks("No Existe Nada","X")===0,"rename with no matches is a no-op");
+
+// ==================== 1.2.0 ====================
+// ---- recipe parsing ----
+const rpz=A.RecipeParts(A.DishRecipe("Gazpacho"));
+ok(rpz && rpz.items.length>=5 && /raciones/.test(rpz.base),"RecipeParts: base + items from real recipe");
+ok(rpz.steps.startsWith("1."),"RecipeParts: steps extracted");
+ok(A.RecipeParts(A.DishRecipe("Fruta"))===null,"RecipeParts: 'Sugerencia' recipes are not structured");
+ok(A.RecipeParts(null)===null,"RecipeParts(null) -> null");
+// commas inside parentheses don't split items
+const rpj=A.RecipeParts("Ingredientes (2 raciones): alcachofas, judías verdes, guisantes (frescos, o congelados), sal.\n\n1. Listo.");
+ok(rpj.items.length===4 && rpj.items[2]==="guisantes (frescos, o congelados)","RecipeParts: parens keep their commas");
+
+// ---- servings scaling ----
+ok(A.ScaleQty("250 g de lentejas",2)==="500 g de lentejas","ScaleQty ×2 grams");
+ok(A.ScaleQty("½ cebolla",6)==="3 cebolla","ScaleQty ×6 unicode fraction");
+ok(A.ScaleQty("1,5 kg de sal gruesa",2)==="3 kg de sal gruesa","ScaleQty decimal comma");
+ok(A.ScaleQty("garbanzos remojados 12 h",2)==="garbanzos remojados 12 h","ScaleQty leaves durations (h)");
+ok(A.ScaleQty("congelado previamente 5 días",4)==="congelado previamente 5 días","ScaleQty leaves days");
+ok(A.ScaleQty("crema de cacahuete 100 %",2)==="crema de cacahuete 100 %","ScaleQty leaves percentages");
+ok(A.ScaleQty("2 dientes de ajo",6)==="12 dientes de ajo","ScaleQty ×6 integer");
+ok(A.ScaleQty("¼ de col",2)==="½ de col","ScaleQty keeps nice fractions");
+ok(A.ScaleQty("250 g de arroz",1)==="250 g de arroz","ScaleQty ×1 is identity");
+
+// ---- shopping ingredients (composites merge) ----
+const ingC=A.IngredientesDe("Lentejas estofadas · Atún a la plancha");
+ok(Array.isArray(ingC) && ingC.length>6,"IngredientesDe merges composite parts");
+ok(A.IngredientesDe("Plato Inventado Sin Receta")===null,"IngredientesDe unknown -> null");
+
+// ---- editable weekly routine ----
+A.state=A.SeedState(); A.RefreshCatalog();
+const defP=A.DefaultPlantilla();
+ok(defP.desayuno[0]==="Avena con fruta" && defP.almKids[0]==="Fruta" && defP.almAdults[0]==="","DefaultPlantilla derived from SEED");
+ok(A.Plantilla().desayuno[0]==="Avena con fruta","Plantilla falls back to default");
+A.state.plantilla={desayuno:["Café y tostada","","","","","",""],almKids:["Plátano","","","","","",""],almAdults:["Nueces","","","","","",""]};
+ok(A.TemplateDish(0,"Desayuno","nosotros")==="Café y tostada","custom plantilla: desayuno");
+ok(A.TemplateDish(0,"Almuerzo","noah")==="Plátano","custom plantilla: almuerzo kids");
+ok(A.TemplateDish(0,"Almuerzo","nosotros")==="Nueces","custom plantilla: almuerzo adults");
+const wkP=A.EnsureWeek("2026-09-07");
+ok(wkP.days[0].slots.Desayuno.iria.dish==="Café y tostada","EnsureWeek uses custom plantilla");
+ok(wkP.days[1].slots.Desayuno.iria.dish==="","empty plantilla slot -> stays empty");
+A.state.plantilla=null;
+ok(A.TemplateDish(0,"Desayuno","noah")==="Avena con fruta","plantilla reset -> SEED default");
+
+// ---- cloud: dirty flag + data branch ----
+ok(A.GH_BRANCH==="data","sync writes to the data branch (not main)");
+A.state.updatedAt="2026-07-08T10:00:00.000Z"; A.state.lastSync="2026-07-08T09:00:00.000Z";
+ok(A.CloudDirty()===true,"CloudDirty: edits newer than last upload");
+A.state.lastSync="2026-07-08T11:00:00.000Z";
+ok(A.CloudDirty()===false,"CloudDirty: clean after upload");
+ok(A.BuildSyncPayload(A.state).state.plantilla===null,"sync payload carries plantilla (null ok)");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);

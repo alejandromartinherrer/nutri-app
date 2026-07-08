@@ -9,7 +9,7 @@ dependencias, offline, instalable como PWA en iOS.
 |---|---|
 | `index.html` | La app completa (UI + lógica + datos SEED + recetario con recetas) |
 | `sw.js` | Service worker: offline tras la primera visita (opcional pero recomendado) |
-| `data/sync.json` | Copia de la nube (la escribe la propia app con ☁️ Guardar) |
+| `data/sync.json` | Copia de la nube — vive en la rama **`data`** (la escribe la propia app) |
 | `test/test.js` | Suite (80 asserts) que se ejecuta contra el HTML publicado, sin build |
 | `.github/workflows/ci.yml` | CI: suite bajo UTC, Europe/Madrid y America/Los_Angeles |
 | `CHANGELOG.md` | Historial de versiones |
@@ -26,9 +26,14 @@ igual, solo pierde la garantía offline.
 
 ## Sincronización entre dispositivos (☁️)
 
-- El botón **☁️** del encabezado sube el estado a `data/sync.json` de este
-  repo vía GitHub API. Al abrir la app con red, se adopta la copia más
-  reciente (`updatedAt`, last-write-wins).
+- El botón **☁️** del encabezado sube el estado a `data/sync.json` en la
+  rama **`data`** de este repo vía GitHub API (así los guardados no
+  reconstruyen Pages ni ensucian `main`). Además hay **auto-guardado**
+  ~30 s tras el último cambio, y un punto naranja en ☁️ marca cambios sin
+  subir. Al abrir la app con red, se adopta la copia más reciente
+  (`updatedAt`, last-write-wins) con opción **Deshacer** durante 8 s.
+- Si la rama `data` se borrara, hay que recrearla (p. ej.
+  `git push origin main:data`); la app no la crea sola.
 - Requiere un **token fine-grained** (solo este repo, permiso *Contents:
   Read and write*, con caducidad), que se pega en Opciones → Nube (GitHub).
 - El token vive solo en `localStorage` del dispositivo (clave
