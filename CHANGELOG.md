@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.0 — 2026-07-08 (Caducidades, texto libre visible, expandir todo)
+- **Caducidad en la despensa**: campo de fecha opcional al añadir; tocar un
+  alimento lo edita (nombre/cantidad/unidad/caducidad). A ≤2 días se marca
+  solo como «usar pronto» (con "caduca hoy/mañana/en 2 días"), en rojo si ya
+  caducó, y pasa al grupo urgente: primero en despensa, en el picker y en
+  «Sorpréndeme» (`DaysLeft`/`InvUrgent`).
+- **Texto libre visible en el picker**: al escribir algo que no existe
+  aparece un botón «➕ Usar “…” tal cual» (antes solo funcionaba pulsando
+  Enter, indescubrible en móvil). Vale para 1º/2º/cenas y slots simples.
+- **▾ Expandir / ▴ Contraer todos** los días de la semana con un botón sobre
+  la lista.
+- Tests: 122 asserts.
+
 ## 1.2.0 — 2026-07-08 (Sync sin fricción + recetas escalables)
 ### Características
 - **Raciones escalables**: en la ficha de cada plato, chips ×1/×2/×4/×6 que

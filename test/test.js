@@ -22,7 +22,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent};\n";
 eval(src);
 const A=global.__api;
 
@@ -267,6 +267,18 @@ ok(A.CloudDirty()===true,"CloudDirty: edits newer than last upload");
 A.state.lastSync="2026-07-08T11:00:00.000Z";
 ok(A.CloudDirty()===false,"CloudDirty: clean after upload");
 ok(A.BuildSyncPayload(A.state).state.plantilla===null,"sync payload carries plantilla (null ok)");
+
+// ==================== 1.3.0 ====================
+// ---- inventory expiry ----
+const hoy=A.TodayISO();
+ok(A.DaysLeft(null)===null,"DaysLeft(null) -> null");
+ok(A.DaysLeft(hoy)===0,"DaysLeft(today) = 0");
+ok(A.DaysLeft(A.AddDays(hoy,2))===2 && A.DaysLeft(A.AddDays(hoy,-1))===-1,"DaysLeft counts forward/backward");
+ok(A.InvUrgent({pri:true})===true,"InvUrgent: starred");
+ok(A.InvUrgent({cad:A.AddDays(hoy,2)})===true,"InvUrgent: expires in 2 days");
+ok(A.InvUrgent({cad:A.AddDays(hoy,3)})===false,"InvUrgent: 3 days away is not urgent");
+ok(A.InvUrgent({cad:A.AddDays(hoy,-5)})===true,"InvUrgent: already expired");
+ok(A.InvUrgent({})===false && A.InvUrgent(null)===false,"InvUrgent: plain item / null");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);

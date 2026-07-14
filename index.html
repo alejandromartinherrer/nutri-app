@@ -120,6 +120,7 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .it .nm small{color:var(--muted);font-weight:600}
 .it .used{font-size:11px;color:var(--herb);font-weight:700}
 .it .pri{font-size:10px;font-weight:800;letter-spacing:.04em;color:var(--amber);background:var(--amber-soft);padding:2px 7px;border-radius:20px}
+.it .pri.cad-off{color:#fff;background:var(--red)}
 .stepper{display:flex;align-items:center;gap:0;background:var(--bg);border-radius:9px;overflow:hidden;flex-shrink:0}
 .stepper button{width:30px;height:30px;font-size:18px;font-weight:700;color:var(--aub);display:grid;place-items:center}
 .stepper button:active{background:var(--aub-soft)}
@@ -202,6 +203,8 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .pick-list{display:flex;flex-direction:column;gap:1px;margin-top:4px}
 .pick{display:flex;align-items:center;gap:10px;padding:11px 4px;border-top:1px solid var(--line2);text-align:left;width:100%}
 .pick .nm{flex:1;font-size:15px;font-weight:600}
+.pick.free{background:var(--aub-soft);border-radius:11px;border-top:0;padding:11px 10px;margin:2px 0}
+.pick.free .nm{color:var(--aub-2)}
 .pick .ti{font-size:10.5px;font-weight:800;color:var(--aub-2);background:var(--aub-soft);padding:3px 8px;border-radius:20px;white-space:nowrap}
 .inv-row{display:flex;gap:7px;overflow-x:auto;padding:2px 0 4px;-webkit-overflow-scrolling:touch}
 .inv-chip{display:flex;align-items:center;gap:6px;padding:9px 12px;border-radius:12px;background:var(--herb-soft);color:#235c40;font-weight:700;font-size:13px;white-space:nowrap;border:1.5px solid transparent}
@@ -238,6 +241,10 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .icon-btn.dirty::after{content:"";position:absolute;top:3px;right:3px;width:9px;height:9px;border-radius:50%;background:#F6B93B;border:2px solid var(--aub);box-sizing:content-box}
 /* shopping: expandable ingredient list */
 .ing-list{width:100%;font-size:12.5px;color:var(--muted);padding:6px 0 2px 28px;line-height:1.55}
+/* semana: expand/collapse all days */
+.exp-row{display:flex;justify-content:flex-end;margin:0 2px 8px}
+.exp-all{font-size:12px;font-weight:700;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:6px 12px;font-family:inherit;cursor:pointer}
+.exp-all:active{background:var(--line2)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 :focus-visible{outline:3px solid var(--aub-2);outline-offset:2px}
 .ver-foot{text-align:center;font-size:11px;color:var(--muted);padding:10px 0 2px}
@@ -322,7 +329,7 @@ const RECETAS = {"alubias con verduras":"Ingredientes (4 raciones): 400 g de alu
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.2.0";
+const APP_VERSION = "1.3.0";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -655,11 +662,15 @@ function escapeHtml(s){return (s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&
 
 function RenderSemana(){
 	const wk=CurWeek(); const today=TodayISO();
-	let html="";
+	// materialise defaults first so the expand-all toggle sees real values
+	wk.days.forEach(d=>{ ui.collapsed[d.date]=ui.collapsed[d.date] ?? (d.date<today); });
+	const anyOpen = wk.days.some(d=>!ui.collapsed[d.date]);
+	let html=`<div class="exp-row">
+		<button class="exp-all" data-action="toggle-all-days">${anyOpen?"▴ Contraer todos":"▾ Expandir todos"}</button>
+	</div>`;
 	wk.days.forEach((d,i)=>{
 		const isToday = d.date===today;
-		const collapsed = ui.collapsed[d.date] ?? (d.date<today && !isToday);
-		ui.collapsed[d.date]=collapsed;
+		const collapsed = ui.collapsed[d.date];
 		const dowName = DOW[i];
 		const dots = state.members.map(m=>`<span class="dot" style="background:${m.color}"></span>`).join("");
 		let body="";
@@ -691,9 +702,28 @@ function RenderSemana(){
 }
 
 /* ============================ RENDER: DESPENSA ============================ */
+/* days until expiry (date-only ISO strings; negative = expired) */
+function DaysLeft(cad){
+	if(!cad) return null;
+	return Math.round((Date.parse(cad)-Date.parse(TodayISO()))/86400000);
+}
+/* urgent = starred by hand OR expiring within 2 days */
+function InvUrgent(it){
+	if(!it) return false;
+	if(it.pri) return true;
+	const dl=DaysLeft(it.cad);
+	return dl!==null && dl<=2;
+}
+function CadBadge(it){
+	const dl=DaysLeft(it.cad);
+	if(dl===null) return it.pri?'<span class="pri">usar pronto</span>':'';
+	if(dl<0) return '<span class="pri cad-off">caducado</span>';
+	if(dl<=2) return `<span class="pri">usar pronto · ${dl===0?"caduca hoy":dl===1?"caduca mañana":"caduca en 2 días"}</span>`;
+	return (it.pri?'<span class="pri">usar pronto</span>':'')+`<span class="used"> · cad. ${FmtLong(it.cad)}</span>`;
+}
 function InvSection(loc,title,sub){
 	const list = state.inventory[loc].slice().sort((a,b)=>{
-		if(!!b.pri-!!a.pri) return !!b.pri-!!a.pri;
+		if(!!InvUrgent(b)-!!InvUrgent(a)) return !!InvUrgent(b)-!!InvUrgent(a);
 		return (a.added||"").localeCompare(b.added||"");
 	});
 	const usedSet = UsedInvIds();
@@ -701,8 +731,8 @@ function InvSection(loc,title,sub){
 		const used = usedSet.has(it.id);
 		return `<div class="it">
 			<button class="star ${it.pri?'on':''}" data-action="inv-pri" data-id="${it.id}" data-loc="${loc}" title="Usar pronto">${it.pri?'★':'☆'}</button>
-			<div class="nm">${escapeHtml(it.name)} ${it.unit?`<small>${escapeHtml(it.unit)}</small>`:''}
-				${it.pri?'<span class="pri">usar pronto</span>':''}
+			<div class="nm" data-action="inv-edit" data-id="${it.id}" data-loc="${loc}" role="button" style="cursor:pointer">${escapeHtml(it.name)} ${it.unit?`<small>${escapeHtml(it.unit)}</small>`:''}
+				${CadBadge(it)}
 				${used?'<span class="used"> · en el menú</span>':''}</div>
 			<div class="stepper">
 				<button data-action="inv-q" data-id="${it.id}" data-loc="${loc}" data-dir="-1">−</button>
@@ -727,7 +757,7 @@ function UsedInvIds(){
 }
 function RenderDespensa(){
 	return `<div class="view-title">Despensa</div>
-		<p class="hint">Marca con ★ lo que toca gastar antes. Aparecerá primero al planear y en “Sorpréndeme”.</p>
+		<p class="hint">Marca con ★ lo que toca gastar antes, o toca un alimento para ponerle caducidad: a 2 días de caducar se marca solo como «usar pronto». Lo urgente aparece primero al planear y en “Sorpréndeme”.</p>
 		${InvSection("frigo","🧊 En el frigo","consumir antes")}
 		${InvSection("conge","❄️ En el congelador","stock")}`;
 }
@@ -1157,16 +1187,23 @@ function RenderPicker(){
 	// inventory chips (priority/oldest first)
 	const inv=[...state.inventory.frigo.map(i=>({...i,loc:"frigo"})),...state.inventory.conge.map(i=>({...i,loc:"conge"}))]
 		.filter(i=>i.qty>0)
-		.sort((a,b)=>(!!b.pri-!!a.pri)||((a.added||"").localeCompare(b.added||"")));
+		.sort((a,b)=>(!!InvUrgent(b)-!!InvUrgent(a))||((a.added||"").localeCompare(b.added||"")));
 	const invHtml = inv.length? `<div class="lab">Usar de tu despensa</div>
 		<div class="inv-row">${inv.map(i=>`<button class="inv-chip ${i.loc==='frigo'?'fridge':''}" data-paction="pinv" data-id="${i.id}">
 			${i.loc==='frigo'?'🧊':'❄️'} ${escapeHtml(i.name)} <span class="q">×${i.qty}</span></button>`).join("")}</div>`:"";
 
-	const listHtml = items.length? items.map(c=>`
+	const q=picker.search.trim();
+	const exact=q && items.some(c=>c.name.trim().toLowerCase()===q.toLowerCase());
+	const freeHtml = (q && !exact)? `
+		<button class="pick free" data-paction="pfree" data-name="${escapeHtml(q)}">
+			<span class="nm">➕ Usar «${escapeHtml(q)}» tal cual</span>
+			<span class="ti">texto libre</span>
+		</button>` : "";
+	const listHtml = freeHtml + (items.length? items.map(c=>`
 		<button class="pick" data-paction="pchoose" data-name="${escapeHtml(c.name)}">
 			<span class="nm">${escapeHtml(c.name)}</span>
 			${c.tipo?`<span class="ti">${escapeHtml(c.tipo)}</span>`:''}
-		</button>`).join("") : `<div class="empty-msg">Sin resultados. Usa el texto libre abajo.</div>`;
+		</button>`).join("") : (q?"":`<div class="empty-msg">Nada aquí todavía.</div>`));
 
 	document.getElementById("sheetContent").innerHTML = `
 		<div class="grip"></div>
@@ -1251,7 +1288,7 @@ function Surprise(){
 	const pri = byCourse("primero"), seg=byCourse("segundo"), cen=byCourse("cena"), noah=byCourse("noah");
 	// inventory keyword set for prioritisation
 	const invItems=[...state.inventory.frigo,...state.inventory.conge].filter(i=>i.qty>0);
-	const invTokens = invItems.map(i=>({id:i.id,toks:Tokens(i.name),pri:i.pri}));
+	const invTokens = invItems.map(i=>({id:i.id,toks:Tokens(i.name),pri:InvUrgent(i)}));
 	function invMatch(dish){
 		const dt=Tokens(dish.name).concat(Tokens(dish.tipo||""));
 		for(const it of invTokens){
@@ -1875,6 +1912,10 @@ document.addEventListener("click",e=>{
 		case "wk-prev": state.current=AddDays(state.current,-7); EnsureWeek(state.current); Save(); Render(); break;
 		case "wk-next": state.current=AddDays(state.current,7); EnsureWeek(state.current); Save(); Render(); break;
 		case "toggle-day": ui.collapsed[ds.date]=!ui.collapsed[ds.date]; Render(); break;
+		case "toggle-all-days": { const wk=CurWeek();
+			const anyOpen=wk.days.some(d=>!ui.collapsed[d.date]);
+			wk.days.forEach(d=>ui.collapsed[d.date]=anyOpen);
+			Render(); break; }
 		case "pick": OpenPicker(+ds.d,ds.s,ds.m||null,ds.all==="1"); break;
 		case "slot-all": OpenPicker(+ds.d,ds.s,null,true); break;
 		case "surprise": Surprise(); break;
@@ -1918,8 +1959,18 @@ document.addEventListener("click",e=>{
 		case "inv-add": AddPrompt({title:"Añadir a la despensa",fields:[
 			{key:"name",label:"Qué",ph:"p.ej. Salmón"},
 			{key:"qty",label:"Cantidad",type:"number",value:"1"},
-			{key:"unit",label:"Unidad (opcional)",ph:"ud, kg, pack…"}
-		],onSave:v=>{if(!v.name)return Toast("Pon un nombre");state.inventory[ds.loc].push({id:Uid(),name:v.name,qty:Math.max(0,parseInt(v.qty||"1")||1),unit:v.unit,added:TodayISO(),pri:ds.loc==="frigo"});Save();CloseSheet();Render()}}); break;
+			{key:"unit",label:"Unidad (opcional)",ph:"ud, kg, pack…"},
+			{key:"cad",label:"Caducidad (opcional)",type:"date"}
+		],onSave:v=>{if(!v.name)return Toast("Pon un nombre");state.inventory[ds.loc].push({id:Uid(),name:v.name,qty:Math.max(0,parseInt(v.qty||"1")||1),unit:v.unit,cad:v.cad||null,added:TodayISO(),pri:ds.loc==="frigo"});Save();CloseSheet();Render()}}); break;
+		case "inv-edit": { const it=InvById(ds.id); if(!it) break;
+			AddPrompt({title:"Editar «"+it.name+"»",fields:[
+				{key:"name",label:"Qué",value:it.name},
+				{key:"qty",label:"Cantidad",type:"number",value:it.qty},
+				{key:"unit",label:"Unidad (opcional)",ph:"ud, kg, pack…",value:it.unit||""},
+				{key:"cad",label:"Caducidad (opcional)",type:"date",value:it.cad||""}
+			],onSave:v=>{if(!v.name)return Toast("Pon un nombre");
+				it.name=v.name; it.qty=Math.max(0,parseInt(v.qty||"1")||1); it.unit=v.unit; it.cad=v.cad||null;
+				Save();CloseSheet();Render();Toast("Actualizado")}}); break; }
 		/* produce */
 		case "prod-done": { const p=state.produce.find(x=>x.id===ds.id); if(p){p.done=!p.done; Save(); Render()} break; }
 		case "prod-del": { const i=state.produce.findIndex(x=>x.id===ds.id); if(i>=0)state.produce.splice(i,1); Save(); Render(); break; }
@@ -1964,6 +2015,9 @@ document.addEventListener("click",e=>{
 			else ApplyDish(it.name,it.id); break; }
 		case "pchoose":
 			if(picker.slot==="Comida"||picker.slot==="Cena"){ picker[picker.sub]=ds.name; if(picker.sub==="pri")picker.sub="seg"; RenderPicker(); }
+			else ApplyDish(ds.name,null); break;
+		case "pfree":   // free text: same as choosing, but clears the search box
+			if(picker.slot==="Comida"||picker.slot==="Cena"){ picker[picker.sub]=ds.name; picker.search=""; if(picker.sub==="pri")picker.sub="seg"; RenderPicker(); }
 			else ApplyDish(ds.name,null); break;
 		case "psave": SaveComida(); break;
 		case "paway": SetAway(); break;
