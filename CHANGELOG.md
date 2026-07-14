@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1 — 2026-07-08
+- «Enviar al frutero» ahora vive justo debajo de la sección Fruta y verdura
+  (antes al final de la página); abajo queda solo «Copiar lista completa».
+
 ## 1.3.0 — 2026-07-08 (Caducidades, texto libre visible, expandir todo)
 - **Caducidad en la despensa**: campo de fecha opcional al añadir; tocar un
   alimento lo edita (nombre/cantidad/unidad/caducidad). A ≤2 días se marca
