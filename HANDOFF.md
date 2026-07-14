@@ -1,6 +1,11 @@
 # Nutri APP — Handoff
 
-## Estado actual (v1.2.0 — 2026-07-08)
+## Estado actual (v1.3.0 — 2026-07-08)
+- v1.3.0: caducidad en despensa (`DaysLeft`/`InvUrgent`, tocar item = editar),
+  botón de texto libre en el picker (`pfree`), expandir/contraer todos los
+  días (`toggle-all-days`). 122 asserts.
+
+## Estado previo (v1.2.0 — 2026-07-08)
 - Repo: `github.com/alejandromartinherrer/nutri-app` (público, Pages activo).
 - App publicada: `https://alejandromartinherrer.github.io/nutri-app/`
 - HTML: **index.html**. Carpeta local: `C:\claude_projects\web-apps\nutri-app`
