@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-14T08:20:26.386Z",
+ "savedAt": "2026-07-14T08:26:55.906Z",
  "state": {
   "members": [
    {
@@ -1194,34 +1194,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Berenjena rellena de verduras · Lomo de cerdo a la naranja",
+         "invId": "afq5nwi",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Nuggets caseros de pollo",
+         "invId": "3u22qz8",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Berenjena rellena de verduras · Lomo de cerdo a la naranja",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Fingers de berenjena al horno",
+         "invId": "rph3wuk",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Fingers de berenjena al horno",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Fingers de berenjena al horno",
          "invId": null,
          "away": false
         }
@@ -1267,34 +1267,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Alubias con verduras · Pad thai de pollo ligero",
+         "invId": "3u22qz8",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Pizza casera de verduras",
+         "invId": "ese3uw9",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Alubias con verduras · Pad thai de pollo ligero",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Wrap de hummus y verduras",
+         "invId": "ese3uw9",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Wrap de hummus y verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Wrap de hummus y verduras",
          "invId": null,
          "away": false
         }
@@ -1340,34 +1340,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Wok de verduras con anacardos · Muslos de pollo al horno con limón",
+         "invId": "3u22qz8",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Crema de verduras",
+         "invId": "ese3uw9",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Wok de verduras con anacardos · Muslos de pollo al horno con limón",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Frittata de verduras",
+         "invId": "ese3uw9",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Frittata de verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Frittata de verduras",
          "invId": null,
          "away": false
         }
@@ -1413,34 +1413,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Sopa de pollo y verduras · Estofado de ternera con verduras",
+         "invId": "afq5nwi",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Albóndigas de pavo con puré",
+         "invId": "afq5nwi",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Sopa de pollo y verduras · Estofado de ternera con verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Quesadilla integral de pollo y verduras",
+         "invId": "3u22qz8",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Quesadilla integral de pollo y verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Quesadilla integral de pollo y verduras",
          "invId": null,
          "away": false
         }
@@ -1486,34 +1486,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Ensalada de garbanzos, tomate y atún · Nuggets de pollo al horno con boniato",
+         "invId": "3u22qz8",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Pollo con patata y verdura",
+         "invId": "3u22qz8",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Ensalada de garbanzos, tomate y atún · Nuggets de pollo al horno con boniato",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Carpaccio de ternera",
+         "invId": "afq5nwi",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Carpaccio de ternera",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Carpaccio de ternera",
          "invId": null,
          "away": false
         }
@@ -1559,34 +1559,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Chicken Curry (Versión Thermomix) · Pavo en salsa de mostaza y miel",
+         "invId": "3u22qz8",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Arroz con pollo",
+         "invId": "3u22qz8",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Chicken Curry (Versión Thermomix) · Pavo en salsa de mostaza y miel",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Espárragos trigueros con jamón y huevo",
+         "invId": "ese3uw9",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Espárragos trigueros con jamón y huevo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Espárragos trigueros con jamón y huevo",
          "invId": null,
          "away": false
         }
@@ -1632,34 +1632,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Espárragos a la plancha · Salteado de tofu y verduras",
+         "invId": "ese3uw9",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Mini hamburguesas de pollo",
+         "invId": "3u22qz8",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Espárragos a la plancha · Salteado de tofu y verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Brochetas de langostino y verduras",
+         "invId": "ese3uw9",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Brochetas de langostino y verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Brochetas de langostino y verduras",
          "invId": null,
          "away": false
         }
@@ -3750,7 +3750,7 @@
     "receta": "Ingredientes:\n500g de pollo cortado en dados\n2 puerros grandes\n1 cebolla\n80g AOVE\n4 zanahorias\n250-300 ml de leche fresca\n250-300 ml de leche de coco (o caldo de pollo, también queda muy rico)\nCurry al gusto\nPimienta\nSal\n\nPreparación paso a paso:\nSofríe la base: Corta el puerro y la cebolla, añade AOVE y sofríe en la Thermomix a velocidad cuchara durante 15 minutos a 100 grados.\n\nCocina la salsa: Añade las zanahorias cortadas y las leches (fresca y de coco). Programa 45 minutos a 120 grados.\n\nCondimenta y tritura: Incorpora el curry, la pimienta y la sal. Bate todo a velocidad 9 durante 2 minutos para que quede una salsa fina.\n\nPrepara el pollo: Saltea los dados de pollo en una sartén aparte.\n\nMezcla final: Incorpora la salsa de la Thermomix a la sartén con el pollo y deja hervir todo junto durante unos minutos para que se integren los sabores."
    }
   ],
-  "updatedAt": "2026-07-14T08:20:26.386Z",
-  "lastSync": "2026-07-09T15:46:11.843Z"
+  "updatedAt": "2026-07-14T08:26:55.906Z",
+  "lastSync": "2026-07-14T08:20:59.559Z"
  }
 }
