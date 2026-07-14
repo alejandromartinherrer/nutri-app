@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-14T13:56:43.182Z",
+ "savedAt": "2026-07-14T17:35:52.725Z",
  "state": {
   "members": [
    {
@@ -3354,34 +3354,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Berenjena rellena de verduras · Pinchos morunos de pollo",
+         "invId": "dirbpxj",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Albóndigas de pavo con puré",
+         "invId": "16cnuhb",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Berenjena rellena de verduras · Pinchos morunos de pollo",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Fingers de berenjena al horno",
+         "invId": "rph3wuk",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Fingers de berenjena al horno",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Fingers de berenjena al horno",
          "invId": null,
          "away": false
         }
@@ -3427,34 +3427,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Ensalada César con pollo · Conejo al horno con hierbas",
+         "invId": "16cnuhb",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Croquetas de pollo al horno",
+         "invId": "dirbpxj",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Ensalada César con pollo · Conejo al horno con hierbas",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Tartar de atún con aguacate",
+         "invId": "1qrlz3z",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Tartar de atún con aguacate",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Tartar de atún con aguacate",
          "invId": null,
          "away": false
         }
@@ -3500,34 +3500,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Chicken Curry (Versión Thermomix) · Lomo de cerdo a la naranja",
+         "invId": "ku4k3g0",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Crema de verduras",
+         "invId": "ese3uw9",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Chicken Curry (Versión Thermomix) · Lomo de cerdo a la naranja",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Pizza con base de coliflor",
+         "invId": "ese3uw9",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Pizza con base de coliflor",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Pizza con base de coliflor",
          "invId": null,
          "away": false
         }
@@ -3573,34 +3573,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Pisto con huevo y garbanzos · Lomo de cerdo a la plancha",
+         "invId": "ku4k3g0",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Pollo con patata y verdura",
+         "invId": "dirbpxj",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Pisto con huevo y garbanzos · Lomo de cerdo a la plancha",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Wrap de hummus y verduras",
+         "invId": "ese3uw9",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Wrap de hummus y verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Wrap de hummus y verduras",
          "invId": null,
          "away": false
         }
@@ -3646,34 +3646,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Sopa de pollo y verduras · Pavo a la plancha",
+         "invId": "dirbpxj",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Arroz con pollo",
+         "invId": "dirbpxj",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Sopa de pollo y verduras · Pavo a la plancha",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Huevos rellenos de atún",
+         "invId": "1qrlz3z",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Huevos rellenos de atún",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Huevos rellenos de atún",
          "invId": null,
          "away": false
         }
@@ -3719,34 +3719,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Arroz integral con verduras · Muslos de pollo al horno con limón",
+         "invId": "j1xxuu8",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Crema de verduras con picatostes integrales",
+         "invId": "ese3uw9",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Arroz integral con verduras · Muslos de pollo al horno con limón",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Carpaccio de ternera",
+         "invId": "16cnuhb",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Carpaccio de ternera",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Carpaccio de ternera",
          "invId": null,
          "away": false
         }
@@ -3792,34 +3792,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Calabacín relleno · Arroz integral con pollo y verduras",
+         "invId": "dirbpxj",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Nuggets caseros de pollo",
+         "invId": "dirbpxj",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Calabacín relleno · Arroz integral con pollo y verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Tostada integral de aguacate y huevo",
+         "invId": "ese3uw9",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Tostada integral de aguacate y huevo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Tostada integral de aguacate y huevo",
          "invId": null,
          "away": false
         }
@@ -3846,7 +3846,7 @@
     "receta": "Ingredientes:\n500g de pollo cortado en dados\n2 puerros grandes\n1 cebolla\n80g AOVE\n4 zanahorias\n250-300 ml de leche fresca\n250-300 ml de leche de coco (o caldo de pollo, también queda muy rico)\nCurry al gusto\nPimienta\nSal\n\nPreparación paso a paso:\nSofríe la base: Corta el puerro y la cebolla, añade AOVE y sofríe en la Thermomix a velocidad cuchara durante 15 minutos a 100 grados.\n\nCocina la salsa: Añade las zanahorias cortadas y las leches (fresca y de coco). Programa 45 minutos a 120 grados.\n\nCondimenta y tritura: Incorpora el curry, la pimienta y la sal. Bate todo a velocidad 9 durante 2 minutos para que quede una salsa fina.\n\nPrepara el pollo: Saltea los dados de pollo en una sartén aparte.\n\nMezcla final: Incorpora la salsa de la Thermomix a la sartén con el pollo y deja hervir todo junto durante unos minutos para que se integren los sabores."
    }
   ],
-  "updatedAt": "2026-07-14T13:56:43.182Z",
-  "lastSync": "2026-07-14T10:49:49.601Z"
+  "updatedAt": "2026-07-14T17:35:52.725Z",
+  "lastSync": "2026-07-14T13:57:15.212Z"
  }
 }
