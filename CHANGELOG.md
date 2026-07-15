@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.3.2 — 2026-07-08 (La compra ahora sí muestra los ingredientes)
+### Corregido
+- «Para los platos de la semana» **rehecha**. Antes mostraba solo nombres de
+  platos y, por un bug, ocultaba casi todos: un único enlace a la despensa
+  (que «Sorpréndeme» ponía en la celda de la 1ª persona) marcaba el plato
+  entero como «cubierto» y lo escondía. Resultado: solo se veían los
+  desayunos. Ahora aparecen **todas** las comidas y cenas planificadas, cada
+  una con **sus ingredientes** sacados de la receta.
+### Nuevo comportamiento
+- Cada plato es una fila plegable (número de ingredientes a la derecha); botón
+  «▾ Ingredientes / ▴ Contraer» para abrir o cerrar todos a la vez.
+- Los ingredientes que coinciden con algo de tu **despensa** se marcan
+  «✓ ya tienes» (pista difusa, sin ocultar: si el nombre no cuadra, no se
+  marca y no pasa nada).
+- «Copiar lista» incluye ahora los ingredientes por plato (con «ya tienes»).
+- El badge de la pestaña Compra cuenta lo que compras a mano (fruta/verdura +
+  otros), no los platos.
+- Solo comidas y cenas: desayunos/almuerzos son rutina (fruta, yogur…) y
+  siguen en Fruta y verdura / Otros.
+- Tests: 132 asserts.
+
 ## 1.3.1 — 2026-07-08
 - «Enviar al frutero» ahora vive justo debajo de la sección Fruta y verdura
   (antes al final de la página); abajo queda solo «Copiar lista completa».

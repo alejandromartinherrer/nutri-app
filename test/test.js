@@ -22,7 +22,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes};\n";
 eval(src);
 const A=global.__api;
 
@@ -279,6 +279,34 @@ ok(A.InvUrgent({cad:A.AddDays(hoy,2)})===true,"InvUrgent: expires in 2 days");
 ok(A.InvUrgent({cad:A.AddDays(hoy,3)})===false,"InvUrgent: 3 days away is not urgent");
 ok(A.InvUrgent({cad:A.AddDays(hoy,-5)})===true,"InvUrgent: already expired");
 ok(A.InvUrgent({})===false && A.InvUrgent(null)===false,"InvUrgent: plain item / null");
+
+// ==================== 1.3.2: shopping = ingredients per dish ====================
+A.state=A.SeedState(); A.RefreshCatalog();
+// PlannedCookDishes: distinct comida/cena, excludes desayuno/almuerzo routine
+const cook=A.PlannedCookDishes();
+ok(Array.isArray(cook)&&cook.length>0,"PlannedCookDishes returns dishes");
+ok(!cook.includes("Fruta")&&!cook.includes("Yogur"),"PlannedCookDishes excludes breakfast/snack routine");
+ok(cook.every((n,i)=>i===0||cook[i-1].localeCompare(n,"es")<=0),"PlannedCookDishes sorted");
+// dedupe: a dish planned on many days/members appears once
+const wkc=A.CurWeek();
+wkc.days[0].slots.Comida.nosotros.dish="Gazpacho";
+wkc.days[1].slots.Comida.nosotros.dish="Gazpacho";
+ok(A.PlannedCookDishes().filter(n=>n==="Gazpacho").length===1,"PlannedCookDishes dedupes by name");
+// away cells don't count
+A.state=A.SeedState(); A.RefreshCatalog();
+const wkc2=A.CurWeek();
+A.state.members.forEach(m=>wkc2.days.forEach(d=>{d.slots.Comida[m.id]={dish:"",invId:null,away:true};d.slots.Cena[m.id]={dish:"",invId:null,away:true};}));
+ok(A.PlannedCookDishes().length===0,"PlannedCookDishes ignores away/empty");
+
+// PantryHas: fuzzy, accent-insensitive, token-based, respects qty
+A.state=A.SeedState(); A.RefreshCatalog();
+A.state.inventory.frigo=[{id:"x1",name:"Pollo entero",qty:1},{id:"x2",name:"Atún",qty:2}];
+A.state.inventory.conge=[{id:"x3",name:"Guisantes",qty:0}];
+ok(A.PantryHas("250 g de pollo")===true,"PantryHas: 'pollo' matches 'Pollo entero'");
+ok(A.PantryHas("2 lomos de atun")===true,"PantryHas: accent-insensitive (atun ~ Atún)");
+ok(A.PantryHas("300 g de guisantes")===false,"PantryHas: qty 0 doesn't count");
+ok(A.PantryHas("2 dientes de ajo")===false,"PantryHas: no match -> false (hint, not filter)");
+ok(A.PantryHas("")===false,"PantryHas('') -> false");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);

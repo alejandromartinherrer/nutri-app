@@ -239,8 +239,19 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 /* cloud button: unsaved-changes dot */
 .icon-btn{position:relative}
 .icon-btn.dirty::after{content:"";position:absolute;top:3px;right:3px;width:9px;height:9px;border-radius:50%;background:#F6B93B;border:2px solid var(--aub);box-sizing:content-box}
-/* shopping: expandable ingredient list */
-.ing-list{width:100%;font-size:12.5px;color:var(--muted);padding:6px 0 2px 28px;line-height:1.55}
+/* shopping: dish → ingredients block, with pantry hints */
+.need-dish{border-top:1px solid var(--line2)}
+.need-dish:first-child{border-top:0}
+.need-h{display:flex;align-items:center;gap:9px;width:100%;padding:11px 14px;background:none;border:0;text-align:left;font-family:inherit;cursor:pointer}
+.need-h:active{background:var(--line2)}
+.need-h .need-nm{flex:1;font-size:14.5px;font-weight:700;color:var(--ink)}
+.need-h .need-c{font-size:10.5px;font-weight:800;color:var(--aub-2);background:var(--aub-soft);padding:2px 8px;border-radius:20px;white-space:nowrap}
+.need-h .need-c.none{color:var(--muted);background:var(--line2)}
+.ing-block{padding:0 14px 12px 34px}
+.ing-item{font-size:13px;color:var(--ink);padding:3px 0;line-height:1.5}
+.ing-item.have{color:var(--muted)}
+.ing-item.have .have-tag{font-size:10px;font-weight:800;color:var(--herb);margin-left:7px;letter-spacing:.03em}
+.ing-item.none{color:var(--muted);font-style:italic}
 /* semana: expand/collapse all days */
 .exp-row{display:flex;justify-content:flex-end;margin:0 2px 8px}
 .exp-all{font-size:12px;font-weight:700;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:6px 12px;font-family:inherit;cursor:pointer}
@@ -331,7 +342,7 @@ const RECETAS = {"alubias con verduras":"Ingredientes (4 raciones): 400 g de alu
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.3.1";
+const APP_VERSION = "1.3.2";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -613,7 +624,8 @@ function RenderTop(){
 
 /* ============================ RENDER: NAV ============================ */
 function RenderNav(){
-	const need = DishesNeedingShopping().length + state.produce.filter(p=>p.done===false).length;
+	// badge = things YOU still have to buy by hand (fruta/verdura + otros)
+	const need = state.produce.filter(p=>!p.done).length + state.extras.filter(x=>!x.done).length;
 	const tabs=[
 		{id:"semana",ic:"🍽️",l:"Semana"},
 		{id:"despensa",ic:"❄️",l:"Despensa"},
@@ -766,7 +778,7 @@ function RenderDespensa(){
 
 /* ============================ RENDER: COMPRA ============================ */
 function RenderCompra(){
-	const need = DishesNeedingShopping();
+	const dishes = PlannedCookDishes();
 	const produce = state.produce;
 	const prodItems = produce.length? produce.map(p=>`
 		<div class="it ${p.done?'done':''}">
@@ -775,16 +787,30 @@ function RenderCompra(){
 			<button class="del" data-action="prod-del" data-id="${p.id}">✕</button>
 		</div>`).join("") : `<div class="empty-msg">Lista vacía.</div>`;
 
-	ui.shopIng=ui.shopIng||{};
-	const needItems = need.length? need.map(n=>{
+	// each planned comida/cena dish + its ingredients; pantry matches marked.
+	ui.shopClosed = ui.shopClosed || {};
+	const anyOpen = dishes.some(n=>!ui.shopClosed[n]);
+	const needItems = dishes.length? dishes.map(n=>{
 		const ing=IngredientesDe(n);
-		const open=!!ui.shopIng[n];
-		return `<div class="it" style="flex-wrap:wrap">
-			<div class="nm" style="color:var(--amber);font-weight:700">⚠︎ ${escapeHtml(n)}</div>
-			${ing?`<button class="del" data-action="shop-ing" data-name="${escapeHtml(n)}" title="Ver ingredientes" style="color:var(--aub);font-size:14px">${open?"▴":"🧾"}</button>`:""}
-			<button class="del" data-action="need-to-extra" data-name="${escapeHtml(n)}" title="Mover a Otros" style="color:var(--aub)">＋</button>
-			${open&&ing?`<div class="ing-list">${ing.map(x=>`• ${escapeHtml(x)}`).join("<br>")}</div>`:""}
-		</div>`;}).join("") : `<div class="empty-msg">Todo lo planificado está cubierto por la despensa 🎉</div>`;
+		const closed=!!ui.shopClosed[n];
+		let body="";
+		if(!closed){
+			body = ing
+				? `<div class="ing-block">${ing.map(x=>{
+						const have=PantryHas(x);
+						return `<div class="ing-item${have?' have':''}">${have?'✓':'•'} ${escapeHtml(x)}${have?'<span class="have-tag">ya tienes</span>':''}</div>`;
+					}).join("")}</div>`
+				: `<div class="ing-block"><div class="ing-item none">Sin receta guardada. Escribe sus ingredientes tocando el plato en Ideas, o añádelos abajo en “Otros”.</div></div>`;
+		}
+		return `<div class="need-dish">
+			<button class="need-h" data-action="shop-toggle" data-name="${escapeHtml(n)}">
+				<span class="chev ${closed?'':'up'}">▾</span>
+				<span class="need-nm">${escapeHtml(n)}</span>
+				<span class="need-c ${ing?'':'none'}">${ing?ing.length:'sin receta'}</span>
+			</button>
+			${body}
+		</div>`;
+	}).join("") : `<div class="empty-msg">Aún no has planificado comidas ni cenas esta semana.</div>`;
 
 	const extras = state.extras;
 	const exItems = extras.length? extras.map(x=>`
@@ -795,7 +821,7 @@ function RenderCompra(){
 		</div>`).join("") : `<div class="empty-msg">Sin extras.</div>`;
 
 	return `<div class="view-title">Lista de la compra</div>
-		<p class="hint">Se actualiza sola con lo que planeas. Pulsa “Copiar” para mandarla por WhatsApp.</p>
+		<p class="hint">Fruta y verdura la pones tú; los ingredientes de tus comidas y cenas salen solos de sus recetas. Lo que ya tienes en la despensa se marca «ya tienes». Pulsa “Copiar” para mandarla por WhatsApp.</p>
 		<div class="sec">
 			<div class="sec-h"><h3>🍎 Fruta y verdura</h3>
 				<button class="add-x" data-action="prod-add">+ añadir</button></div>
@@ -806,7 +832,8 @@ function RenderCompra(){
 		</div>
 		<div class="sec">
 			<div class="sec-h"><h3>🍳 Para los platos de la semana</h3>
-				<span class="sub">${need.length} sin stock</span></div>
+				<span class="sub">${dishes.length}</span>
+				${dishes.length?`<button class="add-x" data-action="shop-toggle-all">${anyOpen?"▴ Contraer":"▾ Ingredientes"}</button>`:""}</div>
 			${needItems}
 		</div>
 		<div class="sec">
@@ -911,6 +938,31 @@ function IngredientesDe(name){
 	let out=[];
 	parts.forEach(p=>{const r=RecipeParts(DishRecipe(p)); if(r) out=out.concat(r.items);});
 	return out.length?out:null;
+}
+/* fuzzy pantry hint: does any stocked item plausibly cover this ingredient?
+   Token-based (len>3), accent-insensitive. False negatives are fine by design —
+   it's a hint, not a filter: if the pantry name doesn't match, it just isn't
+   marked (the user accepted this trade-off). */
+function PantryHas(text){
+	const t=Norm(text);
+	const inv=[...state.inventory.frigo,...state.inventory.conge].filter(i=>i.qty>0);
+	return inv.some(i=>{const ks=Tokens(i.name); return ks.length && ks.some(k=>t.includes(k));});
+}
+/* distinct cooked dishes (Comida + Cena) planned this week, alpha order.
+   Desayuno/Almuerzo are routine staples, handled in Fruta/verdura + Otros. */
+function PlannedCookDishes(){
+	const wk=CurWeek(); const seen=new Map();
+	wk.days.forEach(d=>["Comida","Cena"].forEach(s=>{
+		const slot=d.slots[s]; if(!slot) return;
+		state.members.forEach(m=>{
+			const c=slot[m.id];
+			if(c && c.dish && !c.away){
+				const k=c.dish.trim().toLowerCase();
+				if(!seen.has(k)) seen.set(k,c.dish.trim());
+			}
+		});
+	}));
+	return [...seen.values()].sort((a,b)=>a.localeCompare(b,"es"));
 }
 
 /* recipe text for a dish: user-written first, then the built-in recipe book */
@@ -1619,8 +1671,16 @@ function CopyShop(){
 	let lines=[`🛒 Compra — semana ${FmtLong(wk.monday)} a ${FmtLong(AddDays(wk.monday,6))}`,""];
 	const prod=state.produce.filter(p=>!p.done);
 	if(prod.length){lines.push("🍎 Fruta y verdura");prod.forEach(p=>lines.push(`· ${p.name}${p.qty?` (${p.qty} ${p.unit||""})`:""}`));lines.push("")}
-	const need=DishesNeedingShopping();
-	if(need.length){lines.push("🍳 Para los platos");need.forEach(n=>lines.push(`· ${n}`));lines.push("")}
+	const dishes=PlannedCookDishes();
+	if(dishes.length){
+		lines.push("🍳 Para los platos");
+		dishes.forEach(n=>{
+			lines.push(`▸ ${n}`);
+			const ing=IngredientesDe(n);
+			if(ing) ing.forEach(x=>lines.push(`   ${PantryHas(x)?"✓":"·"} ${x}${PantryHas(x)?" (ya tienes)":""}`));
+		});
+		lines.push("");
+	}
 	const ex=state.extras.filter(x=>!x.done);
 	if(ex.length){lines.push("📝 Otros");ex.forEach(x=>lines.push(`· ${x.name}`))}
 	const text=lines.join("\n").trim();
@@ -1936,7 +1996,8 @@ document.addEventListener("click",e=>{
 			Toast(n?`Rutina guardada — ${n} huecos rellenados`:"Rutina guardada");
 			break; }
 		case "rutina-reset": state.plantilla=null; Save(); OpenRutina(); Toast("Rutina original restaurada"); break;
-		case "shop-ing": ui.shopIng=ui.shopIng||{}; ui.shopIng[ds.name]=!ui.shopIng[ds.name]; Render(); break;
+		case "shop-toggle": ui.shopClosed=ui.shopClosed||{}; ui.shopClosed[ds.name]=!ui.shopClosed[ds.name]; Render(); break;
+		case "shop-toggle-all": { ui.shopClosed=ui.shopClosed||{}; const dl=PlannedCookDishes(); const anyOpen=dl.some(n=>!ui.shopClosed[n]); dl.forEach(n=>ui.shopClosed[n]=anyOpen); Render(); break; }
 		case "rec-scale": { const sb=document.querySelector(".sheet-body"); const st=sb?sb.scrollTop:0;
 			OpenDish(ds.id, parseInt(ds.f,10)||1);
 			const sb2=document.querySelector(".sheet-body"); if(sb2) sb2.scrollTop=st; break; }
