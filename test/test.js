@@ -22,7 +22,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES};\n";
 eval(src);
 const A=global.__api;
 
@@ -47,7 +47,7 @@ ok(A.ValidState(null)===false,"ValidState null");
 ok(A.ValidState({members:[]})===false,"ValidState partial rejected");
 ok(A.ValidState({weeks:{},members:[],inventory:{frigo:[],conge:[]},produce:[]})===true,"ValidState ok");
 // ---- catalog ----
-ok(A.BuildCatalog().length===166,"BuildCatalog returns full SEED catalog");
+ok(A.BuildCatalog().length===166+A.REALFOODING_DISHES.length,"BuildCatalog returns SEED + Realfooding");
 // ---- version, SEP, macro index ----
 ok(/^\d+\.\d+\.\d+$/.test(A.APP_VERSION),"APP_VERSION semver");
 ok(Number.isInteger(A.SCHEMA_VERSION)&&A.SCHEMA_VERSION>=1,"SCHEMA_VERSION int");
@@ -327,6 +327,37 @@ ok(Array.isArray(merged)&&merged.length>0,"MergedIngredients returns a list");
 const lc=merged.map(x=>x.toLowerCase());
 ok(new Set(lc).size===lc.length,"MergedIngredients has no exact duplicates");
 ok(merged.every((x,i)=>i===0||A.IngSortKey(merged[i-1]).localeCompare(A.IngSortKey(x),"es")<=0),"MergedIngredients sorted by noun");
+
+// ==================== 1.5.0: bought checklist + Realfooding ====================
+// bought checklist, per week, keyed by Norm(ingredient)
+A.state=A.SeedState(); A.RefreshCatalog();
+const wkb=A.CurWeek();
+A.state.members.forEach(m=>wkb.days.forEach(d=>{d.slots.Comida[m.id]={dish:"",invId:null,away:false};d.slots.Cena[m.id]={dish:"",invId:null,away:false};}));
+wkb.days[0].slots.Comida.nosotros.dish="Gazpacho";
+const gk=A.Norm("1 kg de tomate maduro");
+ok(A.IsBought("1 kg de tomate maduro")===false,"IsBought false by default");
+A.ToggleBought(gk);
+ok(A.IsBought("1 kg de tomate maduro")===true,"ToggleBought marks bought");
+ok(A.CurWeek().bought[gk]===1,"bought stored on the week object");
+A.ToggleBought(gk);
+ok(A.IsBought("1 kg de tomate maduro")===false,"ToggleBought unmarks");
+// per-week isolation: another week starts clean
+A.ToggleBought(gk);
+const other=A.EnsureWeek("2026-10-05");
+A.state.current="2026-10-05";
+ok(A.IsBought("1 kg de tomate maduro")===false,"bought is per-week (clean on another week)");
+A.state.current=wkb.monday;
+ok(A.IsBought("1 kg de tomate maduro")===true,"bought persists on its own week");
+
+// Realfooding dishes present in catalog with recipes + macros
+A.state=A.SeedState(); A.RefreshCatalog();
+ok(Array.isArray(A.REALFOODING_DISHES)&&A.REALFOODING_DISHES.length>=15,"REALFOODING_DISHES present");
+const rf=A.state.catalog.filter(c=>c.estilo==="Realfooding");
+ok(rf.length===A.REALFOODING_DISHES.length,"all Realfooding dishes in catalog");
+ok(rf.every(c=>!!A.DishRecipe(c.name)),"every Realfooding dish has a recipe");
+ok(rf.every(c=>A.DishMacros(c.name)&&typeof A.DishMacros(c.name).kcal==="number"),"every Realfooding dish has macros");
+ok(!!A.DishRecipe("Tortitas de avena y plátano"),"sample Realfooding recipe resolvable");
+ok(A.state.catalog.every(c=>!!A.RECETAS[c.name.trim().toLowerCase()]),"still: every catalog dish has a recipe (incl. Realfooding)");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);

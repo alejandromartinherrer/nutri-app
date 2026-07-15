@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.5.0 — 2026-07-08 (Tachar comprados + recetas Realfooding)
+### Nuevo
+- **Marcar comprados** en «Para los platos de la semana»: toca un ingrediente
+  para tacharlo (✓). Funciona en las dos vistas (Por plato y Todo junto) y el
+  mismo ingrediente se tacha en todas partes. La cabecera muestra «X por
+  comprar» y hay un botón **limpiar** para desmarcar todo.
+  - El estado se guarda **por semana** (se reinicia solo al cambiar de semana)
+    y viaja con la nube.
+  - «Copiar lista» exporta solo **lo que falta** (excluye lo ya comprado).
+  - En vista Por plato, cada plato muestra su progreso «comprados/total».
+- **17 recetas Realfooding** (comida real, mínimamente procesada) añadidas al
+  recetario, con macros y receta completa, estilo «Realfooding»: bowls,
+  cremas, legumbres, pescados al horno, wok de tofu, tortitas de avena, etc.
+  El recetario pasa de 166 a 183 platos.
+- Tests: 153 asserts.
+
 ## 1.4.0 — 2026-07-08 (Dos vistas de la compra)
 - «Para los platos de la semana» con conmutador **Por plato / Todo junto**:
   - **Por plato**: cada comida/cena con sus ingredientes desplegables (como
