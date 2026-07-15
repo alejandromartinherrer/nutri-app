@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.4.0 — 2026-07-08 (Dos vistas de la compra)
+- «Para los platos de la semana» con conmutador **Por plato / Todo junto**:
+  - **Por plato**: cada comida/cena con sus ingredientes desplegables (como
+    en 1.3.2), con Expandir/Contraer todos.
+  - **Todo junto**: una única lista con **todos los ingredientes de la semana**,
+    sin repetir (dedupe sin tildes/mayúsculas) y ordenados por el nombre del
+    ingrediente (no por la cantidad), para recorrer el súper de un tirón. Los
+    platos sin receta se listan aparte para no perderlos.
+- La vista elegida se recuerda (por dispositivo) y «Copiar lista» respeta la
+  vista activa.
+- Tests: 141 asserts.
+
 ## 1.3.2 — 2026-07-08 (La compra ahora sí muestra los ingredientes)
 ### Corregido
 - «Para los platos de la semana» **rehecha**. Antes mostraba solo nombres de
