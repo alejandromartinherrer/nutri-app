@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.6.0 — 2026-07-08 (Grupos de alimentos a la vista + más Realfooding)
+### Nuevo
+- **Etiquetas de tipo en la semana**: cada plato planificado muestra su grupo
+  (Legumbres, Verduras, Pescado, Pollo, Carne, Huevos, Pasta…) con un color,
+  para ver de un vistazo qué estás metiendo al planear. Las comidas «1º · 2º»
+  muestran ambos grupos.
+- **Resumen por día**: los días plegados enseñan puntos de color con los grupos
+  de esa comida/cena, así ves «lo que toca» sin abrir el día.
+- **+17 recetas Realfooding** (segunda tanda): cremas, ensaladas, curris de
+  garbanzos, merluza al horno, sopa de miso, crepes de avena… El recetario
+  pasa de 183 a 200 platos.
+- Tests: 162 asserts.
+
 ## 1.5.0 — 2026-07-08 (Tachar comprados + recetas Realfooding)
 ### Nuevo
 - **Marcar comprados** en «Para los platos de la semana»: toca un ingrediente

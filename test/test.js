@@ -22,7 +22,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor};\n";
 eval(src);
 const A=global.__api;
 
@@ -358,6 +358,24 @@ ok(rf.every(c=>!!A.DishRecipe(c.name)),"every Realfooding dish has a recipe");
 ok(rf.every(c=>A.DishMacros(c.name)&&typeof A.DishMacros(c.name).kcal==="number"),"every Realfooding dish has macros");
 ok(!!A.DishRecipe("Tortitas de avena y plátano"),"sample Realfooding recipe resolvable");
 ok(A.state.catalog.every(c=>!!A.RECETAS[c.name.trim().toLowerCase()]),"still: every catalog dish has a recipe (incl. Realfooding)");
+
+// ---- food-group tags in the week ----
+A.state=A.SeedState(); A.RefreshCatalog();
+ok(A.DishTipo("Lentejas estofadas")==="Legumbres","DishTipo from catalog");
+ok(A.DishTipo("Salmón a la plancha")==="Pescado","DishTipo pescado");
+ok(A.DishTipo("Plato Inventado XYZ")===null,"DishTipo unknown -> null");
+const mt=A.MealTipos("Lentejas estofadas · Salmón a la plancha");
+ok(mt.length===2&&mt.includes("Legumbres")&&mt.includes("Pescado"),"MealTipos splits composite");
+ok(A.MealTipos("Gazpacho · Gazpacho").length===1,"MealTipos dedupes same tipo");
+ok(A.MealTipos("").length===0,"MealTipos empty");
+ok(/^#/.test(A.TipoColor("Legumbres"))&&/^#/.test(A.TipoColor("Cualquiera")),"TipoColor always a hex (known + fallback)");
+const wkt=A.CurWeek();
+A.state.members.forEach(m=>wkt.days.forEach(d=>{d.slots.Comida[m.id]={dish:"",invId:null,away:false};d.slots.Cena[m.id]={dish:"",invId:null,away:false};}));
+wkt.days[0].slots.Comida.nosotros.dish="Lentejas estofadas";
+wkt.days[0].slots.Cena.nosotros.dish="Salmón a la plancha";
+const dt=A.DayTipos(wkt.days[0]);
+ok(dt.includes("Legumbres")&&dt.includes("Pescado"),"DayTipos from comida+cena");
+ok(A.DayTipos(wkt.days[1]).length===0,"DayTipos empty day -> []");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);
