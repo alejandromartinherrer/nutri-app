@@ -1,9 +1,21 @@
 # Nutri APP — Handoff
 
-## Estado actual (v1.3.0 — 2026-07-08)
-- v1.3.0: caducidad en despensa (`DaysLeft`/`InvUrgent`, tocar item = editar),
-  botón de texto libre en el picker (`pfree`), expandir/contraer todos los
-  días (`toggle-all-days`). 122 asserts.
+## Estado actual (v1.5.0 — 2026-07-08)
+- v1.5.0: tachar comprados en la compra (`bought` por semana en el objeto week,
+  key=`Norm(ingrediente)`; `IsBought`/`ToggleBought`; badge got/total; limpiar;
+  CopyShop exporta solo lo que falta). 17 recetas **Realfooding**
+  (`REALFOODING_DISHES` concatenado en `BuildCatalog`; recetas vía
+  `Object.assign(RECETAS,...)`; catálogo 166→183). 153 asserts.
+- v1.4.0: dos vistas de compra (`state.shopView` dish/merged; `MergedIngredients`
+  + `IngSortKey`).
+- v1.3.2: «Para los platos» = ingredientes por plato (`PlannedCookDishes`,
+  `IngredientesDe`, `PantryHas`); arreglado el bug de ocultado por invId.
+- v1.3.0: caducidad en despensa (`DaysLeft`/`InvUrgent`), texto libre `pfree`,
+  expandir/contraer días.
+- NOTA: para añadir más platos de un "estilo" (Futurlife21/Realfooding/…):
+  editar el array de dishes + recetas y reinyectar como en
+  scratchpad/realfooding.py (concat en BuildCatalog + Object.assign en RECETAS).
+  El test "every catalog dish has a recipe" obliga a que cada plato tenga receta.
 
 ## Estado previo (v1.2.0 — 2026-07-08)
 - Repo: `github.com/alejandromartinherrer/nutri-app` (público, Pages activo).
