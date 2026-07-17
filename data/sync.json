@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-15T22:08:06.485Z",
+ "savedAt": "2026-07-17T22:39:59.127Z",
  "state": {
   "members": [
    {
@@ -42,30 +42,6 @@
      "pri": false
     },
     {
-     "id": "ku4k3g0",
-     "name": "Lomo adobado",
-     "qty": 1,
-     "unit": "Pack familiar",
-     "added": "2026-07-14",
-     "pri": false
-    },
-    {
-     "id": "16cnuhb",
-     "name": "Carne picada",
-     "qty": 2,
-     "unit": "Bricks",
-     "added": "2026-07-14",
-     "pri": false
-    },
-    {
-     "id": "dirbpxj",
-     "name": "Pollo entero",
-     "qty": 1,
-     "unit": "",
-     "added": "2026-07-14",
-     "pri": false
-    },
-    {
      "id": "tsdzh0e",
      "name": "Empanadillas",
      "qty": 1,
@@ -101,17 +77,9 @@
      "pri": false
     },
     {
-     "id": "afq5nwi",
-     "name": "Carne Picada",
-     "qty": 1,
-     "unit": "",
-     "added": "2026-07-07",
-     "pri": false
-    },
-    {
      "id": "4spx0zi",
      "name": "Trozos Lomo Adobado",
-     "qty": 10,
+     "qty": 6,
      "unit": "",
      "added": "2026-07-07",
      "pri": false
@@ -119,15 +87,7 @@
     {
      "id": "3u22qz8",
      "name": "Pechugas Pollo",
-     "qty": 1,
-     "unit": "",
-     "added": "2026-07-07",
-     "pri": false
-    },
-    {
-     "id": "qsf086r",
-     "name": "Kebab",
-     "qty": 1,
+     "qty": 2,
      "unit": "",
      "added": "2026-07-07",
      "pri": false
@@ -135,22 +95,6 @@
     {
      "id": "ese3uw9",
      "name": "Verduras",
-     "qty": 1,
-     "unit": "",
-     "added": "2026-07-07",
-     "pri": false
-    },
-    {
-     "id": "9x4lob6",
-     "name": "Gnoccis",
-     "qty": 1,
-     "unit": "",
-     "added": "2026-07-07",
-     "pri": false
-    },
-    {
-     "id": "2nfi2ap",
-     "name": "Guisantes",
      "qty": 1,
      "unit": "",
      "added": "2026-07-07",
@@ -3855,8 +3799,8 @@
     "receta": "Ingredientes:\n500g de pollo cortado en dados\n2 puerros grandes\n1 cebolla\n80g AOVE\n4 zanahorias\n250-300 ml de leche fresca\n250-300 ml de leche de coco (o caldo de pollo, también queda muy rico)\nCurry al gusto\nPimienta\nSal\n\nPreparación paso a paso:\nSofríe la base: Corta el puerro y la cebolla, añade AOVE y sofríe en la Thermomix a velocidad cuchara durante 15 minutos a 100 grados.\n\nCocina la salsa: Añade las zanahorias cortadas y las leches (fresca y de coco). Programa 45 minutos a 120 grados.\n\nCondimenta y tritura: Incorpora el curry, la pimienta y la sal. Bate todo a velocidad 9 durante 2 minutos para que quede una salsa fina.\n\nPrepara el pollo: Saltea los dados de pollo en una sartén aparte.\n\nMezcla final: Incorpora la salsa de la Thermomix a la sartén con el pollo y deja hervir todo junto durante unos minutos para que se integren los sabores."
    }
   ],
-  "updatedAt": "2026-07-15T22:08:06.485Z",
-  "lastSync": "2026-07-15T20:47:40.999Z",
+  "updatedAt": "2026-07-17T22:39:59.127Z",
+  "lastSync": "2026-07-15T22:08:28.136Z",
   "shopView": "merged"
  }
 }
