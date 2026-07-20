@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-20T21:55:24.866Z",
+ "savedAt": "2026-07-20T21:56:24.314Z",
  "state": {
   "members": [
    {
@@ -1117,34 +1117,34 @@
         "nosotros": {
          "dish": "",
          "invId": null,
-         "away": false
+         "away": true
         },
         "noah": {
          "dish": "",
          "invId": null,
-         "away": false
+         "away": true
         },
         "iria": {
          "dish": "",
          "invId": null,
-         "away": false
+         "away": true
         }
        },
        "Cena": {
         "nosotros": {
          "dish": "",
          "invId": null,
-         "away": false
+         "away": true
         },
         "noah": {
          "dish": "",
          "invId": null,
-         "away": false
+         "away": true
         },
         "iria": {
          "dish": "",
          "invId": null,
-         "away": false
+         "away": true
         }
        }
       }
@@ -1190,34 +1190,34 @@
         "nosotros": {
          "dish": "",
          "invId": null,
-         "away": false
+         "away": true
         },
         "noah": {
          "dish": "",
          "invId": null,
-         "away": false
+         "away": true
         },
         "iria": {
          "dish": "",
          "invId": null,
-         "away": false
+         "away": true
         }
        },
        "Cena": {
         "nosotros": {
          "dish": "",
          "invId": null,
-         "away": false
+         "away": true
         },
         "noah": {
          "dish": "",
          "invId": null,
-         "away": false
+         "away": true
         },
         "iria": {
          "dish": "",
          "invId": null,
-         "away": false
+         "away": true
         }
        }
       }
@@ -1226,8 +1226,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-20T21:55:24.866Z",
-  "lastSync": "2026-07-20T21:55:02.528Z",
+  "updatedAt": "2026-07-20T21:56:24.314Z",
+  "lastSync": "2026-07-20T21:55:29.329Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
