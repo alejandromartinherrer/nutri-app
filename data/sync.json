@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-20T21:49:21.681Z",
+ "savedAt": "2026-07-20T21:52:28.780Z",
  "state": {
   "members": [
    {
@@ -961,17 +961,17 @@
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
+         "dish": "Salmón al papillote con soja",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Salmón al papillote con soja",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Salmón al papillote con soja",
          "invId": null,
          "away": false
         }
@@ -1274,8 +1274,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-20T21:49:21.681Z",
-  "lastSync": "2026-07-20T21:49:54.233Z",
+  "updatedAt": "2026-07-20T21:52:28.780Z",
+  "lastSync": "2026-07-20T21:50:52.267Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
