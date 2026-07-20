@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-20T22:06:46.580Z",
+ "savedAt": "2026-07-20T22:08:07.406Z",
  "state": {
   "members": [
    {
@@ -984,24 +984,24 @@
          "away": false
         },
         "null": {
-         "dish": "",
+         "dish": "Alubias con verduras",
          "invId": null,
-         "away": true
+         "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Chicken Curry",
+         "dish": "Empanadillas pollo al curry",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Chicken Curry",
+         "dish": "Empanadillas pollo al curry",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Chicken Curry",
+         "dish": "Empanadillas pollo al curry",
          "invId": null,
          "away": false
         }
@@ -1231,8 +1231,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-20T22:06:46.580Z",
-  "lastSync": "2026-07-20T22:06:31.873Z",
+  "updatedAt": "2026-07-20T22:08:07.406Z",
+  "lastSync": "2026-07-20T22:07:18.160Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
