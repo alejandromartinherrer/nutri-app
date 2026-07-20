@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.6.1 — 2026-07-20 (Fix crítico: recetas ya no se pierden al sincronizar)
+### Corregido
+- **Pérdida de recetas entre dispositivos.** La sincronización era
+  «último-que-guarda-gana» sobre todo el estado, así que una receta añadida
+  en un dispositivo desaparecía si otro dispositivo (que nunca la tuvo)
+  guardaba después. Ahora el «recetario» (`userDishes` + borrados `hidden`)
+  se **fusiona por unión** en ambos sentidos:
+  - Al subir: se une lo que hay en la nube antes de escribir (no se pisa una
+    receta de otro dispositivo).
+  - Al bajar: si lo local es más nuevo, igualmente se recuperan las recetas
+    que solo están en la nube (antes se ignoraban); al adoptar la nube se
+    conservan las recetas que solo estaban en local.
+  - Los borrados siguen mandando (una receta borrada no «revive»).
+  El plan semanal sigue siendo último-que-guarda-gana (correcto ahí).
+- Recuperada la receta «Chicken Curry (Versión Thermomix)» desde el historial.
+- Tests: 169 asserts.
+
 ## 1.6.0 — 2026-07-08 (Grupos de alimentos a la vista + más Realfooding)
 ### Nuevo
 - **Etiquetas de tipo en la semana**: cada plato planificado muestra su grupo

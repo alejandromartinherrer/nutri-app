@@ -22,7 +22,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize};\n";
 eval(src);
 const A=global.__api;
 
@@ -376,6 +376,30 @@ wkt.days[0].slots.Cena.nosotros.dish="Salmón a la plancha";
 const dt=A.DayTipos(wkt.days[0]);
 ok(dt.includes("Legumbres")&&dt.includes("Pescado"),"DayTipos from comida+cena");
 ok(A.DayTipos(wkt.days[1]).length===0,"DayTipos empty day -> []");
+
+// ==================== 1.6.1: recipe book merge (no more lost recipes) ====================
+// a recipe present only in the cloud survives a merge into local
+let tgt={userDishes:[{name:"Local Only",kcal:100}],hidden:["a"]};
+let cloudSrc={userDishes:[{name:"Cloud Only",kcal:200},{name:"Local Only",kcal:999}],hidden:["b"]};
+A.MergeRecipeBook(tgt,cloudSrc);
+const names=tgt.userDishes.map(d=>d.name).sort();
+ok(names.length===2&&names[0]==="Cloud Only"&&names[1]==="Local Only","merge unions userDishes by name");
+ok(tgt.userDishes.find(d=>d.name==="Local Only").kcal===100,"merge: target wins on same name");
+ok(tgt.hidden.includes("a")&&tgt.hidden.includes("b"),"merge unions hidden (deletions survive)");
+ok(A.MergeRecipeBook({userDishes:[],hidden:[]},null).userDishes.length===0,"merge with null source is a no-op");
+ok(A.RecipeBookSize({userDishes:[1,2],hidden:[3]})===3,"RecipeBookSize counts dishes+hidden");
+// deletion wins over a stale copy: dish in source.userDishes but hidden in target
+A.state=A.SeedState(); A.RefreshCatalog();
+A.state.userDishes=[]; A.state.hidden=["gazpacho"];
+A.MergeRecipeBook(A.state,{userDishes:[{name:"Gazpacho",course:"primero",kcal:1}],hidden:[]});
+A.RefreshCatalog();
+ok(A.DishMacros("Gazpacho")===null,"merge: a hidden dish stays hidden even if the other copy still lists it");
+// additive recovery: local lacks a user recipe the cloud has -> gained
+A.state=A.SeedState(); A.RefreshCatalog();
+A.state.userDishes=[]; A.state.hidden=[];
+const b0=A.RecipeBookSize(A.state);
+A.MergeRecipeBook(A.state,{userDishes:[{name:"Mi Receta Nube",course:"segundo",kcal:400}],hidden:[]});
+ok(A.RecipeBookSize(A.state)===b0+1,"merge recovers a cloud-only recipe");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);

@@ -364,7 +364,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.6.0";
+const APP_VERSION = "1.6.1";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -1571,6 +1571,20 @@ function BuildSyncPayload(s){
 	return {app:"nutri-app", schema:SCHEMA_VERSION, savedAt:st.updatedAt||null, state:st};
 }
 
+/* Recipes and deletions are CUMULATIVE, not week-scoped: unlike the weekly plan
+   (last-write-wins is fine there), a dish added on one device must never be
+   dropped just because another device saved a newer whole-state. Union them. */
+function MergeRecipeBook(target, source){
+	if(!source) return target;
+	const byName=new Map();
+	(source.userDishes||[]).forEach(d=>{ if(d&&d.name) byName.set(d.name.trim().toLowerCase(),d); });
+	(target.userDishes||[]).forEach(d=>{ if(d&&d.name) byName.set(d.name.trim().toLowerCase(),d); }); // same name: keep target's version
+	target.userDishes=[...byName.values()];
+	target.hidden=[...new Set([...(target.hidden||[]),...(source.hidden||[])])];
+	return target;
+}
+function RecipeBookSize(s){ return ((s&&s.userDishes)||[]).length + ((s&&s.hidden)||[]).length; }
+
 async function CloudGet(){
 	const url=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_SYNC_PATH}?ref=${GH_BRANCH}`;
 	const headers={Accept:"application/vnd.github+json"};
@@ -1610,7 +1624,14 @@ async function CloudSave(auto){
 	if(!GhToken()){ if(!auto) OpenCloudSettings(); return; }
 	SetCloudBusy(true);
 	try{
-		const {sha}=await CloudGet();                       // fresh sha → no lost-update
+		const {sha,payload}=await CloudGet();               // fresh sha → no lost-update
+		// union the cloud's recipe book into ours so we never overwrite a recipe
+		// that another device added; persist the recovered ones locally too.
+		if(payload&&payload.state){
+			const before=RecipeBookSize(state);
+			MergeRecipeBook(state, payload.state);
+			if(RecipeBookSize(state)>before){ RefreshCatalog(); SaveQuiet(); Render(); }
+		}
 		const body={message:"app: sync "+(state.updatedAt||TodayISO()),
 			content:B64EncodeUtf8(JSON.stringify(BuildSyncPayload(state),null,1)), branch:GH_BRANCH};
 		if(sha) body.sha=sha;
@@ -1637,12 +1658,24 @@ async function CloudPullOnBoot(){
 		const {payload}=await CloudGet();
 		if(!payload || !payload.state || !ValidState(payload.state)) return;
 		const remote=payload.state.updatedAt||payload.savedAt||"";
-		if(!remote || remote<=(state.updatedAt||"")) return;   // local is newer or equal
+		if(!remote || remote<=(state.updatedAt||"")){
+			// local is newer/equal for the weekly plan, BUT the cloud may hold recipes
+			// this device never saw. Union them (never drop a recipe) and re-upload.
+			const before=RecipeBookSize(state);
+			MergeRecipeBook(state, payload.state);
+			if(RecipeBookSize(state)>before){
+				RefreshCatalog(); Save(); Render();            // Save() stamps → autosync pushes the union
+				Toast("Recetas recuperadas de la nube ☁️");
+			}
+			return;
+		}
 		const prev=JSON.stringify(state);                      // undo slot (one level)
+		const localBook={userDishes:state.userDishes,hidden:state.hidden};
 		state=payload.state;
 		if(!Array.isArray(state.userDishes)) state.userDishes=[];
 		if(!Array.isArray(state.hidden)) state.hidden=[];
 		if(!Array.isArray(state.extras)) state.extras=[];
+		MergeRecipeBook(state, localBook);                     // keep local-only recipes when adopting remote
 		state.lastSync=state.updatedAt;                        // it IS the cloud copy
 		RefreshCatalog(); SaveQuiet();
 		ApplyTheme(); BuildManifest();
