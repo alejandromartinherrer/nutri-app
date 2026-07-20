@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-20T22:01:43.213Z",
+ "savedAt": "2026-07-20T22:03:52.291Z",
  "state": {
   "members": [
    {
@@ -991,12 +991,12 @@
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Pasta depisto",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Pasta depisto",
          "invId": null,
          "away": false
         }
@@ -1226,8 +1226,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-20T22:01:43.213Z",
-  "lastSync": "2026-07-20T21:59:13.097Z",
+  "updatedAt": "2026-07-20T22:03:52.291Z",
+  "lastSync": "2026-07-20T22:02:14.548Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
