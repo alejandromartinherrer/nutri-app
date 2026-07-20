@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-20T21:56:24.314Z",
+ "savedAt": "2026-07-20T21:58:44.994Z",
  "state": {
   "members": [
    {
@@ -1059,17 +1059,17 @@
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
+         "dish": "Alitas, muslitos airfryer",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Alitas, muslitos airfryer",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Alitas, muslitos airfryer",
          "invId": null,
          "away": false
         }
@@ -1226,8 +1226,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-20T21:56:24.314Z",
-  "lastSync": "2026-07-20T21:55:29.329Z",
+  "updatedAt": "2026-07-20T21:58:44.994Z",
+  "lastSync": "2026-07-20T21:56:55.985Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
