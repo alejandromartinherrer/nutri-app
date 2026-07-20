@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.0 — 2026-07-20 (Desayuno y almuerzo opcionales en la semana)
+- Nuevo interruptor junto a «Contraer todos»: **🍳 Desayuno y almuerzo /
+  Solo comida y cena**. Permite ocultar/mostrar las filas de desayuno y
+  almuerzo al planear la semana, para cuando solo quieres programar comida y
+  cena. La preferencia se recuerda (por dispositivo) y no borra nada: al
+  reactivarlo vuelven a aparecer. `VisibleSlots()` filtra los slots.
+- Tests: 173 asserts.
+
 ## 1.6.1 — 2026-07-20 (Fix crítico: recetas ya no se pierden al sincronizar)
 ### Corregido
 - **Pérdida de recetas entre dispositivos.** La sincronización era

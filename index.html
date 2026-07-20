@@ -269,8 +269,9 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .ing-item.have .have-tag{font-size:10px;font-weight:800;color:var(--herb);margin-left:7px;letter-spacing:.03em}
 .ing-item.none{display:block;color:var(--muted);font-style:italic;cursor:default;padding:5px 4px}
 /* semana: expand/collapse all days */
-.exp-row{display:flex;justify-content:flex-end;margin:0 2px 8px}
-.exp-all{font-size:12px;font-weight:700;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:6px 12px;font-family:inherit;cursor:pointer}
+.exp-row{display:flex;justify-content:space-between;gap:8px;margin:0 2px 8px}
+.exp-all{font-size:12px;font-weight:700;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:6px 12px;font-family:inherit;cursor:pointer;white-space:nowrap}
+.exp-all.on{color:var(--aub-2);background:var(--aub-soft);border-color:var(--aub-soft)}
 .exp-all:active{background:var(--line2)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 :focus-visible{outline:3px solid var(--aub-2);outline-offset:2px}
@@ -364,7 +365,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.6.1";
+const APP_VERSION = "1.7.0";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -734,12 +735,18 @@ function DishHtml(c){
 }
 function escapeHtml(s){return (s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}
 
+/* which meals to show in the week: desayuno/almuerzo are optional to plan */
+function VisibleSlots(){
+	return state.hideDesAlm ? SLOTS.filter(s=>s==="Comida"||s==="Cena") : SLOTS.slice();
+}
 function RenderSemana(){
 	const wk=CurWeek(); const today=TodayISO();
 	// materialise defaults first so the expand-all toggle sees real values
 	wk.days.forEach(d=>{ ui.collapsed[d.date]=ui.collapsed[d.date] ?? (d.date<today); });
 	const anyOpen = wk.days.some(d=>!ui.collapsed[d.date]);
+	const slots = VisibleSlots();
 	let html=`<div class="exp-row">
+		<button class="exp-all ${state.hideDesAlm?'':'on'}" data-action="toggle-desalm">${state.hideDesAlm?"🍳 Solo comida y cena":"🍳 Desayuno y almuerzo"}</button>
 		<button class="exp-all" data-action="toggle-all-days">${anyOpen?"▴ Contraer todos":"▾ Expandir todos"}</button>
 	</div>`;
 	wk.days.forEach((d,i)=>{
@@ -751,7 +758,7 @@ function RenderSemana(){
 		const tipoMini = dayTipos.map(t=>`<span class="tdot" style="background:${TipoColor(t)}" title="${escapeHtml(t)}"></span>`).join("");
 		let body="";
 		if(!collapsed){
-			body = `<div class="slots">`+SLOTS.map(s=>{
+			body = `<div class="slots">`+slots.map(s=>{
 				return `<div class="slot">
 					<div class="slot-l">${s}
 						<button class="sl-act" data-action="slot-all" data-d="${i}" data-s="${s}">para todos ›</button>
@@ -2133,6 +2140,8 @@ document.addEventListener("click",e=>{
 			const anyOpen=wk.days.some(d=>!ui.collapsed[d.date]);
 			wk.days.forEach(d=>ui.collapsed[d.date]=anyOpen);
 			Render(); break; }
+		case "toggle-desalm": state.hideDesAlm=!state.hideDesAlm; SaveQuiet(); Render();
+			Toast(state.hideDesAlm?"Desayuno y almuerzo ocultos":"Mostrando todas las comidas"); break;
 		case "pick": OpenPicker(+ds.d,ds.s,ds.m||null,ds.all==="1"); break;
 		case "slot-all": OpenPicker(+ds.d,ds.s,null,true); break;
 		case "surprise": Surprise(); break;

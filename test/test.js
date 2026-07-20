@@ -22,7 +22,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots};\n";
 eval(src);
 const A=global.__api;
 
@@ -400,6 +400,15 @@ A.state.userDishes=[]; A.state.hidden=[];
 const b0=A.RecipeBookSize(A.state);
 A.MergeRecipeBook(A.state,{userDishes:[{name:"Mi Receta Nube",course:"segundo",kcal:400}],hidden:[]});
 ok(A.RecipeBookSize(A.state)===b0+1,"merge recovers a cloud-only recipe");
+
+// ==================== 1.7.0: optional desayuno/almuerzo in the week ====================
+A.state=A.SeedState(); A.RefreshCatalog();
+ok(A.VisibleSlots().length===4,"VisibleSlots: all 4 meals by default");
+ok(A.VisibleSlots().join()==="Desayuno,Almuerzo,Comida,Cena","VisibleSlots default order");
+A.state.hideDesAlm=true;
+ok(A.VisibleSlots().join()==="Comida,Cena","VisibleSlots hides desayuno/almuerzo when off");
+A.state.hideDesAlm=false;
+ok(A.VisibleSlots().length===4,"VisibleSlots restores all when on");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);
