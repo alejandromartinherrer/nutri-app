@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-20T22:05:52.134Z",
+ "savedAt": "2026-07-20T22:06:23.911Z",
  "state": {
   "members": [
    {
@@ -38,7 +38,7 @@
     {
      "id": "atr4p8u",
      "name": "Atún",
-     "qty": 2,
+     "qty": 1,
      "unit": "",
      "added": "2026-07-20",
      "pri": false
@@ -984,8 +984,8 @@
          "away": false
         },
         "null": {
-         "dish": "Atún WoW",
-         "invId": null,
+         "dish": "Atún",
+         "invId": "atr4p8u",
          "away": false
         }
        },
@@ -1231,8 +1231,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-20T22:05:52.134Z",
-  "lastSync": "2026-07-20T22:05:28.981Z",
+  "updatedAt": "2026-07-20T22:06:23.911Z",
+  "lastSync": "2026-07-20T22:06:23.582Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
