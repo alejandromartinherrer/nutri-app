@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-20T22:08:07.406Z",
+ "savedAt": "2026-07-20T22:29:46.405Z",
  "state": {
   "members": [
    {
@@ -969,17 +969,17 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Chicken Curry (Versión Thermomix)",
+         "dish": "Atún Wow",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Chicken Curry (Versión Thermomix)",
+         "dish": "Atún Wow",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Chicken Curry (Versión Thermomix)",
+         "dish": "Atún Wow",
          "invId": null,
          "away": false
         },
@@ -1231,8 +1231,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-20T22:08:07.406Z",
-  "lastSync": "2026-07-20T22:08:12.125Z",
+  "updatedAt": "2026-07-20T22:29:46.405Z",
+  "lastSync": "2026-07-20T22:09:17.864Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
