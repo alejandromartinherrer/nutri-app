@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-20T21:44:27.832Z",
+ "savedAt": "2026-07-20T21:47:51.863Z",
  "state": {
   "members": [
    {
@@ -871,17 +871,17 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
+         "dish": "Lentejas estofadas",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Lentejas estofadas",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Lentejas estofadas",
          "invId": null,
          "away": false
         }
@@ -1274,8 +1274,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-20T21:44:27.832Z",
-  "lastSync": "2026-07-20T16:00:53.600Z",
+  "updatedAt": "2026-07-20T21:47:51.863Z",
+  "lastSync": "2026-07-20T21:45:26.210Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
