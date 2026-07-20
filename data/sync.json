@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-20T22:29:46.405Z",
+ "savedAt": "2026-07-20T22:30:20.969Z",
  "state": {
   "members": [
    {
@@ -984,7 +984,7 @@
          "away": false
         },
         "null": {
-         "dish": "Alubias con verduras",
+         "dish": "Atún Wow · Pasta depisto",
          "invId": null,
          "away": false
         }
@@ -1231,8 +1231,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-20T22:29:46.405Z",
-  "lastSync": "2026-07-20T22:09:17.864Z",
+  "updatedAt": "2026-07-20T22:30:20.969Z",
+  "lastSync": "2026-07-20T22:29:53.479Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
