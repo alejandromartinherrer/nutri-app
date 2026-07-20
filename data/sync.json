@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-17T22:39:59.127Z",
+ "savedAt": "2026-07-20T07:52:33.505Z",
  "state": {
   "members": [
    {
@@ -3385,8 +3385,8 @@
          "away": false
         },
         "noah": {
-         "dish": "Bastones de zanahoria y pollo al horno",
-         "invId": "dirbpxj",
+         "dish": "Arroz con pollo",
+         "invId": "3u22qz8",
          "away": false
         },
         "iria": {
@@ -3458,7 +3458,7 @@
          "away": false
         },
         "noah": {
-         "dish": "Boniato asado con huevo",
+         "dish": "Crema de verduras",
          "invId": "ese3uw9",
          "away": false
         },
@@ -3531,7 +3531,7 @@
          "away": false
         },
         "noah": {
-         "dish": "Crema de verduras",
+         "dish": "Boniato asado con huevo",
          "invId": "ese3uw9",
          "away": false
         },
@@ -3604,8 +3604,8 @@
          "away": false
         },
         "noah": {
-         "dish": "Nuggets caseros de pollo",
-         "invId": "dirbpxj",
+         "dish": "Bastones de zanahoria y pollo al horno",
+         "invId": "3u22qz8",
          "away": false
         },
         "iria": {
@@ -3750,8 +3750,8 @@
          "away": false
         },
         "noah": {
-         "dish": "Arroz con pollo",
-         "invId": "dirbpxj",
+         "dish": "Palitos de boniato al horno con hummus",
+         "invId": "ese3uw9",
          "away": false
         },
         "iria": {
@@ -3799,8 +3799,8 @@
     "receta": "Ingredientes:\n500g de pollo cortado en dados\n2 puerros grandes\n1 cebolla\n80g AOVE\n4 zanahorias\n250-300 ml de leche fresca\n250-300 ml de leche de coco (o caldo de pollo, también queda muy rico)\nCurry al gusto\nPimienta\nSal\n\nPreparación paso a paso:\nSofríe la base: Corta el puerro y la cebolla, añade AOVE y sofríe en la Thermomix a velocidad cuchara durante 15 minutos a 100 grados.\n\nCocina la salsa: Añade las zanahorias cortadas y las leches (fresca y de coco). Programa 45 minutos a 120 grados.\n\nCondimenta y tritura: Incorpora el curry, la pimienta y la sal. Bate todo a velocidad 9 durante 2 minutos para que quede una salsa fina.\n\nPrepara el pollo: Saltea los dados de pollo en una sartén aparte.\n\nMezcla final: Incorpora la salsa de la Thermomix a la sartén con el pollo y deja hervir todo junto durante unos minutos para que se integren los sabores."
    }
   ],
-  "updatedAt": "2026-07-17T22:39:59.127Z",
-  "lastSync": "2026-07-15T22:08:28.136Z",
+  "updatedAt": "2026-07-20T07:52:33.505Z",
+  "lastSync": "2026-07-17T22:40:10.051Z",
   "shopView": "merged"
  }
 }
