@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-20T22:06:23.911Z",
+ "savedAt": "2026-07-20T22:06:46.580Z",
  "state": {
   "members": [
    {
@@ -984,9 +984,9 @@
          "away": false
         },
         "null": {
-         "dish": "Atún",
-         "invId": "atr4p8u",
-         "away": false
+         "dish": "",
+         "invId": null,
+         "away": true
         }
        },
        "Cena": {
@@ -1231,8 +1231,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-20T22:06:23.911Z",
-  "lastSync": "2026-07-20T22:06:23.582Z",
+  "updatedAt": "2026-07-20T22:06:46.580Z",
+  "lastSync": "2026-07-20T22:06:31.873Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
