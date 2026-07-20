@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-20T21:53:45.187Z",
+ "savedAt": "2026-07-20T21:55:24.866Z",
  "state": {
   "members": [
    {
@@ -36,33 +36,9 @@
    ],
    "conge": [
     {
-     "id": "gl5aezg",
-     "name": "Lubina entera",
-     "qty": 1,
-     "unit": "",
-     "added": "2026-07-20",
-     "pri": false
-    },
-    {
      "id": "atr4p8u",
      "name": "Atún",
      "qty": 2,
-     "unit": "",
-     "added": "2026-07-20",
-     "pri": false
-    },
-    {
-     "id": "39l6c29",
-     "name": "Carne Picada",
-     "qty": 1,
-     "unit": "",
-     "added": "2026-07-20",
-     "pri": false
-    },
-    {
-     "id": "lu9ay07",
-     "name": "Trozos Lomo Adobado",
-     "qty": 10,
      "unit": "",
      "added": "2026-07-20",
      "pri": false
@@ -76,32 +52,8 @@
      "pri": false
     },
     {
-     "id": "bcal4cb",
-     "name": "Kebab",
-     "qty": 1,
-     "unit": "",
-     "added": "2026-07-20",
-     "pri": false
-    },
-    {
      "id": "4bugn5e",
      "name": "Verduras",
-     "qty": 1,
-     "unit": "",
-     "added": "2026-07-20",
-     "pri": false
-    },
-    {
-     "id": "9q3cb54",
-     "name": "Gnoccis",
-     "qty": 1,
-     "unit": "",
-     "added": "2026-07-20",
-     "pri": false
-    },
-    {
-     "id": "c5uys8i",
-     "name": "Guisantes",
      "qty": 1,
      "unit": "",
      "added": "2026-07-20",
@@ -1274,8 +1226,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-20T21:53:45.187Z",
-  "lastSync": "2026-07-20T21:53:45.321Z",
+  "updatedAt": "2026-07-20T21:55:24.866Z",
+  "lastSync": "2026-07-20T21:55:02.528Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
