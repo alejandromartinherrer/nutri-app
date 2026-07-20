@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-20T21:52:28.780Z",
+ "savedAt": "2026-07-20T21:53:13.480Z",
  "state": {
   "members": [
    {
@@ -1017,17 +1017,17 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
+         "dish": "Chicken Curry (Versión Thermomix)",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Chicken Curry (Versión Thermomix)",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Chicken Curry (Versión Thermomix)",
          "invId": null,
          "away": false
         }
@@ -1274,8 +1274,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-20T21:52:28.780Z",
-  "lastSync": "2026-07-20T21:50:52.267Z",
+  "updatedAt": "2026-07-20T21:53:13.480Z",
+  "lastSync": "2026-07-20T21:53:00.264Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
