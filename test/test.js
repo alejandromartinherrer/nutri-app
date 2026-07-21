@@ -22,7 +22,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS};\n";
 eval(src);
 const A=global.__api;
 
@@ -409,6 +409,48 @@ A.state.hideDesAlm=true;
 ok(A.VisibleSlots().join()==="Comida,Cena","VisibleSlots hides desayuno/almuerzo when off");
 A.state.hideDesAlm=false;
 ok(A.VisibleSlots().length===4,"VisibleSlots restores all when on");
+
+// ============ 1.7.1: phantom "null" member cells (dishes vanishing) ============
+A.state=A.SeedState(); A.RefreshCatalog();
+// repro of the reported bug: open via "para todos" then switch it OFF
+A.OpenPicker(2,"Comida",null,true);
+ok(A.picker.member===null&&A.picker.applyAll===true,"repro: 'para todos' opens with member=null");
+A.picker.applyAll=false;                       // (what ptoggle-all used to do)
+const tg=A.PickerTargets();
+ok(tg.length===3&&tg.indexOf(null)<0&&tg.indexOf("null")<0,"PickerTargets never returns a phantom member");
+ok(tg.every(id=>A.state.members.some(m=>m.id===id)),"PickerTargets only real member ids");
+// a real single-member pick still targets exactly that member
+A.picker.member="noah";
+ok(A.PickerTargets().join()==="noah","PickerTargets honours a real single member");
+A.picker.applyAll=true;
+ok(A.PickerTargets().length===3,"PickerTargets applyAll -> everyone");
+// end-to-end: saving after the toggle writes to real members, not a ghost
+A.state=A.SeedState(); A.RefreshCatalog();
+const wkg=A.CurWeek();
+A.state.members.forEach(m=>{wkg.days[2].slots.Comida[m.id]={dish:"",invId:null,away:false};});
+A.OpenPicker(2,"Comida",null,true);
+A.picker.applyAll=false; A.picker.pri="Gazpacho"; A.picker.seg=null;
+A.SaveComida();
+const slotG=A.CurWeek().days[2].slots.Comida;
+ok(!("null" in slotG),"no phantom 'null' key is created any more");
+ok(A.state.members.every(m=>slotG[m.id].dish==="Gazpacho"),"the dish actually lands on real members");
+
+// SanitizeSlots heals existing corruption
+A.state=A.SeedState(); A.RefreshCatalog();
+const wkS=A.CurWeek();
+// case 1: ghost holds a dish and real members are empty -> recover for everyone
+A.state.members.forEach(m=>{wkS.days[3].slots.Cena[m.id]={dish:"",invId:null,away:false};});
+wkS.days[3].slots.Cena["null"]={dish:"Atún Wow",invId:null,away:false};
+// case 2: ghost duplicates what everyone already has -> just drop it
+A.state.members.forEach(m=>{wkS.days[4].slots.Comida[m.id]={dish:"Lentejas estofadas",invId:null,away:false};});
+wkS.days[4].slots.Comida["null"]={dish:"Lentejas estofadas",invId:null,away:false};
+const healed=A.SanitizeSlots(A.state);
+ok(healed===2,"SanitizeSlots removes every phantom cell");
+ok(!("null" in A.CurWeek().days[3].slots.Cena)&&!("null" in A.CurWeek().days[4].slots.Comida),"phantoms gone");
+ok(A.state.members.every(m=>A.CurWeek().days[3].slots.Cena[m.id].dish==="Atún Wow"),"lost dish recovered for everyone");
+ok(A.state.members.every(m=>A.CurWeek().days[4].slots.Comida[m.id].dish==="Lentejas estofadas"),"duplicate ghost dropped without side effects");
+ok(A.SanitizeSlots(A.state)===0,"SanitizeSlots is idempotent");
+ok(A.SanitizeSlots(null)===0&&A.SanitizeSlots({})===0,"SanitizeSlots tolerates junk input");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);

@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.7.1 — 2026-07-21 (Fix crítico: platos que se guardaban en un miembro fantasma)
+### Corregido
+- **«No me deja meter comidas y cenas».** Si abrías el selector con
+  **«para todos ›»** y después apagabas el interruptor *Aplicar a todos*,
+  `picker.member` seguía siendo `null`: el plato se escribía en una celda
+  fantasma con clave `"null"` en vez de en Nosotros/Noah/Iria. La app parecía
+  ignorar lo que añadías y el plato «desaparecía» (afectaba también a
+  *Quitar* y *Fuera de casa*).
+  - `PickerTargets()` ya nunca devuelve un miembro inexistente.
+  - Al apagar *Aplicar a todos* se selecciona automáticamente un miembro real.
+- **Auto-reparación de datos ya corruptos**: `SanitizeSlots()` se ejecuta al
+  cargar y al adoptar la copia de la nube. Elimina las celdas fantasma y, si
+  el plato solo estaba ahí (los miembros reales vacíos), **lo recupera** para
+  todos antes de borrar la celda. Nada se pierde.
+- Tests: 186 asserts (13 nuevos que cubren el fallo y la reparación).
+
 ## 1.7.0 — 2026-07-20 (Desayuno y almuerzo opcionales en la semana)
 - Nuevo interruptor junto a «Contraer todos»: **🍳 Desayuno y almuerzo /
   Solo comida y cena**. Permite ocultar/mostrar las filas de desayuno y

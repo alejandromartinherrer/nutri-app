@@ -365,7 +365,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.7.0";
+const APP_VERSION = "1.7.1";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -468,6 +468,31 @@ function ValidState(s){
 	return !!(s && s.weeks && Array.isArray(s.members) && s.inventory &&
 		s.inventory.frigo && s.inventory.conge && Array.isArray(s.produce));
 }
+/* Heal slots that hold a cell keyed by a non-existent member (the "null" ghost
+   written by the pre-1.7.1 picker bug). If the ghost holds a dish and every real
+   member is empty, the meal was meant for everyone → recover it before dropping
+   the ghost, so no plan is silently lost. Returns how many ghosts were removed. */
+function SanitizeSlots(s){
+	if(!s||!s.weeks||!Array.isArray(s.members)) return 0;
+	const ids=s.members.map(m=>m.id);
+	let fixed=0;
+	Object.values(s.weeks).forEach(w=>(w&&w.days||[]).forEach(d=>{
+		if(!d||!d.slots) return;
+		SLOTS.forEach(sl=>{
+			const slot=d.slots[sl]; if(!slot) return;
+			Object.keys(slot).forEach(k=>{
+				if(ids.indexOf(k)>=0) return;                  // real member: keep
+				const ghost=slot[k];
+				const allEmpty=ids.every(id=>!slot[id]||(!slot[id].dish&&!slot[id].away));
+				if(ghost&&(ghost.dish||ghost.away)&&allEmpty){
+					ids.forEach(id=>{ slot[id]={dish:ghost.dish||"",invId:null,away:!!ghost.away}; });
+				}
+				delete slot[k]; fixed++;
+			});
+		});
+	}));
+	return fixed;
+}
 function Load(){
 	try{
 		let raw = localStorage.getItem(STORE_KEY), legacy=false;
@@ -476,6 +501,7 @@ function Load(){
 		const s = JSON.parse(raw);
 		if(!ValidState(s)) return false;   // partial/corrupt -> re-seed
 		if(legacy) MigrateV1(s);           // v1 store found: upgrade in place
+		SanitizeSlots(s);                  // drop phantom-member cells (pre-1.7.1 bug)
 		state = s; return true;
 	}catch(e){ return false; }
 }
@@ -1424,9 +1450,20 @@ function PickerCandidatesAllTipos(){
 }
 
 /* assign logic */
+/* Valid member ids for the current picker. Guards the case that corrupted data:
+   opening via "para todos" leaves picker.member null; if the user then turns the
+   "Aplicar a todos" switch OFF, [null] used to be written as a phantom member
+   ("null" key), so the dish silently vanished from the week. Never write to a
+   member that doesn't exist — fall back to everyone (the original intent). */
+function PickerTargets(){
+	const ids=state.members.map(m=>m.id);
+	if(!picker || picker.applyAll) return ids;
+	const one=ids.filter(id=>id===picker.member);
+	return one.length?one:ids;
+}
 function ApplyDish(dish,invId){
 	const wk=CurWeek(); const slot=wk.days[picker.dayIdx].slots[picker.slot];
-	const targets = picker.applyAll? state.members.map(m=>m.id) : [picker.member];
+	const targets = PickerTargets();
 	let firstInv = invId;     // only first target carries the inv link / decrement
 	targets.forEach((mid,idx)=>{
 		const link = (idx===0)?firstInv:null;
@@ -1447,13 +1484,13 @@ function SaveComida(){
 }
 function ClearCell(){
 	const wk=CurWeek(); const slot=wk.days[picker.dayIdx].slots[picker.slot];
-	const targets = picker.applyAll? state.members.map(m=>m.id) : [picker.member];
+	const targets = PickerTargets();
 	targets.forEach(mid=>slot[mid]=BlankCell());
 	Save(); CloseSheet(); Render(); Toast("Quitado");
 }
 function SetAway(){
 	const wk=CurWeek(); const slot=wk.days[picker.dayIdx].slots[picker.slot];
-	const targets = picker.applyAll? state.members.map(m=>m.id) : [picker.member];
+	const targets = PickerTargets();
 	targets.forEach(mid=>slot[mid]={dish:"",invId:null,away:true});
 	Save(); CloseSheet(); Render(); Toast("Marcado fuera de casa");
 }
@@ -1683,6 +1720,7 @@ async function CloudPullOnBoot(){
 		if(!Array.isArray(state.hidden)) state.hidden=[];
 		if(!Array.isArray(state.extras)) state.extras=[];
 		MergeRecipeBook(state, localBook);                     // keep local-only recipes when adopting remote
+		SanitizeSlots(state);                                  // heal phantom cells coming from an old device
 		state.lastSync=state.updatedAt;                        // it IS the cloud copy
 		RefreshCatalog(); SaveQuiet();
 		ApplyTheme(); BuildManifest();
@@ -2234,7 +2272,10 @@ document.addEventListener("click",e=>{
 	const t=e.target.closest("[data-paction]"); if(!t||!picker) return;
 	const a=t.dataset.paction, ds=t.dataset;
 	switch(a){
-		case "ptoggle-all": picker.applyAll=!picker.applyAll; RenderPicker(); break;
+		case "ptoggle-all": picker.applyAll=!picker.applyAll;
+			// turning it off with no member (opened via "para todos") must pick a real one
+			if(!picker.applyAll && !state.members.some(m=>m.id===picker.member)) picker.member=state.members[0].id;
+			RenderPicker(); break;
 		case "pcourse": picker.course=ds.c; picker.tipo=null; RenderPicker(); break;
 		case "psub": picker.sub=ds.c; picker.tipo=null; RenderPicker(); break;
 		case "pclrsub": picker[ds.c]=null; RenderPicker(); break;
