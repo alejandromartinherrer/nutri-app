@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-21T08:42:45.770Z",
+ "savedAt": "2026-07-21T08:44:37.284Z",
  "state": {
   "members": [
    {
@@ -74,6 +74,27 @@
     "name": "Tomate Kokumi",
     "qty": 1,
     "unit": "Bandeja",
+    "done": false
+   },
+   {
+    "id": "6aau42q",
+    "name": "Sandía",
+    "qty": 1,
+    "unit": "ud",
+    "done": false
+   },
+   {
+    "id": "umyu0jh",
+    "name": "Platano",
+    "qty": 10,
+    "unit": "ud",
+    "done": false
+   },
+   {
+    "id": "klhvmpy",
+    "name": "Kiwi Gold",
+    "qty": 6,
+    "unit": "ud",
     "done": false
    }
   ],
@@ -1128,8 +1149,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-21T08:42:45.770Z",
-  "lastSync": "2026-07-21T08:42:45.025Z",
+  "updatedAt": "2026-07-21T08:44:37.284Z",
+  "lastSync": "2026-07-21T08:43:17.502Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
