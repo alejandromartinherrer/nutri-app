@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-21T05:58:34.715Z",
+ "savedAt": "2026-07-21T08:33:32.807Z",
  "state": {
   "members": [
    {
@@ -913,17 +913,17 @@
        },
        "Cena": {
         "nosotros": {
-         "dish": "Salmón al papillote con soja",
+         "dish": "Judias verdes con atun y huevo",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Salmón al papillote con soja",
+         "dish": "Judias verdes con atun y huevo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Salmón al papillote con soja",
+         "dish": "Judias verdes con atun y huevo",
          "invId": null,
          "away": false
         }
@@ -1226,8 +1226,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-21T05:58:34.715Z",
-  "lastSync": "2026-07-21T05:58:41.305Z",
+  "updatedAt": "2026-07-21T08:33:32.807Z",
+  "lastSync": "2026-07-21T06:05:18.034Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
