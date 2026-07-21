@@ -22,7 +22,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui}};\n";
 eval(src);
 const A=global.__api;
 
@@ -451,6 +451,45 @@ ok(A.state.members.every(m=>A.CurWeek().days[3].slots.Cena[m.id].dish==="Atún W
 ok(A.state.members.every(m=>A.CurWeek().days[4].slots.Comida[m.id].dish==="Lentejas estofadas"),"duplicate ghost dropped without side effects");
 ok(A.SanitizeSlots(A.state)===0,"SanitizeSlots is idempotent");
 ok(A.SanitizeSlots(null)===0&&A.SanitizeSlots({})===0,"SanitizeSlots tolerates junk input");
+
+// ============ 1.8.0: arranque en la semana de hoy + receta desde la semana ============
+A.state=A.SeedState(); A.RefreshCatalog();
+// GoToThisWeek: semana actual, solo HOY desplegado
+A.state.current="2026-01-05";                     // semana vieja, como la deja una sesión anterior
+A.ui.collapsed={};
+const wkT=A.GoToThisWeek();
+const hoyISO=A.TodayISO(), lunHoy=A.MondayOf(hoyISO);
+ok(A.state.current===lunHoy,"GoToThisWeek salta a la semana de hoy");
+ok(wkT.monday===lunHoy,"GoToThisWeek devuelve la semana de hoy");
+ok(A.ui.collapsed[hoyISO]===false,"hoy queda desplegado");
+const otros=wkT.days.filter(d=>d.date!==hoyISO);
+ok(otros.length===6&&otros.every(d=>A.ui.collapsed[d.date]===true),"los otros 6 días quedan contraídos");
+// idempotente y sin perder datos
+wkT.days[0].slots.Comida.nosotros.dish="Gazpacho";
+A.GoToThisWeek();
+ok(A.CurWeek().days[0].slots.Comida.nosotros.dish==="Gazpacho","GoToThisWeek no borra lo planificado");
+
+// DishNameHtml: los platos con receta son pulsables; el texto libre no
+const htmlCon=A.DishNameHtml("Gazpacho");
+ok(/data-action="dish-open"/.test(htmlCon)&&/data-name="Gazpacho"/.test(htmlCon),"plato con receta -> pulsable");
+ok(/📖/.test(htmlCon),"lleva el icono de receta como pista visual");
+const htmlSin=A.DishNameHtml("Invento Mío Sin Receta");
+ok(!/data-action/.test(htmlSin),"texto libre sin receta -> NO pulsable");
+ok(htmlSin==="Invento Mío Sin Receta","texto libre se pinta tal cual");
+// compuesto: cada parte por separado
+const htmlComp=A.DishNameHtml("Gazpacho"+A.SEP+"Salmón a la plancha");
+ok((htmlComp.match(/data-action="dish-open"/g)||[]).length===2,"plato compuesto -> una diana por parte");
+ok(/dish-sep/.test(htmlComp),"el separador se mantiene visible");
+// escapado: un nombre con comillas no rompe el atributo
+A.state.userDishes=[{name:'Pollo "especial" <b>',course:"segundo",kcal:1,receta:"Paso."}];
+A.RefreshCatalog();
+const htmlEsc=A.DishNameHtml('Pollo "especial" <b>');
+ok(!/<b>/.test(htmlEsc)&&/&quot;/.test(htmlEsc),"el nombre se escapa en texto y en atributo");
+A.state.userDishes=[]; A.RefreshCatalog();
+
+// ResetSeed eliminado del producto
+ok(typeof A.SeedState==="function","SeedState sigue existiendo (uso interno)");
+ok(html.indexOf('data-action="reset"')<0,"la opción de reinicio ya no existe en la UI");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);

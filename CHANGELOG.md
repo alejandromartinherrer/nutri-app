@@ -1,5 +1,35 @@
 # Changelog
 
+## 1.8.0 — 2026-07-21 (Primera tanda de la auditoría UX)
+### Nuevo
+- **La app abre siempre en la semana de hoy, con solo el día de hoy desplegado.**
+  Antes se quedaba en la semana que dejaste abierta (si el domingo planificabas
+  la siguiente, el lunes aterrizabas en la equivocada). Además se corrige al
+  volver a la app tras pasar de medianoche. `GoToThisWeek()`.
+- **Tocar el nombre de un plato en la Semana abre su receta**, con sus macros y
+  el escalado ×1/×2/×4/×6. Un 📖 discreto marca qué nombres son pulsables; el
+  resto de la fila sigue abriendo el selector para cambiar el plato. En las
+  comidas de dos platos, cada parte abre la suya. El texto libre (sin receta)
+  no es pulsable.
+- **El buscador del recetario manda sobre la pestaña**: si escribes, busca en
+  los 201 platos y cada resultado muestra su categoría. Antes, buscar «salmón»
+  desde la pestaña *Primeros* daba «Nada aquí todavía» teniendo 8 platos de
+  salmón — el camino directo a crear duplicados.
+### Corregido
+- **Zonas táctiles al mínimo de Apple.** Antes había controles de 18–30 px: la
+  casilla de tachar en el súper (24), la estrella de la despensa (23), los
+  botones de borrar (30), «para todos ›» (18), «+ añadir» (19) y la propia fila
+  para añadir una comida (30). Ahora el mínimo real es 38–44 px en todo, sin
+  mover el diseño (relleno compensado con margen negativo, y área de toque
+  invisible alrededor de las casillas).
+- **Los filtros de tipo se ven enteros**: los 9 chips y las 5 pestañas del
+  recetario pasan a varias líneas en vez de esconderse en un scroll horizontal
+  que no se intuía (antes se veían 3 de 9).
+- El nombre del plato ahora pesa más que la etiqueta del comensal (15,5 px / 600).
+### Eliminado
+- **«Reiniciar con los datos de ejemplo».** Borraba todo sin confirmación y
+  estaba pegada a «Acerca de». La app ya no la necesita.
+
 ## 1.7.3 — 2026-07-21 (Texto libre también sin scrollear)
 - El botón **«➕ Usar «…» tal cual»** sale ahora **justo debajo del buscador**,
   donde acabas de escribir, en vez de al principio de la lista de platos (que

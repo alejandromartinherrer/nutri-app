@@ -48,10 +48,10 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 }
 .top-row{display:flex;align-items:center;gap:8px}
 .top h1{font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin:0;opacity:.75;flex:1}
-.icon-btn{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.14);font-size:17px;line-height:1;border:0;padding:0;color:inherit;font-family:inherit;cursor:pointer}
+.icon-btn{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:rgba(255,255,255,.14);font-size:17px;line-height:1;border:0;padding:0;color:inherit;font-family:inherit;cursor:pointer}
 .icon-btn:active{background:rgba(255,255,255,.28)}
 .wk{display:flex;align-items:center;gap:10px;margin-top:10px}
-.wk-nav{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.14);display:grid;place-items:center;font-size:20px;font-weight:600}
+.wk-nav{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.14);display:grid;place-items:center;font-size:20px;font-weight:600}
 .wk-nav:active{background:rgba(255,255,255,.28)}
 .wk-label{flex:1;text-align:center}
 .wk-label .r1{font-size:19px;font-weight:700;letter-spacing:-.01em}
@@ -93,17 +93,25 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .slot{padding:9px 14px;border-top:1px solid var(--line2)}
 .slot:first-child{border-top:none}
 .slot-l{font-size:10.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--aub-2);margin-bottom:6px;display:flex;align-items:center;gap:7px}
-.slot-l .sl-act{margin-left:auto;color:var(--muted);font-weight:700;letter-spacing:.02em;text-transform:none;font-size:12px}
+/* padding grows the tap area to 44px; the negative margin keeps the layout put */
+.slot-l .sl-act{margin:-13px -6px -13px auto;padding:13px 6px;color:var(--muted);font-weight:700;letter-spacing:.02em;text-transform:none;font-size:12px}
 .rows{display:flex;flex-direction:column;gap:5px}
-.row-all,.row-m{display:flex;align-items:center;gap:9px;min-height:30px;border-radius:var(--r-sm);padding:5px 8px;background:var(--line2)}
+.row-all,.row-m{display:flex;align-items:center;gap:9px;min-height:44px;border-radius:var(--r-sm);padding:7px 8px;background:var(--line2)}
 .row-all{background:var(--aub-soft)}
 .tag{font-size:10px;font-weight:800;letter-spacing:.04em;padding:2px 8px;border-radius:20px;color:#fff;white-space:nowrap;flex-shrink:0}
 .tag.all{background:var(--aub)}
-.tag.m{min-width:64px;text-align:center}
-.dish{flex:1;font-size:14px;white-space:pre-wrap;line-height:1.25}
+.tag.m{text-align:center}
+.dish{flex:1;font-size:15.5px;font-weight:600;white-space:pre-wrap;line-height:1.3}
 .dish.empty{color:var(--muted);font-weight:600}
 .dish .frozen,.dish .fridge{font-size:11px;margin-left:6px;color:var(--herb);font-weight:700;white-space:nowrap}
 .dish .fridge{color:var(--amber)}
+/* the dish name is the content — it must outweigh the member pill next to it */
+.dish-nm{cursor:pointer;border-bottom:1px dashed var(--line);padding:8px 3px 3px;margin:-8px -3px -1px;display:inline-block}
+.dish-nm:active{background:var(--aub-soft);border-radius:5px}
+.dish-nm .rbk{font-size:11px;opacity:.55;margin-left:3px;border:0}
+.dish-sep{opacity:.45;margin:0 2px}
+.search-note{font-size:12.5px;color:var(--muted);margin:0 2px 12px;font-weight:600}
+.lnk{background:none;border:0;color:var(--aub);font-weight:800;font-family:inherit;font-size:12.5px;cursor:pointer;padding:6px 4px;margin:-6px 0}
 .tipo-tags{display:inline-flex;flex-wrap:wrap;gap:4px;margin-left:6px;vertical-align:middle}
 .tipo-tag{font-size:9.5px;font-weight:800;color:#fff;padding:1px 7px;border-radius:20px;letter-spacing:.02em;white-space:nowrap}
 .tdot{width:8px;height:8px;border-radius:50%;display:inline-block}
@@ -115,32 +123,37 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .sec-h{display:flex;align-items:center;gap:8px;padding:12px 14px 10px}
 .sec-h h3{margin:0;font-size:15px;font-weight:800;letter-spacing:-.01em}
 .sec-h .sub{font-size:12px;color:var(--muted);font-weight:600}
-.sec-h .add-x{margin-left:auto;color:var(--aub);font-weight:800;font-size:13px}
+.sec-h .add-x{margin:-13px -6px -13px auto;padding:13px 6px;color:var(--aub);font-weight:800;font-size:13px}
 .it{display:flex;align-items:center;gap:10px;padding:9px 14px;border-top:1px solid var(--line2)}
-.it .star{font-size:16px;width:24px;text-align:center;flex-shrink:0;color:#d8cfd5}
+.it .star{font-size:16px;width:44px;height:44px;margin:-9px -10px -9px -12px;display:grid;place-items:center;flex-shrink:0;color:#d8cfd5}
 .it .star.on{color:#E8A93B}
-.it .nm{flex:1;font-size:14.5px}
+.it .nm{flex:1;font-size:14.5px;min-height:26px;display:flex;align-items:center;flex-wrap:wrap;gap:2px 6px;padding:9px 0;margin:-9px 0}
 .it .nm small{color:var(--muted);font-weight:600}
 .it .used{font-size:11px;color:var(--herb);font-weight:700}
 .it .pri{font-size:10px;font-weight:800;letter-spacing:.04em;color:var(--amber);background:var(--amber-soft);padding:2px 7px;border-radius:20px}
 .it .pri.cad-off{color:#fff;background:var(--red)}
 .stepper{display:flex;align-items:center;gap:0;background:var(--bg);border-radius:9px;overflow:hidden;flex-shrink:0}
-.stepper button{width:30px;height:30px;font-size:18px;font-weight:700;color:var(--aub);display:grid;place-items:center}
+.stepper button{width:40px;height:44px;font-size:18px;font-weight:700;color:var(--aub);display:grid;place-items:center}
 .stepper button:active{background:var(--aub-soft)}
 .stepper .q{min-width:30px;text-align:center;font-weight:800;font-size:14px}
-.del{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:#c6bcc4;font-size:15px;flex-shrink:0}
+.del{width:44px;height:44px;border-radius:8px;display:grid;place-items:center;color:#c6bcc4;font-size:15px;flex-shrink:0;margin-right:-8px}
 .del:active{background:#f6eef3;color:var(--red)}
-.check{width:24px;height:24px;border-radius:7px;border:2px solid var(--line);flex-shrink:0;display:grid;place-items:center;font-size:14px;color:#fff}
+.check{width:26px;height:26px;border-radius:7px;border:2px solid var(--line);flex-shrink:0;display:grid;place-items:center;font-size:14px;color:#fff;position:relative}
+/* invisible 44px hit area around the 26px box: full target, same drawing */
+.check::after{content:"";position:absolute;inset:-9px}
 .check.on{background:var(--herb);border-color:var(--herb)}
 .it.done .nm{text-decoration:line-through;color:var(--muted)}
 .empty-msg{padding:16px 14px;color:var(--muted);font-size:13px;text-align:center}
 
 /* ideas */
 .tabs{display:flex;gap:6px;padding:0 14px 10px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tab{padding:8px 13px;border-radius:20px;background:var(--card);box-shadow:var(--sh);font-size:13px;font-weight:700;white-space:nowrap;color:var(--muted)}
+.tab{padding:12px 14px;min-height:44px;display:inline-flex;align-items:center;border-radius:20px;background:var(--card);box-shadow:var(--sh);font-size:13px;font-weight:700;white-space:nowrap;color:var(--muted)}
 .tab.on{background:var(--aub);color:#fff}
 .fchips{display:flex;gap:6px;padding:0 14px 12px;overflow-x:auto;flex-wrap:nowrap}
-.fchip{padding:6px 11px;border-radius:18px;background:var(--card);box-shadow:var(--sh);font-size:12px;font-weight:700;white-space:nowrap;color:var(--muted)}
+/* in the main views let filters wrap: a hidden horizontal scroll meant that only
+   3 of 9 food types were ever seen. Sheets keep the single scrolling row. */
+#view .fchips,#view .tabs{flex-wrap:wrap;overflow-x:visible}
+.fchip{padding:11px 12px;min-height:40px;display:inline-flex;align-items:center;border-radius:18px;background:var(--card);box-shadow:var(--sh);font-size:12px;font-weight:700;white-space:nowrap;color:var(--muted)}
 .fchip.on{background:var(--herb);color:#fff}
 .idea{display:flex;align-items:center;gap:10px;padding:9px 14px;border-top:1px solid var(--line2);cursor:pointer}
 .idea:active{background:var(--line2)}
@@ -258,12 +271,12 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 /* shopping: view toggle (per-dish / merged) */
 .shop-view{display:flex;align-items:center;gap:8px;padding:10px 14px 2px}
 .sv-group{display:inline-flex;background:var(--bg);border-radius:10px;padding:3px}
-.sv{font-size:12.5px;font-weight:700;color:var(--muted);background:none;border:0;padding:6px 12px;border-radius:8px;font-family:inherit;cursor:pointer}
+.sv{font-size:12.5px;font-weight:700;color:var(--muted);background:none;border:0;padding:11px 14px;min-height:42px;border-radius:8px;font-family:inherit;cursor:pointer}
 .sv.on{background:var(--card);color:var(--ink);box-shadow:var(--sh)}
-.sv-all{margin-left:auto;font-size:12px;font-weight:700;color:var(--aub);background:none;border:0;font-family:inherit;cursor:pointer}
+.sv-all{margin:-12px -4px -12px auto;padding:12px 4px;font-size:12px;font-weight:700;color:var(--aub);background:none;border:0;font-family:inherit;cursor:pointer}
 .ing-block{padding:0 14px 12px 18px}
 .ing-block.merged{padding:8px 14px 14px 10px}
-.ing-item{display:flex;align-items:flex-start;gap:9px;width:100%;font-size:13px;color:var(--ink);padding:5px 4px;line-height:1.5;background:none;border:0;text-align:left;font-family:inherit;cursor:pointer}
+.ing-item{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;font-size:13.5px;color:var(--ink);padding:7px 4px;line-height:1.45;background:none;border:0;text-align:left;font-family:inherit;cursor:pointer}
 .ing-item:active{background:var(--line2);border-radius:8px}
 .ing-item .ing-box{flex:none;width:18px;height:18px;margin-top:1px;border:1.5px solid var(--line);border-radius:6px;display:grid;place-items:center;font-size:12px;font-weight:800;color:#fff}
 .ing-item .ing-tx{flex:1}
@@ -274,7 +287,7 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .ing-item.none{display:block;color:var(--muted);font-style:italic;cursor:default;padding:5px 4px}
 /* semana: expand/collapse all days */
 .exp-row{display:flex;justify-content:space-between;gap:8px;margin:0 2px 8px}
-.exp-all{font-size:12px;font-weight:700;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:6px 12px;font-family:inherit;cursor:pointer;white-space:nowrap}
+.exp-all{font-size:12px;font-weight:700;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:11px 13px;min-height:42px;font-family:inherit;cursor:pointer;white-space:nowrap}
 .exp-all.on{color:var(--aub-2);background:var(--aub-soft);border-color:var(--aub-soft)}
 .exp-all:active{background:var(--line2)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -369,7 +382,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.7.3";
+const APP_VERSION = "1.8.0";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -754,6 +767,17 @@ function DayTipos(day){
 	});
 	return out;
 }
+/* Each part of the meal that HAS a recipe becomes its own tap target that opens
+   the recipe (marked with 📖 so the tappable bit is visible); the rest of the row
+   keeps opening the picker to change the dish. Free-text dishes stay plain text. */
+function DishNameHtml(dish){
+	return (dish||"").split(SEP).map(p=>{
+		const name=p.trim();
+		if(!name) return "";
+		if(!DishRecipe(name)) return escapeHtml(name);
+		return `<span class="dish-nm" data-action="dish-open" data-name="${escapeHtml(name)}" role="button" title="Ver la receta">${escapeHtml(name)}<span class="rbk">📖</span></span>`;
+	}).filter(Boolean).join(`<span class="dish-sep">${SEP}</span>`);
+}
 function DishHtml(c){
 	let extra="";
 	if(c.invId){
@@ -761,10 +785,20 @@ function DishHtml(c){
 		extra = loc==="frigo"?`<span class="fridge">🧊 del frigo</span>`:`<span class="frozen">❄️ del congelador</span>`;
 	}
 	const tags=TipoTags(c.dish);
-	return escapeHtml(c.dish)+extra+(tags?`<span class="tipo-tags">${tags}</span>`:"");
+	return DishNameHtml(c.dish)+extra+(tags?`<span class="tipo-tags">${tags}</span>`:"");
 }
 function escapeHtml(s){return (s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}
 
+/* Land on the current week with only TODAY open: that is the daily question
+   ("what do we eat today?"), and a wall of 7 open days answers it worse. */
+function GoToThisWeek(){
+	const monday=MondayOf(TodayISO());
+	state.current=monday;
+	const wk=EnsureWeek(monday);
+	const today=TodayISO();
+	wk.days.forEach(d=>{ ui.collapsed[d.date] = d.date!==today; });
+	return wk;
+}
 /* which meals to show in the week: desayuno/almuerzo are optional to plan */
 function VisibleSlots(){
 	return state.hideDesAlm ? SLOTS.filter(s=>s==="Comida"||s==="Cena") : SLOTS.slice();
@@ -1192,11 +1226,15 @@ function RenderMacros(){
 
 /* ============================ RENDER: IDEAS ============================ */
 function RenderIdeas(){
-	const course = ui.ideasCourse;                       // "todos" = search everywhere
-	let items = course==="todos"? state.catalog.slice() : state.catalog.filter(c=>c.course===course);
+	const course = ui.ideasCourse;
+	const searching = !!ui.ideasSearch.trim();
+	// Text beats the tab: if you type, we look in the WHOLE recipe book. Otherwise
+	// you'd get "nothing here" while the dish sits in another tab (and you'd duplicate it).
+	let items = (searching || course==="todos")? state.catalog.slice()
+		: state.catalog.filter(c=>c.course===course);
 	const tipos = [...new Set(items.map(i=>i.tipo).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
 	if(ui.ideasTipo) items=items.filter(i=>i.tipo===ui.ideasTipo);
-	if(ui.ideasSearch){const q=Norm(ui.ideasSearch);items=items.filter(i=>Norm(i.name).includes(q))}
+	if(searching){const q=Norm(ui.ideasSearch);items=items.filter(i=>Norm(i.name).includes(q))}
 	items.sort((a,b)=>a.name.localeCompare(b.name,"es"));
 
 	const tabs = ["todos","primero","segundo","cena","noah"].map(c=>
@@ -1207,18 +1245,18 @@ function RenderIdeas(){
 	const list = items.length? items.map(i=>`
 		<div class="idea" data-action="idea-open" data-id="${i.id}" role="button">
 			<div class="nm">${escapeHtml(i.name)}${i.user?' <span class="ued" title="Editado por ti">✎</span>':''}${DishRecipe(i.name)?' <span class="rbk" title="Con receta — toca para verla">📖</span>':''}</div>
-			${course==="todos"?`<span class="ti co">${COURSE_LABEL[i.course]||i.course}</span>`:''}
+			${(course==="todos"||searching)?`<span class="ti co">${COURSE_LABEL[i.course]||i.course}</span>`:''}
 			${i.tipo?`<span class="ti">${escapeHtml(i.tipo)}</span>`:''}
 			<button class="del" data-action="idea-del" data-id="${i.id}">✕</button>
-		</div>`).join("") : `<div class="empty-msg">Nada aquí todavía.</div>`;
+		</div>`).join("") : `<div class="empty-msg">${searching?`Ningún plato con «${escapeHtml(ui.ideasSearch.trim())}». Puedes crearlo con «+ nuevo».`:"Nada aquí todavía."}</div>`;
 
-	return `<div class="view-title">Ideas de comidas</div>
-		<p class="hint">Tu recetario. Toca un plato para ver su receta y macros; lo que añadas aparece al planear y en “Sorpréndeme”. ${state.catalog.length} platos.</p>
-		<input class="field" data-action="ideas-search" id="ideasSearch" placeholder="${course==="todos"?"Buscar en todo el recetario…":"Buscar plato…"}" value="${escapeHtml(ui.ideasSearch)}" style="margin:0 2px 12px;width:calc(100% - 4px)">
-		<div class="tabs">${tabs}</div>
+	return `<div class="view-title">Recetario</div>
+		<p class="hint">Toca un plato para ver su receta y sus macros. Lo que añadas aquí aparece al planear y en “Sorpréndeme”. ${state.catalog.length} platos.</p>
+		<input class="field" data-action="ideas-search" id="ideasSearch" placeholder="Buscar en todo el recetario…" value="${escapeHtml(ui.ideasSearch)}" style="margin:0 2px 12px;width:calc(100% - 4px)">
+		${searching?`<div class="search-note">Buscando en los ${state.catalog.length} platos · <button class="lnk" data-action="ideas-clear">limpiar</button></div>`:`<div class="tabs">${tabs}</div>`}
 		<div class="fchips">${chips}</div>
 		<div class="sec">
-			<div class="sec-h"><h3>${COURSE_LABEL[course]}</h3><span class="sub">${items.length}</span>
+			<div class="sec-h"><h3>${searching?"Resultados":COURSE_LABEL[course]}</h3><span class="sub">${items.length}</span>
 				<button class="add-x" data-action="idea-add" data-c="${course==="todos"?"primero":course}">+ nuevo</button></div>
 			${list}
 		</div>`;
@@ -1837,7 +1875,6 @@ function OpenMenu(){
 			<button class="menu-item" data-action="export"><span class="mi">📤</span> Exportar copia (guardar/compartir)</button>
 			<button class="menu-item" data-action="import"><span class="mi">📥</span> Importar copia</button>
 			<button class="menu-item" data-action="new-week"><span class="mi">🧹</span> Vaciar esta semana</button>
-			<button class="menu-item danger" data-action="reset"><span class="mi">↺</span> Reiniciar con los datos de ejemplo</button>
 			<button class="menu-item" data-action="about"><span class="mi">ℹ️</span> Acerca de</button>
 			<div class="ver-foot">v${APP_VERSION} · datos v${SCHEMA_VERSION}</div>
 			<input type="file" id="importFile" accept="application/json" style="display:none">
@@ -1859,9 +1896,6 @@ function ExportData(){
 }
 function NewWeek(){
 	const m=state.current; delete state.weeks[m]; EnsureWeek(m); Save(); CloseSheet(); Render(); Toast("Semana vaciada");
-}
-function ResetSeed(){
-	state=SeedState(); RefreshCatalog(); ui.collapsed={}; state.current=Object.keys(state.weeks)[0]; Save(); CloseSheet(); ApplyTheme(); BuildManifest(); Render(); Toast("Datos de ejemplo restaurados");
 }
 
 /* ============================ SHOPPING COPY ============================ */
@@ -2177,7 +2211,7 @@ document.addEventListener("click",e=>{
 	const a=t.dataset.action, ds=t.dataset;
 	switch(a){
 		case "view": ui.view=ds.v; Render(); break;
-		case "today": { state.current=MondayOf(TodayISO()); EnsureWeek(state.current); ui.view="semana"; ui.collapsed[TodayISO()]=false; Save(); Render(); break; }
+		case "today": GoToThisWeek(); ui.view="semana"; Save(); Render(); break;
 		case "wk-prev": state.current=AddDays(state.current,-7); EnsureWeek(state.current); Save(); Render(); break;
 		case "wk-next": state.current=AddDays(state.current,7); EnsureWeek(state.current); Save(); Render(); break;
 		case "toggle-day": ui.collapsed[ds.date]=!ui.collapsed[ds.date]; Render(); break;
@@ -2223,7 +2257,6 @@ document.addEventListener("click",e=>{
 		case "export": ExportData(); break;
 		case "import": document.getElementById("importFile").click(); break;
 		case "new-week": NewWeek(); break;
-		case "reset": ResetSeed(); break;
 		case "copy-shop": CopyShop(); break;
 		case "share-week": ShareWeekImage(); break;
 		case "share-shop": ShareShoppingImage(); break;
@@ -2260,9 +2293,14 @@ document.addEventListener("click",e=>{
 		case "ex-add": AddPrompt({title:"Añadir a Otros",fields:[{key:"name",label:"Qué",ph:"p.ej. Papel de horno"}],onSave:v=>{if(!v.name)return;state.extras.push({id:Uid(),name:v.name,done:false});Save();CloseSheet();Render()}}); break;
 		case "need-to-extra": state.extras.push({id:Uid(),name:ds.name,done:false}); Save(); Toast("Movido a Otros"); break;
 		/* ideas */
-		case "ideas-course": ui.ideasCourse=ds.c; ui.ideasTipo=null; Render(); break;
+		case "ideas-course": ui.ideasCourse=ds.c; ui.ideasTipo=null; ui.ideasSearch=""; Render(); break;
+		case "ideas-clear": ui.ideasSearch=""; ui.ideasTipo=null; Render(); break;
 		case "ideas-tipo": ui.ideasTipo=ds.t||null; Render(); break;
 		case "idea-open": OpenDish(ds.id); break;
+		case "dish-open": { const k=(ds.name||"").trim().toLowerCase();
+			const d=state.catalog.find(x=>x.name.trim().toLowerCase()===k);
+			if(d) OpenDish(d.id); else Toast("Este plato no está en el recetario");
+			break; }
 		case "idea-edit": { const d=state.catalog.find(x=>x.id===ds.id); if(d) EditDish(d,d.course); break; }
 		case "idea-del": { const d=state.catalog.find(x=>x.id===ds.id);
 			if(d){ const nm=d.name.trim().toLowerCase();
@@ -2325,16 +2363,21 @@ document.addEventListener("keydown",e=>{
 	if(!Array.isArray(state.hidden)) state.hidden=[];
 	if(!Array.isArray(state.userDishes)) state.userDishes=[];
 	RefreshCatalog();                 // reference data: SEED + userDishes − hidden
-	// guarantee current week + members exist
-	if(!state.current) state.current=MondayOf(TodayISO());
 	if(!state.members) state.members=[{id:"nosotros",name:"Nosotros",color:"var(--m-nosotros)",factor:1},{id:"noah",name:"Noah",color:"var(--m-noah)",factor:0.6},{id:"iria",name:"Iria",color:"var(--m-iria)",factor:0.6}];
 	state.members.forEach(m=>{if(typeof m.factor!=="number")m.factor=(m.id==="nosotros"?1:0.6);});
+	// always open on the CURRENT week (needs members: EnsureWeek builds cells per member)
+	GoToThisWeek();
 	if(!state.theme) state.theme="fresco";
 	ApplyTheme();
 	BuildManifest();
 	EnsureWeek(state.current);
 	SaveQuiet(); Render();
 	CloudPullOnBoot();               // async, never blocks offline start
+	// coming back to the PWA after midnight / days later must not leave you in the past
+	document.addEventListener("visibilitychange",()=>{
+		if(document.visibilityState!=="visible") return;
+		if(state.current!==MondayOf(TodayISO())){ GoToThisWeek(); Render(); }
+	});
 	/* Offline: best-effort SW registration. Silently skipped on file://,
 	   unsupported browsers, or when sw.js is not deployed next to the app. */
 	if("serviceWorker" in navigator){
