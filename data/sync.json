@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-21T08:42:12.988Z",
+ "savedAt": "2026-07-21T08:42:45.770Z",
  "state": {
   "members": [
    {
@@ -67,6 +67,13 @@
     "name": "Melocotón Caspe",
     "qty": 1,
     "unit": "Kg",
+    "done": false
+   },
+   {
+    "id": "hfgeav0",
+    "name": "Tomate Kokumi",
+    "qty": 1,
+    "unit": "Bandeja",
     "done": false
    }
   ],
@@ -1121,8 +1128,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-21T08:42:12.988Z",
-  "lastSync": "2026-07-21T08:33:45.169Z",
+  "updatedAt": "2026-07-21T08:42:45.770Z",
+  "lastSync": "2026-07-21T08:42:45.025Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
