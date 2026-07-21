@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.11.0 — 2026-07-21 (Menú de opciones: 7 entradas → 4)
+- Las cuatro entradas de nube y copias se funden en **una sola: «🔐 Copia de
+  seguridad»**, que además dice su propio estado en el menú («al día» /
+  «cambios sin subir» / «sin configurar»), así que no hay que abrirla para mirar.
+  - Fuera **«Guardar en la nube ahora»**: era exactamente el botón ☁️ de la cabecera.
+  - **Exportar** e **importar** pasan dentro de esa pantalla, junto al token.
+- **El token caducado ya no te deja tirado.** Antes el aviso decía «Opciones →
+  Nube», que era una entrada de menú; ahora **abre la pantalla directamente**
+  con el aviso y el campo listo. El token caduca cada 90 días: esto no podía
+  depender de recordar dónde estaba la opción.
+- **Importar ahora avisa antes de sustituir**: dice cuántas semanas y platos
+  trae el archivo, pide confirmación y deja **Deshacer**. Antes reemplazaba
+  todo tu estado en cuanto elegías el fichero.
+- Mensajes de nube en cristiano: «Otro dispositivo subió cambios antes. Pulsa
+  ☁️ otra vez.» y «No se ha subido. Tus datos están en el móvil y se
+  reintentará» en vez de textos venidos de códigos HTTP.
+
 ## 1.10.0 — 2026-07-21 (Temas 1 y 3 de la auditoría)
 ### Nada se borra sin vuelta atrás (tema 1)
 - **Deshacer en todos los borrados** de despensa, fruta/verdura y otros: el

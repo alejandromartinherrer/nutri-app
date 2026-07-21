@@ -220,6 +220,13 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .pick-list{display:flex;flex-direction:column;gap:1px;margin-top:4px}
 .pick{display:flex;align-items:center;gap:10px;padding:11px 4px;border-top:1px solid var(--line2);text-align:left;width:100%}
 .pick .nm{flex:1;font-size:15px;font-weight:600}
+/* backup sheet: state at a glance */
+.bk-state{background:var(--bg);border-radius:11px;padding:13px 15px;font-size:14px;font-weight:600}
+.bk-sub{font-size:12.5px;color:var(--muted);font-weight:500;margin-top:4px}
+.bk-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;vertical-align:1px}
+.bk-dot.on{background:var(--herb)} .bk-dot.warn{background:#F6B93B} .bk-dot.off{background:var(--line)}
+.bk-alert{background:var(--amber-soft);color:var(--ink);border-radius:11px;padding:13px 15px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.menu-item .mi-sub{margin-left:auto;font-size:12px;font-weight:600;color:var(--muted)}
 /* picker: who is this dish for */
 .who-chips{display:flex;flex-wrap:wrap;gap:7px;margin:2px 0 4px}
 .who{flex:1 1 auto;min-width:70px;min-height:44px;padding:11px 12px;border-radius:11px;border:1.5px solid var(--line);
@@ -400,7 +407,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.10.0";
+const APP_VERSION = "1.11.0";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -1892,9 +1899,12 @@ async function CloudSave(auto){
 		if(!auto) Toast("Guardado en la nube ☁️✓");
 	}catch(e){
 		if(auto){/* quiet: the dot stays on and the next edit reschedules */}
-		else if(e&&e.code==="auth") Toast("Token no válido o caducado — Opciones → Nube");
-		else if(e&&e.code==="conflict") Toast("Conflicto de guardado — reintenta");
-		else Toast(navigator.onLine===false?"Sin conexión — guardado solo local":"No se pudo guardar en la nube");
+		// an expired token used to point at a menu entry; open the sheet instead,
+		// so there is always a way back even if the menu changes
+		else if(e&&e.code==="auth") OpenCloudSettings({aviso:"⚠️ <b>El acceso a la nube ha caducado.</b> Crea un token nuevo en GitHub y pégalo aquí abajo. Tus datos siguen guardados en este dispositivo."});
+		else if(e&&e.code==="conflict") Toast("Otro dispositivo subió cambios antes. Pulsa ☁️ otra vez.");
+		else Toast(navigator.onLine===false?"Sin conexión. Guardado en el móvil; se subirá solo."
+			:"No se ha subido a la nube. Tus datos están en el móvil y se reintentará.");
 	}finally{ SetCloudBusy(false); UpdateCloudDot(); }
 }
 
@@ -1940,31 +1950,78 @@ async function CloudPullOnBoot(){
 	}catch(e){/* offline / rate-limited → keep local, that's the contract */}
 }
 
-function OpenCloudSettings(){
+/* One place for everything that protects your data: cloud status, the access
+   token (it expires, so this must never be unreachable) and the manual copy.
+   Replaces four separate menu entries. */
+function OpenCloudSettings(o){
 	const has=!!GhToken();
+	const sync=state.lastSync? state.lastSync.slice(0,16).replace("T"," ") : null;
+	const estado = !has ? `<span class="bk-dot off"></span> Sin configurar — tus datos solo están en este dispositivo`
+		: (CloudDirty()? `<span class="bk-dot warn"></span> Hay cambios sin subir`
+		               : `<span class="bk-dot on"></span> Todo subido`);
+	const aviso = (o&&o.aviso)? `<div class="bk-alert">${o.aviso}</div>` : "";
 	document.getElementById("sheetContent").innerHTML=`
 		<div class="grip"></div>
-		<div class="sheet-h"><div class="t1">Nube (GitHub)</div><div class="x" data-action="close-sheet">✕</div></div>
+		<div class="sheet-h"><div class="t1">Copia de seguridad</div><div class="x" data-action="close-sheet">✕</div></div>
 		<div class="sheet-body">
-			<div class="about-b">
-				<p>El botón <b>☁️ Guardar</b> sube tus datos al repositorio
-				<b>${GH_OWNER}/${GH_REPO}</b> y cada dispositivo carga la última
-				copia al abrir la app con conexión.</p>
-				<p>Necesita un <b>token fine-grained</b> de GitHub: Settings →
-				Developer settings → Fine-grained tokens → solo el repositorio
-				<b>${GH_REPO}</b>, permiso <b>Contents: Read and write</b>, con
-				caducidad. El token se guarda solo en este dispositivo y nunca
-				se incluye en copias ni en la nube.</p>
-				<p>Estado: ${has?"🟢 token configurado":"⚪ sin token"}${state.lastSync?` · última subida ${state.lastSync.slice(0,16).replace("T"," ")}`:""}</p>
-			</div>
-			<div class="lab">Token de acceso</div>
-			<input class="field" id="ghTokenInput" type="password" placeholder="github_pat_…" autocomplete="off">
+			${aviso}
+			<div class="bk-state">${estado}${(has&&sync)?`<div class="bk-sub">Última subida: ${sync}</div>`:""}</div>
+			<p class="hint" style="margin:12px 2px 0">Tus menús se guardan solos en
+			<b>${GH_OWNER}/${GH_REPO}</b> y cada dispositivo carga la copia más reciente al abrir la app.
+			Para eso hace falta un token de acceso que <b>caduca cada cierto tiempo</b>: cuando pase, vuelve aquí y pega uno nuevo.</p>
+
+			<div class="lab" style="margin-top:16px">Token de acceso</div>
+			<input class="field" id="ghTokenInput" type="password" placeholder="${has?'Pega aquí uno nuevo para reemplazarlo':'github_pat_…'}" autocomplete="off">
+			<p class="hint" style="margin:8px 2px 0;font-size:12.5px">En GitHub: Settings → Developer settings →
+			Fine-grained tokens → solo el repositorio <b>${GH_REPO}</b>, permiso <b>Contents: Read and write</b>.
+			El token se queda en este dispositivo: nunca viaja en las copias ni a la nube.</p>
 			<div class="act-row" style="margin-top:14px">
-				${has?'<button class="btn danger" data-action="cloud-forget">Borrar token</button>':'<button class="btn ghost" data-action="close-sheet">Cancelar</button>'}
+				${has?'<button class="btn ghost" data-action="cloud-forget">Borrar token</button>':''}
 				<button class="btn prim" data-action="cloud-token-save">Guardar token</button>
 			</div>
+
+			<div class="lab" style="margin-top:22px">Copia manual</div>
+			<p class="hint" style="margin:0 2px 10px;font-size:12.5px">Un archivo con todo, independiente de GitHub. Por si acaso.</p>
+			<div class="act-row" style="margin-top:0">
+				<button class="btn ghost" data-action="export">📤 Exportar</button>
+				<button class="btn ghost" data-action="import">📥 Importar</button>
+			</div>
+			<input type="file" id="importFile" accept="application/json" style="display:none">
 		</div>`;
 	ShowSheet();
+	BindImportFile();
+}
+/* importing replaces everything, so it now previews what's inside, confirms,
+   and leaves an undo — it used to swap your whole state the moment you picked a file */
+function BindImportFile(){
+	const f=document.getElementById("importFile");
+	if(!f) return;
+	f.onchange=ev=>{
+		const file=ev.target.files[0]; if(!file) return;
+		const r=new FileReader();
+		r.onload=()=>{try{
+			const data=JSON.parse(r.result);
+			if(!ValidState(data)) return Toast("Ese archivo no es una copia válida");
+			const prev=JSON.stringify(state);
+			ConfirmSheet({title:"Importar copia",
+				text:(()=>{const w=Object.keys(data.weeks||{}).length,d=(data.userDishes||[]).length;
+					return `Vas a <b>sustituir</b> todo lo que hay en este dispositivo por el contenido del archivo.<br><br>El archivo trae ${w} ${w===1?"semana":"semanas"} y ${d} ${d===1?"plato tuyo":"platos tuyos"}.`;})(),
+				okLabel:"Sustituir mis datos",
+				onOk:()=>{
+					state=data;
+					if(!Array.isArray(state.userDishes))state.userDishes=[];
+					if(!Array.isArray(state.hidden))state.hidden=[];
+					if(!Array.isArray(state.extras))state.extras=[];
+					SanitizeSlots(state); RefreshCatalog(); Save();
+					ApplyTheme(); BuildManifest(); GoToThisWeek(); Render();
+					ToastAction("Copia importada","Deshacer",()=>{
+						try{ state=JSON.parse(prev); RefreshCatalog(); Save(); ApplyTheme(); BuildManifest(); Render(); Toast("Restaurado"); }
+						catch(e){ Toast("No se pudo deshacer"); }
+					});
+				}});
+		}catch(e){Toast("No se pudo leer el archivo")}};
+		r.readAsText(file);
+	};
 }
 
 /* ============================ BACK FROM THE SHOP ============================
@@ -2109,23 +2166,12 @@ function OpenMenu(){
 				<div class="sw-row">${sw}</div>
 			</div>
 			<button class="menu-item" data-action="menu-rutina"><span class="mi">🥣</span> Rutina semanal (desayunos/almuerzos)</button>
-			<button class="menu-item" data-action="cloud-save-menu"><span class="mi">☁️</span> Guardar en la nube ahora</button>
-			<button class="menu-item" data-action="cloud-settings"><span class="mi">🔑</span> Nube (GitHub) — configurar</button>
-			<button class="menu-item" data-action="export"><span class="mi">📤</span> Exportar copia (guardar/compartir)</button>
-			<button class="menu-item" data-action="import"><span class="mi">📥</span> Importar copia</button>
+			<button class="menu-item" data-action="cloud-settings"><span class="mi">🔐</span> Copia de seguridad<span class="mi-sub">${!GhToken()?"sin configurar":(CloudDirty()?"cambios sin subir":"al día")}</span></button>
 			<button class="menu-item" data-action="new-week"><span class="mi">🧹</span> Vaciar esta semana</button>
 			<button class="menu-item" data-action="about"><span class="mi">ℹ️</span> Acerca de</button>
 			<div class="ver-foot">v${APP_VERSION} · datos v${SCHEMA_VERSION}</div>
-			<input type="file" id="importFile" accept="application/json" style="display:none">
 		</div>`;
 	ShowSheet();
-	const f=document.getElementById("importFile");
-	if(f) f.onchange=ev=>{
-		const file=ev.target.files[0]; if(!file) return;
-		const r=new FileReader();
-		r.onload=()=>{try{const data=JSON.parse(r.result);if(ValidState(data)){state=data;if(!Array.isArray(state.userDishes))state.userDishes=[];if(!Array.isArray(state.hidden))state.hidden=[];RefreshCatalog();if(!Array.isArray(state.extras))state.extras=[];Save();CloseSheet();ApplyTheme();BuildManifest();Render();Toast("Copia importada")}else Toast("Archivo no válido")}catch(e){Toast("No se pudo leer el archivo")}};
-		r.readAsText(file);
-	};
 }
 function ExportData(){
 	const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
@@ -2529,7 +2575,6 @@ document.addEventListener("click",e=>{
 			OpenDish(ds.id, parseInt(ds.f,10)||1);
 			const sb2=document.querySelector(".sheet-body"); if(sb2) sb2.scrollTop=st; break; }
 		case "cloud-save": CloudSave(); break;
-		case "cloud-save-menu": CloseSheet(); CloudSave(); break;
 		case "cloud-settings": OpenCloudSettings(); break;
 		case "cloud-token-save": { const v=(document.getElementById("ghTokenInput")||{}).value||"";
 			if(!v.trim()) return Toast("Pega el token primero");
@@ -2538,7 +2583,7 @@ document.addEventListener("click",e=>{
 		case "set-theme": SetTheme(ds.theme); break;
 		case "close-sheet": CloseSheet(); break;
 		case "export": ExportData(); break;
-		case "import": document.getElementById("importFile").click(); break;
+		case "import": { const f=document.getElementById("importFile"); if(f) f.click(); break; }
 		case "new-week": NewWeek(); break;
 		case "copy-shop": CopyShop(); break;
 		case "share-week": ShareWeekImage(); break;
