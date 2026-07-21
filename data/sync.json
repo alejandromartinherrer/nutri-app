@@ -1150,9 +1150,10 @@
   },
   "current": "2026-07-20",
   "updatedAt": "2026-07-21T08:44:37.284Z",
-  "lastSync": "2026-07-21T08:45:09.212Z",
+  "lastSync": "2026-07-21T11:40:41.179Z",
   "theme": "fresco",
   "hideDesAlm": true,
-  "shopView": "dish"
+  "shopView": "dish",
+  "shopWeek": "2026-07-20"
  }
 }
