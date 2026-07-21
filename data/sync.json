@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-21T05:52:39.981Z",
+ "savedAt": "2026-07-21T05:58:34.715Z",
  "state": {
   "members": [
    {
@@ -979,7 +979,7 @@
          "away": false
         },
         "iria": {
-         "dish": "Pasta de pisto",
+         "dish": "Pasta depisto (Makeada)",
          "invId": null,
          "away": false
         }
@@ -1226,8 +1226,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-21T05:52:39.981Z",
-  "lastSync": "2026-07-21T05:48:08.527Z",
+  "updatedAt": "2026-07-21T05:58:34.715Z",
+  "lastSync": "2026-07-21T05:53:22.361Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
