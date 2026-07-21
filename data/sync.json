@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-21T08:33:32.807Z",
+ "savedAt": "2026-07-21T08:42:12.988Z",
  "state": {
   "members": [
    {
@@ -63,115 +63,10 @@
   },
   "produce": [
    {
-    "id": "edxwpht",
-    "name": "Pera conferencia",
-    "qty": 4,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "aycapoo",
-    "name": "Manzana Golden",
-    "qty": 4,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "y0jh13f",
-    "name": "Cereza",
-    "qty": 1,
-    "unit": "kg",
-    "done": false
-   },
-   {
-    "id": "3n6dz1u",
-    "name": "Aguacate",
-    "qty": 3,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "gbjda8w",
-    "name": "Paraguayo",
-    "qty": 10,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "8l2u9z1",
-    "name": "Platano",
-    "qty": 8,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "xc1rfm5",
-    "name": "Melón",
-    "qty": 1,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "4kxskqc",
-    "name": "Pepino",
-    "qty": 2,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "rf2q3ly",
-    "name": "Tomate todo-carne",
-    "qty": 3,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "qjcvy6i",
-    "name": "Puerro",
-    "qty": 3,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "6cmo1md",
-    "name": "Calabacin",
-    "qty": 1,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "2ii75bq",
-    "name": "Pimiento Rojo",
-    "qty": 2,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "nrrwhd7",
-    "name": "Pimiento Verde",
-    "qty": 2,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "cx4cc7r",
-    "name": "Limón",
-    "qty": 1,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "s6hat2i",
-    "name": "Judía verde",
+    "id": "jgaofu9",
+    "name": "Melocotón Caspe",
     "qty": 1,
     "unit": "Kg",
-    "done": false
-   },
-   {
-    "id": "pc8is00",
-    "name": "Brócoli",
-    "qty": 2,
-    "unit": "ud",
     "done": false
    }
   ],
@@ -1226,8 +1121,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-21T08:33:32.807Z",
-  "lastSync": "2026-07-21T06:05:18.034Z",
+  "updatedAt": "2026-07-21T08:42:12.988Z",
+  "lastSync": "2026-07-21T08:33:45.169Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
