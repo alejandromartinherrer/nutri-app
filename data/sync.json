@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-21T05:46:13.704Z",
+ "savedAt": "2026-07-21T05:47:51.174Z",
  "state": {
   "members": [
    {
@@ -974,7 +974,7 @@
          "away": false
         },
         "noah": {
-         "dish": "Atún Wow",
+         "dish": "Pasta depisto (makeada)",
          "invId": null,
          "away": false
         },
@@ -1226,8 +1226,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-21T05:46:13.704Z",
-  "lastSync": "2026-07-21T05:45:31.342Z",
+  "updatedAt": "2026-07-21T05:47:51.174Z",
+  "lastSync": "2026-07-21T05:46:58.073Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
