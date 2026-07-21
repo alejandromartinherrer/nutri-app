@@ -215,6 +215,10 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .inv-chip:active{border-color:var(--herb)}
 .inv-chip .q{font-size:11px;opacity:.7}
 .act-row{display:flex;gap:8px;margin-top:16px}
+.act-row .btn{flex:1}
+/* picker: save/remove/away sit above the long list so you never scroll to save */
+.pick-actions{margin:14px 0 4px;padding-bottom:14px;border-bottom:1px solid var(--line2)}
+.pick-actions .act-row{margin-top:8px}
 .btn{flex:1;height:46px;border-radius:12px;font-weight:800;font-size:14px;display:grid;place-items:center;border:1.5px solid var(--line)}
 .btn.ghost{background:#fff;color:var(--ink)}
 .btn.warn{background:#fff;color:var(--amber);border-color:var(--amber-soft)}
@@ -365,7 +369,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.7.1";
+const APP_VERSION = "1.7.2";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -1423,15 +1427,17 @@ function RenderPicker(){
 			<input class="field" id="pickSearch" placeholder="Buscar o escribir plato…" value="${escapeHtml(picker.search)}" style="margin-top:12px">
 			${scopeChips}
 			${courseTabs}
+			<div class="pick-actions">
+				${isComposite?`<button class="btn prim" data-paction="psave" style="width:100%">Guardar ${isComida?"comida":"cena"} ✓</button>`:''}
+				<div class="act-row">
+					<button class="btn danger" data-paction="pclear">Quitar</button>
+					<button class="btn warn" data-paction="paway">🚶 Fuera de casa</button>
+				</div>
+			</div>
 			${invHtml}
 			${tipoChips}
 			<div class="lab">${recLab}</div>
 			<div class="pick-list">${listHtml}</div>
-			${isComposite?`<button class="btn prim" data-paction="psave" style="width:100%;margin-top:4px">Guardar ${isComida?"comida":"cena"} ✓</button>`:''}
-			<div class="act-row">
-				<button class="btn warn" data-paction="paway">🚶 Fuera de casa</button>
-				<button class="btn danger" data-paction="pclear">Quitar</button>
-			</div>
 		</div>`;
 	const s=document.getElementById("pickSearch");
 	if(s) s.oninput=e=>{

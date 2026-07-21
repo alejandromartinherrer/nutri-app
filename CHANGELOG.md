@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.7.2 — 2026-07-21 (Guardar sin scrollear)
+- En el selector de plato, **Guardar / Quitar / Fuera de casa** pasan a estar
+  **encima de «Usar de tu despensa»**, justo debajo del buscador, en vez de al
+  final de toda la lista de platos. Antes había que bajar ~3000 px para
+  guardar; ahora el botón queda visible sin scrollear (y como el panel se
+  redibuja arriba al elegir un plato, lo tienes delante al terminar).
+- «Quitar» a la izquierda y «Fuera de casa» a la derecha, con separador bajo
+  el bloque de acciones.
+
 ## 1.7.1 — 2026-07-21 (Fix crítico: platos que se guardaban en un miembro fantasma)
 ### Corregido
 - **«No me deja meter comidas y cenas».** Si abrías el selector con
