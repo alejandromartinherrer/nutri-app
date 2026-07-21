@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.3 — 2026-07-21 (Texto libre también sin scrollear)
+- El botón **«➕ Usar «…» tal cual»** sale ahora **justo debajo del buscador**,
+  donde acabas de escribir, en vez de al principio de la lista de platos (que
+  queda más abajo). Visible sin scrollear.
+- Si no hay coincidencias, la lista lo dice («Sin coincidencias en el
+  recetario») en vez de quedarse vacía.
+
 ## 1.7.2 — 2026-07-21 (Guardar sin scrollear)
 - En el selector de plato, **Guardar / Quitar / Fuera de casa** pasan a estar
   **encima de «Usar de tu despensa»**, justo debajo del buscador, en vez de al

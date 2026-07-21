@@ -206,7 +206,7 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .pick-list{display:flex;flex-direction:column;gap:1px;margin-top:4px}
 .pick{display:flex;align-items:center;gap:10px;padding:11px 4px;border-top:1px solid var(--line2);text-align:left;width:100%}
 .pick .nm{flex:1;font-size:15px;font-weight:600}
-.pick.free{background:var(--aub-soft);border-radius:11px;border-top:0;padding:11px 10px;margin:2px 0}
+.pick.free{background:var(--aub-soft);border-radius:11px;border-top:0;padding:11px 12px;margin:10px 0 0}
 .pick.free .nm{color:var(--aub-2)}
 .pick .ti{font-size:10.5px;font-weight:800;color:var(--aub-2);background:var(--aub-soft);padding:3px 8px;border-radius:20px;white-space:nowrap}
 .inv-row{display:flex;gap:7px;overflow-x:auto;padding:2px 0 4px;-webkit-overflow-scrolling:touch}
@@ -369,7 +369,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.7.2";
+const APP_VERSION = "1.7.3";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -1406,11 +1406,11 @@ function RenderPicker(){
 			<span class="nm">➕ Usar «${escapeHtml(q)}» tal cual</span>
 			<span class="ti">texto libre</span>
 		</button>` : "";
-	const listHtml = freeHtml + (items.length? items.map(c=>`
+	const listHtml = items.length? items.map(c=>`
 		<button class="pick" data-paction="pchoose" data-name="${escapeHtml(c.name)}">
 			<span class="nm">${escapeHtml(c.name)}</span>
 			${c.tipo?`<span class="ti">${escapeHtml(c.tipo)}</span>`:''}
-		</button>`).join("") : (q?"":`<div class="empty-msg">Nada aquí todavía.</div>`));
+		</button>`).join("") : `<div class="empty-msg">${q?"Sin coincidencias en el recetario.":"Nada aquí todavía."}</div>`;
 
 	document.getElementById("sheetContent").innerHTML = `
 		<div class="grip"></div>
@@ -1425,6 +1425,7 @@ function RenderPicker(){
 			</div>
 			${composerHtml}
 			<input class="field" id="pickSearch" placeholder="Buscar o escribir plato…" value="${escapeHtml(picker.search)}" style="margin-top:12px">
+			${freeHtml}
 			${scopeChips}
 			${courseTabs}
 			<div class="pick-actions">
