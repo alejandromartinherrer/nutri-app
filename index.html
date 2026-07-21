@@ -282,6 +282,16 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .sv{font-size:12.5px;font-weight:700;color:var(--muted);background:none;border:0;padding:11px 14px;min-height:42px;border-radius:8px;font-family:inherit;cursor:pointer}
 .sv.on{background:var(--card);color:var(--ink);box-shadow:var(--sh)}
 .sv-all{margin:-12px -4px -12px auto;padding:12px 4px;font-size:12px;font-weight:700;color:var(--aub);background:none;border:0;font-family:inherit;cursor:pointer}
+.need-h .need-x{font-size:11px;font-weight:700;color:var(--aub-2);background:var(--aub-soft);padding:2px 7px;border-radius:20px;margin-left:7px;white-space:nowrap}
+.aisle{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 4px;padding-left:4px}
+.ing-block.merged .aisle:first-child{margin-top:2px}
+/* back from the shop */
+.home-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 2px;border-top:1px solid var(--line2)}
+.home-row .nm{flex:1;min-width:110px;font-size:14.5px;font-weight:600}
+.home-opts{display:flex;gap:6px}
+.hopt{min-height:40px;padding:9px 11px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);
+	color:var(--muted);font-size:12.5px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap}
+.hopt.on{background:var(--aub);border-color:var(--aub);color:#fff}
 .ing-block{padding:0 14px 12px 18px}
 .ing-block.merged{padding:8px 14px 14px 10px}
 .ing-item{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;font-size:13.5px;color:var(--ink);padding:7px 4px;line-height:1.45;background:none;border:0;text-align:left;font-family:inherit;cursor:pointer}
@@ -390,7 +400,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.9.0";
+const APP_VERSION = "1.10.0";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -698,8 +708,10 @@ function RenderTop(){
 
 /* ============================ RENDER: NAV ============================ */
 function RenderNav(){
-	// badge = things YOU still have to buy by hand (fruta/verdura + otros)
-	const need = state.produce.filter(p=>!p.done).length + state.extras.filter(x=>!x.done).length;
+	// badge = everything still to buy, ingredients included (it used to show "3"
+	// while 25 ingredients were pending, which taught you to ignore it)
+	let need = state.produce.filter(p=>!p.done).length + state.extras.filter(x=>!x.done).length;
+	try{ need += MergedIngredients().filter(x=>!IsBought(x)).length; }catch(e){}
 	const tabs=[
 		{id:"semana",ic:"🍽️",l:"Semana"},
 		{id:"despensa",ic:"❄️",l:"Despensa"},
@@ -919,6 +931,7 @@ function RenderDespensa(){
 
 /* ============================ RENDER: COMPRA ============================ */
 function RenderCompra(){
+	ResetWeeklyTicks();
 	const dishes = PlannedCookDishes();
 	const produce = state.produce;
 	const prodItems = produce.length? produce.map(p=>`
@@ -929,10 +942,10 @@ function RenderCompra(){
 		</div>`).join("") : `<div class="empty-msg">Lista vacía.</div>`;
 
 	// tappable ingredient: toggles "bought" (strike-through + check)
-	const ingRow = x => { const have=PantryHas(x); const bought=IsBought(x); const k=escapeHtml(Norm(x));
+	const ingRow = x => { const have=PantryMatch(x); const bought=IsBought(x); const k=escapeHtml(Norm(x));
 		return `<button class="ing-item${have?' have':''}${bought?' bought':''}" data-action="shop-check" data-k="${k}">
 			<span class="ing-box">${bought?'✓':''}</span>
-			<span class="ing-tx">${escapeHtml(x)}${have?'<span class="have-tag">ya tienes</span>':''}</span>
+			<span class="ing-tx">${escapeHtml(x)}${have?`<span class="have-tag">ya tienes: ${escapeHtml(have.name)}</span>`:''}</span>
 		</button>`; };
 
 	// view toggle: "dish" = ingredients grouped per dish; "merged" = one flat list
@@ -945,24 +958,34 @@ function RenderCompra(){
 		needBody = `<div class="empty-msg">Aún no has planificado comidas ni cenas esta semana.</div>`;
 	}else if(shopView==="merged"){
 		const noRec = dishes.filter(n=>!IngredientesDe(n));
+		// grouped by supermarket aisle so the list follows the trolley
+		let last=-1, rows="";
+		merged.forEach(x=>{
+			const a=AisleOf(x);
+			if(a!==last){ rows+=`<div class="aisle">${AisleName(a)}</div>`; last=a; }
+			rows+=ingRow(x);
+		});
 		needBody = `<div class="ing-block merged">
-			${merged.map(ingRow).join("")}
+			${rows}
 			${noRec.map(n=>`<div class="ing-item none">• ${escapeHtml(n)} (plato sin receta)</div>`).join("")}
 		</div>`;
 	}else{
 		ui.shopClosed = ui.shopClosed || {};
 		needBody = dishes.map(n=>{
-			const ing=IngredientesDe(n);
+			const f=DishScale(n);
+			const ing=IngredientesDe(n,f);
 			const closed=!!ui.shopClosed[n];
 			const body = closed ? "" : (ing
 				? `<div class="ing-block">${ing.map(ingRow).join("")}</div>`
-				: `<div class="ing-block"><div class="ing-item none">Sin receta guardada. Escribe sus ingredientes tocando el plato en Ideas, o añádelos abajo en “Otros”.</div></div>`);
+				: `<div class="ing-block"><div class="ing-item none">Sin receta guardada. Escríbela tocando el nombre del plato en la Semana, o añade lo que falte abajo en “Otros”.</div></div>`);
 			const total=ing?ing.length:0, got=ing?ing.filter(IsBought).length:0;
 			const badge = ing ? (got?`${got}/${total} ✓`:`${total}`) : 'sin receta';
+			// the scale factor is shown, never silent: you can audit the quantities
+			const raciones = ing&&f>1 ? `<span class="need-x">para ${ServingsNeeded(n)} · ×${String(f).replace(".",",")}</span>` : "";
 			return `<div class="need-dish">
 				<button class="need-h" data-action="shop-toggle" data-name="${escapeHtml(n)}">
 					<span class="chev ${closed?'':'up'}">▾</span>
-					<span class="need-nm">${escapeHtml(n)}</span>
+					<span class="need-nm">${escapeHtml(n)}${raciones}</span>
 					<span class="need-c ${ing?'':'none'}${ing&&got===total?' done':''}">${badge}</span>
 				</button>
 				${body}
@@ -970,6 +993,7 @@ function RenderCompra(){
 		}).join("");
 	}
 	const subText = merged.length ? (remaining>0 ? `${remaining} por comprar` : "¡todo comprado! ✓") : "";
+	const yaEnCasa = BoughtForPantry().length;
 	const anyOpen = dishes.some(n=>!(ui.shopClosed||{})[n]);
 	const shopViewBar = dishes.length? `<div class="shop-view">
 		<div class="sv-group">
@@ -988,7 +1012,7 @@ function RenderCompra(){
 		</div>`).join("") : `<div class="empty-msg">Sin extras.</div>`;
 
 	return `<div class="view-title">Lista de la compra</div>
-		<p class="hint">Fruta y verdura la pones tú; los ingredientes de tus comidas y cenas salen solos de sus recetas. Lo que ya tienes en la despensa se marca «ya tienes». Pulsa “Copiar” para mandarla por WhatsApp.</p>
+		<p class="hint">Los ingredientes salen solos de las recetas, ya escalados para los que coméis. Ve tachando por el súper y, al llegar a casa, pulsa <b>«Ya está en casa»</b> para que entren en tu despensa.</p>
 		<div class="sec">
 			<div class="sec-h"><h3>🍎 Fruta y verdura</h3>
 				<button class="add-x" data-action="prod-add">+ añadir</button></div>
@@ -998,7 +1022,7 @@ function RenderCompra(){
 			</div>
 		</div>
 		<div class="sec">
-			<div class="sec-h"><h3>🍳 Para los platos de la semana</h3>
+			<div class="sec-h"><h3>🍳 Ingredientes de tus comidas y cenas</h3>
 				<span class="sub">${subText}</span>
 				${boughtCount>0?`<button class="add-x" data-action="shop-clear">limpiar</button>`:""}</div>
 			${shopViewBar}
@@ -1009,8 +1033,9 @@ function RenderCompra(){
 				<button class="add-x" data-action="ex-add">+ añadir</button></div>
 			${exItems}
 		</div>
-		<div class="shop-actions">
-			<button class="btn ghost" data-action="copy-shop">📋 Copiar lista completa</button>
+		<div class="shop-actions" style="flex-direction:column;gap:8px">
+			<button class="btn prim" data-action="back-home" style="width:100%">✅ Ya está en casa${yaEnCasa?` · ${yaEnCasa}`:""}</button>
+			<button class="btn ghost" data-action="copy-shop" style="width:100%">📋 Copiar lista completa</button>
 		</div>`;
 }
 
@@ -1100,22 +1125,66 @@ function ScaleQty(text,f){
 		return isFinite(v)?fmt(v*f):m;
 	});
 }
-/* shopping helper: ingredients of a planned cell (composites merge parts) */
-function IngredientesDe(name){
+/* shopping helper: ingredients of a planned cell (composites merge parts).
+   Scaled when asked: recipes are written for N servings ("Ingredientes (2
+   raciones)") but you cook for the people actually eating it, possibly more
+   than one day — buying half of what you need is the whole point of the list. */
+function IngredientesDe(name,factor){
 	const parts=(name||"").split(SEP).map(s=>s.trim()).filter(Boolean);
 	let out=[];
-	parts.forEach(p=>{const r=RecipeParts(DishRecipe(p)); if(r) out=out.concat(r.items);});
+	parts.forEach(p=>{
+		const r=RecipeParts(DishRecipe(p)); if(!r) return;
+		const f=factor||1;
+		out=out.concat(f===1? r.items : r.items.map(x=>ScaleQty(x,f)));
+	});
 	return out.length?out:null;
 }
-/* fuzzy pantry hint: does any stocked item plausibly cover this ingredient?
-   Token-based (len>3), accent-insensitive. False negatives are fine by design —
-   it's a hint, not a filter: if the pantry name doesn't match, it just isn't
-   marked (the user accepted this trade-off). */
-function PantryHas(text){
-	const t=Norm(text);
-	const inv=[...state.inventory.frigo,...state.inventory.conge].filter(i=>i.qty>0);
-	return inv.some(i=>{const ks=Tokens(i.name); return ks.length && ks.some(k=>t.includes(k));});
+/* how many servings the recipe text itself is written for (default 2) */
+function RecipeServings(name){
+	const parts=(name||"").split(SEP).map(s=>s.trim()).filter(Boolean);
+	for(const p of parts){
+		const r=RecipeParts(DishRecipe(p));
+		if(r && r.base){ const m=r.base.match(/(\d+)\s*(?:raciones|unidades|uds)/i); if(m) return parseInt(m[1],10)||2; }
+	}
+	return 2;
 }
+/* people actually eating this dish this week (counts every planned cell, so a
+   dish cooked twice for 3 people needs 6 servings) */
+function ServingsNeeded(name){
+	const wk=CurWeek(); const k=name.trim().toLowerCase(); let n=0;
+	wk.days.forEach(d=>["Comida","Cena"].forEach(s=>{
+		const slot=d.slots[s]; if(!slot) return;
+		state.members.forEach(m=>{
+			const c=slot[m.id];
+			if(c && c.dish && !c.away && c.dish.trim().toLowerCase()===k) n++;
+		});
+	}));
+	return n||1;
+}
+/* rounded-up scale factor for a dish, e.g. recipe for 2, need 6 -> ×3 */
+function DishScale(name){
+	const need=ServingsNeeded(name), base=RecipeServings(name)||2;
+	const f=need/base;
+	return f<=1 ? 1 : Math.round(f*2)/2;      // halves: ×1,5 is a real thing when cooking
+}
+/* Pantry hint: which stocked item plausibly covers this ingredient?
+   Matches on the pantry item's HEAD NOUN (first significant word, as Spanish
+   puts it first) against whole words of the ingredient. That keeps "Pollo
+   entero" ↔ "250 g de pollo" while killing the old false positive where
+   "Caldo de pollo" marked "400 g de pechuga de pollo" as already owned.
+   Returns the matching item (so the UI can name it) or null. */
+/* crude but symmetric: applied to BOTH sides, so consistency beats grammar */
+function Singular(w){ return w.replace(/s$/,""); }
+function PantryMatch(text){
+	const words=new Set(Norm(text).split(/[^a-z0-9]+/).filter(Boolean).map(Singular));
+	const inv=[...state.inventory.frigo,...state.inventory.conge].filter(i=>i.qty>0);
+	for(const i of inv){
+		const ks=Tokens(i.name);
+		if(ks.length && words.has(Singular(ks[0]))) return i;
+	}
+	return null;
+}
+function PantryHas(text){ return !!PantryMatch(text); }
 /* distinct cooked dishes (Comida + Cena) planned this week, alpha order.
    Desayuno/Almuerzo are routine staples, handled in Fruta/verdura + Otros. */
 function PlannedCookDishes(){
@@ -1147,13 +1216,44 @@ function IngSortKey(t){
 function MergedIngredients(){
 	const map=new Map();
 	PlannedCookDishes().forEach(n=>{
-		const ing=IngredientesDe(n);
+		const ing=IngredientesDe(n,DishScale(n));
 		if(ing) ing.forEach(x=>{const k=Norm(x); if(!map.has(k)) map.set(k,x);});
 	});
-	return [...map.values()].sort((a,b)=>IngSortKey(a).localeCompare(IngSortKey(b),"es"));
+	return [...map.values()].sort((a,b)=>{
+		const aa=AisleOf(a), ab=AisleOf(b);
+		if(aa!==ab) return aa-ab;                       // walk the shop, not the alphabet
+		return IngSortKey(a).localeCompare(IngSortKey(b),"es");
+	});
 }
+/* rough supermarket aisles, so the combined list follows the trolley instead of
+   the alphabet. Unknown items fall into "despensa", which is fine. */
+const AISLES=[
+	{n:"Fruta y verdura",k:["tomate","cebolla","ajo","patata","zanahoria","calabac","berenjena","pimiento","lechuga","espinaca","brocoli","broco","canonigo","rucula","pepino","limon","lima","naranja","platano","manzana","aguacate","champinon","seta","calabaza","puerro","apio","judia","guisante","perejil","cilantro","albahaca","menta","romero","tomillo","boniato","col","coliflor","esparrago","remolacha","mango","fresa","pera","jengibre","cebolleta","chalota","rabano","alcachofa"]},
+	{n:"Carne y pescado",k:["pollo","pavo","ternera","cerdo","lomo","carne","jamon","bacon","chorizo","conejo","cordero","salmon","merluza","bacalao","atun","lubina","dorada","gamba","langostino","mejillon","calamar","sepia","pulpo","boqueron","anchoa","marisco","chipiron","pechuga","contramuslo","muslo","solomillo","filete"]},
+	{n:"Frescos y lácteos",k:["huevo","leche","yogur","queso","mozzarella","feta","parmesano","nata","mantequilla","tofu","crema"]},
+	{n:"Despensa",k:["arroz","pasta","espagueti","macarron","quinoa","lenteja","garbanzo","alubia","frijol","avena","harina","pan","tortilla integral","aceite","aove","vinagre","sal","pimienta","curry","comino","pimenton","curcuma","canela","azafran","laurel","oregano","caldo","tomate triturado","conserva","tahini","miso","soja","coco","nuez","nueces","almendra","anacardo","pistacho","semilla","sesamo","pipa","miel","mostaza","aceituna","hummus","levadura","cacahuete","pasas"]},
+	{n:"Congelados",k:["congelad","helado"]}
+];
+function AisleOf(text){
+	const t=Norm(text);
+	for(let i=0;i<AISLES.length;i++) if(AISLES[i].k.some(k=>t.indexOf(k)>=0)) return i;
+	return 3;                                          // default: despensa
+}
+function AisleName(i){ return (AISLES[i]||AISLES[3]).n; }
 /* "bought" checklist, stored per week (keyed by Norm(ingredient)) so it resets
    naturally when you move to another week. Same key across dishes = tick once. */
+/* Fruta/verdura and Otros keep a global "done" flag, so last week's ticks used to
+   survive into this week and you'd send the greengrocer an already-crossed-off
+   list. Reset them the first time a new week is opened. */
+function ResetWeeklyTicks(){
+	if(state.shopWeek===state.current) return 0;
+	let n=0;
+	(state.produce||[]).forEach(p=>{ if(p.done){p.done=false;n++;} });
+	(state.extras||[]).forEach(x=>{ if(x.done){x.done=false;n++;} });
+	state.shopWeek=state.current;
+	SaveQuiet();
+	return n;
+}
 function BoughtMap(){ return (CurWeek().bought)||{}; }
 function IsBought(x){ return !!BoughtMap()[Norm(x)]; }
 function ToggleBought(k){ const wk=CurWeek(); const b=wk.bought||(wk.bought={}); if(b[k]) delete b[k]; else b[k]=1; }
@@ -1311,7 +1411,7 @@ function OpenDish(id,scale){
 			${recHtml}
 			<div class="act-row" style="margin-top:16px">
 				<button class="btn prim" data-action="idea-edit" data-id="${d.id}">✏️ Editar</button>
-				<button class="btn danger" data-action="idea-del" data-id="${d.id}" data-close="1">Quitar</button>
+				<button class="btn danger" data-action="idea-del" data-id="${d.id}" data-close="1">Borrar del recetario</button>
 			</div>
 		</div>`;
 	ShowSheet();
@@ -1531,7 +1631,7 @@ function RenderPicker(){
 			<div class="pick-actions">
 				${isComposite?`<button class="btn prim" data-paction="psave" style="width:100%">Guardar ${isComida?"comida":"cena"} ✓</button>`:''}
 				<div class="act-row">
-					<button class="btn danger" data-paction="pclear">Quitar</button>
+					<button class="btn ghost" data-paction="pclear">Dejar vacío</button>
 					<button class="btn warn" data-paction="paway">🚶 Fuera de casa</button>
 				</div>
 			</div>
@@ -1867,6 +1967,88 @@ function OpenCloudSettings(){
 	ShowSheet();
 }
 
+/* ============================ BACK FROM THE SHOP ============================
+   The loop was open: planning discounted stock automatically, but nothing you
+   bought ever came back into the pantry, so it drifted out of date and dragged
+   "ya tienes" and Sorpréndeme down with it. One tap per item, no forms. */
+function BoughtForPantry(){
+	const out=[], seen=new Set();
+	const push=(name,src)=>{
+		const clean=(name||"").trim(); if(!clean) return;
+		const k=Norm(clean); if(seen.has(k)) return; seen.add(k);
+		out.push({name:clean, src});
+	};
+	// ingredients ticked off in "Para los platos"
+	const b=BoughtMap();
+	MergedIngredients().forEach(x=>{ if(b[Norm(x)]) push(IngShortName(x),"ingrediente"); });
+	// fruit/veg and extras already crossed out
+	(state.produce||[]).filter(p=>p.done).forEach(p=>push(p.name,"fruta"));
+	(state.extras||[]).filter(x=>x.done).forEach(x=>push(x.name,"otros"));
+	return out;
+}
+/* "250 g de lentejas" -> "Lentejas": the pantry stores products, not quantities.
+   Works on the ORIGINAL text (not the sort key) so accents and ñ survive. */
+function IngShortName(text){
+	let s=(text||"").trim();
+	s=s.replace(/^[\d.,\/½¼¾⅓⅔\s\-–—]+/,"");
+	s=s.replace(/^(kg|g|mg|ml|cl|l|ud|uds|dientes?|lomos?|latas?|filetes?|rebanadas?|cdas?|cdtas?|cucharadas?|cucharaditas?|hojas?|ramas?|vasos?|pizca|manojos?|puñados?)\b\s*/i,"");
+	s=s.replace(/^de\s+(la\s+|el\s+|los\s+|las\s+)?/i,"");
+	s=s.replace(/\s*\([^)]*\)\s*$/,"");           // drop a trailing "(opcional)"
+	s=s.trim();
+	if(!s) return (text||"").trim();
+	return s.charAt(0).toUpperCase()+s.slice(1);
+}
+function OpenBackHome(){
+	const items=BoughtForPantry();
+	ui.homePick=ui.homePick||{};
+	// default: everything selected, and fruit/veg to the fridge
+	items.forEach(i=>{ if(ui.homePick[i.name]===undefined) ui.homePick[i.name]="frigo"; });
+	const rows = items.length? items.map(i=>{
+		const cur=ui.homePick[i.name];
+		return `<div class="home-row">
+			<div class="nm">${escapeHtml(i.name)}</div>
+			<div class="home-opts">
+				<button class="hopt ${cur==='frigo'?'on':''}" data-action="home-loc" data-n="${escapeHtml(i.name)}" data-l="frigo">🧊 Frigo</button>
+				<button class="hopt ${cur==='conge'?'on':''}" data-action="home-loc" data-n="${escapeHtml(i.name)}" data-l="conge">❄️ Conge</button>
+				<button class="hopt ${cur==='no'?'on':''}" data-action="home-loc" data-n="${escapeHtml(i.name)}" data-l="no">No</button>
+			</div>
+		</div>`;
+	}).join("") : `<div class="empty-msg">Nada tachado todavía. Ve marcando lo que compras y vuelve aquí al llegar a casa.</div>`;
+	document.getElementById("sheetContent").innerHTML=`
+		<div class="grip"></div>
+		<div class="sheet-h"><div class="t1">Ya está en casa</div><div class="x" data-action="close-sheet">✕</div></div>
+		<div class="sheet-body">
+			<p class="hint" style="margin:0 2px 10px">Lo que has ido tachando. Elige dónde va cada cosa y entra en tu despensa.
+			Al guardar se limpian los tachados de esta semana.</p>
+			${rows}
+			${items.length?`<div class="act-row" style="margin-top:18px">
+				<button class="btn ghost" data-action="close-sheet">Cancelar</button>
+				<button class="btn prim" data-action="home-save">Guardar en la despensa</button>
+			</div>`:""}
+		</div>`;
+	ShowSheet();
+}
+function SaveBackHome(){
+	const items=BoughtForPantry();
+	let n=0;
+	items.forEach(i=>{
+		const loc=(ui.homePick||{})[i.name];
+		if(loc!=="frigo" && loc!=="conge") return;
+		const arr=state.inventory[loc];
+		const ex=arr.find(x=>Norm(x.name)===Norm(i.name));
+		if(ex) ex.qty=(ex.qty||0)+1;                       // already there: one more
+		else arr.push({id:Uid(),name:i.name,qty:1,unit:"",cad:null,added:TodayISO(),pri:loc==="frigo"});
+		n++;
+	});
+	// clear this week's ticks: the shop is done
+	const wk=CurWeek(); wk.bought={};
+	(state.produce||[]).forEach(p=>p.done=false);
+	(state.extras||[]).forEach(x=>x.done=false);
+	ui.homePick={};
+	Save(); CloseSheet(); ui.view="despensa"; Render();
+	Toast(n?`${n} producto${n>1?"s":""} en la despensa ✓`:"Nada que guardar");
+}
+
 /* ============================ WEEKLY ROUTINE EDITOR ============================ */
 function OpenRutina(){
 	const P=Plantilla();
@@ -1965,14 +2147,19 @@ function CopyShop(){
 	if(dishes.length){
 		lines.push("🍳 Para los platos (lo que falta)");
 		if(state.shopView==="merged"){
-			MergedIngredients().filter(x=>!IsBought(x)).forEach(x=>lines.push(`· ${x}${PantryHas(x)?" (ya tienes)":""}`));
+			let last=-1;
+			MergedIngredients().filter(x=>!IsBought(x)).forEach(x=>{
+				const a=AisleOf(x); if(a!==last){ lines.push(""); lines.push(AisleName(a).toUpperCase()); last=a; }
+				lines.push(`· ${x}${PantryHas(x)?" (ya tienes)":""}`);
+			});
 			dishes.filter(n=>!IngredientesDe(n)).forEach(n=>lines.push(`· ${n} (plato sin receta)`));
 		}else{
 			dishes.forEach(n=>{
-				const ing=IngredientesDe(n);
+				const f=DishScale(n);
+				const ing=IngredientesDe(n,f);
 				if(!ing){ lines.push(`▸ ${n} (sin receta)`); return; }
 				const rem=ing.filter(x=>!IsBought(x));
-				if(rem.length){ lines.push(`▸ ${n}`); rem.forEach(x=>lines.push(`   · ${x}${PantryHas(x)?" (ya tienes)":""}`)); }
+				if(rem.length){ lines.push(`▸ ${n}${f>1?` (para ${ServingsNeeded(n)})`:""}`); rem.forEach(x=>lines.push(`   · ${x}${PantryHas(x)?" (ya tienes)":""}`)); }
 			});
 		}
 		lines.push("");
@@ -2235,17 +2422,53 @@ function ShareShoppingImage(){
 }
 
 /* ============================ EVENTS ============================ */
-function Toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.remove("act");t.classList.add("show");clearTimeout(Toast._t);Toast._t=setTimeout(()=>t.classList.remove("show"),1900)}
+function Toast(msg){
+	const t=document.getElementById("toast");
+	// don't let a routine message wipe an "Deshacer" the user may still be reaching for
+	if(t.classList.contains("act") && Date.now()<(ToastAction._until||0)) return;
+	t.textContent=msg;t.classList.remove("act");t.classList.add("show");
+	clearTimeout(Toast._t);Toast._t=setTimeout(()=>t.classList.remove("show"),1900);
+}
 /* toast with one action button (e.g. "Deshacer"); longer-lived than Toast */
 function ToastAction(msg,label,fn){
 	const t=document.getElementById("toast");
 	t.textContent=msg;
 	const b=document.createElement("button"); b.className="t-act"; b.textContent=label;
-	b.onclick=()=>{ t.classList.remove("show","act"); clearTimeout(Toast._t); fn(); };
+	b.onclick=()=>{ t.classList.remove("show","act"); ToastAction._until=0; clearTimeout(Toast._t); fn(); };
 	t.appendChild(b);
 	t.classList.add("show","act");
+	ToastAction._until=Date.now()+8000;      // protected window
 	clearTimeout(Toast._t);
-	Toast._t=setTimeout(()=>t.classList.remove("show","act"),8000);
+	Toast._t=setTimeout(()=>{t.classList.remove("show","act");ToastAction._until=0;},8000);
+}
+/* Deleting a list item was one silent, final tap. Now it always comes back with
+   an 8s "Deshacer" that puts the item back exactly where it was. */
+function DeleteWithUndo(arr,idx,verb){
+	if(idx<0||idx>=arr.length) return null;
+	const item=arr[idx];
+	arr.splice(idx,1);
+	Save(); Render();
+	ToastAction((verb||"Quitado")+" «"+(item.name||"")+"»","Deshacer",()=>{
+		arr.splice(Math.min(idx,arr.length),0,item);
+		Save(); Render(); Toast("Restaurado");
+	});
+	return item;
+}
+/* confirmation sheet for the few actions that really cannot be undone */
+function ConfirmSheet(o){
+	document.getElementById("sheetContent").innerHTML=`
+		<div class="grip"></div>
+		<div class="sheet-h"><div class="t1">${escapeHtml(o.title)}</div><div class="x" data-action="close-sheet">✕</div></div>
+		<div class="sheet-body">
+			<p class="hint" style="margin:0 2px 6px;font-size:14.5px">${o.text}</p>
+			<div class="act-row" style="margin-top:18px">
+				<button class="btn ghost" data-action="close-sheet">Cancelar</button>
+				<button class="btn danger" id="confirmOk">${escapeHtml(o.okLabel||"Borrar")}</button>
+			</div>
+		</div>`;
+	ShowSheet();
+	const ok=document.getElementById("confirmOk");
+	if(ok) ok.onclick=()=>{ CloseSheet(); o.onOk(); };
 }
 let _lastFocus = null;
 function ShowSheet(){
@@ -2297,6 +2520,9 @@ document.addEventListener("click",e=>{
 		case "shop-view": state.shopView=ds.v; SaveQuiet(); Render(); break;
 		case "shop-check": ToggleBought(ds.k); Save(); Render(); break;
 		case "shop-clear": { const wk=CurWeek(); wk.bought={}; Save(); Render(); Toast("Comprados desmarcados"); break; }
+		case "back-home": OpenBackHome(); break;
+		case "home-loc": ui.homePick=ui.homePick||{}; ui.homePick[ds.n]=ds.l; OpenBackHome(); break;
+		case "home-save": SaveBackHome(); break;
 		case "shop-toggle": ui.shopClosed=ui.shopClosed||{}; ui.shopClosed[ds.name]=!ui.shopClosed[ds.name]; Render(); break;
 		case "shop-toggle-all": { ui.shopClosed=ui.shopClosed||{}; const dl=PlannedCookDishes(); const anyOpen=dl.some(n=>!ui.shopClosed[n]); dl.forEach(n=>ui.shopClosed[n]=anyOpen); Render(); break; }
 		case "rec-scale": { const sb=document.querySelector(".sheet-body"); const st=sb?sb.scrollTop:0;
@@ -2320,7 +2546,7 @@ document.addEventListener("click",e=>{
 		/* inventory */
 		case "inv-pri": { const it=InvById(ds.id); if(it){it.pri=!it.pri; Save(); Render()} break; }
 		case "inv-q": { const it=InvById(ds.id); if(it){it.qty=Math.max(0,it.qty+(+ds.dir)); Save(); Render()} break; }
-		case "inv-del": { const arr=state.inventory[ds.loc]; const i=arr.findIndex(x=>x.id===ds.id); if(i>=0)arr.splice(i,1); Save(); Render(); break; }
+		case "inv-del": { const arr=state.inventory[ds.loc]; DeleteWithUndo(arr,arr.findIndex(x=>x.id===ds.id)); break; }
 		case "inv-add": AddPrompt({title:"Añadir a la despensa",fields:[
 			{key:"name",label:"Qué",ph:"p.ej. Salmón"},
 			{key:"qty",label:"Cantidad",type:"number",value:"1"},
@@ -2338,7 +2564,7 @@ document.addEventListener("click",e=>{
 				Save();CloseSheet();Render();Toast("Actualizado")}}); break; }
 		/* produce */
 		case "prod-done": { const p=state.produce.find(x=>x.id===ds.id); if(p){p.done=!p.done; Save(); Render()} break; }
-		case "prod-del": { const i=state.produce.findIndex(x=>x.id===ds.id); if(i>=0)state.produce.splice(i,1); Save(); Render(); break; }
+		case "prod-del": DeleteWithUndo(state.produce,state.produce.findIndex(x=>x.id===ds.id)); break;
 		case "prod-add": AddPrompt({title:"Añadir fruta/verdura",fields:[
 			{key:"name",label:"Qué",ph:"p.ej. Manzana Golden"},
 			{key:"qty",label:"Cantidad",type:"number",value:""},
@@ -2346,7 +2572,7 @@ document.addEventListener("click",e=>{
 		],onSave:v=>{if(!v.name)return Toast("Pon un nombre");const q=parseFloat(v.qty);state.produce.push({id:Uid(),name:v.name,qty:(Number.isFinite(q)&&q>0)?q:null,unit:v.unit||"ud",done:false});Save();CloseSheet();Render()}}); break;
 		/* extras */
 		case "ex-done": { const x=state.extras.find(z=>z.id===ds.id); if(x){x.done=!x.done; Save(); Render()} break; }
-		case "ex-del": { const i=state.extras.findIndex(z=>z.id===ds.id); if(i>=0)state.extras.splice(i,1); Save(); Render(); break; }
+		case "ex-del": DeleteWithUndo(state.extras,state.extras.findIndex(z=>z.id===ds.id)); break;
 		case "ex-add": AddPrompt({title:"Añadir a Otros",fields:[{key:"name",label:"Qué",ph:"p.ej. Papel de horno"}],onSave:v=>{if(!v.name)return;state.extras.push({id:Uid(),name:v.name,done:false});Save();CloseSheet();Render()}}); break;
 		case "need-to-extra": state.extras.push({id:Uid(),name:ds.name,done:false}); Save(); Toast("Movido a Otros"); break;
 		/* ideas */
@@ -2359,12 +2585,26 @@ document.addEventListener("click",e=>{
 			if(d) OpenDish(d.id); else Toast("Este plato no está en el recetario");
 			break; }
 		case "idea-edit": { const d=state.catalog.find(x=>x.id===ds.id); if(d) EditDish(d,d.course); break; }
-		case "idea-del": { const d=state.catalog.find(x=>x.id===ds.id);
-			if(d){ const nm=d.name.trim().toLowerCase();
+		case "idea-del": { const d=state.catalog.find(x=>x.id===ds.id); if(!d) break;
+			const nm=d.name.trim().toLowerCase();
+			const propia=(state.userDishes||[]).find(x=>(x.name||"").trim().toLowerCase()===nm);
+			const quitar=()=>{
+				const hiddenBak=(state.hidden||[]).slice(), userBak=(state.userDishes||[]).slice();
 				(state.hidden=state.hidden||[]).includes(nm)||state.hidden.push(nm);
 				state.userDishes=(state.userDishes||[]).filter(x=>(x.name||"").trim().toLowerCase()!==nm);
-				RefreshCatalog(); }
-			Save(); if(ds.close) CloseSheet(); Render(); Toast("Plato quitado del recetario"); break; }
+				RefreshCatalog(); Save(); if(ds.close) CloseSheet(); Render();
+				ToastAction("Quitado «"+d.name+"» del recetario","Deshacer",()=>{
+					state.hidden=hiddenBak; state.userDishes=userBak;
+					RefreshCatalog(); Save(); Render(); Toast("Restaurado");
+				});
+			};
+			// a dish carrying a recipe YOU wrote is the one thing that can't be rebuilt
+			if(propia && propia.receta){
+				ConfirmSheet({title:"Borrar «"+d.name+"»",
+					text:"Este plato tiene <b>tu receta escrita</b>. Si lo borras, la receta se pierde y no está en ningún otro sitio.",
+					okLabel:"Borrar del recetario", onOk:quitar});
+			} else quitar();
+			break; }
 		case "idea-add": EditDish(null, ds.c||"primero"); break;
 	}
 });

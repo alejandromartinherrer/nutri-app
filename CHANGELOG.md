@@ -1,5 +1,37 @@
 # Changelog
 
+## 1.10.0 — 2026-07-21 (Temas 1 y 3 de la auditoría)
+### Nada se borra sin vuelta atrás (tema 1)
+- **Deshacer en todos los borrados** de despensa, fruta/verdura y otros: el
+  aviso trae un botón «Deshacer» durante 8 s que devuelve el elemento **a su
+  posición exacta**. Antes desaparecía en silencio y para siempre.
+- **Confirmación al borrar un plato con receta tuya escrita** — lo único que no
+  se puede reconstruir. Si no tiene receta propia, se borra con Deshacer.
+- Un aviso normal ya no puede pisar un «Deshacer» que estés a punto de pulsar.
+- **Verbos honestos**: «Quitar» significaba dos cosas opuestas con el mismo
+  rojo. Ahora es «Dejar vacío» (vaciar un hueco) y «Borrar del recetario».
+### Compra y Despensa cierran el círculo (tema 3)
+- **Botón «✅ Ya está en casa»**: al volver del súper, una hoja con todo lo que
+  tachaste, un toque por producto para decir si va al frigo o al congelador, y
+  entra en tu despensa. Los nombres se limpian solos («250 g de lentejas» →
+  «Lentejas»). Al guardar se vacían los tachados de la semana.
+  Antes no existía ningún camino de vuelta: planificar sí descontaba stock, así
+  que la despensa se desfasaba y arrastraba a «ya tienes» y «Sorpréndeme».
+- **Ingredientes escalados de verdad**: la receta es para 2 y coméis 4, o el
+  plato se repite dos días → las cantidades se multiplican. El factor se
+  muestra siempre («para 6 · ×1,5»), nunca es magia silenciosa.
+- **Los tachados se reinician al cambiar de semana**. Antes el lunes abrías con
+  la lista de la semana pasada tachada y mandabas al frutero un pedido
+  incompleto sin enterarte.
+- **«ya tienes» ya no se equivoca**: se compara el sustantivo principal del
+  producto. «Caldo de pollo» dejó de marcar «400 g de pechuga de pollo», y
+  ahora se lee qué producto concreto lo cubre («ya tienes: Caldo de pollo»).
+- **La lista combinada va por pasillos del súper** (fruta y verdura · carne y
+  pescado · frescos · despensa · congelados) en vez de por orden alfabético.
+- **Badge honesto**: contaba 3 cuando quedaban 25 ingredientes por comprar.
+- Renombrada a «🍳 Ingredientes de tus comidas y cenas».
+- Tests: 251 asserts.
+
 ## 1.9.0 — 2026-07-21 (El selector de plato, rehecho — tema 2 de la auditoría)
 ### Nuevo
 - **Chips «¿Para quién?»: Todos · Nosotros · Noah · Iria.** Sustituyen al

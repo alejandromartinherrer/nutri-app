@@ -1,7 +1,7 @@
 // ---- minimal DOM/localStorage stubs ----
 const store={};
 global.localStorage={getItem:k=>k in store?store[k]:null,setItem:(k,v)=>{store[k]=v},removeItem:k=>{delete store[k]}};
-function fakeEl(){return {innerHTML:"",value:"",href:"",style:{},classList:{add(){},remove(){}},focus(){},select(){},setSelectionRange(){},setAttribute(){},getAttribute(){return""},querySelector(){return null},querySelectorAll(){return[]},appendChild(){},set oninput(f){},set onchange(f){},set onclick(f){},onload:null,files:[],click(){}}}
+function fakeEl(){return {innerHTML:"",value:"",href:"",style:{},classList:{add(){},remove(){},contains(){return false},toggle(){}},focus(){},select(){},setSelectionRange(){},setAttribute(){},getAttribute(){return""},querySelector(){return null},querySelectorAll(){return[]},appendChild(){},set oninput(f){},set onchange(f){},set onclick(f){},onload:null,files:[],click(){}}}
 global.document={addEventListener(){},getElementById(){return fakeEl()},createElement(tag){return tag==="canvas"?fakeCanvas():fakeEl()},querySelector(){return fakeEl()},activeElement:null,head:{appendChild(){}},documentElement:{style:{setProperty(){},removeProperty(){}}},body:{appendChild(){},removeChild(){}}};
 global.navigator={};
 global.URL={createObjectURL(){return"blob:"},revokeObjectURL(){}};
@@ -22,7 +22,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml,DeleteWithUndo,ToastAction,Toast,RecipeServings,ServingsNeeded,DishScale,PantryMatch,ResetWeeklyTicks,BoughtForPantry,SaveBackHome,IngShortName,AisleOf,AisleName};\n";
 eval(src);
 const A=global.__api;
 
@@ -326,7 +326,7 @@ const merged=A.MergedIngredients();
 ok(Array.isArray(merged)&&merged.length>0,"MergedIngredients returns a list");
 const lc=merged.map(x=>x.toLowerCase());
 ok(new Set(lc).size===lc.length,"MergedIngredients has no exact duplicates");
-ok(merged.every((x,i)=>i===0||A.IngSortKey(merged[i-1]).localeCompare(A.IngSortKey(x),"es")<=0),"MergedIngredients sorted by noun");
+ok(merged.every((x,i)=>i===0||A.AisleOf(merged[i-1])<A.AisleOf(x)||A.IngSortKey(merged[i-1]).localeCompare(A.IngSortKey(x),"es")<=0),"MergedIngredients sorted by aisle, then noun");
 
 // ==================== 1.5.0: bought checklist + Realfooding ====================
 // bought checklist, per week, keyed by Norm(ingredient)
@@ -527,6 +527,97 @@ ok(A.PickerFreeHtml()==="","coincidencia exacta -> sin boton de texto libre");
 A.picker.search=""; A.picker.tipo=null;
 ok(/data-paction="pchoose"/.test(A.PickerListHtml()),"la lista se pinta por su cuenta");
 A.picker=null;
+
+// ============ 1.10.0: deshacer al borrar + circulo Compra/Despensa ============
+A.state=A.SeedState(); A.RefreshCatalog();
+// --- DeleteWithUndo: quita, y el callback lo devuelve a su sitio ---
+const arrU=[{id:"a",name:"Uno"},{id:"b",name:"Dos"},{id:"c",name:"Tres"}];
+const quitado=A.DeleteWithUndo(arrU,1);
+ok(quitado&&quitado.name==="Dos","DeleteWithUndo devuelve el item quitado");
+ok(arrU.length===2&&arrU.map(x=>x.name).join()==="Uno,Tres","el item desaparece de la lista");
+ok(typeof A.ToastAction==="function","hay mecanismo de deshacer");
+ok(A.DeleteWithUndo(arrU,-1)===null&&A.DeleteWithUndo(arrU,9)===null,"indices invalidos no rompen nada");
+
+// --- escalado por comensales y repeticiones ---
+const wkS2=A.CurWeek();
+A.state.members.forEach(m=>wkS2.days.forEach(d=>{d.slots.Comida[m.id]={dish:"",invId:null,away:false};d.slots.Cena[m.id]={dish:"",invId:null,away:false};}));
+A.state.members.forEach(m=>{wkS2.days[0].slots.Comida[m.id]={dish:"Gazpacho",invId:null,away:false};});
+ok(A.RecipeServings("Gazpacho")===4,"RecipeServings lee las raciones de la receta");
+ok(A.ServingsNeeded("Gazpacho")===3,"ServingsNeeded cuenta los comensales planificados");
+ok(A.DishScale("Gazpacho")===1,"receta para 4 y comen 3 -> no se escala");
+// el mismo plato dos dias: 6 raciones sobre una receta de 4 -> x1,5
+A.state.members.forEach(m=>{wkS2.days[1].slots.Comida[m.id]={dish:"Gazpacho",invId:null,away:false};});
+ok(A.ServingsNeeded("Gazpacho")===6,"cocinarlo dos dias duplica las raciones");
+ok(A.DishScale("Gazpacho")===1.5,"6 raciones sobre receta de 4 -> x1,5");
+const ingEsc=A.IngredientesDe("Gazpacho",A.DishScale("Gazpacho"));
+ok(ingEsc.some(x=>/1½ kg de tomate/.test(x)),"los ingredientes salen escalados (1 kg -> 1½ kg)");
+ok(A.IngredientesDe("Gazpacho").some(x=>/1 kg de tomate/.test(x)),"sin factor, cantidades originales");
+// los 'fuera de casa' no cuentan
+A.state.members.forEach(m=>{wkS2.days[1].slots.Comida[m.id]={dish:"",invId:null,away:true};});
+ok(A.ServingsNeeded("Gazpacho")===3,"fuera de casa no suma raciones");
+
+// --- PantryMatch: palabra completa, y dice QUE producto casa ---
+A.state.inventory.frigo=[{id:"p1",name:"Caldo de pollo",qty:1}];
+A.state.inventory.conge=[];
+ok(A.PantryMatch("400 g de pechuga de pollo")===null,"'Caldo de pollo' ya no marca 'pechuga de pollo'");
+const mm2=A.PantryMatch("200 ml de caldo de pollo");
+ok(mm2&&mm2.name==="Caldo de pollo","casa cuando estan todas sus palabras");
+A.state.inventory.frigo=[{id:"p2",name:"Tomate",qty:2}];
+ok(A.PantryMatch("3 tomates maduros")!==null,"tolera el plural");
+A.state.inventory.frigo=[{id:"p3",name:"Atun",qty:0}];
+ok(A.PantryMatch("2 latas de atun")===null,"cantidad 0 no cuenta");
+
+// --- reinicio semanal de tachados ---
+A.state=A.SeedState(); A.RefreshCatalog();
+A.state.produce.forEach(p=>p.done=true); A.state.extras=[{id:"e1",name:"Papel",done:true}];
+A.state.shopWeek="2020-01-06";
+const limpiados=A.ResetWeeklyTicks();
+ok(limpiados>0,"al cambiar de semana se limpian los tachados");
+ok(A.state.produce.every(p=>!p.done)&&A.state.extras.every(x=>!x.done),"todo queda sin tachar");
+ok(A.state.shopWeek===A.state.current,"se recuerda la semana ya limpiada");
+ok(A.ResetWeeklyTicks()===0,"no vuelve a limpiar en la misma semana");
+
+// --- volver del super: lo comprado entra en la despensa ---
+A.state=A.SeedState(); A.RefreshCatalog();
+const wkH=A.CurWeek();
+A.state.members.forEach(m=>wkH.days.forEach(d=>{d.slots.Comida[m.id]={dish:"",invId:null,away:false};d.slots.Cena[m.id]={dish:"",invId:null,away:false};}));
+wkH.days[0].slots.Comida.nosotros={dish:"Gazpacho",invId:null,away:false};
+const primero=A.MergedIngredients()[0];
+A.ToggleBought(A.Norm(primero));
+A.state.produce[0].done=true;
+const cesta=A.BoughtForPantry();
+ok(cesta.length>=2,"la cesta recoge ingredientes tachados y fruta tachada");
+ok(cesta.every(i=>!/^\d/.test(i.name)),"los nombres van sin cantidad ('250 g de X' -> 'X')");
+ok(A.IngShortName("250 g de lentejas")==="Lentejas","IngShortName limpia y capitaliza");
+ok(A.IngShortName("1½ pepino pequeño")==="Pepino pequeño","IngShortName conserva acentos y ñ");
+ok(A.IngShortName("¾ diente de ajo")==="Ajo","IngShortName quita 'diente de'");
+ok(A.IngShortName("aceitunas (opcional)")==="Aceitunas","IngShortName quita el '(opcional)' final");
+// guardar: entra en la despensa y se limpian los tachados
+A.ui.homePick={}; cesta.forEach(i=>A.ui.homePick[i.name]="frigo");
+const antesFrigo=A.state.inventory.frigo.length;
+A.SaveBackHome();
+ok(A.state.inventory.frigo.length===antesFrigo+cesta.length,"todo lo elegido entra en el frigo");
+ok(Object.keys(A.CurWeek().bought||{}).length===0,"los tachados de la semana se limpian");
+ok(A.state.produce.every(p=>!p.done),"la fruta tachada se limpia");
+// repetir un producto suma cantidad en vez de duplicar la fila
+const nomRep=A.state.inventory.frigo[A.state.inventory.frigo.length-1].name;
+const qtyAntes=A.state.inventory.frigo.find(x=>x.name===nomRep).qty;
+A.ui.homePick={}; A.ui.homePick[nomRep]="frigo";
+A.state.produce.push({id:"px",name:nomRep,qty:1,unit:"ud",done:true});
+A.SaveBackHome();
+ok(A.state.inventory.frigo.find(x=>x.name===nomRep).qty===qtyAntes+1,"un producto repetido suma cantidad");
+
+// --- pasillos del super ---
+ok(A.AisleName(A.AisleOf("3 tomates maduros"))==="Fruta y verdura","tomate -> fruta y verdura");
+ok(A.AisleName(A.AisleOf("2 lomos de salmón"))==="Carne y pescado","salmon -> carne y pescado");
+ok(A.AisleName(A.AisleOf("4 huevos"))==="Frescos y lácteos","huevos -> frescos");
+ok(A.AisleName(A.AisleOf("350 g de lentejas"))==="Despensa","lentejas -> despensa");
+ok(A.AisleName(A.AisleOf("algo rarisimo"))==="Despensa","lo desconocido cae en despensa");
+// la lista combinada sale agrupada por pasillo
+A.state=A.SeedState(); A.RefreshCatalog();
+const mrg=A.MergedIngredients();
+const aisles=mrg.map(A.AisleOf);
+ok(aisles.every((a,i)=>i===0||aisles[i-1]<=a),"la lista combinada va ordenada por pasillo");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);
