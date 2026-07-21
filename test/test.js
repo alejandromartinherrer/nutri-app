@@ -22,7 +22,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui}};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml};\n";
 eval(src);
 const A=global.__api;
 
@@ -490,6 +490,43 @@ A.state.userDishes=[]; A.RefreshCatalog();
 // ResetSeed eliminado del producto
 ok(typeof A.SeedState==="function","SeedState sigue existiendo (uso interno)");
 ok(html.indexOf('data-action="reset"')<0,"la opción de reinicio ya no existe en la UI");
+
+// ============ 1.9.0: selector por zonas + chips de comensal ============
+A.state=A.SeedState(); A.RefreshCatalog();
+const wkPick=A.CurWeek();
+wkPick.days[1].slots.Comida.nosotros={dish:"Lentejas estofadas",invId:null,away:false};
+wkPick.days[1].slots.Comida.noah={dish:"Macarrones con tomate",invId:null,away:false};
+wkPick.days[1].slots.Comida.iria={dish:"Macarrones con tomate",invId:null,away:false};
+A.OpenPicker(1,"Comida",null,true);
+// chips: uno por comensal + "Todos"
+const whoHtml=A.PickerWhoHtml();
+ok((whoHtml.match(/data-paction="pwho"/g)||[]).length===4,"hay un chip por comensal + Todos");
+ok(/data-m=""/.test(whoHtml),"el chip Todos usa data-m vacio");
+A.state.members.forEach(m=>ok(whoHtml.indexOf('data-m="'+m.id+'"')>=0,"chip para "+m.id));
+ok(/class="who on"/.test(whoHtml),"Todos aparece marcado al abrir con applyAll");
+// elegir un comensal concreto recarga SU plato en el composer
+A.picker.applyAll=false; A.picker.member="noah";
+A.PickerLoadComposer();
+ok(A.picker.pri==="Macarrones con tomate","el composer carga el plato del comensal elegido");
+ok(A.PickerTargets().join()==="noah","solo se apunta a ese comensal");
+A.picker.applyAll=true; A.picker.member=null;
+A.PickerLoadComposer();
+ok(A.picker.pri==="Lentejas estofadas","con Todos, el composer usa el primer comensal");
+ok(A.PickerTargets().length===3,"con Todos se apunta a los tres");
+// el chip marcado sigue al estado
+A.picker.applyAll=false; A.picker.member="iria";
+ok(/data-m="iria"[^>]*>/.test(A.PickerWhoHtml().replace(/class="who on" /,'MARK ')) || /who on"[^>]*data-m="iria"/.test(A.PickerWhoHtml()),"el chip activo refleja al comensal");
+// zona de texto libre: pista con buscador vacio, boton al escribir algo nuevo
+A.picker.search="";
+ok(/free-hint/.test(A.PickerFreeHtml()),"buscador vacio -> pista de texto libre");
+A.picker.search="Invento Rarisimo";
+ok(/data-paction="pfree"/.test(A.PickerFreeHtml()),"texto sin coincidencia -> boton de texto libre");
+A.picker.search="Gazpacho"; A.picker.all=true;
+ok(A.PickerFreeHtml()==="","coincidencia exacta -> sin boton de texto libre");
+// la lista se genera sola (zona independiente)
+A.picker.search=""; A.picker.tipo=null;
+ok(/data-paction="pchoose"/.test(A.PickerListHtml()),"la lista se pinta por su cuenta");
+A.picker=null;
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);

@@ -192,7 +192,8 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 	background:var(--card);border-radius:20px 20px 0 0;
 	box-shadow:var(--sh-pop);
 	transform:translateY(100%);transition:transform .26s cubic-bezier(.2,.8,.2,1);
-	max-height:88vh;max-height:88dvh;   /* dvh: correct under iOS dynamic toolbar */
+	bottom:var(--kb,0px);               /* --kb = keyboard height, set from visualViewport */
+	max-height:88vh;max-height:calc(88dvh - var(--kb,0px));
 	display:flex;flex-direction:column;overflow:hidden;
 	padding-bottom:env(safe-area-inset-bottom);
 }
@@ -219,6 +220,13 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .pick-list{display:flex;flex-direction:column;gap:1px;margin-top:4px}
 .pick{display:flex;align-items:center;gap:10px;padding:11px 4px;border-top:1px solid var(--line2);text-align:left;width:100%}
 .pick .nm{flex:1;font-size:15px;font-weight:600}
+/* picker: who is this dish for */
+.who-chips{display:flex;flex-wrap:wrap;gap:7px;margin:2px 0 4px}
+.who{flex:1 1 auto;min-width:70px;min-height:44px;padding:11px 12px;border-radius:11px;border:1.5px solid var(--line);
+	background:var(--bg);color:var(--muted);font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer}
+.who.on{background:var(--aub);border-color:var(--aub);color:#fff}
+.cm-hint{font-size:12.5px;color:var(--muted);margin:8px 2px 0;font-weight:600}
+.free-hint{font-size:12.5px;color:var(--muted);margin:10px 2px 0;font-weight:600;opacity:.8}
 .pick.free{background:var(--aub-soft);border-radius:11px;border-top:0;padding:11px 12px;margin:10px 0 0}
 .pick.free .nm{color:var(--aub-2)}
 .pick .ti{font-size:10.5px;font-weight:800;color:var(--aub-2);background:var(--aub-soft);padding:3px 8px;border-radius:20px;white-space:nowrap}
@@ -382,7 +390,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.8.0";
+const APP_VERSION = "1.9.0";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -1395,17 +1403,26 @@ function PickerCandidates(){
 	items.sort((a,b)=>a.name.localeCompare(b.name,"es"));
 	return items;
 }
-function RenderPicker(){
-	const wk=CurWeek(); const d=wk.days[picker.dayIdx];
-	const who = picker.applyAll? "Para todos" : (Member(picker.member)?.name||"");
-	const items=PickerCandidates();
+/* The picker is the most-used sheet in the app, so it renders in ZONES instead of
+   rebuilding its innerHTML on every keystroke: #pickSearch is never destroyed, so
+   the iOS keyboard does not flicker, autocorrect/dictation survive and the scroll
+   position stays put while you type. */
+function PickerWhoHtml(){
+	const chips=[{id:"",label:"Todos"}].concat(state.members.map(m=>({id:m.id,label:m.name})));
+	return `<div class="who-chips">${chips.map(c=>{
+		const on = c.id? (!picker.applyAll && picker.member===c.id) : picker.applyAll;
+		return `<button class="who ${on?'on':''}" data-paction="pwho" data-m="${c.id}">${escapeHtml(c.label)}</button>`;
+	}).join("")}</div>`;
+}
+function PickerComposerHtml(){
 	const isComposite = picker.slot==="Comida" || picker.slot==="Cena";
+	if(!isComposite) return "";
 	const isComida = picker.slot==="Comida";
-	const courseTabs = "";
 	const k1 = isComida?"1º":"1", k2 = isComida?"2º":"2";
 	const ph1 = isComida?"elige primero":"elige plato";
-	const composerHtml = isComposite ? `
-		<div class="composer">
+	const hint = (picker.pri && !picker.seg)
+		? `<div class="cm-hint">Elige un ${k2} si quieres, o pulsa <b>Guardar ✓</b></div>` : "";
+	return `<div class="composer">
 			<button class="cm-slot ${picker.sub==='pri'?'on':''}" data-paction="psub" data-c="pri">
 				<span class="cm-k">${k1}</span>
 				<span class="cm-v ${picker.pri?'':'ph'}">${picker.pri?escapeHtml(picker.pri):ph1}</span>
@@ -1416,9 +1433,16 @@ function RenderPicker(){
 				<span class="cm-v ${picker.seg?'':'ph'}">${picker.seg?escapeHtml(picker.seg):'opcional'}</span>
 				${picker.seg?`<span class="cm-x" data-paction="pclrsub" data-c="seg">✕</span>`:''}
 			</button>
-		</div>` : "";
-	const baseLab = isComposite ? (isComida ? (picker.sub==="pri"?"Primeros":"Segundos") : "Cenas") : "Del recetario";
-	const recLab = picker.all ? "Todo el recetario" : baseLab;
+		</div>${hint}`;
+}
+function PickerBaseLab(){
+	const isComposite = picker.slot==="Comida" || picker.slot==="Cena";
+	if(!isComposite) return "Del recetario";
+	return picker.slot==="Comida" ? (picker.sub==="pri"?"Primeros":"Segundos") : "Cenas";
+}
+function PickerFiltersHtml(){
+	const isComposite = picker.slot==="Comida" || picker.slot==="Cena";
+	const baseLab=PickerBaseLab();
 	const scopeChips = isComposite ? `<div class="fchips" style="padding:12px 0 0">
 		<button class="fchip ${!picker.all?'on':''}" data-paction="pall" data-v="0">Solo ${baseLab.toLowerCase()}</button>
 		<button class="fchip ${picker.all?'on':''}" data-paction="pall" data-v="1">Todas las categorías</button>
@@ -1428,6 +1452,60 @@ function RenderPicker(){
 		<button class="fchip ${!picker.tipo?'on':''}" data-paction="ptipo" data-t="">Todos</button>
 		${tipos.map(t=>`<button class="fchip ${picker.tipo===t?'on':''}" data-paction="ptipo" data-t="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("")}
 	</div>`;
+	return scopeChips+tipoChips+`<div class="lab">${picker.all?"Todo el recetario":baseLab}</div>`;
+}
+function PickerFreeHtml(){
+	const q=picker.search.trim();
+	if(!q) return `<div class="free-hint">➕ ¿No está en la lista? Escríbelo y se usa tal cual.</div>`;
+	const exact=PickerCandidates().some(c=>c.name.trim().toLowerCase()===q.toLowerCase());
+	if(exact) return "";
+	return `<button class="pick free" data-paction="pfree" data-name="${escapeHtml(q)}">
+			<span class="nm">➕ Usar «${escapeHtml(q)}» tal cual</span>
+			<span class="ti">texto libre</span>
+		</button>`;
+}
+function PickerListHtml(){
+	const items=PickerCandidates();
+	if(!items.length) return `<div class="empty-msg">${picker.search.trim()?"Sin coincidencias en el recetario.":"Nada aquí todavía."}</div>`;
+	return items.map(c=>`
+		<button class="pick" data-paction="pchoose" data-name="${escapeHtml(c.name)}">
+			<span class="nm">${escapeHtml(c.name)}</span>
+			${c.tipo?`<span class="ti">${escapeHtml(c.tipo)}</span>`:''}
+		</button>`).join("");
+}
+/* zone painters — these never touch #pickSearch */
+function PaintPickerHead(){
+	const w=document.getElementById("pickWho"); if(w) w.innerHTML=PickerWhoHtml();
+	const c=document.getElementById("pickComposer"); if(c) c.innerHTML=PickerComposerHtml();
+}
+function PaintPickerFilters(){
+	const f=document.getElementById("pickFilters"); if(f) f.innerHTML=PickerFiltersHtml();
+}
+function PaintPickerList(){
+	const fr=document.getElementById("pickFree"); if(fr) fr.innerHTML=PickerFreeHtml();
+	const l=document.getElementById("pickList"); if(l) l.innerHTML=PickerListHtml();
+}
+/* after choosing a dish: repaint everything except the input and go back to the
+   top, where the composer and the Guardar button are waiting */
+function PaintPickerAfterChoice(){
+	PaintPickerHead(); PaintPickerFilters(); PaintPickerList();
+	const sb=document.querySelector(".sheet-body"); if(sb) sb.scrollTop=0;
+}
+/* re-read the composer from whichever member is targeted now */
+function PickerLoadComposer(){
+	if(picker.slot!=="Comida" && picker.slot!=="Cena") return;
+	const cellSlot=CurWeek().days[picker.dayIdx].slots[picker.slot];
+	const ref = picker.member? cellSlot[picker.member] : cellSlot[state.members[0].id];
+	const parts=(ref&&ref.dish?ref.dish:"").split(SEP).map(s=>s.trim());
+	picker.pri=parts[0]||null;
+	picker.seg=parts[1]||null;
+	picker.invId=(ref&&ref.invId)||null;
+	picker.sub="pri";
+}
+function RenderPicker(){
+	const wk=CurWeek(); const d=wk.days[picker.dayIdx];
+	const isComposite = picker.slot==="Comida" || picker.slot==="Cena";
+	const isComida = picker.slot==="Comida";
 
 	// inventory chips (priority/oldest first)
 	const inv=[...state.inventory.frigo.map(i=>({...i,loc:"frigo"})),...state.inventory.conge.map(i=>({...i,loc:"conge"}))]
@@ -1437,19 +1515,6 @@ function RenderPicker(){
 		<div class="inv-row">${inv.map(i=>`<button class="inv-chip ${i.loc==='frigo'?'fridge':''}" data-paction="pinv" data-id="${i.id}">
 			${i.loc==='frigo'?'🧊':'❄️'} ${escapeHtml(i.name)} <span class="q">×${i.qty}</span></button>`).join("")}</div>`:"";
 
-	const q=picker.search.trim();
-	const exact=q && items.some(c=>c.name.trim().toLowerCase()===q.toLowerCase());
-	const freeHtml = (q && !exact)? `
-		<button class="pick free" data-paction="pfree" data-name="${escapeHtml(q)}">
-			<span class="nm">➕ Usar «${escapeHtml(q)}» tal cual</span>
-			<span class="ti">texto libre</span>
-		</button>` : "";
-	const listHtml = items.length? items.map(c=>`
-		<button class="pick" data-paction="pchoose" data-name="${escapeHtml(c.name)}">
-			<span class="nm">${escapeHtml(c.name)}</span>
-			${c.tipo?`<span class="ti">${escapeHtml(c.tipo)}</span>`:''}
-		</button>`).join("") : `<div class="empty-msg">${q?"Sin coincidencias en el recetario.":"Nada aquí todavía."}</div>`;
-
 	document.getElementById("sheetContent").innerHTML = `
 		<div class="grip"></div>
 		<div class="sheet-h">
@@ -1457,15 +1522,12 @@ function RenderPicker(){
 			<div class="x" data-action="close-sheet">✕</div>
 		</div>
 		<div class="sheet-body">
-			<div class="toggle" data-paction="ptoggle-all">
-				<div class="tl">Aplicar a todos<br><span style="font-weight:500;color:var(--muted);font-size:12px">${who}</span></div>
-				<div class="sw ${picker.applyAll?'on':''}"></div>
-			</div>
-			${composerHtml}
-			<input class="field" id="pickSearch" placeholder="Buscar o escribir plato…" value="${escapeHtml(picker.search)}" style="margin-top:12px">
-			${freeHtml}
-			${scopeChips}
-			${courseTabs}
+			<div class="lab" style="margin-top:0">¿Para quién?</div>
+			<div id="pickWho">${PickerWhoHtml()}</div>
+			<div id="pickComposer">${PickerComposerHtml()}</div>
+			<input class="field" id="pickSearch" placeholder="Buscar o escribir plato…" value="${escapeHtml(picker.search)}"
+				autocomplete="off" autocorrect="off" enterkeyhint="done" style="margin-top:12px">
+			<div id="pickFree">${PickerFreeHtml()}</div>
 			<div class="pick-actions">
 				${isComposite?`<button class="btn prim" data-paction="psave" style="width:100%">Guardar ${isComida?"comida":"cena"} ✓</button>`:''}
 				<div class="act-row">
@@ -1474,16 +1536,11 @@ function RenderPicker(){
 				</div>
 			</div>
 			${invHtml}
-			${tipoChips}
-			<div class="lab">${recLab}</div>
-			<div class="pick-list">${listHtml}</div>
+			<div id="pickFilters">${PickerFiltersHtml()}</div>
+			<div class="pick-list" id="pickList">${PickerListHtml()}</div>
 		</div>`;
 	const s=document.getElementById("pickSearch");
-	if(s) s.oninput=e=>{
-		picker.search=e.target.value; const pos=e.target.selectionStart;
-		RenderPicker(); const s2=document.getElementById("pickSearch");
-		if(s2){s2.focus();try{s2.setSelectionRange(pos,pos)}catch(_){}}
-	};
+	if(s) s.oninput=e=>{ picker.search=e.target.value; PaintPickerList(); };   // the input survives
 }
 function PickerCandidatesAllTipos(){
 	let items=state.catalog.slice();
@@ -2317,23 +2374,22 @@ document.addEventListener("click",e=>{
 	const t=e.target.closest("[data-paction]"); if(!t||!picker) return;
 	const a=t.dataset.paction, ds=t.dataset;
 	switch(a){
-		case "ptoggle-all": picker.applyAll=!picker.applyAll;
-			// turning it off with no member (opened via "para todos") must pick a real one
-			if(!picker.applyAll && !state.members.some(m=>m.id===picker.member)) picker.member=state.members[0].id;
-			RenderPicker(); break;
-		case "pcourse": picker.course=ds.c; picker.tipo=null; RenderPicker(); break;
-		case "psub": picker.sub=ds.c; picker.tipo=null; RenderPicker(); break;
-		case "pclrsub": picker[ds.c]=null; RenderPicker(); break;
-		case "ptipo": picker.tipo=ds.t||null; RenderPicker(); break;
-		case "pall": picker.all=ds.v==="1"; picker.tipo=null; RenderPicker(); break;
+		// who the dish is for: "" = everyone. Replaces the old on/off switch, which
+		// could leave member=null and had no way to target just one person.
+		case "pwho": { picker.applyAll = ds.m===""; picker.member = ds.m || null;
+			PickerLoadComposer(); PaintPickerHead(); PaintPickerFilters(); PaintPickerList(); break; }
+		case "psub": picker.sub=ds.c; picker.tipo=null; PaintPickerHead(); PaintPickerFilters(); PaintPickerList(); break;
+		case "pclrsub": picker[ds.c]=null; PaintPickerHead(); break;
+		case "ptipo": picker.tipo=ds.t||null; PaintPickerFilters(); PaintPickerList(); break;
+		case "pall": picker.all=ds.v==="1"; picker.tipo=null; PaintPickerFilters(); PaintPickerList(); break;
 		case "pinv": { const it=InvById(ds.id); if(!it) break;
-			if(picker.slot==="Comida"||picker.slot==="Cena"){ picker[picker.sub]=it.name; picker.invId=it.id; if(picker.sub==="pri")picker.sub="seg"; RenderPicker(); }
+			if(picker.slot==="Comida"||picker.slot==="Cena"){ picker[picker.sub]=it.name; picker.invId=it.id; if(picker.sub==="pri")picker.sub="seg"; PaintPickerAfterChoice(); }
 			else ApplyDish(it.name,it.id); break; }
 		case "pchoose":
-			if(picker.slot==="Comida"||picker.slot==="Cena"){ picker[picker.sub]=ds.name; if(picker.sub==="pri")picker.sub="seg"; RenderPicker(); }
+			if(picker.slot==="Comida"||picker.slot==="Cena"){ picker[picker.sub]=ds.name; if(picker.sub==="pri")picker.sub="seg"; PaintPickerAfterChoice(); }
 			else ApplyDish(ds.name,null); break;
 		case "pfree":   // free text: same as choosing, but clears the search box
-			if(picker.slot==="Comida"||picker.slot==="Cena"){ picker[picker.sub]=ds.name; picker.search=""; if(picker.sub==="pri")picker.sub="seg"; RenderPicker(); }
+			if(picker.slot==="Comida"||picker.slot==="Cena"){ picker[picker.sub]=ds.name; picker.search=""; const si=document.getElementById("pickSearch"); if(si) si.value=""; if(picker.sub==="pri")picker.sub="seg"; PaintPickerAfterChoice(); }
 			else ApplyDish(ds.name,null); break;
 		case "psave": SaveComida(); break;
 		case "paway": SetAway(); break;
@@ -2350,8 +2406,9 @@ document.addEventListener("keydown",e=>{
 		const v=document.activeElement.value.trim(); if(!v) return;
 		if(picker.slot==="Comida"||picker.slot==="Cena"){
 			picker[picker.sub]=v; picker.search="";
+			document.activeElement.value="";           // the input stays alive: keyboard doesn't drop
 			if(picker.sub==="pri")picker.sub="seg";
-			RenderPicker(); const s=document.getElementById("pickSearch"); if(s)s.focus();
+			PaintPickerAfterChoice();
 		} else ApplyDish(v,null);
 	}
 });
@@ -2373,6 +2430,14 @@ document.addEventListener("keydown",e=>{
 	EnsureWeek(state.current);
 	SaveQuiet(); Render();
 	CloudPullOnBoot();               // async, never blocks offline start
+	/* Expose the on-screen keyboard height as --kb so bottom sheets sit ON TOP of
+	   it instead of hiding behind it (iOS doesn't shrink the layout viewport). */
+	const vv=window.visualViewport;
+	if(vv){
+		const upd=()=>document.documentElement.style.setProperty("--kb",
+			Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop))+"px");
+		vv.addEventListener("resize",upd); vv.addEventListener("scroll",upd); upd();
+	}
 	// coming back to the PWA after midnight / days later must not leave you in the past
 	document.addEventListener("visibilitychange",()=>{
 		if(document.visibilityState!=="visible") return;

@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.9.0 — 2026-07-21 (El selector de plato, rehecho — tema 2 de la auditoría)
+### Nuevo
+- **Chips «¿Para quién?»: Todos · Nosotros · Noah · Iria.** Sustituyen al
+  interruptor «Aplicar a todos». Antes, si los tres comían lo mismo **no había
+  forma de cambiar solo el plato de Iria**: la fila abría siempre en modo «para
+  todos» y al apagar el interruptor caías en «Nosotros». Ahora eliges el
+  comensal de un toque y el composer carga **su** plato actual.
+- **Pista tras elegir el 1º**: «Elige un 2º si quieres, o pulsa Guardar ✓».
+  La diferencia entre Desayuno (un toque) y Comida/Cena (componer + guardar)
+  ya no hay que adivinarla.
+- **Pista de texto libre siempre visible**: con el buscador vacío se lee
+  «➕ ¿No está en la lista? Escríbelo y se usa tal cual».
+### Corregido
+- **El buscador ya no se destruye al teclear.** El selector se redibuja **por
+  zonas**: al escribir solo se repinta la lista, no la hoja entera. El teclado
+  del iPhone deja de parpadear, sobreviven autocorrector y dictado, y **el
+  scroll se queda donde estaba** (verificado: 250 px → 250 px).
+- **La hoja se apoya sobre el teclado** en vez de esconderse detrás: la altura
+  del teclado se expone como `--kb` desde `visualViewport` y el sheet la
+  descuenta. Antes quedaban ~250 px útiles con todo lo buscado tapado.
+- Al elegir un plato, la hoja vuelve arriba, que es donde están el composer y
+  el botón Guardar.
+
 ## 1.8.0 — 2026-07-21 (Primera tanda de la auditoría UX)
 ### Nuevo
 - **La app abre siempre en la semana de hoy, con solo el día de hoy desplegado.**
