@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-21T05:44:21.920Z",
+ "savedAt": "2026-07-21T05:46:13.704Z",
  "state": {
   "members": [
    {
@@ -969,7 +969,7 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Atún Wow",
+         "dish": "Atun Wow",
          "invId": null,
          "away": false
         },
@@ -1226,8 +1226,8 @@
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-21T05:44:21.920Z",
-  "lastSync": "2026-07-20T22:31:29.733Z",
+  "updatedAt": "2026-07-21T05:46:13.704Z",
+  "lastSync": "2026-07-21T05:45:31.342Z",
   "theme": "fresco",
   "hideDesAlm": true
  }
