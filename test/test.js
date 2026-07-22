@@ -1,12 +1,12 @@
 // ---- minimal DOM/localStorage stubs ----
 const store={};
 global.localStorage={getItem:k=>k in store?store[k]:null,setItem:(k,v)=>{store[k]=v},removeItem:k=>{delete store[k]}};
-function fakeEl(){return {innerHTML:"",value:"",href:"",style:{},classList:{add(){},remove(){},contains(){return false},toggle(){}},focus(){},select(){},setSelectionRange(){},setAttribute(){},getAttribute(){return""},querySelector(){return null},querySelectorAll(){return[]},appendChild(){},set oninput(f){},set onchange(f){},set onclick(f){},onload:null,files:[],click(){}}}
-global.document={addEventListener(){},getElementById(){return fakeEl()},createElement(tag){return tag==="canvas"?fakeCanvas():fakeEl()},querySelector(){return fakeEl()},activeElement:null,head:{appendChild(){}},documentElement:{style:{setProperty(){},removeProperty(){}}},body:{appendChild(){},removeChild(){}}};
+function fakeEl(){return {innerHTML:"",value:"",href:"",style:{},dataset:{},classList:{add(){},remove(){},contains(){return false},toggle(){}},focus(){},select(){},setSelectionRange(){},setAttribute(){},getAttribute(){return""},querySelector(){return null},querySelectorAll(){return[]},appendChild(){},addEventListener(){},removeEventListener(){},set oninput(f){},set onchange(f){},set onclick(f){},onload:null,files:[],click(){}}}
+global.document={addEventListener(){},getElementById(){return fakeEl()},createElement(tag){return tag==="canvas"?fakeCanvas():fakeEl()},querySelector(){return fakeEl()},activeElement:null,head:{appendChild(){}},documentElement:{style:{setProperty(){},removeProperty(){}},classList:{add(){},remove(){},contains(){return false},toggle(){}},setAttribute(){},removeAttribute(){},dataset:{}},body:{appendChild(){},removeChild(){},dataset:{},classList:{add(){},remove(){},contains(){return false}}}};
 global.navigator={};
 global.URL={createObjectURL(){return"blob:"},revokeObjectURL(){}};
 global.Blob=function(){};global.FileReader=function(){};
-global.window={};
+global.window={addEventListener(){},removeEventListener(){},innerHeight:812};
 global.getComputedStyle=()=>({getPropertyValue:()=>""});
 function fakeCtx(){return {set font(v){},set fillStyle(v){},set strokeStyle(v){},set lineWidth(v){},set textBaseline(v){},set textAlign(v){},measureText:t=>({width:String(t).length*16}),fillRect(){},strokeRect(){},beginPath(){},moveTo(){},lineTo(){},arcTo(){},arc(){},closePath(){},fill(){},stroke(){},fillText(){}}}
 function fakeCanvas(){return {width:0,height:0,getContext(){return fakeCtx()},toDataURL(){return"data:image/png;base64,AAAA"}}}
@@ -22,7 +22,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml,DeleteWithUndo,ToastAction,Toast,RecipeServings,ServingsNeeded,DishScale,PantryMatch,ResetWeeklyTicks,BoughtForPantry,SaveBackHome,IngShortName,AisleOf,AisleName};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml,DeleteWithUndo,ToastAction,Toast,RecipeServings,ServingsNeeded,DishScale,PantryMatch,ResetWeeklyTicks,BoughtForPantry,SaveBackHome,IngShortName,AisleOf,AisleName,PlannedLabel,TipoFamily,Surprise,UndoSurprise,SurpriseAgain,AssignDishTo,DoCopyDay,DishWhenHtml,THEMES};\n";
 eval(src);
 const A=global.__api;
 
@@ -618,6 +618,74 @@ A.state=A.SeedState(); A.RefreshCatalog();
 const mrg=A.MergedIngredients();
 const aisles=mrg.map(A.AisleOf);
 ok(aisles.every((a,i)=>i===0||aisles[i-1]<=a),"la lista combinada va ordenada por pasillo");
+
+// ============ 1.12.0: contador honesto, sorpresa reversible, copiar dia, temas ============
+A.state=A.SeedState(); A.RefreshCatalog();
+// --- contador: huecos, no comensales; respeta lo que se ve ---
+const wkC=A.GoToThisWeek();
+A.state.members.forEach(m=>wkC.days.forEach(d=>A.SLOTS.forEach(s=>{d.slots[s][m.id]={dish:"",invId:null,away:false}})));
+A.state.hideDesAlm=true;
+ok(A.CountPlanned().total===14,"solo comidas y cenas visibles -> 14 huecos");
+ok(A.CountPlanned().done===0,"semana vacia -> 0 planificados");
+ok(A.PlannedLabel()==="0 de 14 comidas y cenas","etiqueta con denominador");
+A.state.members.forEach(m=>{wkC.days[0].slots.Comida[m.id]={dish:"Gazpacho",invId:null,away:false}});
+ok(A.CountPlanned().done===1,"un hueco con 3 comensales cuenta UNA vez");
+// 'fuera de casa' no cuenta como planificado
+A.state.members.forEach(m=>{wkC.days[1].slots.Cena[m.id]={dish:"",invId:null,away:true}});
+ok(A.CountPlanned().done===1,"'fuera de casa' no cuenta como planificado");
+A.state.hideDesAlm=false;
+ok(A.CountPlanned().total===28,"al mostrar desayunos/almuerzos el total sube a 28");
+A.state.hideDesAlm=true;
+// semana completa
+A.state.members.forEach(m=>wkC.days.forEach(d=>{d.slots.Comida[m.id]={dish:"Gazpacho",invId:null,away:false};d.slots.Cena[m.id]={dish:"Gazpacho",invId:null,away:false}}));
+ok(/completa/.test(A.PlannedLabel()),"semana llena -> 'semana completa'");
+
+// --- Sorprendeme reversible ---
+A.state=A.SeedState(); A.RefreshCatalog();
+const wkSu=A.GoToThisWeek();
+A.state.members.forEach(m=>wkSu.days.forEach(d=>{d.slots.Comida[m.id]={dish:"",invId:null,away:false};d.slots.Cena[m.id]={dish:"",invId:null,away:false}}));
+A.state.members.forEach(m=>{wkSu.days[0].slots.Comida[m.id]={dish:"Mi plato a mano",invId:null,away:false}});
+const antesSu=A.CountPlanned().done;
+A.Surprise();
+const trasSu=A.CountPlanned().done;
+ok(trasSu>antesSu,"Sorprendeme rellena huecos");
+ok(A.CurWeek().days[0].slots.Comida.nosotros.dish==="Mi plato a mano","no pisa lo puesto a mano");
+A.UndoSurprise();
+ok(A.CountPlanned().done===antesSu,"Deshacer devuelve la semana a como estaba");
+ok(A.CurWeek().days[0].slots.Comida.nosotros.dish==="Mi plato a mano","y conserva lo manual");
+A.Surprise(); const tras2=A.CountPlanned().done;
+A.SurpriseAgain();
+ok(A.CountPlanned().done===tras2,"'otra vez' deshace y vuelve a tirar (mismo numero de huecos)");
+A.UndoSurprise();
+
+// --- planificar desde la ficha / copiar dia ---
+A.state=A.SeedState(); A.RefreshCatalog();
+const wkA=A.GoToThisWeek();
+A.state.members.forEach(m=>wkA.days.forEach(d=>{d.slots.Comida[m.id]={dish:"",invId:null,away:false};d.slots.Cena[m.id]={dish:"",invId:null,away:false}}));
+ok(A.AssignDishTo(2,"Cena","Gazpacho")===true,"AssignDishTo coloca el plato");
+ok(A.state.members.every(m=>A.CurWeek().days[2].slots.Cena[m.id].dish==="Gazpacho"),"lo pone para todos");
+ok(!("null" in A.CurWeek().days[2].slots.Cena),"sin miembro fantasma");
+ok(/Ya esta semana/.test(A.DishWhenHtml("Gazpacho")),"la ficha dice donde esta planificado");
+ok(A.DishWhenHtml("Plato Que No Existe")==="","si no esta planificado, no muestra nada");
+// copiar el dia 2 al 3 y al 4
+A.state.members.forEach(m=>{wkA.days[2].slots.Comida[m.id]={dish:"Lentejas estofadas",invId:null,away:false}});
+A.ui.copyPick={}; A.ui.copyPick[wkA.days[3].date]=true; A.ui.copyPick[wkA.days[4].date]=true;
+A.DoCopyDay(2);
+ok(A.CurWeek().days[3].slots.Comida.nosotros.dish==="Lentejas estofadas"&&A.CurWeek().days[3].slots.Cena.nosotros.dish==="Gazpacho","copia comida y cena al dia elegido");
+ok(A.CurWeek().days[4].slots.Comida.nosotros.dish==="Lentejas estofadas","copia a varios dias a la vez");
+ok(A.CurWeek().days[5].slots.Comida.nosotros.dish==="","no toca los dias no elegidos");
+
+// --- temas: la bandera dark existe y los colores de grupo son 6 familias ---
+ok(A.THEMES.noche.dark===true,"el tema Noche declara que es oscuro");
+ok(Object.keys(A.THEMES).every(k=>k==="noche"||!A.THEMES[k].dark),"los demas temas son claros");
+const fam=A.TipoFamily("Legumbres");
+ok(fam&&fam.bg&&fam.ink,"cada grupo tiene fondo suave y tinta oscura");
+ok(A.TipoFamily("Verduras").dot===A.TipoFamily("Ensaladas").dot,"verduras y ensaladas comparten familia");
+ok(A.TipoFamily("Pescado").dot!==A.TipoFamily("Pollo").dot,"pescado y pollo se distinguen");
+ok(A.TipoFamily("Legumbres").dot!==A.TipoFamily("Pasta").dot,"legumbres y pasta ya NO son el mismo marron");
+const familias=new Set(["Legumbres","Verduras","Pasta","Pescado","Pollo","Huevos"].map(t=>A.TipoFamily(t).dot));
+ok(familias.size===6,"seis familias realmente distintas");
+ok(A.TipoFamily("Inventado").dot,"un tipo desconocido tiene color de reserva");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);

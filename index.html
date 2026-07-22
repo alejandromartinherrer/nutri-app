@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -25,8 +25,31 @@
 	--sh-pop:0 8px 40px rgba(36,27,46,.22);
 	--ff:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
-/* no double-tap zoom (still allows scroll); belt & braces with the viewport meta */
+/* no double-tap zoom (still allows scroll); pinch-to-zoom stays available */
 html{touch-action:manipulation}
+/* Surfaces that used to be hardcoded light. THEMES sets its vars inline on
+   :root, so these live in classes instead — that's why the dark flag works. */
+:root{
+	--surface-nav:rgba(255,255,255,.92);
+	--field-focus:#FFFFFF;
+	--track:#cdbfca;          /* switch track when off */
+	--faint:#e0d8de;          /* grip, hairlines */
+	--ghost-bg:#FFFFFF;       /* secondary buttons */
+	--del-ink:#c6bcc4;        /* trash icons */
+}
+:root.dark{
+	--surface-nav:rgba(22,27,31,.94);
+	--field-focus:#232B31;
+	--track:#3A444C;
+	--faint:#39434A;
+	--ghost-bg:#232B31;
+	--del-ink:#7C888F;
+	--amber:#E39B5C;
+	--red:#E2726F;
+}
+/* text size escape hatch: pinch works again, and this scales the whole UI */
+:root[data-txt="grande"]{zoom:1.12}
+:root[data-txt="enorme"]{zoom:1.26}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
 body{
@@ -98,7 +121,9 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .rows{display:flex;flex-direction:column;gap:5px}
 .row-all,.row-m{display:flex;align-items:center;gap:9px;min-height:44px;border-radius:var(--r-sm);padding:7px 8px;background:var(--line2)}
 .row-all{background:var(--aub-soft)}
-.tag{font-size:10px;font-weight:800;letter-spacing:.04em;padding:2px 8px;border-radius:20px;color:#fff;white-space:nowrap;flex-shrink:0}
+/* the member pill is a label, not the content: it must not outshout the dish */
+.tag{font-size:10.5px;font-weight:700;letter-spacing:.02em;padding:2px 8px;border-radius:20px;color:#fff;white-space:nowrap;flex-shrink:0;opacity:.92}
+.tdot.more{background:var(--line);color:var(--muted)}
 .tag.all{background:var(--aub)}
 .tag.m{text-align:center}
 .dish{flex:1;font-size:15.5px;font-weight:600;white-space:pre-wrap;line-height:1.3}
@@ -113,8 +138,8 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .search-note{font-size:12.5px;color:var(--muted);margin:0 2px 12px;font-weight:600}
 .lnk{background:none;border:0;color:var(--aub);font-weight:800;font-family:inherit;font-size:12.5px;cursor:pointer;padding:6px 4px;margin:-6px 0}
 .tipo-tags{display:inline-flex;flex-wrap:wrap;gap:4px;margin-left:6px;vertical-align:middle}
-.tipo-tag{font-size:9.5px;font-weight:800;color:#fff;padding:1px 7px;border-radius:20px;letter-spacing:.02em;white-space:nowrap}
-.tdot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.tipo-tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.01em;white-space:nowrap}
+.tdot{width:14px;height:14px;border-radius:50%;display:inline-grid;place-items:center;color:#fff;font-size:8.5px;font-weight:800;line-height:1}
 .away{color:var(--muted);font-size:13px;font-weight:700}
 .add-slot{color:var(--aub-2);font-weight:800;font-size:13px;padding:6px 8px}
 
@@ -136,7 +161,7 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .stepper button{width:40px;height:44px;font-size:18px;font-weight:700;color:var(--aub);display:grid;place-items:center}
 .stepper button:active{background:var(--aub-soft)}
 .stepper .q{min-width:30px;text-align:center;font-weight:800;font-size:14px}
-.del{width:44px;height:44px;border-radius:8px;display:grid;place-items:center;color:#c6bcc4;font-size:15px;flex-shrink:0;margin-right:-8px}
+.del{width:44px;height:44px;border-radius:8px;display:grid;place-items:center;color:var(--del-ink);font-size:15px;flex-shrink:0;margin-right:-8px}
 .del:active{background:#f6eef3;color:var(--red)}
 .check{width:26px;height:26px;border-radius:7px;border:2px solid var(--line);flex-shrink:0;display:grid;place-items:center;font-size:14px;color:#fff;position:relative}
 /* invisible 44px hit area around the 26px box: full target, same drawing */
@@ -174,7 +199,7 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 /* ---------- bottom nav ---------- */
 .nav{
 	position:fixed;left:0;right:0;bottom:0;z-index:30;
-	background:rgba(255,255,255,.92);backdrop-filter:saturate(160%) blur(14px);
+	background:var(--surface-nav);backdrop-filter:saturate(160%) blur(14px);
 	border-top:1px solid var(--line);
 	display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom));
 	max-width:520px;margin:0 auto;
@@ -202,24 +227,62 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
    the bottom of the phone screen with no way to scroll */
 #sheetContent{display:flex;flex-direction:column;min-height:0;flex:1}
 .sheet.show{transform:translateY(0)}
-.grip{width:38px;height:4px;border-radius:4px;background:#e0d8de;margin:9px auto 4px}
+.grip{width:38px;height:4px;border-radius:4px;background:var(--faint);margin:9px auto 4px}
 .sheet-h{padding:4px 16px 10px;display:flex;align-items:flex-end;gap:8px;border-bottom:1px solid var(--line2)}
 .sheet-h .t1{font-size:18px;font-weight:800;letter-spacing:-.01em}
 .sheet-h .t2{font-size:12px;color:var(--muted);font-weight:600;margin-top:1px}
 .sheet-h .x{margin-left:auto;width:32px;height:32px;border-radius:9px;background:var(--bg);display:grid;place-items:center;font-size:16px;color:var(--muted)}
 .sheet-body{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:12px 16px 24px}
 .field{width:100%;height:44px;border:1.5px solid var(--line);border-radius:11px;padding:0 13px;background:var(--bg);outline:none}
-.field:focus{border-color:var(--aub);background:#fff}
+.field:focus{border-color:var(--aub);background:var(--field-focus);color:var(--ink)}
 .lab{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:14px 2px 7px}
 .toggle{display:flex;align-items:center;gap:10px;background:var(--aub-soft);border-radius:12px;padding:11px 13px;margin-bottom:4px}
 .toggle .tl{flex:1;font-weight:700;font-size:14px}
-.sw{width:48px;height:28px;border-radius:16px;background:#cdbfca;position:relative;transition:background .18s;flex-shrink:0}
+.sw{width:48px;height:28px;border-radius:16px;background:var(--track);position:relative;transition:background .18s;flex-shrink:0}
 .sw.on{background:var(--aub)}
 .sw::after{content:"";position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .18s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
 .sw.on::after{left:23px}
 .pick-list{display:flex;flex-direction:column;gap:1px;margin-top:4px}
 .pick{display:flex;align-items:center;gap:10px;padding:11px 4px;border-top:1px solid var(--line2);text-align:left;width:100%}
 .pick .nm{flex:1;font-size:15px;font-weight:600}
+/* week header: macros are one tap from the week they describe */
+.r2-btn{background:none;border:0;font-family:inherit;color:inherit;font:inherit;cursor:pointer;padding:6px 8px;margin:-6px -8px;opacity:.85}
+/* surprise: roll again / undo */
+.surprise-row{display:flex;gap:8px}
+.surprise-row .surprise{flex:1}
+.surprise.again{flex:0 0 52px;font-size:18px;padding:0}
+/* copy a day onto other days */
+.day-copy{font-size:15px;color:var(--muted);padding:10px 8px;margin:-10px 0;cursor:pointer}
+.copy-box{background:var(--bg);border-radius:11px;padding:12px 14px;font-size:14px}
+.copy-src{margin-bottom:4px} .copy-src:last-child{margin-bottom:0}
+.copy-day{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:10px 12px;margin-top:8px;
+	border:1.5px solid var(--line);border-radius:11px;background:var(--card);font-family:inherit;text-align:left;cursor:pointer}
+.copy-day.on{border-color:var(--aub);background:var(--aub-soft)}
+.copy-day .cd-k{width:20px;font-weight:800;color:var(--aub)}
+.copy-day .cd-n{flex:1;font-size:14.5px;font-weight:700;text-transform:capitalize}
+.copy-day .cd-n span{display:block;font-size:12px;font-weight:500;color:var(--muted);text-transform:none}
+.copy-day .cd-w{font-size:10.5px;font-weight:800;color:var(--amber);background:var(--amber-soft);padding:3px 8px;border-radius:20px}
+/* plan a dish straight from its card */
+.plan-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 2px;border-top:1px solid var(--line2)}
+.plan-day{flex:1;min-width:104px;font-size:14.5px;font-weight:700;text-transform:capitalize}
+.plan-day span{display:block;font-size:12px;font-weight:500;color:var(--muted);text-transform:none}
+.plan-opts{display:flex;gap:6px}
+.hopt.taken{opacity:.6}
+.when-row{background:var(--aub-soft);color:var(--aub-2);border-radius:9px;padding:9px 12px;font-size:13px;margin-bottom:12px}
+/* recipe shortcut inside lists */
+.pick-book{font-size:15px;padding:10px 8px;margin:-10px 0;opacity:.7;cursor:pointer}
+.pick .kc{font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap}
+/* text size choice */
+.txt-row{display:flex;gap:7px}
+.txt-opt{flex:1;min-height:44px;border:1.5px solid var(--line);border-radius:11px;background:var(--bg);color:var(--muted);
+	font-size:13px;font-weight:700;font-family:inherit;cursor:pointer}
+.txt-opt.on{background:var(--aub);border-color:var(--aub);color:#fff}
+/* optional fields folded away: adding a dish is two fields */
+.fold{margin-top:14px;border-top:1px solid var(--line2);padding-top:10px}
+.fold>summary{font-size:13px;font-weight:800;color:var(--aub);cursor:pointer;padding:8px 2px;list-style:none}
+.fold>summary::-webkit-details-marker{display:none}
+.fold>summary::before{content:"▸ ";font-size:11px}
+.fold[open]>summary::before{content:"▾ "}
 /* backup sheet: state at a glance */
 .bk-state{background:var(--bg);border-radius:11px;padding:13px 15px;font-size:14px;font-weight:600}
 .bk-sub{font-size:12.5px;color:var(--muted);font-weight:500;margin-top:4px}
@@ -248,7 +311,7 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .pick-actions{margin:14px 0 4px;padding-bottom:14px;border-bottom:1px solid var(--line2)}
 .pick-actions .act-row{margin-top:8px}
 .btn{flex:1;height:46px;border-radius:12px;font-weight:800;font-size:14px;display:grid;place-items:center;border:1.5px solid var(--line)}
-.btn.ghost{background:#fff;color:var(--ink)}
+.btn.ghost{background:var(--ghost-bg);color:var(--ink)}
 .btn.warn{background:#fff;color:var(--amber);border-color:var(--amber-soft)}
 .btn.danger{background:#fff;color:var(--red);border-color:#f0dada}
 .btn.prim{background:var(--aub);color:#fff;border-color:var(--aub)}
@@ -273,7 +336,10 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .toast .t-act{margin-left:10px;background:rgba(255,255,255,.18);border:0;color:#fff;font-weight:800;font-size:13px;padding:6px 12px;border-radius:9px;font-family:inherit;cursor:pointer}
 /* cloud button: unsaved-changes dot */
 .icon-btn{position:relative}
-.icon-btn.dirty::after{content:"";position:absolute;top:3px;right:3px;width:9px;height:9px;border-radius:50%;background:#F6B93B;border:2px solid var(--aub);box-sizing:content-box}
+.icon-btn.dirty::after,.icon-btn.failed::after,.icon-btn.unset::after{content:"";position:absolute;top:3px;right:3px;width:9px;height:9px;border-radius:50%;border:2px solid var(--aub);box-sizing:content-box}
+.icon-btn.dirty::after{background:#F6B93B}
+.icon-btn.failed::after{background:#E2554E}
+.icon-btn.unset::after{background:transparent;border-color:rgba(255,255,255,.55)}
 /* shopping: dish → ingredients block, with pantry hints */
 .need-dish{border-top:1px solid var(--line2)}
 .need-dish:first-child{border-top:0}
@@ -310,8 +376,13 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .ing-item.have .ing-tx{color:var(--muted)}
 .ing-item.have .have-tag{font-size:10px;font-weight:800;color:var(--herb);margin-left:7px;letter-spacing:.03em}
 .ing-item.none{display:block;color:var(--muted);font-style:italic;cursor:default;padding:5px 4px}
+/* chrome only where it applies: Despensa/Recetario don't have a week, and
+   "Sorpréndeme" is a once-a-week action that was shouting on every screen */
+body[data-view="despensa"] .wk,body[data-view="ideas"] .wk{display:none}
+body:not([data-view="semana"]) .surprise{display:none}
+.surprise{box-shadow:none;font-weight:700}
 /* semana: expand/collapse all days */
-.exp-row{display:flex;justify-content:space-between;gap:8px;margin:0 2px 8px}
+.exp-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;margin:0 2px 8px}
 .exp-all{font-size:12px;font-weight:700;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:11px 13px;min-height:42px;font-family:inherit;cursor:pointer;white-space:nowrap}
 .exp-all.on{color:var(--aub-2);background:var(--aub-soft);border-color:var(--aub-soft)}
 .exp-all:active{background:var(--line2)}
@@ -377,7 +448,10 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 			<div class="wk-label" id="wkLabel"></div>
 			<button class="wk-nav" data-action="wk-next" aria-label="Semana siguiente">›</button>
 		</div>
-		<button class="surprise" data-action="surprise">✨ Sorpréndeme con la semana</button>
+		<div class="surprise-row">
+			<button class="surprise" data-action="surprise">✨ Sorpréndeme con la semana</button>
+			<button class="surprise again" data-action="surprise-again" title="Deshacer y volver a tirar">🎲</button>
+		</div>
 	</div>
 	<div id="view" class="view"></div>
 </div>
@@ -407,7 +481,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.11.0";
+const APP_VERSION = "1.12.0";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -441,6 +515,11 @@ function ApplyTheme(){
 	Object.entries(th.vars).forEach(([k,v])=>root.style.setProperty(k,v));
 	// reset shadows to default when leaving a theme that overrode them
 	if(!th.vars["--sh"]){root.style.removeProperty("--sh");root.style.removeProperty("--sh-pop");}
+	// the "dark" flag existed since day one but nothing consumed it: the nav bar
+	// stayed white and typing in a field showed light text on white
+	root.classList.remove("dark"); if(th.dark) root.classList.add("dark");
+	if(state && state.txtSize && state.txtSize!=="normal") root.setAttribute("data-txt",state.txtSize);
+	else root.removeAttribute("data-txt");
 	const meta=document.getElementById("metaTheme");
 	if(meta) meta.setAttribute("content",th.vars["--aub"]);
 }
@@ -688,12 +767,27 @@ function DishesNeedingShopping(){
 	all.forEach((name,key)=>{ if(!covered.has(key)) out.push(name) });
 	return out.sort((a,b)=>a.localeCompare(b,"es"));
 }
+/* How many meal SLOTS are planned, out of how many are visible. The old count
+   added one per person per slot including "fuera de casa" and the breakfasts you
+   have hidden, so a fresh week already read 42 and a full one 84 — a number
+   nobody could interpret. Now: "12 de 14 comidas y cenas". */
 function CountPlanned(){
-	const wk=CurWeek(); let n=0;
-	wk.days.forEach(d=>SLOTS.forEach(s=>state.members.forEach(m=>{
-		const c=d.slots[s][m.id]; if(c&&(c.dish||c.away)) n++;
-	})));
-	return n;
+	const wk=CurWeek(); const slots=VisibleSlots();
+	let done=0, total=0;
+	wk.days.forEach(d=>slots.forEach(s=>{
+		const slot=d.slots[s]; if(!slot) return;
+		total++;
+		if(state.members.some(m=>slot[m.id]&&slot[m.id].dish)) done++;
+	}));
+	return {done,total};
+}
+/* wording that matches what's on screen: only the meals you chose to see */
+function PlannedLabel(){
+	const {done,total}=CountPlanned();
+	const que = state.hideDesAlm ? "comidas y cenas" : "comidas";
+	if(!total) return "Semana sin planificar";
+	if(done===total) return `${total} ${que} · semana completa ✓`;
+	return `${done} de ${total} ${que}`;
 }
 
 /* ============================ RENDER: TOP ============================ */
@@ -702,7 +796,7 @@ function RenderTop(){
 	const end=AddDays(wk.monday,6);
 	document.getElementById("wkLabel").innerHTML =
 		`<div class="r1">${FmtLong(wk.monday)} – ${FmtLong(end)}</div>`+
-		`<div class="r2">${CountPlanned()} comidas planificadas</div>`;
+		`<button class="r2 r2-btn" data-action="open-macros" title="Ver macros de la semana">${PlannedLabel()} · 📊</button>`;
 	// "Hoy": dimmed on the current week, highlighted when viewing another one
 	const tb=document.getElementById("todayBtn");
 	if(tb){
@@ -719,12 +813,13 @@ function RenderNav(){
 	// while 25 ingredients were pending, which taught you to ignore it)
 	let need = state.produce.filter(p=>!p.done).length + state.extras.filter(x=>!x.done).length;
 	try{ need += MergedIngredients().filter(x=>!IsBought(x)).length; }catch(e){}
+	// Macros left the bar: it was 20% of it for a read-only report you check once
+	// a week. It now opens from the week header, and the four tabs grow 25%.
 	const tabs=[
 		{id:"semana",ic:"🍽️",l:"Semana"},
 		{id:"despensa",ic:"❄️",l:"Despensa"},
 		{id:"compra",ic:"🛒",l:"Compra",badge:need},
-		{id:"macros",ic:"📊",l:"Macros"},
-		{id:"ideas",ic:"💡",l:"Ideas"}
+		{id:"ideas",ic:"📖",l:"Recetario"}
 	];
 	document.getElementById("nav").innerHTML = tabs.map(t=>{
 		const b = (t.badge&&ui.view!=="compra")?`<span class="badge">${t.badge>99?"99":t.badge}</span>`:"";
@@ -758,13 +853,28 @@ function SlotRows(d,dayIdx,slot){
 	return rows;
 }
 /* food-group colours, so a glance at the week shows what you're planning */
-const TIPO_COLORS = {
-	"Legumbres":"#C0872D","Verduras":"#3E8E5A","Ensaladas":"#5BA26B",
-	"Sopas y cremas":"#C2792B","Pasta":"#B5843B","Arroz y cereales":"#A9803C",
-	"Pescado":"#3B82A6","Marisco":"#4E9CC0","Pollo":"#C06A2E","Carne":"#9E4B3A",
-	"Huevos":"#C9A227","Bowls":"#6B8E4E"
+/* Six genuinely distinguishable families instead of twelve near-identical hues
+   (the old set was five ochres, three greens and two blues — at 8 px "lentejas"
+   and "arroz" were the same brown dot). Each family carries a soft background
+   and a dark ink, the pattern that already passes contrast elsewhere. */
+const TIPO_FAMILIES = {
+	verde:  {ink:"#1F6B44", bg:"#DCEFE3", dot:"#2F8B5B"},   // verduras y ensaladas
+	ocre:   {ink:"#7A5410", bg:"#F6EBD5", dot:"#C08A2D"},   // legumbres
+	trigo:  {ink:"#7B5A21", bg:"#F3EEDC", dot:"#B39247"},   // pasta, arroz y cereales
+	azul:   {ink:"#1D5A78", bg:"#DDEBF3", dot:"#3B82A6"},   // pescado y marisco
+	rojo:   {ink:"#8A3529", bg:"#F7E1DD", dot:"#B4503F"},   // carne y pollo
+	amarillo:{ink:"#7A5E12", bg:"#F7EFD2", dot:"#C9A227"}   // huevos
 };
-function TipoColor(t){ return TIPO_COLORS[t] || "#7C8A83"; }
+const TIPO_FAMILY = {
+	"Verduras":"verde","Ensaladas":"verde","Sopas y cremas":"verde","Bowls":"verde",
+	"Legumbres":"ocre",
+	"Pasta":"trigo","Arroz y cereales":"trigo",
+	"Pescado":"azul","Marisco":"azul",
+	"Pollo":"rojo","Carne":"rojo",
+	"Huevos":"amarillo"
+};
+function TipoFamily(t){ return TIPO_FAMILIES[TIPO_FAMILY[t]] || {ink:"#4A5750",bg:"#E7EBE8",dot:"#7C8A83"}; }
+function TipoColor(t){ return TipoFamily(t).dot; }        // the dot / legacy callers
 function DishTipo(name){
 	if(!name) return null;
 	const k=name.trim().toLowerCase();
@@ -781,8 +891,9 @@ function MealTipos(dish){
 	return out;
 }
 function TipoTags(dish){
-	return MealTipos(dish).map(t=>
-		`<span class="tipo-tag" style="background:${TipoColor(t)}">${escapeHtml(t)}</span>`).join("");
+	return MealTipos(dish).map(t=>{ const f=TipoFamily(t);
+		return `<span class="tipo-tag" style="background:${f.bg};color:${f.ink}">${escapeHtml(t)}</span>`;
+	}).join("");
 }
 /* distinct food groups planned for a day's comida + cena (for the day header) */
 function DayTipos(day){
@@ -838,7 +949,8 @@ function RenderSemana(){
 	const slots = VisibleSlots();
 	let html=`<div class="exp-row">
 		<button class="exp-all ${state.hideDesAlm?'':'on'}" data-action="toggle-desalm">${state.hideDesAlm?"🍳 Solo comida y cena":"🍳 Desayuno y almuerzo"}</button>
-		<button class="exp-all" data-action="toggle-all-days">${anyOpen?"▴ Contraer todos":"▾ Expandir todos"}</button>
+		<button class="exp-all" data-action="menu-rutina" title="Desayunos y almuerzos que se repiten cada semana">🥣 Rutina</button>
+		<button class="exp-all" data-action="toggle-all-days">${anyOpen?"▴ Contraer":"▾ Expandir"}</button>
 	</div>`;
 	wk.days.forEach((d,i)=>{
 		const isToday = d.date===today;
@@ -846,7 +958,10 @@ function RenderSemana(){
 		const dowName = DOW[i];
 		const dots = state.members.map(m=>`<span class="dot" style="background:${m.color}"></span>`).join("");
 		const dayTipos = DayTipos(d);
-		const tipoMini = dayTipos.map(t=>`<span class="tdot" style="background:${TipoColor(t)}" title="${escapeHtml(t)}"></span>`).join("");
+		// initial inside the dot: colour alone can't carry the information
+		const tipoMini = dayTipos.slice(0,3).map(t=>
+			`<span class="tdot" style="background:${TipoColor(t)}" title="${escapeHtml(t)}">${escapeHtml(t.charAt(0))}</span>`).join("")
+			+ (dayTipos.length>3?`<span class="tdot more" title="${escapeHtml(dayTipos.slice(3).join(", "))}">+${dayTipos.length-3}</span>`:"");
 		let body="";
 		if(!collapsed){
 			body = `<div class="slots">`+slots.map(s=>{
@@ -867,6 +982,7 @@ function RenderSemana(){
 				${isToday?'<span class="day-today">hoy</span>':''}
 				<div class="day-fill"></div>
 				${collapsed?`<div class="day-mini">${tipoMini||dots}</div>`:''}
+				${!collapsed?`<span class="day-copy" data-action="copy-day" data-d="${i}" title="Copiar esta comida y cena a otro día">⧉</span>`:''}
 				<span class="chev ${collapsed?'':'up'}">▾</span>
 			</div>
 			${body}
@@ -993,6 +1109,7 @@ function RenderCompra(){
 				<button class="need-h" data-action="shop-toggle" data-name="${escapeHtml(n)}">
 					<span class="chev ${closed?'':'up'}">▾</span>
 					<span class="need-nm">${escapeHtml(n)}${raciones}</span>
+					${DishRecipe(n.split(SEP)[0].trim())?`<span class="pick-book" data-action="dish-open" data-name="${escapeHtml(n.split(SEP)[0].trim())}" title="Ver la receta">📖</span>`:''}
 					<span class="need-c ${ing?'':'none'}${ing&&got===total?' done':''}">${badge}</span>
 				</button>
 				${body}
@@ -1305,7 +1422,7 @@ function RenderMacros(){
 		if(counted===0){
 			return `<div class="mc-card">
 				<div class="mc-top"><div class="mc-name"><span class="tag" style="background:${hex}"></span>${mem.name}</div></div>
-				<div class="mc-empty">Sin platos del catálogo planificados esta semana.</div></div>`;
+				<div class="mc-empty">Sin platos del recetario planificados esta semana.</div></div>`;
 		}
 		const dayK=Math.round(t.kcal/days);
 		const pc=t.prot*4,cc=t.carb*4,fc=t.fat*9,sum=Math.max(1,pc+cc+fc);
@@ -1335,7 +1452,7 @@ function RenderMacros(){
 		</div>`;
 	}).join("");
 	return `<div class="view-title">Macros por persona</div>
-		<div class="mc-note">Estimación por ración estándar (no es medición). Suma <b>comida y cena</b> del catálogo; desayunos/almuerzos rutinarios y platos escritos a mano no cuentan. «Nosotros» = por adulto; Noah e Iria al 60 %. En negrita, la media <b>por día</b> (sobre 7 días); en gris atenuado, el total <b>semanal</b>.</div>
+		<div class="mc-note">Estimación por ración estándar (no es medición). Suma <b>comida y cena</b> del recetario; desayunos/almuerzos rutinarios y platos escritos a mano no cuentan. «Nosotros» = por adulto; Noah e Iria al 60 %. En negrita, la media <b>por día</b> (sobre 7 días); en gris atenuado, el total <b>semanal</b>.</div>
 		${cards}`;
 }
 
@@ -1377,6 +1494,105 @@ function RenderIdeas(){
 		</div>`;
 }
 
+/* Where this dish already sits in the current week — answers "didn't I just
+   cook this?" without going back to the planner. */
+let _pickerBack=null;
+function DishWhenHtml(name){
+	const wk=CurWeek(), k=name.trim().toLowerCase(), hits=[];
+	wk.days.forEach((d,i)=>["Comida","Cena"].forEach(s=>{
+		const slot=d.slots[s]; if(!slot) return;
+		if(state.members.some(m=>slot[m.id]&&slot[m.id].dish&&slot[m.id].dish.trim().toLowerCase().split(SEP.trim()).map(x=>x.trim()).indexOf(k)>=0
+			|| (slot[m.id]&&slot[m.id].dish&&slot[m.id].dish.trim().toLowerCase()===k)))
+			hits.push(`${DOW[i].slice(0,3)} · ${s}`);
+	}));
+	if(!hits.length) return "";
+	return `<div class="when-row">📅 Ya esta semana: <b>${hits.join(" · ")}</b></div>`;
+}
+/* Assign without touching the global picker object — the PickerTargets guard
+   (the v1.7.1 phantom-member fix) stays the only path the picker itself uses. */
+function AssignDishTo(dayIdx,slot,dish){
+	const wk=CurWeek(), cells=wk.days[dayIdx].slots[slot];
+	if(!cells) return false;
+	state.members.forEach(m=>{ cells[m.id]={dish:dish,invId:null,away:false}; });
+	Save(); return true;
+}
+/* "El domingo cocino para el lunes": copy a day's comida+cena onto other days.
+   Only copies slots that actually have something, and never silently overwrites
+   without saying so. */
+function OpenCopyDay(from){
+	const wk=CurWeek(), src=wk.days[from];
+	const slots=["Comida","Cena"].filter(s=>src.slots[s]&&state.members.some(m=>src.slots[s][m.id]&&src.slots[s][m.id].dish));
+	if(!slots.length) return Toast("Ese día no tiene comida ni cena que copiar");
+	ui.copyPick=ui.copyPick||{};
+	const resumen=slots.map(s=>{
+		const first=state.members.map(m=>src.slots[s][m.id]).find(c=>c&&c.dish);
+		return `<div class="copy-src"><b>${s}:</b> ${escapeHtml(first.dish)}</div>`;
+	}).join("");
+	const rows=wk.days.map((d,i)=>{
+		if(i===from) return "";
+		const on=!!ui.copyPick[d.date];
+		const ocupado=slots.some(s=>d.slots[s]&&state.members.some(m=>d.slots[s][m.id]&&d.slots[s][m.id].dish));
+		return `<button class="copy-day ${on?'on':''}" data-action="copy-pick" data-date="${d.date}">
+			<span class="cd-k">${on?'✓':''}</span>
+			<span class="cd-n">${DOW[i]}<span>${FmtLong(d.date)}</span></span>
+			${ocupado?'<span class="cd-w">se sustituye</span>':''}
+		</button>`;
+	}).join("");
+	const n=Object.keys(ui.copyPick).filter(k=>ui.copyPick[k]).length;
+	document.getElementById("sheetContent").innerHTML=`
+		<div class="grip"></div>
+		<div class="sheet-h"><div><div class="t1">Copiar ${DOW[from]}</div><div class="t2">${FmtLong(src.date)}</div></div><div class="x" data-action="close-sheet">✕</div></div>
+		<div class="sheet-body">
+			<div class="copy-box">${resumen}</div>
+			<div class="lab" style="margin-top:14px">¿A qué días?</div>
+			${rows}
+			<div class="act-row" style="margin-top:16px">
+				<button class="btn ghost" data-action="close-sheet">Cancelar</button>
+				<button class="btn prim" data-action="copy-do" data-d="${from}">Copiar${n?` a ${n} día${n>1?"s":""}`:""}</button>
+			</div>
+		</div>`;
+	ShowSheet();
+}
+function DoCopyDay(from){
+	const wk=CurWeek(), src=wk.days[from];
+	const targets=wk.days.filter(d=>(ui.copyPick||{})[d.date]);
+	if(!targets.length) return Toast("Elige al menos un día");
+	const bak=JSON.stringify(wk);
+	let n=0;
+	targets.forEach(d=>["Comida","Cena"].forEach(s=>{
+		if(!src.slots[s]||!d.slots[s]) return;
+		if(!state.members.some(m=>src.slots[s][m.id]&&src.slots[s][m.id].dish)) return;
+		state.members.forEach(m=>{ const c=src.slots[s][m.id];
+			d.slots[s][m.id]={dish:c?c.dish:"",invId:null,away:!!(c&&c.away)}; });
+		n++;
+	}));
+	ui.copyPick={};
+	Save(); CloseSheet(); Render();
+	ToastAction(`Copiado a ${targets.length} día${targets.length>1?"s":""}`,"Deshacer",()=>{
+		try{ const w=JSON.parse(bak); state.weeks[w.monday]=w; Save(); Render(); Toast("Deshecho"); }
+		catch(e){ Toast("No se pudo deshacer"); }
+	});
+}
+function OpenPlanDish(name){
+	const wk=CurWeek(), slots=VisibleSlots().filter(s=>s==="Comida"||s==="Cena");
+	const rows=wk.days.map((d,i)=>`
+		<div class="plan-row">
+			<div class="plan-day">${DOW[i]}<span>${FmtLong(d.date)}</span></div>
+			<div class="plan-opts">${slots.map(s=>{
+				const taken=state.members.some(m=>d.slots[s][m.id]&&d.slots[s][m.id].dish);
+				return `<button class="hopt${taken?' taken':''}" data-action="plan-put" data-d="${i}" data-s="${s}" data-name="${escapeHtml(name)}">${s}${taken?" ·ocupado":""}</button>`;
+			}).join("")}</div>
+		</div>`).join("");
+	document.getElementById("sheetContent").innerHTML=`
+		<div class="grip"></div>
+		<div class="sheet-h"><div><div class="t1">Planificar</div><div class="t2">${escapeHtml(name)}</div></div><div class="x" data-action="close-sheet">✕</div></div>
+		<div class="sheet-body">
+			<p class="hint" style="margin:0 2px 8px">Elige el día y si es comida o cena. Se pone para todos; luego puedes cambiarlo por persona desde la Semana.</p>
+			${rows}
+		</div>`;
+	ShowSheet();
+}
+
 /* ---- dish detail sheet: macros + recipe (scalable servings) + edit ---- */
 function OpenDish(id,scale){
 	const d=state.catalog.find(x=>x.id===id); if(!d) return;
@@ -1414,10 +1630,15 @@ function OpenDish(id,scale){
 		<div class="sheet-h"><div class="t1">${escapeHtml(d.name)}</div><div class="x" data-action="close-sheet">✕</div></div>
 		<div class="sheet-body">
 			<div class="fchips" style="padding:0 0 10px">${chips}</div>
+			${DishWhenHtml(d.name)}
 			${macros}
 			${recHtml}
 			<div class="act-row" style="margin-top:16px">
-				<button class="btn prim" data-action="idea-edit" data-id="${d.id}">✏️ Editar</button>
+				<button class="btn prim" data-action="plan-dish" data-name="${escapeHtml(d.name)}">📅 Planificar</button>
+				<button class="btn ghost" data-action="idea-edit" data-id="${d.id}">✏️ Editar</button>
+			</div>
+			<div class="act-row">
+				${_pickerBack?`<button class="btn ghost" data-action="pick-back">← Volver a elegir</button>`:""}
 				<button class="btn danger" data-action="idea-del" data-id="${d.id}" data-close="1">Borrar del recetario</button>
 			</div>
 		</div>`;
@@ -1435,11 +1656,13 @@ function EditDish(dish,defCourse){
 		{key:"tipo",label:"Tipo (opcional)",ph:"Pasta, Pollo, Verduras…",value:isEdit?(dish.tipo||""):""},
 		{key:"estilo",label:"Estilo (opcional)",ph:"Casero, Italiano, Asiático…",value:isEdit?(dish.estilo||""):""},
 		{key:"batch",label:"¿Batch/Tupper?",type:"select",value:isEdit&&dish.batch?"1":"0",options:[{value:"0",label:"No"},{value:"1",label:"Sí"}]},
-		{key:"kcal",label:"Kcal por ración",type:"number",ph:"450",value:isEdit&&typeof dish.kcal==="number"?dish.kcal:""},
-		{key:"prot",label:"Proteína (g)",type:"number",ph:"25",value:isEdit&&typeof dish.prot==="number"?dish.prot:""},
-		{key:"carb",label:"Hidratos (g)",type:"number",ph:"40",value:isEdit&&typeof dish.carb==="number"?dish.carb:""},
-		{key:"fat",label:"Grasa (g)",type:"number",ph:"15",value:isEdit&&typeof dish.fat==="number"?dish.fat:""},
-		{key:"receta",label:"Receta (ingredientes y pasos)",type:"textarea",ph:"Escríbela una vez y quedará guardada…",value:isEdit?(DishRecipe(dish.name)||""):""}
+		// everything below is optional and folded away: adding a dish is 2 fields
+		{type:"fold",label:"Macros y receta (opcional)",open:isEdit},
+		{key:"kcal",label:"Kcal por ración",type:"number",ph:"450",value:isEdit&&typeof dish.kcal==="number"?dish.kcal:"",fold:1},
+		{key:"prot",label:"Proteína (g)",type:"number",ph:"25",value:isEdit&&typeof dish.prot==="number"?dish.prot:"",fold:1},
+		{key:"carb",label:"Hidratos (g)",type:"number",ph:"40",value:isEdit&&typeof dish.carb==="number"?dish.carb:"",fold:1},
+		{key:"fat",label:"Grasa (g)",type:"number",ph:"15",value:isEdit&&typeof dish.fat==="number"?dish.fat:"",fold:1},
+		{key:"receta",label:"Receta (ingredientes y pasos)",type:"textarea",ph:"Escríbela una vez y quedará guardada…",value:isEdit?(DishRecipe(dish.name)||""):"",fold:1}
 	],onSave:v=>{
 		if(!v.name) return Toast("Pon un nombre");
 		const num=x=>{const n=parseFloat(String(x).replace(",","."));return isFinite(n)?n:undefined};
@@ -1465,6 +1688,9 @@ function EditDish(dish,defCourse){
 /* ============================ MASTER RENDER ============================ */
 function Render(){
 	RenderTop(); RenderNav();
+	// lets CSS drop the week strip and "Sorpréndeme" where they mean nothing,
+	// giving ~100 px back on the two longest views
+	document.body.dataset.view=ui.view;
 	const v=document.getElementById("view");
 	if(ui.view==="semana") v.innerHTML=RenderSemana();
 	else if(ui.view==="despensa") v.innerHTML=RenderDespensa();
@@ -1574,10 +1800,13 @@ function PickerFreeHtml(){
 function PickerListHtml(){
 	const items=PickerCandidates();
 	if(!items.length) return `<div class="empty-msg">${picker.search.trim()?"Sin coincidencias en el recetario.":"Nada aquí todavía."}</div>`;
+	// kcal and the recipe are shown HERE, where the decision happens: you used to
+	// have to plan blind and check macros in another tab afterwards
 	return items.map(c=>`
 		<button class="pick" data-paction="pchoose" data-name="${escapeHtml(c.name)}">
 			<span class="nm">${escapeHtml(c.name)}</span>
-			${c.tipo?`<span class="ti">${escapeHtml(c.tipo)}</span>`:''}
+			${typeof c.kcal==="number"?`<span class="kc">${c.kcal} kcal</span>`:''}
+			${DishRecipe(c.name)?`<span class="pick-book" data-paction="pbook" data-name="${escapeHtml(c.name)}" title="Ver la receta">📖</span>`:''}
 		</button>`).join("");
 }
 /* zone painters — these never touch #pickSearch */
@@ -1706,6 +1935,9 @@ function SetAway(){
 
 /* ============================ SURPRISE GENERATOR ============================ */
 function Surprise(){
+	// snapshot BEFORE filling: rolling the dice used to be a one-way door — the
+	// only way back was emptying the whole week, manual work included
+	_surpriseBak=JSON.stringify(CurWeek());
 	const wk=CurWeek();
 	const byCourse = c=>state.catalog.filter(x=>x.course===c);
 	const pri = byCourse("primero"), seg=byCourse("segundo"), cen=byCourse("cena"), noah=byCourse("noah");
@@ -1782,7 +2014,22 @@ function Surprise(){
 		filled++;
 	}
 	Save(); Render();
-	Toast(filled?`Rellenadas ${filled} comidas (huecos vacíos) ✨`:"No había huecos vacíos que rellenar");
+	if(!filled){ Toast("No había huecos vacíos que rellenar"); return; }
+	ToastAction(`Rellenadas ${filled} comidas ✨`,"Deshacer",UndoSurprise);
+}
+let _surpriseBak=null;
+function UndoSurprise(){
+	if(!_surpriseBak) return Toast("Nada que deshacer");
+	try{
+		const w=JSON.parse(_surpriseBak);
+		state.weeks[w.monday]=w; _surpriseBak=null;
+		Save(); Render(); Toast("Semana como estaba");
+	}catch(e){ Toast("No se pudo deshacer"); }
+}
+/* "otra vez": undo the previous roll and roll again, so you can keep trying */
+function SurpriseAgain(){
+	if(_surpriseBak){ try{ const w=JSON.parse(_surpriseBak); state.weeks[w.monday]=w; }catch(e){} }
+	Surprise();
 }
 function Tokens(s){
 	return (s||"").toLowerCase()
@@ -1859,11 +2106,17 @@ function SetCloudBusy(b){
 function CloudDirty(){
 	return !!(state.updatedAt && (!state.lastSync || state.updatedAt>state.lastSync));
 }
+/* three distinct states, because "orange dot" used to mean both "pending" and
+   "has been failing for three days because the token expired" */
+let _cloudFailed=false;
 function UpdateCloudDot(){
 	const el=document.getElementById("cloudBtn");
 	if(!el) return;
-	if(GhToken() && CloudDirty()) el.classList.add("dirty");
-	else el.classList.remove("dirty");
+	el.classList.remove("dirty","failed","unset");
+	if(!GhToken()){ el.classList.add("unset"); el.title="Copia de seguridad sin configurar"; return; }
+	if(_cloudFailed){ el.classList.add("failed"); el.title="No se ha podido subir — toca para revisar"; return; }
+	if(CloudDirty()){ el.classList.add("dirty"); el.title="Cambios pendientes de subir"; return; }
+	el.title="Todo subido";
 }
 /* auto-sync: quiet upload ~30 s after the last edit (token + online only) */
 let _autoSync=null;
@@ -1895,10 +2148,11 @@ async function CloudSave(auto){
 		if(r.status===401||r.status===403) throw {code:"auth"};
 		if(r.status===409||r.status===422) throw {code:"conflict"};
 		if(!r.ok) throw new Error("HTTP "+r.status);
-		state.lastSync=new Date().toISOString(); SaveQuiet();
+		state.lastSync=new Date().toISOString(); _cloudFailed=false; SaveQuiet();
 		if(!auto) Toast("Guardado en la nube ☁️✓");
 	}catch(e){
-		if(auto){/* quiet: the dot stays on and the next edit reschedules */}
+		_cloudFailed=true;
+		if(auto){/* quiet: the dot turns red and the next edit reschedules */}
 		// an expired token used to point at a menu entry; open the sheet instead,
 		// so there is always a way back even if the menu changes
 		else if(e&&e.code==="auth") OpenCloudSettings({aviso:"⚠️ <b>El acceso a la nube ha caducado.</b> Crea un token nuevo en GitHub y pégalo aquí abajo. Tus datos siguen guardados en este dispositivo."});
@@ -2106,6 +2360,16 @@ function SaveBackHome(){
 	Toast(n?`${n} producto${n>1?"s":""} en la despensa ✓`:"Nada que guardar");
 }
 
+/* Macros as a sheet: a weekly read-only report doesn't deserve a fifth of the
+   navigation bar, but it does deserve to be one tap from the week it describes. */
+function OpenMacrosSheet(){
+	document.getElementById("sheetContent").innerHTML=`
+		<div class="grip"></div>
+		<div class="sheet-h"><div class="t1">Macros de la semana</div><div class="x" data-action="close-sheet">✕</div></div>
+		<div class="sheet-body">${RenderMacros()}</div>`;
+	ShowSheet();
+}
+
 /* ============================ WEEKLY ROUTINE EDITOR ============================ */
 function OpenRutina(){
 	const P=Plantilla();
@@ -2164,6 +2428,9 @@ function OpenMenu(){
 			<div class="appear">
 				<div class="lbl">Apariencia</div>
 				<div class="sw-row">${sw}</div>
+				<div class="lbl" style="margin-top:14px">Tamaño del texto</div>
+				<div class="txt-row">${[["normal","Normal"],["grande","Grande"],["enorme","Muy grande"]].map(([id,l])=>
+					`<button class="txt-opt ${(state.txtSize||"normal")===id?"on":""}" data-action="set-txt" data-t="${id}">${l}</button>`).join("")}</div>
 			</div>
 			<button class="menu-item" data-action="menu-rutina"><span class="mi">🥣</span> Rutina semanal (desayunos/almuerzos)</button>
 			<button class="menu-item" data-action="cloud-settings"><span class="mi">🔐</span> Copia de seguridad<span class="mi-sub">${!GhToken()?"sin configurar":(CloudDirty()?"cambios sin subir":"al día")}</span></button>
@@ -2235,22 +2502,30 @@ function AddPrompt(opts){
 		<div class="sheet-h"><div class="t1">${opts.title}</div><div class="x" data-action="close-sheet">✕</div></div>
 		<div class="sheet-body" id="promptBody"></div>`;
 	const body=document.getElementById("promptBody");
+	let foldBox=null;                      // optional fields live in here
 	opts.fields.forEach(f=>{
-		const lab=document.createElement("div");lab.className="lab";lab.textContent=f.label;body.appendChild(lab);
+		if(f.type==="fold"){                 // a collapsible group header
+			const det=document.createElement("details"); det.className="fold"; det.open=!!f.open;
+			const sum=document.createElement("summary"); sum.textContent=f.label; det.appendChild(sum);
+			body.appendChild(det); foldBox=det; return;
+		}
+		const host = (f.fold && foldBox) ? foldBox : body;
+		const lab=document.createElement("div");lab.className="lab";lab.textContent=f.label;host.appendChild(lab);
+		const body2=host;                    // keep the rest of the code reading naturally
 		if(f.type==="select"){
 			const sel=document.createElement("select");sel.className="field";sel.id="f_"+f.key;
 			f.options.forEach(o=>{const op=document.createElement("option");op.value=o.value;op.textContent=o.label;if(String(o.value)===String(f.value))op.selected=true;sel.appendChild(op)});
-			body.appendChild(sel);
+			body2.appendChild(sel);
 		}else if(f.type==="textarea"){
 			const ta=document.createElement("textarea");ta.className="field ta";ta.id="f_"+f.key;ta.placeholder=f.ph||"";
-			ta.rows=6;if(f.value!=null)ta.value=f.value;body.appendChild(ta);
+			ta.rows=6;if(f.value!=null)ta.value=f.value;body2.appendChild(ta);
 		}else{
 			const inp=document.createElement("input");inp.className="field";inp.id="f_"+f.key;inp.placeholder=f.ph||"";
 			inp.type=f.type||"text";if(f.type==="number")inp.inputMode="decimal";
-			if(f.value!=null)inp.value=f.value;body.appendChild(inp);
+			if(f.value!=null)inp.value=f.value;body2.appendChild(inp);
 		}
 	});
-	const row=document.createElement("div");row.className="act-row";
+	const row=document.createElement("div");row.className="act-row prompt-actions";
 	row.innerHTML=`<button class="btn ghost" data-action="close-sheet">Cancelar</button><button class="btn prim" id="promptSave">Guardar</button>`;
 	body.appendChild(row);
 	// iOS: keep the focused field visible above the keyboard
@@ -2550,9 +2825,12 @@ document.addEventListener("click",e=>{
 		case "pick": OpenPicker(+ds.d,ds.s,ds.m||null,ds.all==="1"); break;
 		case "slot-all": OpenPicker(+ds.d,ds.s,null,true); break;
 		case "surprise": Surprise(); break;
+		case "surprise-again": SurpriseAgain(); break;
 		case "menu": OpenMenu(); break;
 		case "about": OpenAbout(); break;
 		case "menu-rutina": OpenRutina(); break;
+		case "open-macros": OpenMacrosSheet(); break;
+		case "set-txt": state.txtSize=ds.t; Save(); ApplyTheme(); OpenMenu(); break;
 		case "rutina-save": {
 			const val=id=>{const el=document.getElementById(id);return el?el.value.trim():""};
 			const P={desayuno:[],almKids:[],almAdults:[]};
@@ -2624,7 +2902,14 @@ document.addEventListener("click",e=>{
 		case "ideas-course": ui.ideasCourse=ds.c; ui.ideasTipo=null; ui.ideasSearch=""; Render(); break;
 		case "ideas-clear": ui.ideasSearch=""; ui.ideasTipo=null; Render(); break;
 		case "ideas-tipo": ui.ideasTipo=ds.t||null; Render(); break;
-		case "idea-open": OpenDish(ds.id); break;
+		case "idea-open": _pickerBack=null; OpenDish(ds.id); break;
+		case "plan-dish": OpenPlanDish(ds.name); break;
+		case "copy-day": ui.copyPick={}; OpenCopyDay(+ds.d); break;
+		case "copy-pick": ui.copyPick=ui.copyPick||{}; ui.copyPick[ds.date]=!ui.copyPick[ds.date];
+			OpenCopyDay(+document.querySelector('[data-action="copy-do"]').dataset.d); break;
+		case "copy-do": DoCopyDay(+ds.d); break;
+		case "plan-put": { if(AssignDishTo(+ds.d,ds.s,ds.name)){ CloseSheet(); ui.view="semana"; ui.collapsed[CurWeek().days[+ds.d].date]=false; Render(); Toast(`${ds.name} · ${DOW[+ds.d]} ${ds.s.toLowerCase()} ✓`); } break; }
+		case "pick-back": { if(_pickerBack){ picker={..._pickerBack}; _pickerBack=null; RenderPicker(); } break; }
 		case "dish-open": { const k=(ds.name||"").trim().toLowerCase();
 			const d=state.catalog.find(x=>x.name.trim().toLowerCase()===k);
 			if(d) OpenDish(d.id); else Toast("Este plato no está en el recetario");
@@ -2670,6 +2955,12 @@ document.addEventListener("click",e=>{
 		case "pinv": { const it=InvById(ds.id); if(!it) break;
 			if(picker.slot==="Comida"||picker.slot==="Cena"){ picker[picker.sub]=it.name; picker.invId=it.id; if(picker.sub==="pri")picker.sub="seg"; PaintPickerAfterChoice(); }
 			else ApplyDish(it.name,it.id); break; }
+		// consult the recipe BEFORE choosing, without losing the picker
+		case "pbook": { e.stopPropagation();
+			const k=(ds.name||"").trim().toLowerCase();
+			const d2=state.catalog.find(x=>x.name.trim().toLowerCase()===k);
+			if(d2){ _pickerBack={...picker}; OpenDish(d2.id); }
+			break; }
 		case "pchoose":
 			if(picker.slot==="Comida"||picker.slot==="Cena"){ picker[picker.sub]=ds.name; if(picker.sub==="pri")picker.sub="seg"; PaintPickerAfterChoice(); }
 			else ApplyDish(ds.name,null); break;
@@ -2715,6 +3006,30 @@ document.addEventListener("keydown",e=>{
 	EnsureWeek(state.current);
 	SaveQuiet(); Render();
 	CloudPullOnBoot();               // async, never blocks offline start
+	/* Swipe left/right on the week to move between weeks: the arrows were the only
+	   way, and they are the smallest targets on the busiest screen. */
+	(function(){
+		const view=document.getElementById("view");
+		let x0=0,y0=0,live=false;
+		view.addEventListener("touchstart",e=>{
+			if(ui.view!=="semana"||e.touches.length!==1){live=false;return}
+			live=true; x0=e.touches[0].clientX; y0=e.touches[0].clientY;
+		},{passive:true});
+		view.addEventListener("touchend",e=>{
+			if(!live) return; live=false;
+			const t=e.changedTouches[0], dx=t.clientX-x0, dy=t.clientY-y0;
+			if(Math.abs(dx)<60||Math.abs(dy)>40) return;          // horizontal only
+			state.current=AddDays(state.current, dx<0?7:-7);
+			EnsureWeek(state.current); Save(); Render();
+		},{passive:true});
+	})();
+	/* Offline edits used to sit there for ever: ScheduleAutoSync bails when there
+	   is no connection and nothing ever retried. Retry when the network returns
+	   and when the app goes to the background. */
+	window.addEventListener("online",()=>{ if(CloudDirty()) CloudSave(true); });
+	document.addEventListener("visibilitychange",()=>{
+		if(document.visibilityState==="hidden" && CloudDirty()) CloudSave(true);
+	});
 	/* Expose the on-screen keyboard height as --kb so bottom sheets sit ON TOP of
 	   it instead of hiding behind it (iOS doesn't shrink the layout viewport). */
 	const vv=window.visualViewport;

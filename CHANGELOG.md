@@ -1,5 +1,57 @@
 # Changelog
 
+## 1.12.0 — 2026-07-22 (Cierre de la auditoría: temas 4, 5, 6, 7 y 8)
+### Planificar
+- **Contador honesto**: «77 comidas planificadas» pasa a «10 de 14 comidas y
+  cenas». Antes contaba por comensal y por hueco, incluidos los «fuera de casa»
+  y los desayunos que tienes ocultos, así que una semana vacía ya marcaba 42.
+- **«Sorpréndeme» es reversible**: aviso con **Deshacer** y un botón **🎲** que
+  deshace y vuelve a tirar. Antes rellenaba 14 comidas sin marcha atrás salvo
+  vaciar la semana entera (perdiendo también lo puesto a mano).
+- **Copiar un día a otro** (⧉ en la cabecera del día): el domingo cocinas para
+  el lunes. Elige varios días, avisa de cuáles se sustituyen y deja Deshacer.
+- **Deslizar el dedo** cambia de semana; las flechas dejan de ser el único modo.
+### Recetario
+- **📖 también en la Compra y dentro del selector**: consultas la receta
+  *antes* de elegir, y «← Volver a elegir» te devuelve al selector donde estabas.
+- **kcal en el selector**: al elegir plato ves las calorías. Antes había que
+  planificar a ciegas y mirar las macros en otra pestaña después.
+- **«📅 Planificar» desde la ficha del plato**, y la ficha avisa de dónde está
+  ya esa semana («📅 Ya esta semana: Mié · Cena»).
+- **Alta rápida de plato**: 5 campos a la vista; macros y receta quedan
+  plegadas en «Macros y receta (opcional)». Antes eran 10 campos en columna.
+- Fuera la palabra «catálogo» (nombre de variable interna) de la pantalla de
+  Macros.
+### Pantalla
+- **~119 px de cabecera recuperados** en Despensa y Recetario: el selector de
+  semana y el botón amarillo de «Sorpréndeme» ya no aparecen donde no sirven.
+- **Macros sale de la barra** y se abre desde la cabecera de la semana; la barra
+  queda en 4 pestañas (25 % más grandes) y «Ideas» pasa a llamarse **Recetario**.
+- **«🥣 Rutina» a la vista** en la Semana, en vez de enterrada en el menú.
+### Legibilidad
+- **El tema Noche está completo**: la bandera «es oscuro» existía desde el
+  primer día y nadie la leía. La barra inferior era blanca y, al escribir en un
+  campo, el fondo se volvía blanco con el texto claro — **no veías lo que
+  escribías**. Corregido junto con interruptores, papeleras y botones.
+- **Colores de grupo de verdad distinguibles**: de 12 tonos (que eran 4
+  familias: «lentejas» y «arroz» el mismo marrón) a **6 familias**, con fondo
+  suave y tinta oscura. Los 12 pasan ahora contraste AA (peor caso 5,3:1 frente
+  al 3,11 anterior) y el texto sube de 9,5 px a 11 px.
+- Los puntos del día plegado llevan **inicial** dentro: la información ya no
+  depende solo del color. Se muestran 3 y un «+N».
+- **El zoom vuelve a funcionar** (el doble toque sigue desactivado, que era lo
+  que molestaba) y hay **«Tamaño del texto: Normal / Grande / Muy grande»** en
+  Opciones.
+- La etiqueta del comensal deja de gritar más que el nombre del plato.
+### Nube
+- **Reintento automático al volver la conexión** y al dejar la app en segundo
+  plano. Antes, un cambio hecho sin cobertura no subía jamás si no volvías a
+  tocar la app.
+- **Cuatro estados distintos** en el botón ☁️: sin configurar (hueco),
+  pendiente (naranja), ha fallado (rojo) y al día — antes «naranja» significaba
+  a la vez «pendiente» y «lleva tres días fallando».
+- Tests: 279 asserts.
+
 ## 1.11.0 — 2026-07-21 (Menú de opciones: 7 entradas → 4)
 - Las cuatro entradas de nube y copias se funden en **una sola: «🔐 Copia de
   seguridad»**, que además dice su propio estado en el menú («al día» /
