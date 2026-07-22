@@ -3,6 +3,11 @@
 Planificador semanal de comidas familiar. **Un solo HTML**, sin
 dependencias, offline, instalable como PWA en iOS.
 
+Cuatro pestañas: **Semana** (planificar), **Despensa** (con caducidades),
+**Compra** (ingredientes sacados de las recetas, escalados por comensales) y
+**Recetario** (200 platos con macros y receta escalable ×1–×6). Los datos se
+sincronizan entre dispositivos vía GitHub.
+
 ## Estructura
 
 | Archivo | Rol |
@@ -10,7 +15,7 @@ dependencias, offline, instalable como PWA en iOS.
 | `index.html` | La app completa (UI + lógica + datos SEED + recetario con recetas) |
 | `sw.js` | Service worker: offline tras la primera visita (opcional pero recomendado) |
 | `data/sync.json` | Copia de la nube — vive en la rama **`data`** (la escribe la propia app) |
-| `test/test.js` | Suite (80 asserts) que se ejecuta contra el HTML publicado, sin build |
+| `test/test.js` | Suite (279 asserts) que se ejecuta contra el HTML publicado, sin build |
 | `.github/workflows/ci.yml` | CI: suite bajo UTC, Europe/Madrid y America/Los_Angeles |
 | `CHANGELOG.md` | Historial de versiones |
 | `recetario/` | Recetario-saludable.xlsx (entrada de datos original) |
