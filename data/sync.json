@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-21T08:44:37.284Z",
+ "savedAt": "2026-07-22T09:58:10.766Z",
  "state": {
   "members": [
    {
@@ -1146,14 +1146,531 @@
       }
      }
     ]
+   },
+   "2026-07-27": {
+    "monday": "2026-07-27",
+    "days": [
+     {
+      "date": "2026-07-27",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "Berenjena rellena de verduras · Berenjena rellena de quinoa y verduras",
+         "invId": "i3n9nc7",
+         "away": false
+        },
+        "noah": {
+         "dish": "Crema de verduras",
+         "invId": "4bugn5e",
+         "away": false
+        },
+        "iria": {
+         "dish": "Berenjena rellena de verduras · Berenjena rellena de quinoa y verduras",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "Fingers de berenjena al horno",
+         "invId": "i3n9nc7",
+         "away": false
+        },
+        "noah": {
+         "dish": "Fingers de berenjena al horno",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fingers de berenjena al horno",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-28",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "Quinoa con verduras · Pollo tikka masala",
+         "invId": "nth93uf",
+         "away": false
+        },
+        "noah": {
+         "dish": "Bastones de zanahoria y pollo al horno",
+         "invId": "nth93uf",
+         "away": false
+        },
+        "iria": {
+         "dish": "Quinoa con verduras · Pollo tikka masala",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "Shawarma de pollo en wrap integral",
+         "invId": "nth93uf",
+         "away": false
+        },
+        "noah": {
+         "dish": "Shawarma de pollo en wrap integral",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Shawarma de pollo en wrap integral",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-29",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Yogur con fruta y nueces",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Yogur con fruta y nueces",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Yogur con fruta y nueces",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "Lasaña de calabacín · Pollo guisado con patata y zanahoria",
+         "invId": "nth93uf",
+         "away": false
+        },
+        "noah": {
+         "dish": "Crema de verduras con picatostes integrales",
+         "invId": "4bugn5e",
+         "away": false
+        },
+        "iria": {
+         "dish": "Lasaña de calabacín · Pollo guisado con patata y zanahoria",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "Sopa de verduras y lentejas",
+         "invId": "4bugn5e",
+         "away": false
+        },
+        "noah": {
+         "dish": "Sopa de verduras y lentejas",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Sopa de verduras y lentejas",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-30",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Sándwich integral",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Sándwich integral",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "Ensalada de garbanzos, tomate y atún · Pollo al curry",
+         "invId": "nth93uf",
+         "away": false
+        },
+        "noah": {
+         "dish": "Arroz con pollo",
+         "invId": "nth93uf",
+         "away": false
+        },
+        "iria": {
+         "dish": "Ensalada de garbanzos, tomate y atún · Pollo al curry",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "Tostada integral de aguacate y huevo",
+         "invId": "4bugn5e",
+         "away": false
+        },
+        "noah": {
+         "dish": "Tostada integral de aguacate y huevo",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Tostada integral de aguacate y huevo",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-31",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "Cuscús con verduras · Filete de pavo con boniato y ensalada",
+         "invId": "nth93uf",
+         "away": false
+        },
+        "noah": {
+         "dish": "Palitos de boniato al horno con hummus",
+         "invId": "4bugn5e",
+         "away": false
+        },
+        "iria": {
+         "dish": "Cuscús con verduras · Filete de pavo con boniato y ensalada",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "Ensalada de pimientos asados con atún",
+         "invId": "atr4p8u",
+         "away": false
+        },
+        "noah": {
+         "dish": "Ensalada de pimientos asados con atún",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Ensalada de pimientos asados con atún",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-08-01",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Tostada de tomate",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Tostada de tomate",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Tostada de tomate",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "Ensalada de quinoa y verduras · Lubina al horno con verduras",
+         "invId": "4bugn5e",
+         "away": false
+        },
+        "noah": {
+         "dish": "Albóndigas de pollo",
+         "invId": "nth93uf",
+         "away": false
+        },
+        "iria": {
+         "dish": "Ensalada de quinoa y verduras · Lubina al horno con verduras",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "Salteado de gambas y verduras al ajillo",
+         "invId": "4bugn5e",
+         "away": false
+        },
+        "noah": {
+         "dish": "Salteado de gambas y verduras al ajillo",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Salteado de gambas y verduras al ajillo",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-08-02",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Bizcocho casero",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Bizcocho casero",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Bizcocho casero",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "Menestra de verduras · Quinoa con pollo y verduras al curry",
+         "invId": "nth93uf",
+         "away": false
+        },
+        "noah": {
+         "dish": "Pizza casera de verduras",
+         "invId": "4bugn5e",
+         "away": false
+        },
+        "iria": {
+         "dish": "Menestra de verduras · Quinoa con pollo y verduras al curry",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "Wok de tofu y verduras con sésamo",
+         "invId": "4bugn5e",
+         "away": false
+        },
+        "noah": {
+         "dish": "Wok de tofu y verduras con sésamo",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Wok de tofu y verduras con sésamo",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     }
+    ]
    }
   },
   "current": "2026-07-20",
-  "updatedAt": "2026-07-21T08:44:37.284Z",
-  "lastSync": "2026-07-21T12:20:14.595Z",
+  "updatedAt": "2026-07-22T09:58:10.766Z",
+  "lastSync": "2026-07-21T17:50:30.333Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "dish",
-  "shopWeek": "2026-07-20"
+  "shopWeek": "2026-07-20",
+  "txtSize": "normal"
  }
 }
