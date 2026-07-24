@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-24T18:13:22.909Z",
+ "savedAt": "2026-07-24T18:14:42.432Z",
  "state": {
   "members": [
    {
@@ -63,38 +63,17 @@
   },
   "produce": [
    {
-    "id": "jgaofu9",
-    "name": "Melocotón Caspe",
+    "id": "qp8jowj",
+    "name": "Manzana",
+    "qty": 5,
+    "unit": "ud",
+    "done": false
+   },
+   {
+    "id": "ejh468q",
+    "name": "Tomate cherry",
     "qty": 1,
     "unit": "Kg",
-    "done": false
-   },
-   {
-    "id": "hfgeav0",
-    "name": "Tomate Kokumi",
-    "qty": 1,
-    "unit": "Bandeja",
-    "done": false
-   },
-   {
-    "id": "6aau42q",
-    "name": "Sandía",
-    "qty": 1,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "umyu0jh",
-    "name": "Platano",
-    "qty": 10,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "klhvmpy",
-    "name": "Kiwi Gold",
-    "qty": 6,
-    "unit": "ud",
     "done": false
    }
   ],
@@ -1665,12 +1644,12 @@
    }
   },
   "current": "2026-07-27",
-  "updatedAt": "2026-07-24T18:13:22.909Z",
-  "lastSync": "2026-07-24T18:13:05.472Z",
+  "updatedAt": "2026-07-24T18:14:42.432Z",
+  "lastSync": "2026-07-24T18:13:55.390Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "dish",
-  "shopWeek": "2026-07-20",
+  "shopWeek": "2026-07-27",
   "txtSize": "normal"
  }
 }
