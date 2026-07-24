@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-24T18:12:32.926Z",
+ "savedAt": "2026-07-24T18:13:22.909Z",
  "state": {
   "members": [
    {
@@ -1189,34 +1189,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Sopa de pollo y verduras",
-         "invId": null,
+         "dish": "Berenjena rellena de verduras · Berenjena rellena de quinoa y verduras",
+         "invId": "i3n9nc7",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Nuggets caseros de pollo",
+         "invId": "nth93uf",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Berenjena rellena de verduras · Berenjena rellena de quinoa y verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Fingers de berenjena al horno",
+         "invId": "i3n9nc7",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Fingers de berenjena al horno",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Fingers de berenjena al horno",
          "invId": null,
          "away": false
         }
@@ -1262,34 +1262,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Sopa de verduras · Ternera salteada con verduras y soja",
+         "invId": "4bugn5e",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Palitos de boniato al horno con hummus",
+         "invId": "4bugn5e",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Sopa de verduras · Ternera salteada con verduras y soja",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Sopa de verduras y lentejas",
+         "invId": "4bugn5e",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Sopa de verduras y lentejas",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Sopa de verduras y lentejas",
          "invId": null,
          "away": false
         }
@@ -1335,34 +1335,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Pisto con huevo y garbanzos · Bowl de pollo, arroz y verduras",
+         "invId": "nth93uf",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Arroz con pollo",
+         "invId": "nth93uf",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Pisto con huevo y garbanzos · Bowl de pollo, arroz y verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Tartar de atún con aguacate",
+         "invId": "atr4p8u",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Tartar de atún con aguacate",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Tartar de atún con aguacate",
          "invId": null,
          "away": false
         }
@@ -1408,34 +1408,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Ensalada César con pollo · Pad thai de pollo ligero",
+         "invId": "nth93uf",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Croquetas de pollo al horno",
+         "invId": "nth93uf",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Ensalada César con pollo · Pad thai de pollo ligero",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Espárragos trigueros con jamón y huevo",
+         "invId": "4bugn5e",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Espárragos trigueros con jamón y huevo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Espárragos trigueros con jamón y huevo",
          "invId": null,
          "away": false
         }
@@ -1481,34 +1481,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Brócoli al vapor con AOVE · Lubina al horno con verduras",
+         "invId": "4bugn5e",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Crema de verduras",
+         "invId": "4bugn5e",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Brócoli al vapor con AOVE · Lubina al horno con verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Salteado de gambas y verduras al ajillo",
+         "invId": "4bugn5e",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Salteado de gambas y verduras al ajillo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Salteado de gambas y verduras al ajillo",
          "invId": null,
          "away": false
         }
@@ -1554,34 +1554,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Ensalada de garbanzos, tomate y atún · Pollo al limón con verduras asadas",
+         "invId": "nth93uf",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Pollo con patata y verdura",
+         "invId": "nth93uf",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Ensalada de garbanzos, tomate y atún · Pollo al limón con verduras asadas",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Ensalada de pimientos asados con atún",
+         "invId": "atr4p8u",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Ensalada de pimientos asados con atún",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Ensalada de pimientos asados con atún",
          "invId": null,
          "away": false
         }
@@ -1627,34 +1627,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Menestra de verduras · Fajitas de pollo",
+         "invId": "nth93uf",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Boniato asado con huevo",
+         "invId": "4bugn5e",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Menestra de verduras · Fajitas de pollo",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Wok de tofu y verduras con sésamo",
+         "invId": "4bugn5e",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Wok de tofu y verduras con sésamo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Wok de tofu y verduras con sésamo",
          "invId": null,
          "away": false
         }
@@ -1665,8 +1665,8 @@
    }
   },
   "current": "2026-07-27",
-  "updatedAt": "2026-07-24T18:12:32.926Z",
-  "lastSync": "2026-07-24T18:12:04.528Z",
+  "updatedAt": "2026-07-24T18:13:22.909Z",
+  "lastSync": "2026-07-24T18:13:05.472Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "dish",
