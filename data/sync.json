@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-24T18:20:06.112Z",
+ "savedAt": "2026-07-24T18:25:52.847Z",
  "state": {
   "members": [
    {
@@ -617,522 +617,6 @@
      }
     ]
    },
-   "2026-07-20": {
-    "monday": "2026-07-20",
-    "days": [
-     {
-      "date": "2026-07-20",
-      "slots": {
-       "Desayuno": {
-        "nosotros": {
-         "dish": "Avena con fruta",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Avena con fruta",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Avena con fruta",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Almuerzo": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Comida": {
-        "nosotros": {
-         "dish": "Chicken Curry (Versión Thermomix)",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Chicken Curry (Versión Thermomix)",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Chicken Curry (Versión Thermomix)",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Cena": {
-        "nosotros": {
-         "dish": "Tortilla francesa con jamón",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Tortilla francesa con jamón",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Tortilla francesa con jamón",
-         "invId": null,
-         "away": false
-        }
-       }
-      }
-     },
-     {
-      "date": "2026-07-21",
-      "slots": {
-       "Desayuno": {
-        "nosotros": {
-         "dish": "Tostada integral con aceite",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Tostada integral con aceite",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Tostada integral con aceite",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Almuerzo": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Yogur",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Yogur",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Comida": {
-        "nosotros": {
-         "dish": "Lentejas estofadas",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Lentejas estofadas",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Lentejas estofadas",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Cena": {
-        "nosotros": {
-         "dish": "Salmón al papillote con soja",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Salmón al papillote con soja",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Salmón al papillote con soja",
-         "invId": null,
-         "away": false
-        }
-       }
-      }
-     },
-     {
-      "date": "2026-07-22",
-      "slots": {
-       "Desayuno": {
-        "nosotros": {
-         "dish": "Yogur con fruta y nueces",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Yogur con fruta y nueces",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Yogur con fruta y nueces",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Almuerzo": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Comida": {
-        "nosotros": {
-         "dish": "Pasta carbonara",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Pasta carbonara",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Pasta carbonara",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Cena": {
-        "nosotros": {
-         "dish": "Judias verdes con atun y huevo",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Judias verdes con atun y huevo",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Judias verdes con atun y huevo",
-         "invId": null,
-         "away": false
-        }
-       }
-      }
-     },
-     {
-      "date": "2026-07-23",
-      "slots": {
-       "Desayuno": {
-        "nosotros": {
-         "dish": "Tostada integral con aceite",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Tostada integral con aceite",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Tostada integral con aceite",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Almuerzo": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Sándwich integral",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Sándwich integral",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Comida": {
-        "nosotros": {
-         "dish": "Atun Wow",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Pasta depisto (makeada)",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Pasta depisto (Makeada)",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Cena": {
-        "nosotros": {
-         "dish": "Empanadillas pollo al curry",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Empanadillas pollo al curry",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Empanadillas pollo al curry",
-         "invId": null,
-         "away": false
-        }
-       }
-      }
-     },
-     {
-      "date": "2026-07-24",
-      "slots": {
-       "Desayuno": {
-        "nosotros": {
-         "dish": "Avena con fruta",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Avena con fruta",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Avena con fruta",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Almuerzo": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Comida": {
-        "nosotros": {
-         "dish": "Lentejas estofadas",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Lentejas estofadas",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Lentejas estofadas",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Cena": {
-        "nosotros": {
-         "dish": "Alitas, muslitos airfryer",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Alitas, muslitos airfryer",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Alitas, muslitos airfryer",
-         "invId": null,
-         "away": false
-        }
-       }
-      }
-     },
-     {
-      "date": "2026-07-25",
-      "slots": {
-       "Desayuno": {
-        "nosotros": {
-         "dish": "Tostada de tomate",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Tostada de tomate",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Tostada de tomate",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Almuerzo": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Yogur",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Yogur",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Comida": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": true
-        },
-        "noah": {
-         "dish": "",
-         "invId": null,
-         "away": true
-        },
-        "iria": {
-         "dish": "",
-         "invId": null,
-         "away": true
-        }
-       },
-       "Cena": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": true
-        },
-        "noah": {
-         "dish": "",
-         "invId": null,
-         "away": true
-        },
-        "iria": {
-         "dish": "",
-         "invId": null,
-         "away": true
-        }
-       }
-      }
-     },
-     {
-      "date": "2026-07-26",
-      "slots": {
-       "Desayuno": {
-        "nosotros": {
-         "dish": "Bizcocho casero",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Bizcocho casero",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Bizcocho casero",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Almuerzo": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": false
-        },
-        "noah": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        },
-        "iria": {
-         "dish": "Fruta",
-         "invId": null,
-         "away": false
-        }
-       },
-       "Comida": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": true
-        },
-        "noah": {
-         "dish": "",
-         "invId": null,
-         "away": true
-        },
-        "iria": {
-         "dish": "",
-         "invId": null,
-         "away": true
-        }
-       },
-       "Cena": {
-        "nosotros": {
-         "dish": "",
-         "invId": null,
-         "away": true
-        },
-        "noah": {
-         "dish": "",
-         "invId": null,
-         "away": true
-        },
-        "iria": {
-         "dish": "",
-         "invId": null,
-         "away": true
-        }
-       }
-      }
-     }
-    ]
-   },
    "2026-07-27": {
     "monday": "2026-07-27",
     "days": [
@@ -1648,15 +1132,531 @@
       }
      }
     ]
+   },
+   "2026-07-20": {
+    "monday": "2026-07-20",
+    "days": [
+     {
+      "date": "2026-07-20",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-21",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-22",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Yogur con fruta y nueces",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Yogur con fruta y nueces",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Yogur con fruta y nueces",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-23",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Sándwich integral",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Sándwich integral",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-24",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-25",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Tostada de tomate",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Tostada de tomate",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Tostada de tomate",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-07-26",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Bizcocho casero",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Bizcocho casero",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Bizcocho casero",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     }
+    ]
    }
   },
-  "current": "2026-07-27",
-  "updatedAt": "2026-07-24T18:20:06.112Z",
-  "lastSync": "2026-07-24T18:17:05.874Z",
+  "current": "2026-07-20",
+  "updatedAt": "2026-07-24T18:25:52.847Z",
+  "lastSync": "2026-07-24T18:20:38.323Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
-  "shopWeek": "2026-07-27",
+  "shopWeek": "2026-07-20",
   "txtSize": "normal"
  }
 }
