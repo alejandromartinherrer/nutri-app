@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-24T18:16:34.180Z",
+ "savedAt": "2026-07-24T18:20:06.112Z",
  "state": {
   "members": [
    {
@@ -74,6 +74,13 @@
     "name": "Tomate cherry",
     "qty": 1,
     "unit": "Kg",
+    "done": false
+   },
+   {
+    "id": "og0tp08",
+    "name": "Kiwi",
+    "qty": 2,
+    "unit": "ud",
     "done": false
    }
   ],
@@ -1168,34 +1175,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Berenjena rellena de verduras · Berenjena rellena de quinoa y verduras",
+         "invId": "i3n9nc7",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Pollo con patata y verdura",
+         "invId": "nth93uf",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Berenjena rellena de verduras · Berenjena rellena de quinoa y verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Fingers de berenjena al horno",
+         "invId": "i3n9nc7",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Fingers de berenjena al horno",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Fingers de berenjena al horno",
          "invId": null,
          "away": false
         }
@@ -1241,34 +1248,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Arroz integral con verduras · Pollo tikka masala",
+         "invId": "nth93uf",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Crema de verduras con picatostes integrales",
+         "invId": "4bugn5e",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Arroz integral con verduras · Pollo tikka masala",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Salteado de gambas y verduras al ajillo",
+         "invId": "4bugn5e",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Salteado de gambas y verduras al ajillo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Salteado de gambas y verduras al ajillo",
          "invId": null,
          "away": false
         }
@@ -1314,34 +1321,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Ensalada de pollo, mango y aguacate · Arroz integral con pollo y verduras",
+         "invId": "nth93uf",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Bastones de zanahoria y pollo al horno",
+         "invId": "nth93uf",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Ensalada de pollo, mango y aguacate · Arroz integral con pollo y verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Frittata de verduras",
+         "invId": "4bugn5e",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Frittata de verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Frittata de verduras",
          "invId": null,
          "away": false
         }
@@ -1387,34 +1394,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Judías verdes con patata · Pollo al curry",
+         "invId": "nth93uf",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Boniato asado con huevo",
+         "invId": "4bugn5e",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Judías verdes con patata · Pollo al curry",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Brochetas de langostino y verduras",
+         "invId": "4bugn5e",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Brochetas de langostino y verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Brochetas de langostino y verduras",
          "invId": null,
          "away": false
         }
@@ -1460,34 +1467,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Potaje de alubias y verduras · Pollo guisado con patata y zanahoria",
+         "invId": "nth93uf",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Arroz con pollo",
+         "invId": "nth93uf",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Potaje de alubias y verduras · Pollo guisado con patata y zanahoria",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Wok de verduras con pollo",
+         "invId": "nth93uf",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Wok de verduras con pollo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Wok de verduras con pollo",
          "invId": null,
          "away": false
         }
@@ -1533,34 +1540,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Calabaza asada con garbanzos especiados · Souvlaki de pollo con tzatziki",
+         "invId": "nth93uf",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Pizza casera de verduras",
+         "invId": "4bugn5e",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Calabaza asada con garbanzos especiados · Souvlaki de pollo con tzatziki",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Tartar de atún con aguacate",
+         "invId": "atr4p8u",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Tartar de atún con aguacate",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Tartar de atún con aguacate",
          "invId": null,
          "away": false
         }
@@ -1606,34 +1613,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Cuscús con verduras · Muslos de pollo al horno con limón",
+         "invId": "nth93uf",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Mini hamburguesas de pollo",
+         "invId": "nth93uf",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Cuscús con verduras · Muslos de pollo al horno con limón",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Pizza con base de coliflor",
+         "invId": "4bugn5e",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Pizza con base de coliflor",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Pizza con base de coliflor",
          "invId": null,
          "away": false
         }
@@ -1643,12 +1650,12 @@
     ]
    }
   },
-  "current": "2026-07-20",
-  "updatedAt": "2026-07-24T18:16:34.180Z",
-  "lastSync": "2026-07-24T18:16:01.036Z",
+  "current": "2026-07-27",
+  "updatedAt": "2026-07-24T18:20:06.112Z",
+  "lastSync": "2026-07-24T18:17:05.874Z",
   "theme": "fresco",
   "hideDesAlm": true,
-  "shopView": "dish",
+  "shopView": "merged",
   "shopWeek": "2026-07-27",
   "txtSize": "normal"
  }
