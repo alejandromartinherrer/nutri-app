@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-24T18:15:58.456Z",
+ "savedAt": "2026-07-24T18:16:34.180Z",
  "state": {
   "members": [
    {
@@ -1643,9 +1643,9 @@
     ]
    }
   },
-  "current": "2026-07-27",
-  "updatedAt": "2026-07-24T18:15:58.456Z",
-  "lastSync": "2026-07-24T18:15:57.348Z",
+  "current": "2026-07-20",
+  "updatedAt": "2026-07-24T18:16:34.180Z",
+  "lastSync": "2026-07-24T18:16:01.036Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "dish",
