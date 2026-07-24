@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-07-24T18:11:36.412Z",
+ "savedAt": "2026-07-24T18:12:32.926Z",
  "state": {
   "members": [
    {
@@ -1189,7 +1189,7 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
+         "dish": "Sopa de pollo y verduras",
          "invId": null,
          "away": false
         },
@@ -1665,8 +1665,8 @@
    }
   },
   "current": "2026-07-27",
-  "updatedAt": "2026-07-24T18:11:36.412Z",
-  "lastSync": "2026-07-24T18:05:37.539Z",
+  "updatedAt": "2026-07-24T18:12:32.926Z",
+  "lastSync": "2026-07-24T18:12:04.528Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "dish",
