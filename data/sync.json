@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-08T17:18:53.391Z",
+ "savedAt": "2026-08-08T17:21:05.842Z",
  "state": {
   "members": [
    {
@@ -2224,17 +2224,17 @@
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
+         "dish": "Hot Dog",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Hot Dog",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Hot Dog",
          "invId": null,
          "away": false
         }
@@ -2683,8 +2683,8 @@
    }
   },
   "current": "2026-08-10",
-  "updatedAt": "2026-08-08T17:18:53.391Z",
-  "lastSync": "2026-08-08T17:18:18.462Z",
+  "updatedAt": "2026-08-08T17:21:05.842Z",
+  "lastSync": "2026-08-08T17:19:02.930Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
