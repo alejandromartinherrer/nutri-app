@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-08T17:11:37.481Z",
+ "savedAt": "2026-08-08T17:12:12.068Z",
  "state": {
   "members": [
    {
@@ -2207,17 +2207,17 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
+         "dish": "Pasta fresca",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Pasta fresca",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Pasta fresca",
          "invId": null,
          "away": false
         }
@@ -2683,8 +2683,8 @@
    }
   },
   "current": "2026-08-10",
-  "updatedAt": "2026-08-08T17:11:37.481Z",
-  "lastSync": "2026-07-24T18:25:58.038Z",
+  "updatedAt": "2026-08-08T17:12:12.068Z",
+  "lastSync": "2026-08-08T17:12:09.781Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
