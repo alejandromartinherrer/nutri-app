@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-08T17:17:46.010Z",
+ "savedAt": "2026-08-08T17:18:53.391Z",
  "state": {
   "members": [
    {
@@ -2370,17 +2370,17 @@
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
+         "dish": "Albondigas con curry",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Albondigas con curry",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Albondigas con curry",
          "invId": null,
          "away": false
         }
@@ -2683,8 +2683,8 @@
    }
   },
   "current": "2026-08-10",
-  "updatedAt": "2026-08-08T17:17:46.010Z",
-  "lastSync": "2026-08-08T17:15:55.100Z",
+  "updatedAt": "2026-08-08T17:18:53.391Z",
+  "lastSync": "2026-08-08T17:18:18.462Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
