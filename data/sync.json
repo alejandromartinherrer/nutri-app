@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-08T17:25:51.423Z",
+ "savedAt": "2026-08-08T17:27:01.700Z",
  "state": {
   "members": [
    {
@@ -2297,17 +2297,17 @@
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
+         "dish": "Brocoli pure de patata",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Brocoli pure de patata",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Brocoli pure de patata",
          "invId": null,
          "away": false
         }
@@ -2683,8 +2683,8 @@
    }
   },
   "current": "2026-08-10",
-  "updatedAt": "2026-08-08T17:25:51.423Z",
-  "lastSync": "2026-08-08T17:21:16.276Z",
+  "updatedAt": "2026-08-08T17:27:01.700Z",
+  "lastSync": "2026-08-08T17:26:23.514Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
