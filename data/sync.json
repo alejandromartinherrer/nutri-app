@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-08T17:31:14.084Z",
+ "savedAt": "2026-08-08T17:31:58.790Z",
  "state": {
   "members": [
    {
@@ -2499,17 +2499,17 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
+         "dish": "Ensalada de garbanzos especiados y pepino",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Ensalada de garbanzos especiados y pepino",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Ensalada de garbanzos especiados y pepino",
          "invId": null,
          "away": false
         }
@@ -2683,8 +2683,8 @@
    }
   },
   "current": "2026-08-10",
-  "updatedAt": "2026-08-08T17:31:14.084Z",
-  "lastSync": "2026-08-08T17:27:10.905Z",
+  "updatedAt": "2026-08-08T17:31:58.790Z",
+  "lastSync": "2026-08-08T17:31:46.475Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
