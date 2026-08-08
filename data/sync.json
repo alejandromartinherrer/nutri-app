@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-08T17:36:17.353Z",
+ "savedAt": "2026-08-08T17:37:05.059Z",
  "state": {
   "members": [
    {
@@ -2521,7 +2521,7 @@
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Maiz",
          "invId": null,
          "away": false
         },
@@ -2683,8 +2683,8 @@
    }
   },
   "current": "2026-08-10",
-  "updatedAt": "2026-08-08T17:36:17.353Z",
-  "lastSync": "2026-08-08T17:33:02.125Z",
+  "updatedAt": "2026-08-08T17:37:05.059Z",
+  "lastSync": "2026-08-08T17:36:36.610Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
