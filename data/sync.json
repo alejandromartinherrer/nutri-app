@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-08T17:13:18.507Z",
+ "savedAt": "2026-08-08T17:14:18.012Z",
  "state": {
   "members": [
    {
@@ -2280,17 +2280,17 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
+         "dish": "Chicken curry",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Chicken curry",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Chicken curry",
          "invId": null,
          "away": false
         }
@@ -2683,8 +2683,8 @@
    }
   },
   "current": "2026-08-10",
-  "updatedAt": "2026-08-08T17:13:18.507Z",
-  "lastSync": "2026-08-08T17:12:58.187Z",
+  "updatedAt": "2026-08-08T17:14:18.012Z",
+  "lastSync": "2026-08-08T17:13:38.103Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
