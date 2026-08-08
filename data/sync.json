@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-08T17:31:58.790Z",
+ "savedAt": "2026-08-08T17:32:41.432Z",
  "state": {
   "members": [
    {
@@ -2443,17 +2443,17 @@
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
+         "dish": "Crema de calabaza y jengibre",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Crema de calabaza y jengibre",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Crema de calabaza y jengibre",
          "invId": null,
          "away": false
         }
@@ -2683,8 +2683,8 @@
    }
   },
   "current": "2026-08-10",
-  "updatedAt": "2026-08-08T17:31:58.790Z",
-  "lastSync": "2026-08-08T17:31:46.475Z",
+  "updatedAt": "2026-08-08T17:32:41.432Z",
+  "lastSync": "2026-08-08T17:32:14.700Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
