@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-11T08:01:27.951Z",
+ "savedAt": "2026-08-12T20:11:05.029Z",
  "state": {
   "members": [
    {
@@ -84,7 +84,13 @@
     "done": false
    }
   ],
-  "extras": [],
+  "extras": [
+   {
+    "id": "x2f4vjk",
+    "name": "Salsa Bbq",
+    "done": false
+   }
+  ],
   "userDishes": [
    {
     "name": "Chicken Curry (Versión Thermomix)",
@@ -2683,12 +2689,12 @@
    }
   },
   "current": "2026-08-10",
-  "updatedAt": "2026-08-11T08:01:27.951Z",
-  "lastSync": "2026-08-08T17:37:54.088Z",
+  "updatedAt": "2026-08-12T20:11:05.029Z",
+  "lastSync": "2026-08-11T08:02:00.059Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
-  "shopWeek": "2026-07-20",
+  "shopWeek": "2026-08-10",
   "txtSize": "normal"
  }
 }
