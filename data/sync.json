@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-17T20:53:59.823Z",
+ "savedAt": "2026-08-17T20:55:04.849Z",
  "state": {
   "members": [
    {
@@ -2910,17 +2910,17 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Bowl de quinoa, aguacate y huevo · Quinoa con pollo y verduras al curry",
+         "dish": "Lentejas a la jardinera",
          "invId": "29myl1q",
          "away": false
         },
         "noah": {
-         "dish": "Bowl de quinoa, aguacate y huevo · Quinoa con pollo y verduras al curry",
+         "dish": "Lentejas a la jardinera",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Bowl de quinoa, aguacate y huevo · Quinoa con pollo y verduras al curry",
+         "dish": "Lentejas a la jardinera",
          "invId": null,
          "away": false
         }
@@ -3313,8 +3313,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-17T20:53:59.823Z",
-  "lastSync": "2026-08-17T20:53:38.920Z",
+  "updatedAt": "2026-08-17T20:55:04.849Z",
+  "lastSync": "2026-08-17T20:54:31.752Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
