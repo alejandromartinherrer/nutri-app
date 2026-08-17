@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-17T20:58:36.376Z",
+ "savedAt": "2026-08-17T21:00:17.276Z",
  "state": {
   "members": [
    {
@@ -61,15 +61,6 @@
      "pri": true
     },
     {
-     "id": "hkg3mz1",
-     "name": "Judías verdes",
-     "qty": 1,
-     "unit": "",
-     "cad": null,
-     "added": "2026-08-17",
-     "pri": true
-    },
-    {
      "id": "nmgbz0n",
      "name": "Tomate",
      "qty": 2,
@@ -106,28 +97,10 @@
      "pri": true
     },
     {
-     "id": "q4wudd4",
-     "name": "Empanadillas",
-     "qty": 1,
-     "unit": "Ud",
-     "cad": null,
-     "added": "2026-08-17",
-     "pri": true
-    },
-    {
      "id": "pm50d3o",
      "name": "Brócoli y patata",
      "qty": 1,
      "unit": "",
-     "cad": null,
-     "added": "2026-08-17",
-     "pri": true
-    },
-    {
-     "id": "t031eee",
-     "name": "Contra muslos",
-     "qty": 3,
-     "unit": "Ud",
      "cad": null,
      "added": "2026-08-17",
      "pri": true
@@ -3313,8 +3286,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-17T20:58:36.376Z",
-  "lastSync": "2026-08-17T20:57:46.278Z",
+  "updatedAt": "2026-08-17T21:00:17.276Z",
+  "lastSync": "2026-08-17T20:59:09.482Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
