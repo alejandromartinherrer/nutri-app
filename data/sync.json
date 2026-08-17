@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-17T20:49:55.077Z",
+ "savedAt": "2026-08-17T20:52:16.720Z",
  "state": {
   "members": [
    {
@@ -197,36 +197,8 @@
     }
    ]
   },
-  "produce": [
-   {
-    "id": "qp8jowj",
-    "name": "Manzana",
-    "qty": 5,
-    "unit": "ud",
-    "done": false
-   },
-   {
-    "id": "ejh468q",
-    "name": "Tomate cherry",
-    "qty": 1,
-    "unit": "Kg",
-    "done": false
-   },
-   {
-    "id": "og0tp08",
-    "name": "Kiwi",
-    "qty": 2,
-    "unit": "ud",
-    "done": false
-   }
-  ],
-  "extras": [
-   {
-    "id": "x2f4vjk",
-    "name": "Salsa Bbq",
-    "done": false
-   }
-  ],
+  "produce": [],
+  "extras": [],
   "userDishes": [
    {
     "name": "Chicken Curry (Versión Thermomix)",
@@ -3341,12 +3313,12 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-17T20:49:55.077Z",
-  "lastSync": "2026-08-17T20:49:49.306Z",
+  "updatedAt": "2026-08-17T20:52:16.720Z",
+  "lastSync": "2026-08-17T20:50:16.652Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
-  "shopWeek": "2026-08-10",
+  "shopWeek": "2026-08-17",
   "txtSize": "normal"
  }
 }
