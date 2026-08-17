@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-17T21:02:30.860Z",
+ "savedAt": "2026-08-17T21:03:50.156Z",
  "state": {
   "members": [
    {
@@ -75,15 +75,6 @@
      "qty": 1,
      "unit": "",
      "cad": null,
-     "added": "2026-08-17",
-     "pri": true
-    },
-    {
-     "id": "29myl1q",
-     "name": "Pollo picado",
-     "qty": 0,
-     "unit": "Kg",
-     "cad": "2026-08-21",
      "added": "2026-08-17",
      "pri": true
     },
@@ -3020,17 +3011,17 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Espárragos a la plancha · Burrito bowl de pavo y frijoles",
+         "dish": "Albóndigas con tomate",
          "invId": "tg18ylv",
          "away": false
         },
         "noah": {
-         "dish": "Pollo con patata y verdura",
-         "invId": "29myl1q",
+         "dish": "Albóndigas con tomate",
+         "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Espárragos a la plancha · Burrito bowl de pavo y frijoles",
+         "dish": "Albóndigas con tomate",
          "invId": null,
          "away": false
         }
@@ -3277,8 +3268,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-17T21:02:30.860Z",
-  "lastSync": "2026-08-17T21:02:16.864Z",
+  "updatedAt": "2026-08-17T21:03:50.156Z",
+  "lastSync": "2026-08-17T21:03:03.648Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
