@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-17T20:53:06.758Z",
+ "savedAt": "2026-08-17T20:53:59.823Z",
  "state": {
   "members": [
    {
@@ -99,7 +99,7 @@
     {
      "id": "29myl1q",
      "name": "Pollo picado",
-     "qty": 1,
+     "qty": 0,
      "unit": "Kg",
      "cad": "2026-08-21",
      "added": "2026-08-17",
@@ -2915,8 +2915,8 @@
          "away": false
         },
         "noah": {
-         "dish": "Nuggets caseros de pollo",
-         "invId": "29myl1q",
+         "dish": "Bowl de quinoa, aguacate y huevo · Quinoa con pollo y verduras al curry",
+         "invId": null,
          "away": false
         },
         "iria": {
@@ -3313,8 +3313,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-17T20:53:06.758Z",
-  "lastSync": "2026-08-17T20:52:37.814Z",
+  "updatedAt": "2026-08-17T20:53:59.823Z",
+  "lastSync": "2026-08-17T20:53:38.920Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
