@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-17T20:57:20.296Z",
+ "savedAt": "2026-08-17T20:58:36.376Z",
  "state": {
   "members": [
    {
@@ -81,7 +81,7 @@
     {
      "id": "swhgtf9",
      "name": "Aguacate",
-     "qty": 2,
+     "qty": 1,
      "unit": "",
      "cad": null,
      "added": "2026-08-17",
@@ -3000,17 +3000,17 @@
        },
        "Cena": {
         "nosotros": {
-         "dish": "Tartar de atún con aguacate",
+         "dish": "Empanadillas pollo al curry",
          "invId": "swhgtf9",
          "away": false
         },
         "noah": {
-         "dish": "Tartar de atún con aguacate",
+         "dish": "Empanadillas pollo al curry",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Tartar de atún con aguacate",
+         "dish": "Empanadillas pollo al curry",
          "invId": null,
          "away": false
         }
@@ -3313,8 +3313,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-17T20:57:20.296Z",
-  "lastSync": "2026-08-17T20:55:37.714Z",
+  "updatedAt": "2026-08-17T20:58:36.376Z",
+  "lastSync": "2026-08-17T20:57:46.278Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
