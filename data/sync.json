@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-17T21:04:13.522Z",
+ "savedAt": "2026-08-17T21:05:42.414Z",
  "state": {
   "members": [
    {
@@ -54,15 +54,6 @@
     {
      "id": "swhgtf9",
      "name": "Aguacate",
-     "qty": 1,
-     "unit": "",
-     "cad": null,
-     "added": "2026-08-17",
-     "pri": true
-    },
-    {
-     "id": "pm50d3o",
-     "name": "Brócoli y patata",
      "qty": 1,
      "unit": "",
      "cad": null,
@@ -3010,17 +3001,17 @@
        },
        "Cena": {
         "nosotros": {
-         "dish": "Tortilla de brócoli y queso fresco",
+         "dish": "Esparragos trigueros · Maiz al horno",
          "invId": "pm50d3o",
          "away": false
         },
         "noah": {
-         "dish": "Tortilla de brócoli y queso fresco",
+         "dish": "Brócoli con patata",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Tortilla de brócoli y queso fresco",
+         "dish": "Brócoli con patata",
          "invId": null,
          "away": false
         }
@@ -3250,8 +3241,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-17T21:04:13.522Z",
-  "lastSync": "2026-08-17T21:04:08.916Z",
+  "updatedAt": "2026-08-17T21:05:42.414Z",
+  "lastSync": "2026-08-17T21:04:45.728Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
