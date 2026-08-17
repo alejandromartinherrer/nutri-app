@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-17T20:52:16.720Z",
+ "savedAt": "2026-08-17T20:53:06.758Z",
  "state": {
   "members": [
    {
@@ -90,7 +90,7 @@
     {
      "id": "tg18ylv",
      "name": "Filetes Pavo",
-     "qty": 8,
+     "qty": 7,
      "unit": "Ud",
      "cad": "2026-08-23",
      "added": "2026-08-17",
@@ -2837,34 +2837,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Ensalada de lentejas, aguacate y tomate · Pavo a la plancha",
+         "invId": "tg18ylv",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Ensalada de lentejas, aguacate y tomate · Pavo a la plancha",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Ensalada de lentejas, aguacate y tomate · Pavo a la plancha",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Huevos rellenos de salmón con salsa de aguacate",
+         "invId": "swhgtf9",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Huevos rellenos de salmón con salsa de aguacate",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Huevos rellenos de salmón con salsa de aguacate",
          "invId": null,
          "away": false
         }
@@ -2910,34 +2910,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Bowl de quinoa, aguacate y huevo · Quinoa con pollo y verduras al curry",
+         "invId": "29myl1q",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Nuggets caseros de pollo",
+         "invId": "29myl1q",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Bowl de quinoa, aguacate y huevo · Quinoa con pollo y verduras al curry",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Shawarma de pollo en wrap integral",
+         "invId": "29myl1q",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Shawarma de pollo en wrap integral",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Shawarma de pollo en wrap integral",
          "invId": null,
          "away": false
         }
@@ -2983,34 +2983,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Ensalada de aguacate, tomate y huevo · Berenjena rellena de quinoa y verduras",
+         "invId": "i3n9nc7",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Mini-albóndigas de pavo con tomate casero",
+         "invId": "nmgbz0n",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Ensalada de aguacate, tomate y huevo · Berenjena rellena de quinoa y verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Tartar de atún con aguacate",
+         "invId": "swhgtf9",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Tartar de atún con aguacate",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Tartar de atún con aguacate",
          "invId": null,
          "away": false
         }
@@ -3056,34 +3056,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Espárragos a la plancha · Burrito bowl de pavo y frijoles",
+         "invId": "tg18ylv",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Pollo con patata y verdura",
+         "invId": "29myl1q",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Espárragos a la plancha · Burrito bowl de pavo y frijoles",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Tortilla de brócoli y queso fresco",
+         "invId": "pm50d3o",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Tortilla de brócoli y queso fresco",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Tortilla de brócoli y queso fresco",
          "invId": null,
          "away": false
         }
@@ -3129,34 +3129,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Ensalada de garbanzos, tomate y atún · Cuscús marroquí de verduras y pollo",
+         "invId": "29myl1q",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Pizza casera de verduras",
+         "invId": "u1ktlpw",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Ensalada de garbanzos, tomate y atún · Cuscús marroquí de verduras y pollo",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Espárragos trigueros con jamón y huevo",
+         "invId": "ph49q8k",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Espárragos trigueros con jamón y huevo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Espárragos trigueros con jamón y huevo",
          "invId": null,
          "away": false
         }
@@ -3202,34 +3202,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Ensalada de garbanzos especiados y pepino · Pollo teriyaki con arroz integral",
+         "invId": "29myl1q",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Mini hamburguesas de pollo",
+         "invId": "29myl1q",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Ensalada de garbanzos especiados y pepino · Pollo teriyaki con arroz integral",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Quesadilla integral de pollo y verduras",
+         "invId": "29myl1q",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Quesadilla integral de pollo y verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Quesadilla integral de pollo y verduras",
          "invId": null,
          "away": false
         }
@@ -3275,34 +3275,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Judías verdes con patata · Muslos de pollo al horno con limón",
+         "invId": "29myl1q",
          "away": false
         },
         "noah": {
-         "dish": "",
-         "invId": null,
+         "dish": "Macarrones con tomate",
+         "invId": "nmgbz0n",
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Judías verdes con patata · Muslos de pollo al horno con limón",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Pizza con base de coliflor",
+         "invId": "u1ktlpw",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Pizza con base de coliflor",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Pizza con base de coliflor",
          "invId": null,
          "away": false
         }
@@ -3313,8 +3313,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-17T20:52:16.720Z",
-  "lastSync": "2026-08-17T20:50:16.652Z",
+  "updatedAt": "2026-08-17T20:53:06.758Z",
+  "lastSync": "2026-08-17T20:52:37.814Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
