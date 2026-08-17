@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-17T20:46:00.896Z",
+ "savedAt": "2026-08-17T20:46:44.417Z",
  "state": {
   "members": [
    {
@@ -68,17 +68,27 @@
      "cad": null,
      "added": "2026-08-17",
      "pri": true
+    },
+    {
+     "id": "nmgbz0n",
+     "name": "Tomate",
+     "qty": 2,
+     "unit": "Kg",
+     "cad": null,
+     "added": "2026-08-17",
+     "pri": true
+    },
+    {
+     "id": "swhgtf9",
+     "name": "Aguacate",
+     "qty": 2,
+     "unit": "",
+     "cad": null,
+     "added": "2026-08-17",
+     "pri": true
     }
    ],
    "conge": [
-    {
-     "id": "atr4p8u",
-     "name": "Atún",
-     "qty": 1,
-     "unit": "",
-     "added": "2026-07-20",
-     "pri": false
-    },
     {
      "id": "nth93uf",
      "name": "Pechugas Pollo",
@@ -3241,8 +3251,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-17T20:46:00.896Z",
-  "lastSync": "2026-08-12T20:11:11.275Z",
+  "updatedAt": "2026-08-17T20:46:44.417Z",
+  "lastSync": "2026-08-17T20:46:33.516Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
