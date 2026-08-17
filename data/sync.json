@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-17T21:05:42.414Z",
+ "savedAt": "2026-08-17T21:06:23.589Z",
  "state": {
   "members": [
    {
@@ -3057,34 +3057,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Ensalada de garbanzos, tomate y atún · Cuscús marroquí de verduras y pollo",
+         "dish": "Lentejas con atún y huevo",
          "invId": "29myl1q",
          "away": false
         },
         "noah": {
-         "dish": "Pizza casera de verduras",
-         "invId": "u1ktlpw",
+         "dish": "Lentejas con atún y huevo",
+         "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Ensalada de garbanzos, tomate y atún · Cuscús marroquí de verduras y pollo",
+         "dish": "Lentejas con atún y huevo",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Espárragos trigueros con jamón y huevo",
-         "invId": "ph49q8k",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Espárragos trigueros con jamón y huevo",
+         "dish": "",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Espárragos trigueros con jamón y huevo",
+         "dish": "",
          "invId": null,
          "away": false
         }
@@ -3241,8 +3241,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-17T21:05:42.414Z",
-  "lastSync": "2026-08-17T21:04:45.728Z",
+  "updatedAt": "2026-08-17T21:06:23.589Z",
+  "lastSync": "2026-08-17T21:06:14.679Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
