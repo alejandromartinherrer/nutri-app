@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-17T21:01:44.744Z",
+ "savedAt": "2026-08-17T21:02:30.860Z",
  "state": {
   "members": [
    {
@@ -75,15 +75,6 @@
      "qty": 1,
      "unit": "",
      "cad": null,
-     "added": "2026-08-17",
-     "pri": true
-    },
-    {
-     "id": "tg18ylv",
-     "name": "Filetes Pavo",
-     "qty": 6,
-     "unit": "Ud",
-     "cad": "2026-08-23",
      "added": "2026-08-17",
      "pri": true
     },
@@ -2956,17 +2947,17 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Judías verdes con patata · Berenjena rellena de quinoa y verduras",
+         "dish": "Judías verdes con patata · Filetes de pavo",
          "invId": "i3n9nc7",
          "away": false
         },
         "noah": {
-         "dish": "Judías verdes con patata · Berenjena rellena de quinoa y verduras",
+         "dish": "Judías verdes con patata · Filetes de pavo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Judías verdes con patata · Berenjena rellena de quinoa y verduras",
+         "dish": "Judías verdes con patata · Filetes de pavo",
          "invId": null,
          "away": false
         }
@@ -3286,8 +3277,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-17T21:01:44.744Z",
-  "lastSync": "2026-08-17T21:00:52.253Z",
+  "updatedAt": "2026-08-17T21:02:30.860Z",
+  "lastSync": "2026-08-17T21:02:16.864Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
