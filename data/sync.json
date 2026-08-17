@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-17T20:55:04.849Z",
+ "savedAt": "2026-08-17T20:57:20.296Z",
  "state": {
   "members": [
    {
@@ -90,7 +90,7 @@
     {
      "id": "tg18ylv",
      "name": "Filetes Pavo",
-     "qty": 7,
+     "qty": 6,
      "unit": "Ud",
      "cad": "2026-08-23",
      "added": "2026-08-17",
@@ -2837,17 +2837,17 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Ensalada de lentejas, aguacate y tomate · Pavo a la plancha",
+         "dish": "Chicken Curry (Versión Thermomix)",
          "invId": "tg18ylv",
          "away": false
         },
         "noah": {
-         "dish": "Ensalada de lentejas, aguacate y tomate · Pavo a la plancha",
+         "dish": "Chicken Curry (Versión Thermomix)",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Ensalada de lentejas, aguacate y tomate · Pavo a la plancha",
+         "dish": "Chicken Curry (Versión Thermomix)",
          "invId": null,
          "away": false
         }
@@ -3313,8 +3313,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-17T20:55:04.849Z",
-  "lastSync": "2026-08-17T20:54:31.752Z",
+  "updatedAt": "2026-08-17T20:57:20.296Z",
+  "lastSync": "2026-08-17T20:55:37.714Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
