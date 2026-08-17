@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-17T20:46:44.417Z",
+ "savedAt": "2026-08-17T20:49:17.684Z",
  "state": {
   "members": [
    {
@@ -86,6 +86,60 @@
      "cad": null,
      "added": "2026-08-17",
      "pri": true
+    },
+    {
+     "id": "tg18ylv",
+     "name": "Filetes Pavo",
+     "qty": 8,
+     "unit": "Ud",
+     "cad": "2026-08-23",
+     "added": "2026-08-17",
+     "pri": true
+    },
+    {
+     "id": "29myl1q",
+     "name": "Pollo picado",
+     "qty": 1,
+     "unit": "Kg",
+     "cad": "2026-08-21",
+     "added": "2026-08-17",
+     "pri": true
+    },
+    {
+     "id": "q4wudd4",
+     "name": "Empanadillas",
+     "qty": 1,
+     "unit": "Ud",
+     "cad": null,
+     "added": "2026-08-17",
+     "pri": true
+    },
+    {
+     "id": "pm50d3o",
+     "name": "Brócoli y patata",
+     "qty": 1,
+     "unit": "",
+     "cad": null,
+     "added": "2026-08-17",
+     "pri": true
+    },
+    {
+     "id": "t031eee",
+     "name": "Contra muslos",
+     "qty": 3,
+     "unit": "Ud",
+     "cad": null,
+     "added": "2026-08-17",
+     "pri": true
+    },
+    {
+     "id": "u1ktlpw",
+     "name": "Pizza",
+     "qty": 1,
+     "unit": "",
+     "cad": null,
+     "added": "2026-08-17",
+     "pri": true
     }
    ],
    "conge": [
@@ -103,6 +157,24 @@
      "qty": 1,
      "unit": "",
      "added": "2026-07-20",
+     "pri": false
+    },
+    {
+     "id": "n2xyssw",
+     "name": "Menestra de verduras",
+     "qty": 1,
+     "unit": "",
+     "cad": null,
+     "added": "2026-08-17",
+     "pri": false
+    },
+    {
+     "id": "wbizxhl",
+     "name": "Pollo con verduras",
+     "qty": 1,
+     "unit": "",
+     "cad": null,
+     "added": "2026-08-17",
      "pri": false
     }
    ]
@@ -3251,8 +3323,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-17T20:46:44.417Z",
-  "lastSync": "2026-08-17T20:46:33.516Z",
+  "updatedAt": "2026-08-17T20:49:17.684Z",
+  "lastSync": "2026-08-17T20:46:50.925Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
