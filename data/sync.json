@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-17T21:00:17.276Z",
+ "savedAt": "2026-08-17T21:01:44.744Z",
  "state": {
   "members": [
    {
@@ -28,7 +28,7 @@
     {
      "id": "i3n9nc7",
      "name": "Berenjena",
-     "qty": 1,
+     "qty": 0,
      "unit": "",
      "added": "2026-07-20",
      "pri": true
@@ -2956,17 +2956,17 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Ensalada de aguacate, tomate y huevo · Berenjena rellena de quinoa y verduras",
+         "dish": "Judías verdes con patata · Berenjena rellena de quinoa y verduras",
          "invId": "i3n9nc7",
          "away": false
         },
         "noah": {
-         "dish": "Mini-albóndigas de pavo con tomate casero",
-         "invId": "nmgbz0n",
+         "dish": "Judías verdes con patata · Berenjena rellena de quinoa y verduras",
+         "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Ensalada de aguacate, tomate y huevo · Berenjena rellena de quinoa y verduras",
+         "dish": "Judías verdes con patata · Berenjena rellena de quinoa y verduras",
          "invId": null,
          "away": false
         }
@@ -3286,8 +3286,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-17T21:00:17.276Z",
-  "lastSync": "2026-08-17T20:59:09.482Z",
+  "updatedAt": "2026-08-17T21:01:44.744Z",
+  "lastSync": "2026-08-17T21:00:52.253Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
