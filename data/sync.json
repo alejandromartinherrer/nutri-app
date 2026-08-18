@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-18T10:00:59.589Z",
+ "savedAt": "2026-08-18T14:44:37.586Z",
  "state": {
   "members": [
    {
@@ -201,6 +201,11 @@
    {
     "id": "81v82tc",
     "name": "Limpia Cristales",
+    "done": false
+   },
+   {
+    "id": "r6cx7ij",
+    "name": "Lentejas",
     "done": false
    }
   ],
@@ -3318,8 +3323,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-18T10:00:59.589Z",
-  "lastSync": "2026-08-18T10:00:36.170Z",
+  "updatedAt": "2026-08-18T14:44:37.586Z",
+  "lastSync": "2026-08-18T10:01:03.815Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
