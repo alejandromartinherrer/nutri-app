@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-18T10:00:32.815Z",
+ "savedAt": "2026-08-18T10:00:59.589Z",
  "state": {
   "members": [
    {
@@ -187,6 +187,13 @@
     "name": "Lechuga romana",
     "qty": 1,
     "unit": "ud",
+    "done": false
+   },
+   {
+    "id": "v17z5r3",
+    "name": "Zanahoria",
+    "qty": 1,
+    "unit": "Bolsa",
     "done": false
    }
   ],
@@ -3311,8 +3318,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-18T10:00:32.815Z",
-  "lastSync": "2026-08-18T10:00:21.936Z",
+  "updatedAt": "2026-08-18T10:00:59.589Z",
+  "lastSync": "2026-08-18T10:00:36.170Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
