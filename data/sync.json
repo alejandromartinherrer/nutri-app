@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-18T10:00:18.587Z",
+ "savedAt": "2026-08-18T10:00:32.815Z",
  "state": {
   "members": [
    {
@@ -179,6 +179,13 @@
     "id": "399u912",
     "name": "Puerro",
     "qty": 2,
+    "unit": "ud",
+    "done": false
+   },
+   {
+    "id": "cdxqwbs",
+    "name": "Lechuga romana",
+    "qty": 1,
     "unit": "ud",
     "done": false
    }
@@ -3304,8 +3311,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-18T10:00:18.587Z",
-  "lastSync": "2026-08-18T10:00:04.935Z",
+  "updatedAt": "2026-08-18T10:00:32.815Z",
+  "lastSync": "2026-08-18T10:00:21.936Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
