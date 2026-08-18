@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-18T09:59:26.030Z",
+ "savedAt": "2026-08-18T09:59:47.255Z",
  "state": {
   "members": [
    {
@@ -157,6 +157,13 @@
    {
     "id": "mfuhcdt",
     "name": "Paraguayo",
+    "qty": 5,
+    "unit": "ud",
+    "done": false
+   },
+   {
+    "id": "toue0ai",
+    "name": "Melocotón",
     "qty": 5,
     "unit": "ud",
     "done": false
@@ -3283,8 +3290,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-18T09:59:26.030Z",
-  "lastSync": "2026-08-18T09:59:09.029Z",
+  "updatedAt": "2026-08-18T09:59:47.255Z",
+  "lastSync": "2026-08-18T09:59:29.815Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
