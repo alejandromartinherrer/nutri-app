@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-18T14:44:37.586Z",
+ "savedAt": "2026-08-18T15:35:37.262Z",
  "state": {
   "members": [
    {
@@ -206,6 +206,11 @@
    {
     "id": "r6cx7ij",
     "name": "Lentejas",
+    "done": false
+   },
+   {
+    "id": "kop3mpo",
+    "name": "Sensodyne",
     "done": false
    }
   ],
@@ -3323,8 +3328,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-18T14:44:37.586Z",
-  "lastSync": "2026-08-18T10:01:03.815Z",
+  "updatedAt": "2026-08-18T15:35:37.262Z",
+  "lastSync": "2026-08-18T14:44:47.126Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
