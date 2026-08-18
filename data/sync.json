@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-18T07:19:39.912Z",
+ "savedAt": "2026-08-18T09:58:12.620Z",
  "state": {
   "members": [
    {
@@ -125,7 +125,15 @@
     }
    ]
   },
-  "produce": [],
+  "produce": [
+   {
+    "id": "abp9wl4",
+    "name": "Sandía",
+    "qty": 1,
+    "unit": "ud",
+    "done": false
+   }
+  ],
   "extras": [
    {
     "id": "81v82tc",
@@ -3247,8 +3255,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-18T07:19:39.912Z",
-  "lastSync": "2026-08-17T21:07:38.227Z",
+  "updatedAt": "2026-08-18T09:58:12.620Z",
+  "lastSync": "2026-08-18T07:19:56.872Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
