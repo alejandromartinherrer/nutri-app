@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-18T09:58:24.900Z",
+ "savedAt": "2026-08-18T09:58:41.423Z",
  "state": {
   "members": [
    {
@@ -138,6 +138,13 @@
     "name": "Melón",
     "qty": 1,
     "unit": "ud",
+    "done": false
+   },
+   {
+    "id": "gkvuxo1",
+    "name": "Judías verdes",
+    "qty": 1,
+    "unit": "Kg",
     "done": false
    }
   ],
@@ -3262,8 +3269,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-18T09:58:24.900Z",
-  "lastSync": "2026-08-18T09:58:15.884Z",
+  "updatedAt": "2026-08-18T09:58:41.423Z",
+  "lastSync": "2026-08-18T09:58:29.504Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
