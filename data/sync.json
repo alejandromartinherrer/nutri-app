@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-18T10:00:01.629Z",
+ "savedAt": "2026-08-18T10:00:18.587Z",
  "state": {
   "members": [
    {
@@ -172,6 +172,13 @@
     "id": "o4l799r",
     "name": "Cebolla seca",
     "qty": 5,
+    "unit": "ud",
+    "done": false
+   },
+   {
+    "id": "399u912",
+    "name": "Puerro",
+    "qty": 2,
     "unit": "ud",
     "done": false
    }
@@ -3297,8 +3304,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-18T10:00:01.629Z",
-  "lastSync": "2026-08-18T09:59:50.601Z",
+  "updatedAt": "2026-08-18T10:00:18.587Z",
+  "lastSync": "2026-08-18T10:00:04.935Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
