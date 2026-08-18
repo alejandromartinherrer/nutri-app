@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-18T09:59:04.406Z",
+ "savedAt": "2026-08-18T09:59:26.030Z",
  "state": {
   "members": [
    {
@@ -152,6 +152,13 @@
     "name": "Uva blanca",
     "qty": 1,
     "unit": "Kg",
+    "done": false
+   },
+   {
+    "id": "mfuhcdt",
+    "name": "Paraguayo",
+    "qty": 5,
+    "unit": "ud",
     "done": false
    }
   ],
@@ -3276,8 +3283,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-18T09:59:04.406Z",
-  "lastSync": "2026-08-18T09:58:45.273Z",
+  "updatedAt": "2026-08-18T09:59:26.030Z",
+  "lastSync": "2026-08-18T09:59:09.029Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
