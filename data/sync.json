@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-18T15:35:37.262Z",
+ "savedAt": "2026-08-18T17:49:47.042Z",
  "state": {
   "members": [
    {
@@ -201,7 +201,7 @@
    {
     "id": "81v82tc",
     "name": "Limpia Cristales",
-    "done": false
+    "done": true
    },
    {
     "id": "r6cx7ij",
@@ -3328,8 +3328,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-18T15:35:37.262Z",
-  "lastSync": "2026-08-18T14:44:47.126Z",
+  "updatedAt": "2026-08-18T17:49:47.042Z",
+  "lastSync": "2026-08-18T15:35:57.518Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
