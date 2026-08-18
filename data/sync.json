@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-17T21:07:15.692Z",
+ "savedAt": "2026-08-18T07:19:39.912Z",
  "state": {
   "members": [
    {
@@ -126,7 +126,13 @@
    ]
   },
   "produce": [],
-  "extras": [],
+  "extras": [
+   {
+    "id": "81v82tc",
+    "name": "Limpia Cristales",
+    "done": false
+   }
+  ],
   "userDishes": [
    {
     "name": "Chicken Curry (Versión Thermomix)",
@@ -3241,8 +3247,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-17T21:07:15.692Z",
-  "lastSync": "2026-08-17T21:06:35.174Z",
+  "updatedAt": "2026-08-18T07:19:39.912Z",
+  "lastSync": "2026-08-17T21:07:38.227Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
