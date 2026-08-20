@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-20T21:32:43.195Z",
+ "savedAt": "2026-08-20T21:33:33.474Z",
  "state": {
   "members": [
    {
@@ -3227,17 +3227,17 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Judías verdes con patata · Muslos de pollo al horno con limón",
+         "dish": "Fabada · Macarrones",
          "invId": "29myl1q",
          "away": false
         },
         "noah": {
-         "dish": "Macarrones con tomate",
-         "invId": "nmgbz0n",
+         "dish": "Fabada · Macarrones",
+         "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Judías verdes con patata · Muslos de pollo al horno con limón",
+         "dish": "Fabada · Macarrones",
          "invId": null,
          "away": false
         }
@@ -3781,8 +3781,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-20T21:32:43.195Z",
-  "lastSync": "2026-08-20T21:32:17.184Z",
+  "updatedAt": "2026-08-20T21:33:33.474Z",
+  "lastSync": "2026-08-20T21:32:49.849Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
