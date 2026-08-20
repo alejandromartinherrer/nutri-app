@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-20T21:31:44.800Z",
+ "savedAt": "2026-08-20T21:32:43.195Z",
  "state": {
   "members": [
    {
@@ -3154,19 +3154,19 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Ensalada de garbanzos especiados y pepino · Pollo teriyaki con arroz integral",
-         "invId": "29myl1q",
-         "away": false
+         "dish": "",
+         "invId": null,
+         "away": true
         },
         "noah": {
-         "dish": "Mini hamburguesas de pollo",
-         "invId": "29myl1q",
-         "away": false
+         "dish": "",
+         "invId": null,
+         "away": true
         },
         "iria": {
-         "dish": "Ensalada de garbanzos especiados y pepino · Pollo teriyaki con arroz integral",
+         "dish": "",
          "invId": null,
-         "away": false
+         "away": true
         }
        },
        "Cena": {
@@ -3781,8 +3781,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-20T21:31:44.800Z",
-  "lastSync": "2026-08-19T18:33:09.081Z",
+  "updatedAt": "2026-08-20T21:32:43.195Z",
+  "lastSync": "2026-08-20T21:32:17.184Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
