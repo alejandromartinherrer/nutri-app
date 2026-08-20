@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-20T21:33:33.474Z",
+ "savedAt": "2026-08-20T21:36:25.196Z",
  "state": {
   "members": [
    {
@@ -3171,17 +3171,17 @@
        },
        "Cena": {
         "nosotros": {
-         "dish": "Quesadilla integral de pollo y verduras",
+         "dish": "Pizza",
          "invId": "29myl1q",
          "away": false
         },
         "noah": {
-         "dish": "Quesadilla integral de pollo y verduras",
+         "dish": "Pizza",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Quesadilla integral de pollo y verduras",
+         "dish": "Pizza",
          "invId": null,
          "away": false
         }
@@ -3781,8 +3781,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-20T21:33:33.474Z",
-  "lastSync": "2026-08-20T21:32:49.849Z",
+  "updatedAt": "2026-08-20T21:36:25.196Z",
+  "lastSync": "2026-08-20T21:33:54.870Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
