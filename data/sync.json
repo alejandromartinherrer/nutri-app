@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-19T18:32:59.069Z",
+ "savedAt": "2026-08-20T21:31:44.800Z",
  "state": {
   "members": [
    {
@@ -3098,17 +3098,17 @@
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
+         "dish": "Hamburguesa",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Hamburguesa",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Hamburguesa",
          "invId": null,
          "away": false
         }
@@ -3781,8 +3781,8 @@
    }
   },
   "current": "2026-08-17",
-  "updatedAt": "2026-08-19T18:32:59.069Z",
-  "lastSync": "2026-08-19T18:32:08.626Z",
+  "updatedAt": "2026-08-20T21:31:44.800Z",
+  "lastSync": "2026-08-19T18:33:09.081Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
