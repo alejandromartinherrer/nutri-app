@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-20T21:36:25.196Z",
+ "savedAt": "2026-08-23T20:48:35.212Z",
  "state": {
   "members": [
    {
@@ -3305,34 +3305,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Ensalada de lentejas, aguacate y tomate · Bacalao con tomate y pimientos",
-         "invId": "nmgbz0n",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Pizza casera de verduras",
-         "invId": "u1ktlpw",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Ensalada de lentejas, aguacate y tomate · Bacalao con tomate y pimientos",
+         "dish": "",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Revuelto de aguacate, tomate y huevo",
-         "invId": "nmgbz0n",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Revuelto de aguacate, tomate y huevo",
+         "dish": "",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Revuelto de aguacate, tomate y huevo",
+         "dish": "",
          "invId": null,
          "away": false
         }
@@ -3378,34 +3378,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Ensalada de garbanzos, tomate y atún · Albóndigas en salsa de tomate",
-         "invId": "nmgbz0n",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Mini-albóndigas de pavo con tomate casero",
-         "invId": "nmgbz0n",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Ensalada de garbanzos, tomate y atún · Albóndigas en salsa de tomate",
+         "dish": "",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Pizza con base de coliflor",
-         "invId": "u1ktlpw",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Pizza con base de coliflor",
+         "dish": "",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Pizza con base de coliflor",
+         "dish": "",
          "invId": null,
          "away": false
         }
@@ -3451,34 +3451,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Ensalada de garbanzos especiados y pepino · Fajitas de pollo",
-         "invId": "nth93uf",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Macarrones con tomate",
-         "invId": "nmgbz0n",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Ensalada de garbanzos especiados y pepino · Fajitas de pollo",
+         "dish": "",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Mejillones en salsa de tomate",
-         "invId": "nmgbz0n",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Mejillones en salsa de tomate",
+         "dish": "",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Mejillones en salsa de tomate",
+         "dish": "",
          "invId": null,
          "away": false
         }
@@ -3524,34 +3524,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Espaguetis integrales con tomate · Filete de pavo con boniato y ensalada",
-         "invId": "nth93uf",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Crema de verduras con picatostes integrales",
-         "invId": "4bugn5e",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Espaguetis integrales con tomate · Filete de pavo con boniato y ensalada",
+         "dish": "",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Sopa de verduras y lentejas",
-         "invId": "4bugn5e",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Sopa de verduras y lentejas",
+         "dish": "",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Sopa de verduras y lentejas",
+         "dish": "",
          "invId": null,
          "away": false
         }
@@ -3597,34 +3597,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Ensalada de aguacate, tomate y huevo · Pavo en salsa de mostaza y miel",
-         "invId": "nth93uf",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Albóndigas de pollo",
-         "invId": "nth93uf",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Ensalada de aguacate, tomate y huevo · Pavo en salsa de mostaza y miel",
+         "dish": "",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Quesadilla integral de pollo y verduras",
-         "invId": "nth93uf",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Quesadilla integral de pollo y verduras",
+         "dish": "",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Quesadilla integral de pollo y verduras",
+         "dish": "",
          "invId": null,
          "away": false
         }
@@ -3670,34 +3670,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Ensalada de tomate y mozzarella · Pollo al limón",
-         "invId": "nth93uf",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Boniato asado con huevo",
-         "invId": "4bugn5e",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Ensalada de tomate y mozzarella · Pollo al limón",
+         "dish": "",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Tostada integral de aguacate y huevo",
-         "invId": "4bugn5e",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Tostada integral de aguacate y huevo",
+         "dish": "",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Tostada integral de aguacate y huevo",
+         "dish": "",
          "invId": null,
          "away": false
         }
@@ -3743,34 +3743,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Wok de verduras con anacardos · Bowl de pollo, arroz y verduras",
-         "invId": "nth93uf",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Bastones de zanahoria y pollo al horno",
-         "invId": "nth93uf",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Wok de verduras con anacardos · Bowl de pollo, arroz y verduras",
+         "dish": "",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Huevos al plato con verduras",
-         "invId": "4bugn5e",
+         "dish": "",
+         "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "Huevos al plato con verduras",
+         "dish": "",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Huevos al plato con verduras",
+         "dish": "",
          "invId": null,
          "away": false
         }
@@ -3780,9 +3780,9 @@
     ]
    }
   },
-  "current": "2026-08-17",
-  "updatedAt": "2026-08-20T21:36:25.196Z",
-  "lastSync": "2026-08-20T21:33:54.870Z",
+  "current": "2026-08-24",
+  "updatedAt": "2026-08-23T20:48:35.212Z",
+  "lastSync": "2026-08-20T21:36:57.146Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
