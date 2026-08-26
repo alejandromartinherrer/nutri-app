@@ -25,7 +25,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml,DeleteWithUndo,ToastAction,Toast,RecipeServings,ServingsNeeded,DishScale,PantryMatch,ResetWeeklyTicks,BoughtForPantry,SaveBackHome,IngShortName,AisleOf,AisleName,PlannedLabel,TipoFamily,Surprise,UndoSurprise,SurpriseAgain,AssignDishTo,DoCopyDay,DishWhenHtml,THEMES,SyncVerdict,AdoptRemote,PullDeferred,CloudPull,PushBackedOff,FlushPendingPull,SyncPickerKb,RenderPicker,PickerCtxHtml};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml,DeleteWithUndo,ToastAction,Toast,RecipeServings,ServingsNeeded,DishScale,PantryMatch,ResetWeeklyTicks,BoughtForPantry,SaveBackHome,IngShortName,AisleOf,AisleName,PlannedLabel,TipoFamily,Surprise,UndoSurprise,SurpriseAgain,AssignDishTo,DoCopyDay,DishWhenHtml,THEMES,SyncVerdict,AdoptRemote,PullDeferred,CloudPull,PushBackedOff,FlushPendingPull,SyncPickerKb,RenderPicker,PickerCtxHtml,MergeList,MergeShopping,MergeGraves,PruneGraveyard,Stamp,Bury,Unbury,ShopSig,GRAVE_DAYS};\n";
 eval(src);
 const A=global.__api;
 
@@ -803,6 +803,80 @@ ok(A.PickerCtxHtml().indexOf("<b>P")<0,"el nombre se escapa en la linea de conte
 A.OpenPicker(1,"Desayuno","nosotros",false);
 ok(A.PickerCtxHtml()==="","en desayuno/almuerzo no hay 1º y 2º: sin linea");
 A.picker=null;
+
+// ============ 1.14.0: «Otros» y «Fruta y verdura» se fusionan (con lapidas) ============
+const T1="2026-08-02T10:00:00.000Z", T2="2026-08-02T11:00:00.000Z", T3="2026-08-02T12:00:00.000Z";
+// --- lo que motiva todo: dos altas a la vez ya no se pisan ---
+let ml=A.MergeList([{id:"a",name:"Papel",updatedAt:T1}],[{id:"b",name:"Bolsas",updatedAt:T1}],{});
+ok(ml.length===2&&ml.some(x=>x.id==="a")&&ml.some(x=>x.id==="b"),"dos altas simultaneas sobreviven las dos");
+// --- gana la edicion mas reciente (y un des-marcado puede ganar a un marcado) ---
+ml=A.MergeList([{id:"x",done:true,updatedAt:T1}],[{id:"x",done:false,updatedAt:T2}],{});
+ok(ml.length===1&&ml[0].done===false,"en el mismo item gana el toque mas reciente");
+ml=A.MergeList([{id:"x",done:false,updatedAt:T3}],[{id:"x",done:true,updatedAt:T2}],{});
+ok(ml[0].done===false,"des-marcar tambien puede ganar (no siempre manda el 'comprado')");
+// --- la lapida manda SIEMPRE: el fallo que encontro la verificacion adversaria ---
+ok(A.MergeList([{id:"y",updatedAt:T1}],[],{y:T2}).length===0,"lo borrado no vuelve");
+ok(A.MergeList([],[{id:"y",updatedAt:T1}],{y:T2}).length===0,"tampoco vuelve viniendo del otro movil");
+ok(A.MergeList([{id:"y",done:true,updatedAt:T3}],[],{y:T2}).length===0,
+	"marcar como comprado una copia vieja NO resucita lo que el otro borro");
+// --- las lapidas se unen quedandose con la mas reciente, y se podan ---
+const g=A.MergeGraves({a:T1,b:T2},{a:T3});
+ok(g.a===T3&&g.b===T2,"al unir lapidas se queda la mas reciente");
+const ahora=Date.parse("2026-08-02T00:00:00.000Z");
+const podado=A.PruneGraveyard({vieja:"2026-01-01T00:00:00.000Z",nueva:"2026-08-01T00:00:00.000Z"},ahora,90);
+ok(!("vieja" in podado)&&("nueva" in podado),"las lapidas viejas se podan; las recientes no");
+ok(A.GRAVE_DAYS>=90,"el margen de poda deja de sobra para un movil apagado semanas");
+
+// --- de punta a punta: adoptar la nube no pierde ni resucita nada ---
+A.state=A.SeedState(); A.RefreshCatalog(); A.GoToThisWeek();
+A.state.extras=[{id:"mio",name:"Papel de horno",done:false,updatedAt:T2}];
+A.state.produce=[{id:"pf",name:"Peras",qty:6,unit:"ud",done:false,updatedAt:T2}];
+A.state.graveyard={borrado:T2};                      // yo borre «borrado»
+A.state.updatedAt=T1; A.state.lastSync=T1;
+const nube=JSON.parse(JSON.stringify(A.SeedState()));
+nube.extras=[{id:"suyo",name:"Bolsas",done:false,updatedAt:T2},
+             {id:"borrado",name:"Leche",done:true,updatedAt:T3}];  // ella lo marco DESPUES de que yo lo borrara
+nube.produce=[{id:"pn",name:"Manzanas",qty:4,unit:"ud",done:false,updatedAt:T2}];
+nube.graveyard={}; nube.updatedAt=T3;
+A.AdoptRemote({state:nube},{quiet:true});
+const nom=A.state.extras.map(x=>x.name).sort();
+ok(nom.includes("Papel de horno"),"al adoptar conservo lo MIO de Otros");
+ok(nom.includes("Bolsas"),"y recibo lo SUYO");
+ok(!nom.includes("Leche"),"lo que borre no reaparece aunque ella lo tocara despues");
+ok(A.state.graveyard.borrado===T2,"la lapida viaja para que el otro movil tambien lo borre");
+const prod=A.state.produce.map(p=>p.name).sort();
+ok(prod.includes("Peras")&&prod.includes("Manzanas"),"la fruta tambien se fusiona en ambos sentidos");
+
+// --- borrar deja lapida; deshacer la retira ---
+A.state=A.SeedState(); A.RefreshCatalog();
+A.state.graveyard={};
+A.state.extras=[{id:"e1",name:"Uno",done:false,updatedAt:T1},{id:"e2",name:"Dos",done:false,updatedAt:T1}];
+A.DeleteWithUndo(A.state.extras,1);
+ok(A.state.extras.length===1&&!!A.state.graveyard.e2,"al borrar de Otros queda lapida");
+ok(A.MergeList(A.state.extras,[{id:"e2",name:"Dos",updatedAt:T1}],A.state.graveyard).length===1,
+	"y la copia del otro movil no lo devuelve");
+// deshacer: reproducimos lo que hace el callback del boton (Unbury + Stamp + volver a meterlo)
+A.state.extras=[{id:"e1",name:"Uno",done:false,updatedAt:T1},{id:"e2",name:"Dos",done:false,updatedAt:T1}];
+A.state.graveyard={};
+const borradoE=A.DeleteWithUndo(A.state.extras,1);
+A.Unbury(borradoE.id); A.Stamp(borradoE); A.state.extras.push(borradoE);
+ok(!A.state.graveyard.e2,"deshacer retira la lapida");
+ok(A.MergeList(A.state.extras,[],A.state.graveyard).some(x=>x.id==="e2"),"y el item restaurado se queda");
+// borrar en OTRAS listas (despensa, recetario) no ensucia el cementerio
+A.state.graveyard={};
+const inv=A.state.inventory.frigo;
+A.DeleteWithUndo(inv,0);
+ok(Object.keys(A.state.graveyard).length===0,"borrar en la despensa no crea lapidas (solo las listas compartidas)");
+
+// --- la lapida se sincroniza y no rompe copias antiguas ---
+A.state=A.SeedState(); A.RefreshCatalog(); A.state.updatedAt=T1;
+ok(A.BuildSyncPayload(A.state).state.graveyard!==undefined,"el cementerio viaja en la copia de la nube");
+ok(A.ValidState({weeks:{},members:[],inventory:{frigo:[],conge:[]},produce:[]})===true,
+	"una copia antigua SIN cementerio sigue siendo valida");
+ok(A.MergeShopping({extras:[],produce:[]},null).extras.length===0,"MergeShopping con origen nulo no rompe");
+// altas y toques sellan la hora (si no, la fusion no sabria cual es mas nueva)
+ok(/\bStamp\(/.test(html.slice(html.indexOf('case "ex-add"'),html.indexOf('case "ex-add"')+400)),"el alta en Otros sella la hora");
+ok(/\bStamp\(x\)/.test(html.slice(html.indexOf('case "ex-done"'),html.indexOf('case "ex-done"')+300)),"marcar comprado sella la hora");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);

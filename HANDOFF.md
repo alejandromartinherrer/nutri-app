@@ -1,10 +1,10 @@
 # Nutri APP — Handoff
 
-## Estado actual (v1.13.1 — 2026-08-26)
+## Estado actual (v1.14.0 — 2026-08-26)
 - Repo: `github.com/alejandromartinherrer/nutri-app` (público, Pages activo).
 - App: `https://alejandromartinherrer.github.io/nutri-app/` · HTML único `index.html`.
 - Carpeta local: `C:\claude_projects\web-apps\nutri-app` · Node LTS v24 en el sistema.
-- **329 asserts** en verde (UTC / Europe/Madrid / America/Los_Angeles). CI en cada push.
+- **353 asserts** en verde (UTC / Europe/Madrid / America/Los_Angeles). CI en cada push.
 - Recetario: **200 platos** (166 SEED + 34 Realfooding) + los que añada el usuario.
 - **Auditoría UX cerrada**: los 8 temas resueltos entre v1.8.0 y v1.12.0.
 
@@ -40,6 +40,17 @@
 10. Pull y push comparten el candado **`_cloudBusy`**, tomado *antes* del `await`.
    Sin esto, un GET del pull puede solaparse con el PUT del guardado y dejar
    nube y móvil divergentes (misma clase de fallo que perdió una receta).
+11. **`MergeShopping` se aplica en LOS DOS sentidos** (v1.14.0): al adoptar
+   (`AdoptRemote`, con el snapshot local tomado *antes* del `state=payload.state`)
+   y **antes de cada PUT** en `CloudSave`. Si falta uno de los dos lados, ese lado
+   vuelve a pisar la lista del otro móvil.
+12. **En `MergeList` la lápida es TERMINAL**: si hay `graveyard[id]`, el ítem se
+   descarta pase lo que pase con su `updatedAt`. No "revivir si la edición es más
+   nueva": marcar como comprado una copia que aún no sabía del borrado resucitaría
+   el ítem *y* borraría la lápida, con lo que el borrado ya no podría propagarse
+   nunca. Un alta deliberada usa un `Uid()` nuevo, así que no le afecta.
+   `DeleteWithUndo` entierra solo si el array es `state.extras`/`state.produce`;
+   el "Deshacer" hace `Unbury` + `Stamp`.
 
 ## Mapa rápido del código
 - Estado y temas: `SeedState` · `THEMES` (la bandera `dark` SÍ se consume desde v1.12.0)
@@ -92,17 +103,11 @@
 ## Pendiente / a vigilar
 - [ ] **El token caduca el 6-oct-2026.** Al fallar, la app abre sola la pantalla de
       copia pidiendo uno nuevo — no hace falta recordar dónde estaba.
-- [ ] **Fusión de «Otros» y «Fruta y verdura» (paso 2 del refresco automático).**
-      Hoy esas dos listas son «gana el último»: si los dos editan a la vez, uno
-      pisa al otro (el recetario sí se fusiona por unión). Diseñado y verificado
-      pero NO implementado, porque la unión simple **rompe el borrado**: sin
-      lápidas, el ítem borrado por uno reaparece en el pull *y* en el push del
-      otro. Requiere borrado suave: `state.graveyard={id:borradoEnISO}` escrito en
-      `DeleteWithUndo`, `updatedAt` por ítem (en alta y en cada toque), unión por
-      `id` descartando los que tengan lápida, y **la lápida manda siempre** (si no,
-      marcar «comprado» sobre una copia vieja resucita lo borrado); un alta nueva
-      genera `Uid()` nuevo, así que no la afecta. Aplicar en los dos sentidos
-      (`AdoptRemote` y antes del PUT de `CloudSave`) y podar a los 60 días.
+- [x] ~~Fusión de «Otros» y «Fruta y verdura»~~ — hecho en v1.14.0 (invariantes 11 y 12).
+- [ ] Lo único que sigue siendo «gana el último» es el **plan semanal** (y el
+      inventario/tema). Es lo aceptado desde el principio para uso familiar: dos
+      personas rara vez planifican la misma celda a la vez. Si algún día molesta,
+      la vía es fusionar el plan **por celda**, no cambiar el criterio global.
 - [ ] Ideas no auditadas, por si se retoma: lista de compra agrupada por producto
       (sumando cantidades reales, no por plato) y aviso de alimento a punto de
       caducar que no esté planificado.

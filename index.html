@@ -495,7 +495,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.13.1";
+const APP_VERSION = "1.14.0";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -708,7 +708,7 @@ function SeedState(){
 	return {
 		members, catalog,
 		inventory:{frigo,conge},
-		produce, extras:[], userDishes:[], hidden:[],
+		produce, extras:[], userDishes:[], hidden:[], graveyard:{},
 		weeks, current: wk.monday
 	};
 }
@@ -1386,8 +1386,8 @@ function AisleName(i){ return (AISLES[i]||AISLES[3]).n; }
 function ResetWeeklyTicks(){
 	if(state.shopWeek===state.current) return 0;
 	let n=0;
-	(state.produce||[]).forEach(p=>{ if(p.done){p.done=false;n++;} });
-	(state.extras||[]).forEach(x=>{ if(x.done){x.done=false;n++;} });
+	(state.produce||[]).forEach(p=>{ if(p.done){p.done=false;Stamp(p);n++;} });
+	(state.extras||[]).forEach(x=>{ if(x.done){x.done=false;Stamp(x);n++;} });
 	state.shopWeek=state.current;
 	SaveQuiet();
 	return n;
@@ -2131,6 +2131,62 @@ function MergeRecipeBook(target, source){
 }
 function RecipeBookSize(s){ return ((s&&s.userDishes)||[]).length + ((s&&s.hidden)||[]).length; }
 
+/* ---- shared shopping lists: union with tombstones (v1.14.0) --------------
+   «Otros» and «Fruta y verdura» are the two lists both phones edit at the same
+   time, and until now they rode on plain whole-state last-write-wins: whoever
+   uploaded last silently wiped the other's additions. Unioning them by id fixes
+   that but BREAKS deleting — the union re-adds the item on the next pull *and*
+   on the next push — so every deletion is recorded as a tombstone that travels
+   in the sync payload. Additive and backward compatible: an old copy simply has
+   no graveyard, and ValidState never required one. */
+const GRAVE_DAYS=90;
+function Stamp(o){ if(o) o.updatedAt=new Date().toISOString(); return o; }
+function Grave(){ return state.graveyard||(state.graveyard={}); }
+function Bury(id){ if(id) Grave()[id]=new Date().toISOString(); }
+function Unbury(id){ if(id&&state.graveyard) delete state.graveyard[id]; }
+function MergeGraves(a,b){
+	const out={};
+	Object.keys(a||{}).forEach(id=>out[id]=a[id]);
+	Object.keys(b||{}).forEach(id=>{ if(!out[id]||b[id]>out[id]) out[id]=b[id]; });
+	return out;
+}
+/* keep the graveyard bounded; after this long both phones have long converged */
+function PruneGraveyard(grave,nowMs,days){
+	const cut=new Date(nowMs-(days||GRAVE_DAYS)*86400000).toISOString(), out={};
+	Object.keys(grave||{}).forEach(id=>{ if(grave[id]>cut) out[id]=grave[id]; });
+	return out;
+}
+/* Union two copies of one list by id, newest edit per item wins.
+   A tombstone is TERMINAL: an id that was deleted stays deleted however
+   recently the other phone touched it. Otherwise ticking «Leche» as bought on a
+   copy that had not heard about the delete would resurrect it — and clear the
+   tombstone, so the delete could never propagate again. Re-adding something on
+   purpose mints a fresh id, so nothing intentional is ever lost this way. */
+function MergeList(target,source,grave){
+	const by=new Map();
+	(source||[]).forEach(it=>{ if(it&&it.id) by.set(it.id,it); });
+	(target||[]).forEach(it=>{
+		if(!it||!it.id) return;
+		const cur=by.get(it.id);
+		if(!cur || (it.updatedAt||"")>=(cur.updatedAt||"")) by.set(it.id,it);
+	});
+	const g=grave||{};
+	return [...by.values()].filter(it=>!g[it.id]);
+}
+/* applied in BOTH directions — when adopting the cloud and before every upload —
+   so neither a pull nor a push can drop the other phone's addition. */
+function MergeShopping(target,source){
+	if(!target||!source) return target;
+	const grave=PruneGraveyard(MergeGraves(target.graveyard,source.graveyard),Date.now(),GRAVE_DAYS);
+	target.extras=MergeList(target.extras,source.extras,grave);
+	target.produce=MergeList(target.produce,source.produce,grave);
+	target.graveyard=grave;
+	return target;
+}
+function ShopSig(s){
+	return JSON.stringify([(s&&s.extras)||[],(s&&s.produce)||[]]);
+}
+
 async function CloudGet(){
 	const url=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_SYNC_PATH}?ref=${GH_BRANCH}`;
 	const headers={Accept:"application/vnd.github+json"};
@@ -2184,9 +2240,12 @@ async function CloudSave(auto){
 		// union the cloud's recipe book into ours so we never overwrite a recipe
 		// that another device added; persist the recovered ones locally too.
 		if(payload&&payload.state){
-			const before=RecipeBookSize(state);
+			const before=RecipeBookSize(state), shopBefore=ShopSig(state);
 			MergeRecipeBook(state, payload.state);
-			if(RecipeBookSize(state)>before){ RefreshCatalog(); SaveQuiet(); Render(); }
+			MergeShopping(state, payload.state);   // never PUT over the peer's Otros / fruta
+			const gainedBook=RecipeBookSize(state)>before;
+			if(gainedBook) RefreshCatalog();
+			if(gainedBook || ShopSig(state)!==shopBefore){ SaveQuiet(); Render(); }
 		}
 		const body={message:"app: sync "+(state.updatedAt||TodayISO()),
 			content:B64EncodeUtf8(JSON.stringify(BuildSyncPayload(state),null,1)), branch:GH_BRANCH};
@@ -2255,12 +2314,16 @@ function AdoptRemote(payload,o){
 	o=o||{};
 	const prev=o.undo? JSON.stringify(state) : null;
 	const localBook={userDishes:state.userDishes,hidden:state.hidden};
+	// snapshot the shared lists too: the overwrite below throws away this copy
+	const localShop={extras:state.extras,produce:state.produce,graveyard:state.graveyard};
 	let scrollY=0; try{ scrollY=window.scrollY||0; }catch(e){}
 	state=payload.state;
 	if(!Array.isArray(state.userDishes)) state.userDishes=[];
 	if(!Array.isArray(state.hidden)) state.hidden=[];
 	if(!Array.isArray(state.extras)) state.extras=[];
+	if(!Array.isArray(state.produce)) state.produce=[];
 	MergeRecipeBook(state, localBook);                     // keep local-only recipes when adopting remote
+	MergeShopping(state, localShop);                       // and this phone's Otros / Fruta y verdura
 	SanitizeSlots(state);                                  // heal phantom cells coming from an old device
 	state.lastSync=state.updatedAt;                        // it IS the cloud copy → not dirty → no ping-pong
 	RefreshCatalog(); SaveQuiet();
@@ -2300,15 +2363,17 @@ async function CloudPull(opts){
 		const verdict=SyncVerdict({localUpdatedAt:state.updatedAt||"", localLastSync:state.lastSync||"",
 			remoteUpdatedAt:payload.state.updatedAt||payload.savedAt||"", valid:true});
 		if(verdict==="adopt"){ AdoptRemote(payload,{quiet:quiet,undo:!quiet}); return; }
-		// 'recover' and 'keep-local': the cloud may still hold recipes this device
-		// never saw. Union them (never drop a recipe); SaveQuiet → no stamp, so a
-		// mere pull can never outrank a real edit made on the other phone.
-		const before=RecipeBookSize(state);
+		// 'recover' and 'keep-local': the cloud may still hold recipes or shopping
+		// items this device never saw. Union them (never drop one); SaveQuiet → no
+		// stamp, so a mere pull can never outrank a real edit on the other phone.
+		const before=RecipeBookSize(state), shopBefore=ShopSig(state);
 		MergeRecipeBook(state, payload.state);
-		if(RecipeBookSize(state)>before){
-			RefreshCatalog();
+		MergeShopping(state, payload.state);
+		const gainedBook=RecipeBookSize(state)>before, gainedShop=ShopSig(state)!==shopBefore;
+		if(gainedBook || gainedShop){
+			if(gainedBook) RefreshCatalog();
 			if(quiet){ SaveQuiet(); if(!PullDeferred()) Render(); }
-			else { Save(); Render(); Toast("Recetas recuperadas de la nube ☁️"); }
+			else { Save(); Render(); if(gainedBook) Toast("Recetas recuperadas de la nube ☁️"); }
 		}
 	}catch(e){/* offline / rate-limited → keep local, that's the contract */}
 	finally{ _cloudBusy=false; }
@@ -2465,8 +2530,8 @@ function SaveBackHome(){
 	});
 	// clear this week's ticks: the shop is done
 	const wk=CurWeek(); wk.bought={};
-	(state.produce||[]).forEach(p=>p.done=false);
-	(state.extras||[]).forEach(x=>x.done=false);
+	(state.produce||[]).forEach(p=>{ if(p.done){p.done=false;Stamp(p);} });
+	(state.extras||[]).forEach(x=>{ if(x.done){x.done=false;Stamp(x);} });
 	ui.homePick={};
 	Save(); CloseSheet(); ui.view="despensa"; Render();
 	Toast(n?`${n} producto${n>1?"s":""} en la despensa ✓`:"Nada que guardar");
@@ -2879,9 +2944,14 @@ function ToastAction(msg,label,fn){
 function DeleteWithUndo(arr,idx,verb){
 	if(idx<0||idx>=arr.length) return null;
 	const item=arr[idx];
+	// the two shared lists need a tombstone, or the union merge would resurrect
+	// the item on the very next sync with the other phone
+	const shared = arr===state.extras || arr===state.produce;
 	arr.splice(idx,1);
+	if(shared) Bury(item.id);
 	Save(); Render();
 	ToastAction((verb||"Quitado")+" «"+(item.name||"")+"»","Deshacer",()=>{
+		if(shared){ Unbury(item.id); Stamp(item); }   // undo must outlive its own tombstone
 		arr.splice(Math.min(idx,arr.length),0,item);
 		Save(); Render(); Toast("Restaurado");
 	});
@@ -2999,18 +3069,18 @@ document.addEventListener("click",e=>{
 				it.name=v.name; it.qty=Math.max(0,parseInt(v.qty||"1")||1); it.unit=v.unit; it.cad=v.cad||null;
 				Save();CloseSheet();Render();Toast("Actualizado")}}); break; }
 		/* produce */
-		case "prod-done": { const p=state.produce.find(x=>x.id===ds.id); if(p){p.done=!p.done; Save(); Render()} break; }
+		case "prod-done": { const p=state.produce.find(x=>x.id===ds.id); if(p){p.done=!p.done; Stamp(p); Save(); Render()} break; }
 		case "prod-del": DeleteWithUndo(state.produce,state.produce.findIndex(x=>x.id===ds.id)); break;
 		case "prod-add": AddPrompt({title:"Añadir fruta/verdura",fields:[
 			{key:"name",label:"Qué",ph:"p.ej. Manzana Golden"},
 			{key:"qty",label:"Cantidad",type:"number",value:""},
 			{key:"unit",label:"Unidad",ph:"ud / kg",value:"ud"}
-		],onSave:v=>{if(!v.name)return Toast("Pon un nombre");const q=parseFloat(v.qty);state.produce.push({id:Uid(),name:v.name,qty:(Number.isFinite(q)&&q>0)?q:null,unit:v.unit||"ud",done:false});Save();CloseSheet();Render()}}); break;
+		],onSave:v=>{if(!v.name)return Toast("Pon un nombre");const q=parseFloat(v.qty);state.produce.push(Stamp({id:Uid(),name:v.name,qty:(Number.isFinite(q)&&q>0)?q:null,unit:v.unit||"ud",done:false}));Save();CloseSheet();Render()}}); break;
 		/* extras */
-		case "ex-done": { const x=state.extras.find(z=>z.id===ds.id); if(x){x.done=!x.done; Save(); Render()} break; }
+		case "ex-done": { const x=state.extras.find(z=>z.id===ds.id); if(x){x.done=!x.done; Stamp(x); Save(); Render()} break; }
 		case "ex-del": DeleteWithUndo(state.extras,state.extras.findIndex(z=>z.id===ds.id)); break;
-		case "ex-add": AddPrompt({title:"Añadir a Otros",fields:[{key:"name",label:"Qué",ph:"p.ej. Papel de horno"}],onSave:v=>{if(!v.name)return;state.extras.push({id:Uid(),name:v.name,done:false});Save();CloseSheet();Render()}}); break;
-		case "need-to-extra": state.extras.push({id:Uid(),name:ds.name,done:false}); Save(); Toast("Movido a Otros"); break;
+		case "ex-add": AddPrompt({title:"Añadir a Otros",fields:[{key:"name",label:"Qué",ph:"p.ej. Papel de horno"}],onSave:v=>{if(!v.name)return;state.extras.push(Stamp({id:Uid(),name:v.name,done:false}));Save();CloseSheet();Render()}}); break;
+		case "need-to-extra": state.extras.push(Stamp({id:Uid(),name:ds.name,done:false})); Save(); Toast("Movido a Otros"); break;
 		/* ideas */
 		case "ideas-course": ui.ideasCourse=ds.c; ui.ideasTipo=null; ui.ideasSearch=""; Render(); break;
 		case "ideas-clear": ui.ideasSearch=""; ui.ideasTipo=null; Render(); break;
@@ -3105,6 +3175,7 @@ document.addEventListener("keydown",e=>{
 /* ============================ INIT ============================ */
 (function init(){
 	if(!Load()){ state=SeedState(); }
+	if(!state.graveyard||typeof state.graveyard!=="object") state.graveyard={};
 	if(!Array.isArray(state.extras)) state.extras=[];
 	if(!Array.isArray(state.hidden)) state.hidden=[];
 	if(!Array.isArray(state.userDishes)) state.userDishes=[];

@@ -15,7 +15,7 @@ sincronizan entre dispositivos vía GitHub.
 | `index.html` | La app completa (UI + lógica + datos SEED + recetario con recetas) |
 | `sw.js` | Service worker: offline tras la primera visita (opcional pero recomendado) |
 | `data/sync.json` | Copia de la nube — vive en la rama **`data`** (la escribe la propia app) |
-| `test/test.js` | Suite (310 asserts) que se ejecuta contra el HTML publicado, sin build |
+| `test/test.js` | Suite (353 asserts) que se ejecuta contra el HTML publicado, sin build |
 | `.github/workflows/ci.yml` | CI: suite bajo UTC, Europe/Madrid y America/Los_Angeles |
 | `CHANGELOG.md` | Historial de versiones |
 | `recetario/` | Recetario-saludable.xlsx (entrada de datos original) |
@@ -87,5 +87,7 @@ igual, solo pierde la garantía offline.
 - El SW cachea solo navegaciones (la app no tiene más assets: icono y
   manifest van inline; las llamadas a api.github.com no se interceptan).
 - `Sorpréndeme` no propone cena de dos platos (decisión de producto).
-- La nube es last-write-wins por `updatedAt`: si dos dispositivos editan
-  a la vez sin guardar, gana el último en subir (uso familiar, aceptado).
+- La nube es last-write-wins por `updatedAt` **para el plan semanal** (uso
+  familiar, aceptado). El **recetario** se fusiona por unión, y **«Otros» y
+  «Fruta y verdura»** se fusionan por id con marcas de borrado, así que las
+  ediciones simultáneas de la compra no se pierden ni resucitan.

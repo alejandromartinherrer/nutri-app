@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.14.0 — 2026-08-26 (La lista de la compra ya no se pisa entre móviles)
+### Compra
+- **«Otros» y «Fruta y verdura» se fusionan** en vez de sobrescribirse. Eran las
+  dos únicas listas que los dos editáis a la vez y seguían con «gana el último»:
+  si ella añadía algo mientras tú añadías otra cosa, **la última subida borraba
+  la del otro**. Ahora se unen igual que el recetario y no se pierde nada.
+- **Y borrar sigue funcionando.** Unir listas sin más rompe el borrado: lo que
+  uno quita **reaparece** en la siguiente sincronización (la unión lo devuelve
+  tanto al bajar como al subir). Por eso cada borrado deja una marca que viaja
+  con los datos, y **la marca manda siempre**: si tú borras «Leche» y ella la
+  marca como comprada sin haberse enterado, **no resucita** (verificado — era
+  justo el fallo que encontró la revisión adversaria). Volver a añadirla a
+  propósito crea un elemento nuevo, así que nada intencionado se pierde.
+- **«Deshacer» retira la marca**, de modo que lo restaurado se queda.
+- Entre dos toques al mismo producto **gana el más reciente**: des-marcar algo
+  puede ganar a marcarlo, cosa que un «manda el comprado» habría impedido.
+- Las marcas de borrado se podan a los **90 días** (aguantan de sobra un móvil
+  apagado semanas) y no ensucian el resto: borrar en la Despensa o en el
+  Recetario no las genera.
+- Cambio **compatible**: una copia antigua sin marcas sigue siendo válida.
+- Tests: **329 → 353 asserts**.
+
 ## 1.13.1 — 2026-08-26 (El teclado ya no tapa las sugerencias)
 ### Selector de plato
 - **Al escribir, el selector se queda en «campo + resultados».** Medido en un
