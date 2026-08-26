@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-26T12:05:47.443Z",
+ "savedAt": "2026-08-26T12:00:25.754Z",
  "state": {
   "members": [
    {
@@ -128,17 +128,7 @@
   "produce": [],
   "extras": [
    {
-    "id": "1hojcez",
-    "name": "Caja de Pañuelos",
-    "done": false
-   },
-   {
-    "id": "mxlpfw0",
-    "name": "Toallitas cole",
-    "done": false
-   },
-   {
-    "id": "zmgt7xj",
+    "id": "89g8nfv",
     "name": "Parmesano",
     "done": false
    }
@@ -3773,8 +3763,8 @@
    }
   },
   "current": "2026-08-24",
-  "updatedAt": "2026-08-26T12:05:47.443Z",
-  "lastSync": "2026-08-26T12:05:56.364Z",
+  "updatedAt": "2026-08-26T12:00:25.754Z",
+  "lastSync": "2026-08-26T12:31:33.796Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
