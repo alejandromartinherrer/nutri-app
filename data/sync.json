@@ -3774,11 +3774,12 @@
   },
   "current": "2026-08-24",
   "updatedAt": "2026-08-26T13:54:06.258Z",
-  "lastSync": "2026-08-26T13:32:36.658Z",
+  "lastSync": "2026-08-26T13:54:21.138Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
   "shopWeek": "2026-08-24",
-  "txtSize": "normal"
+  "txtSize": "normal",
+  "graveyard": {}
  }
 }
