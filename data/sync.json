@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-26T12:45:39.446Z",
+ "savedAt": "2026-08-26T12:49:04.967Z",
  "state": {
   "members": [
    {
@@ -140,6 +140,11 @@
    {
     "id": "zmgt7xj",
     "name": "Parmesano",
+    "done": false
+   },
+   {
+    "id": "0pvv526",
+    "name": "Prueba",
     "done": false
    }
   ],
@@ -3773,8 +3778,8 @@
    }
   },
   "current": "2026-08-24",
-  "updatedAt": "2026-08-26T12:45:39.446Z",
-  "lastSync": "2026-08-26T12:45:32.787Z",
+  "updatedAt": "2026-08-26T12:49:04.967Z",
+  "lastSync": "2026-08-26T12:46:11.318Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
