@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-26T12:49:30.589Z",
+ "savedAt": "2026-08-26T13:31:26.503Z",
  "state": {
   "members": [
    {
@@ -126,7 +126,13 @@
    ]
   },
   "produce": [],
-  "extras": [],
+  "extras": [
+   {
+    "id": "azddbw6",
+    "name": "Tres",
+    "done": false
+   }
+  ],
   "userDishes": [
    {
     "name": "Chicken Curry (Versión Thermomix)",
@@ -3757,8 +3763,8 @@
    }
   },
   "current": "2026-08-24",
-  "updatedAt": "2026-08-26T12:49:30.589Z",
-  "lastSync": "2026-08-26T13:26:09.992Z",
+  "updatedAt": "2026-08-26T13:31:26.503Z",
+  "lastSync": "2026-08-26T13:31:05.521Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
