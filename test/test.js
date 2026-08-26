@@ -878,5 +878,23 @@ ok(A.MergeShopping({extras:[],produce:[]},null).extras.length===0,"MergeShopping
 ok(/\bStamp\(/.test(html.slice(html.indexOf('case "ex-add"'),html.indexOf('case "ex-add"')+400)),"el alta en Otros sella la hora");
 ok(/\bStamp\(x\)/.test(html.slice(html.indexOf('case "ex-done"'),html.indexOf('case "ex-done"')+300)),"marcar comprado sella la hora");
 
+// ============ 1.14.1: orden de la pestana Compra ============
+// primero las dos listas que se escriben a mano, y al final la que calcula la app
+const compraHtml=html.slice(html.indexOf("Lista de la compra"),html.indexOf("RENDER: MACROS"));
+const iFruta=compraHtml.indexOf("🍎 Fruta y verdura");
+const iOtros=compraHtml.indexOf("📝 Otros");
+const iIngr =compraHtml.indexOf("🍳 Ingredientes");
+ok(iFruta>=0&&iOtros>=0&&iIngr>=0,"las tres secciones de Compra siguen ahi");
+ok(iFruta<iOtros&&iOtros<iIngr,"orden en pantalla: fruta y verdura -> otros -> ingredientes");
+// el texto que se copia debe seguir el MISMO orden que la pantalla
+const copiaSrc=src.slice(src.indexOf("function CopyShop"),src.indexOf("function CopyText"));
+const cFruta=copiaSrc.indexOf("🍎 Fruta y verdura");
+const cOtros=copiaSrc.indexOf("📝 Otros");
+const cIngr =copiaSrc.indexOf("🍳 Para los platos");
+ok(cFruta<cOtros&&cOtros<cIngr,"al copiar la lista, el mismo orden que en pantalla");
+// «Enviar al frutero» tiene que seguir colgando de Fruta y verdura
+ok(compraHtml.indexOf("share-shop")>iFruta&&compraHtml.indexOf("share-shop")<iOtros,
+	"«Enviar al frutero» sigue dentro de Fruta y verdura");
+
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);

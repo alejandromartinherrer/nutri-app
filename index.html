@@ -495,7 +495,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.14.0";
+const APP_VERSION = "1.14.1";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -1160,16 +1160,16 @@ function RenderCompra(){
 			</div>
 		</div>
 		<div class="sec">
+			<div class="sec-h"><h3>📝 Otros</h3>
+				<button class="add-x" data-action="ex-add">+ añadir</button></div>
+			${exItems}
+		</div>
+		<div class="sec">
 			<div class="sec-h"><h3>🍳 Ingredientes de tus comidas y cenas</h3>
 				<span class="sub">${subText}</span>
 				${boughtCount>0?`<button class="add-x" data-action="shop-clear">limpiar</button>`:""}</div>
 			${shopViewBar}
 			${needBody}
-		</div>
-		<div class="sec">
-			<div class="sec-h"><h3>📝 Otros</h3>
-				<button class="add-x" data-action="ex-add">+ añadir</button></div>
-			${exItems}
 		</div>
 		<div class="shop-actions" style="flex-direction:column;gap:8px">
 			<button class="btn prim" data-action="back-home" style="width:100%">✅ Ya está en casa${yaEnCasa?` · ${yaEnCasa}`:""}</button>
@@ -2631,8 +2631,12 @@ function NewWeek(){
 function CopyShop(){
 	const wk=CurWeek();
 	let lines=[`🛒 Compra — semana ${FmtLong(wk.monday)} a ${FmtLong(AddDays(wk.monday,6))}`,""];
+	// same order as the Compra screen: the two lists you write by hand first,
+	// then the ingredients the app works out from the recipes
 	const prod=state.produce.filter(p=>!p.done);
 	if(prod.length){lines.push("🍎 Fruta y verdura");prod.forEach(p=>lines.push(`· ${p.name}${p.qty?` (${p.qty} ${p.unit||""})`:""}`));lines.push("")}
+	const ex=state.extras.filter(x=>!x.done);
+	if(ex.length){lines.push("📝 Otros");ex.forEach(x=>lines.push(`· ${x.name}`));lines.push("")}
 	const dishes=PlannedCookDishes();
 	if(dishes.length){
 		lines.push("🍳 Para los platos (lo que falta)");
@@ -2654,8 +2658,6 @@ function CopyShop(){
 		}
 		lines.push("");
 	}
-	const ex=state.extras.filter(x=>!x.done);
-	if(ex.length){lines.push("📝 Otros");ex.forEach(x=>lines.push(`· ${x.name}`))}
 	const text=lines.join("\n").trim();
 	CopyText(text);
 }

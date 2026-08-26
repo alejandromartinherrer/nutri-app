@@ -1,10 +1,10 @@
 # Nutri APP — Handoff
 
-## Estado actual (v1.14.0 — 2026-08-26)
+## Estado actual (v1.14.1 — 2026-08-26)
 - Repo: `github.com/alejandromartinherrer/nutri-app` (público, Pages activo).
 - App: `https://alejandromartinherrer.github.io/nutri-app/` · HTML único `index.html`.
 - Carpeta local: `C:\claude_projects\web-apps\nutri-app` · Node LTS v24 en el sistema.
-- **353 asserts** en verde (UTC / Europe/Madrid / America/Los_Angeles). CI en cada push.
+- **357 asserts** en verde (UTC / Europe/Madrid / America/Los_Angeles). CI en cada push.
 - Recetario: **200 platos** (166 SEED + 34 Realfooding) + los que añada el usuario.
 - **Auditoría UX cerrada**: los 8 temas resueltos entre v1.8.0 y v1.12.0.
 

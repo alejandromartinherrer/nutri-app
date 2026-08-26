@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.14.1 — 2026-08-26 (Orden de la pestaña Compra)
+- La Compra pasa a ser **🍎 Fruta y verdura → 📝 Otros → 🍳 Ingredientes**
+  (antes los ingredientes iban en medio). Quedan juntas arriba las dos listas
+  que se escriben a mano, y al final la que calcula la app sola.
+- **📋 Copiar lista completa** sigue el mismo orden que la pantalla; antes
+  mandaba «Otros» al final y no coincidían.
+- «Enviar al frutero» sigue colgando de Fruta y verdura.
+
 ## 1.14.0 — 2026-08-26 (La lista de la compra ya no se pisa entre móviles)
 ### Compra
 - **«Otros» y «Fruta y verdura» se fusionan** en vez de sobrescribirse. Eran las
