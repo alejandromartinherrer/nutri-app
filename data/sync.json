@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-26T08:22:00.853Z",
+ "savedAt": "2026-08-26T08:22:36.671Z",
  "state": {
   "members": [
    {
@@ -3468,17 +3468,17 @@
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
+         "dish": "Perritos",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Perritos",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Perritos",
          "invId": null,
          "away": false
         }
@@ -3781,8 +3781,8 @@
    }
   },
   "current": "2026-08-24",
-  "updatedAt": "2026-08-26T08:22:00.853Z",
-  "lastSync": "2026-08-23T20:48:39.113Z",
+  "updatedAt": "2026-08-26T08:22:36.671Z",
+  "lastSync": "2026-08-26T08:22:33.438Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
