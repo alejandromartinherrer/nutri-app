@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-26T12:49:30.589Z",
+ "savedAt": "2026-08-26T12:49:04.967Z",
  "state": {
   "members": [
    {
@@ -126,7 +126,28 @@
    ]
   },
   "produce": [],
-  "extras": [],
+  "extras": [
+   {
+    "id": "1hojcez",
+    "name": "Caja de Pañuelos",
+    "done": false
+   },
+   {
+    "id": "mxlpfw0",
+    "name": "Toallitas cole",
+    "done": false
+   },
+   {
+    "id": "zmgt7xj",
+    "name": "Parmesano",
+    "done": false
+   },
+   {
+    "id": "0pvv526",
+    "name": "Prueba",
+    "done": false
+   }
+  ],
   "userDishes": [
    {
     "name": "Chicken Curry (Versión Thermomix)",
@@ -3757,8 +3778,8 @@
    }
   },
   "current": "2026-08-24",
-  "updatedAt": "2026-08-26T12:49:30.589Z",
-  "lastSync": "2026-08-26T12:32:39.740Z",
+  "updatedAt": "2026-08-26T12:49:04.967Z",
+  "lastSync": "2026-08-26T12:49:44.832Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
