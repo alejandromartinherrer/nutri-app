@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-26T08:22:36.671Z",
+ "savedAt": "2026-08-26T08:23:25.098Z",
  "state": {
   "members": [
    {
@@ -3524,34 +3524,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
+         "dish": "Ensalada de garbanzos especiados y pepino",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Ensalada de garbanzos especiados y pepino",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Ensalada de garbanzos especiados y pepino",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
+         "dish": "Tortilla de patatas",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Tortilla de patatas",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Tortilla de patatas",
          "invId": null,
          "away": false
         }
@@ -3781,8 +3781,8 @@
    }
   },
   "current": "2026-08-24",
-  "updatedAt": "2026-08-26T08:22:36.671Z",
-  "lastSync": "2026-08-26T08:22:33.438Z",
+  "updatedAt": "2026-08-26T08:23:25.098Z",
+  "lastSync": "2026-08-26T08:23:08.402Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
