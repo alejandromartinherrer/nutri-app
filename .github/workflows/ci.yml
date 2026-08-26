@@ -2,6 +2,9 @@ name: tests
 on:
   push:
   pull_request:
+  # GitHub ocasionalmente no crea la ejecución de un push (pasó con 4ebf8ca):
+  # esto permite lanzarla a mano sin tener que inventar un commit vacío.
+  workflow_dispatch:
 
 jobs:
   test:
