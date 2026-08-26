@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-23T20:48:35.212Z",
+ "savedAt": "2026-08-26T08:22:00.853Z",
  "state": {
   "members": [
    {
@@ -3451,17 +3451,17 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
+         "dish": "Macarrones integrales con boloñesa de pavo",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Macarrones integrales con boloñesa de pavo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Macarrones integrales con boloñesa de pavo",
          "invId": null,
          "away": false
         }
@@ -3781,8 +3781,8 @@
    }
   },
   "current": "2026-08-24",
-  "updatedAt": "2026-08-23T20:48:35.212Z",
-  "lastSync": "2026-08-20T21:36:57.146Z",
+  "updatedAt": "2026-08-26T08:22:00.853Z",
+  "lastSync": "2026-08-23T20:48:39.113Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
