@@ -6,8 +6,11 @@ global.document={addEventListener(){},getElementById(){return fakeEl()},createEl
 global.navigator={};
 global.URL={createObjectURL(){return"blob:"},revokeObjectURL(){}};
 global.Blob=function(){};global.FileReader=function(){};
-global.window={addEventListener(){},removeEventListener(){},innerHeight:812};
+global.window={addEventListener(){},removeEventListener(){},innerHeight:812,scrollY:0,scrollTo(){}};
 global.getComputedStyle=()=>({getPropertyValue:()=>""});
+// The app arms a 60 s auto-pull timer at boot; unref it so the suite can exit.
+const _setInterval=global.setInterval;
+global.setInterval=(fn,ms)=>{const t=_setInterval(fn,ms); if(t&&t.unref)t.unref(); return t};
 function fakeCtx(){return {set font(v){},set fillStyle(v){},set strokeStyle(v){},set lineWidth(v){},set textBaseline(v){},set textAlign(v){},measureText:t=>({width:String(t).length*16}),fillRect(){},strokeRect(){},beginPath(){},moveTo(){},lineTo(){},arcTo(){},arc(){},closePath(){},fill(){},stroke(){},fillText(){}}}
 function fakeCanvas(){return {width:0,height:0,getContext(){return fakeCtx()},toDataURL(){return"data:image/png;base64,AAAA"}}}
 
@@ -22,7 +25,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml,DeleteWithUndo,ToastAction,Toast,RecipeServings,ServingsNeeded,DishScale,PantryMatch,ResetWeeklyTicks,BoughtForPantry,SaveBackHome,IngShortName,AisleOf,AisleName,PlannedLabel,TipoFamily,Surprise,UndoSurprise,SurpriseAgain,AssignDishTo,DoCopyDay,DishWhenHtml,THEMES};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml,DeleteWithUndo,ToastAction,Toast,RecipeServings,ServingsNeeded,DishScale,PantryMatch,ResetWeeklyTicks,BoughtForPantry,SaveBackHome,IngShortName,AisleOf,AisleName,PlannedLabel,TipoFamily,Surprise,UndoSurprise,SurpriseAgain,AssignDishTo,DoCopyDay,DishWhenHtml,THEMES,SyncVerdict,AdoptRemote,PullDeferred,CloudPull,PushBackedOff,FlushPendingPull};\n";
 eval(src);
 const A=global.__api;
 
@@ -686,6 +689,82 @@ ok(A.TipoFamily("Legumbres").dot!==A.TipoFamily("Pasta").dot,"legumbres y pasta 
 const familias=new Set(["Legumbres","Verduras","Pasta","Pescado","Pollo","Huevos"].map(t=>A.TipoFamily(t).dot));
 ok(familias.size===6,"seis familias realmente distintas");
 ok(A.TipoFamily("Inventado").dot,"un tipo desconocido tiene color de reserva");
+
+// ============ 1.13.0: pull automatico (sin cerrar y abrir la app) ============
+// --- SyncVerdict: la decision, aislada de la red ---
+const V=(l,ls,r)=>A.SyncVerdict({localUpdatedAt:l,localLastSync:ls,remoteUpdatedAt:r,valid:true});
+ok(V("2026-08-02T10:00:00Z","2026-08-02T10:00:00Z","2026-08-02T09:00:00Z")==="recover","nube mas vieja -> solo recuperar recetas");
+ok(V("2026-08-02T10:00:00Z","2026-08-02T10:00:00Z","2026-08-02T10:00:00Z")==="recover","misma hora -> nada que adoptar");
+ok(V("2026-08-02T10:00:00Z","2026-08-02T10:00:00Z","2026-08-02T11:00:00Z")==="adopt","nube mas nueva y movil al dia -> adoptar");
+ok(V("2026-08-02T10:00:00Z","2026-08-02T09:00:00Z","2026-08-02T11:00:00Z")==="keep-local","nube mas nueva PERO hay cambios sin subir -> no pisar lo local");
+ok(V("2026-08-02T10:00:00Z","",  "2026-08-02T11:00:00Z")==="keep-local","nunca subido = sin subir -> no pisar");
+ok(A.SyncVerdict({valid:false,remoteUpdatedAt:"2026-08-02T11:00:00Z"})==="skip","payload invalido -> no tocar nada");
+ok(A.SyncVerdict({valid:true,remoteUpdatedAt:""})==="skip","sin fecha remota -> no tocar nada");
+ok(A.SyncVerdict(null)==="skip","SyncVerdict(null) no rompe");
+
+// --- adoptar la nube NO puede perder una receta local (el incidente historico) ---
+A.state=A.SeedState(); A.RefreshCatalog();
+A.state.userDishes=[{name:"Mi Receta Local",course:"segundo",kcal:400,receta:"Paso."}];
+A.state.hidden=["gazpacho"];
+A.state.updatedAt="2026-08-02T10:00:00.000Z"; A.state.lastSync="2026-08-02T10:00:00.000Z";
+const libroAntes=A.RecipeBookSize(A.state);
+const remoto=JSON.parse(JSON.stringify(A.SeedState()));
+remoto.userDishes=[{name:"Receta De Ella",course:"primero",kcal:200,receta:"Paso."}];
+remoto.hidden=[]; remoto.updatedAt="2026-08-02T11:00:00.000Z";
+remoto.extras=[{id:"e9",name:"Papel de horno",done:false}];
+A.AdoptRemote({state:remoto},{quiet:true});
+ok(A.state.userDishes.some(d=>d.name==="Mi Receta Local"),"adoptar conserva la receta que solo estaba en este movil");
+ok(A.state.userDishes.some(d=>d.name==="Receta De Ella"),"y trae la receta del otro movil");
+ok(A.RecipeBookSize(A.state)>=libroAntes,"el recetario nunca encoge al adoptar");
+ok(A.state.hidden.includes("gazpacho"),"los borrados locales del recetario sobreviven");
+ok(A.state.extras.some(x=>x.name==="Papel de horno"),"llega lo que el otro movil anadio a Otros");
+// --- y no deja el movil 'sucio': sin esto habria pull/push infinito ---
+ok(A.CloudDirty()===false,"tras adoptar, el movil queda limpio (sin bucle subir/bajar)");
+ok(A.state.lastSync===A.state.updatedAt,"lastSync apunta a la copia adoptada");
+ok(A.state.updatedAt==="2026-08-02T11:00:00.000Z","adoptar NO re-sella el reloj (no puede pisar al otro movil)");
+
+// --- adoptar cura celdas fantasma que lleguen de un movil viejo ---
+A.state=A.SeedState(); A.RefreshCatalog();
+A.state.updatedAt="2026-08-02T10:00:00.000Z"; A.state.lastSync="2026-08-02T10:00:00.000Z";
+const remoto2=JSON.parse(JSON.stringify(A.SeedState()));
+remoto2.updatedAt="2026-08-02T12:00:00.000Z";
+const lunR=Object.keys(remoto2.weeks)[0];
+remoto2.weeks[lunR].days[3].slots.Cena["null"]={dish:"Atun Fantasma",invId:null,away:false};
+remoto2.members.forEach(m=>{remoto2.weeks[lunR].days[3].slots.Cena[m.id]={dish:"",invId:null,away:false};});
+A.state.current=lunR;
+A.AdoptRemote({state:remoto2},{quiet:true});
+ok(!("null" in A.state.weeks[lunR].days[3].slots.Cena),"adoptar limpia el miembro fantasma");
+ok(A.state.members.every(m=>A.state.weeks[lunR].days[3].slots.Cena[m.id].dish==="Atun Fantasma"),"y recupera el plato para todos");
+
+// --- los guardias: nunca redibujar encima de lo que estas haciendo ---
+A.state=A.SeedState(); A.RefreshCatalog();
+A.picker=null; A.ToastAction._until=0; global.document.activeElement=null;   // (tests anteriores dejan un «Deshacer» vivo)
+ok(A.PullDeferred()===false,"sin nada abierto, el pull puede aplicarse");
+A.OpenPicker(1,"Comida","nosotros",false);
+ok(A.PullDeferred()===true,"con el selector abierto se aplaza");
+A.picker=null; A.ToastAction._until=0;
+ok(A.PullDeferred()===false,"al cerrarlo vuelve a poder aplicarse");
+global.document.activeElement={tagName:"INPUT"};
+ok(A.PullDeferred()===true,"mientras escribes se aplaza (buscador de Ideas incluido)");
+global.document.activeElement={tagName:"TEXTAREA"};
+ok(A.PullDeferred()===true,"tambien en un area de texto");
+global.document.activeElement=null;
+A.ToastAction("Quitado «X»","Deshacer",()=>{});
+ok(A.PullDeferred()===true,"con un «Deshacer» vivo se aplaza (no se lo comemos)");
+A.ToastAction._until=0;
+ok(A.PullDeferred()===false,"pasada la ventana de Deshacer, via libre");
+
+// --- el push tiene freno: un token caducado no reintenta cada minuto ---
+ok(A.PushBackedOff()===false,"sin fallos, no hay freno al subir");
+
+// --- el pull no crea caminos de escritura nuevos ---
+ok(html.indexOf("CloudPullOnBoot")<0,"CloudPullOnBoot ya no existe (un unico punto de entrada)");
+const cuerpoPull=src.slice(src.indexOf("async function CloudPull("),src.indexOf("function FlushPendingPull"))
+	.replace(/\/\*[\s\S]*?\*\//g,"").replace(/\/\/.*$/gm,"");        // sin comentarios
+ok(!/\bCloudSave\s*\(/.test(cuerpoPull),"el pull NUNCA sube: no puede pisar la semana del otro movil");
+ok(/if\(quiet\)\{\s*SaveQuiet\(\)/.test(cuerpoPull),"el pull silencioso escribe con SaveQuiet (nunca sella el reloj)");
+ok(cuerpoPull.indexOf("_cloudBusy=true")>0,"el pull coge el mismo candado que el guardado");
+ok(/finally\{\s*_cloudBusy=false/.test(cuerpoPull),"y lo suelta siempre");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);

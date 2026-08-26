@@ -481,7 +481,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.12.0";
+const APP_VERSION = "1.13.0";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -1707,6 +1707,9 @@ function bindIdeasSearch(){
 		const pos=el.selectionStart; Render();
 		const el2=document.getElementById("ideasSearch"); if(el2){el2.focus();try{el2.setSelectionRange(pos,pos)}catch(_){}}
 	};
+	// this input lives in #view, not in a sheet: a pull held back while typing
+	// must land as soon as the field loses focus
+	if(el) el.onblur=()=>FlushPendingPull();
 }
 
 /* ============================ PICKER SHEET ============================ */
@@ -2120,10 +2123,14 @@ function UpdateCloudDot(){
 }
 /* auto-sync: quiet upload ~30 s after the last edit (token + online only) */
 let _autoSync=null;
+/* A dead token used to re-fire a failing PUT on every trigger. Reads are never
+   backed off (public repo); only the failing write is throttled. */
+let _pushBackoffUntil=0, _pushBackoffMs=0;
+function PushBackedOff(){ return Date.now()<_pushBackoffUntil; }
 function ScheduleAutoSync(){
 	if(!GhToken() || navigator.onLine===false) return;
 	clearTimeout(_autoSync);
-	_autoSync=setTimeout(()=>{ if(CloudDirty() && !_cloudBusy) CloudSave(true); },30000);
+	_autoSync=setTimeout(()=>{ if(CloudDirty() && !_cloudBusy && !PushBackedOff()) CloudSave(true); },30000);
 }
 async function CloudSave(auto){
 	if(_cloudBusy) return;
@@ -2148,10 +2155,13 @@ async function CloudSave(auto){
 		if(r.status===401||r.status===403) throw {code:"auth"};
 		if(r.status===409||r.status===422) throw {code:"conflict"};
 		if(!r.ok) throw new Error("HTTP "+r.status);
-		state.lastSync=new Date().toISOString(); _cloudFailed=false; SaveQuiet();
+		state.lastSync=new Date().toISOString(); _cloudFailed=false;
+		_pushBackoffUntil=0; _pushBackoffMs=0; SaveQuiet();
 		if(!auto) Toast("Guardado en la nube ☁️✓");
 	}catch(e){
 		_cloudFailed=true;
+		_pushBackoffMs=Math.min(_pushBackoffMs? _pushBackoffMs*2 : 60000, 300000);
+		_pushBackoffUntil=Date.now()+_pushBackoffMs;
 		if(auto){/* quiet: the dot turns red and the next edit reschedules */}
 		// an expired token used to point at a menu entry; open the sheet instead,
 		// so there is always a way back even if the menu changes
@@ -2162,36 +2172,64 @@ async function CloudSave(auto){
 	}finally{ SetCloudBusy(false); UpdateCloudDot(); }
 }
 
-/* boot pull: fire-and-forget, never blocks first paint, silent on failure */
-async function CloudPullOnBoot(){
+/* ---- auto-pull (v1.13.0) ----------------------------------------------
+   Until now the app only pulled at boot, so seeing the other phone's changes
+   meant fully closing and reopening it. CloudPull is the single pull entry
+   point for both boot and the foreground triggers.
+
+   The quiet path is deliberately READ-ONLY: it adopts the cloud copy only when
+   this device has nothing unsent, and it NEVER stamps, re-stamps or pushes.
+   That is what keeps it safe — a stale-but-dirty device (expired token, no
+   token, long offline) can never promote its own clock and erase the other
+   phone's week. When local is dirty we simply keep the screen as it is and let
+   the ordinary autosync push it; plain last-write-wins then settles it exactly
+   as it does today. */
+function PullDeferred(){
+	// never rebuild the screen under the user's hands
 	try{
-		const {payload}=await CloudGet();
-		if(!payload || !payload.state || !ValidState(payload.state)) return;
-		const remote=payload.state.updatedAt||payload.savedAt||"";
-		if(!remote || remote<=(state.updatedAt||"")){
-			// local is newer/equal for the weekly plan, BUT the cloud may hold recipes
-			// this device never saw. Union them (never drop a recipe) and re-upload.
-			const before=RecipeBookSize(state);
-			MergeRecipeBook(state, payload.state);
-			if(RecipeBookSize(state)>before){
-				RefreshCatalog(); Save(); Render();            // Save() stamps → autosync pushes the union
-				Toast("Recetas recuperadas de la nube ☁️");
-			}
-			return;
-		}
-		const prev=JSON.stringify(state);                      // undo slot (one level)
-		const localBook={userDishes:state.userDishes,hidden:state.hidden};
-		state=payload.state;
-		if(!Array.isArray(state.userDishes)) state.userDishes=[];
-		if(!Array.isArray(state.hidden)) state.hidden=[];
-		if(!Array.isArray(state.extras)) state.extras=[];
-		MergeRecipeBook(state, localBook);                     // keep local-only recipes when adopting remote
-		SanitizeSlots(state);                                  // heal phantom cells coming from an old device
-		state.lastSync=state.updatedAt;                        // it IS the cloud copy
-		RefreshCatalog(); SaveQuiet();
-		ApplyTheme(); BuildManifest();
-		if(!state.current) state.current=MondayOf(TodayISO());
-		EnsureWeek(state.current); Render();
+		const sh=document.getElementById("sheet");
+		if(sh && sh.classList.contains("show")) return true;     // a bottom sheet is open
+		if(picker!==null) return true;                            // the dish picker writes back by position
+		const ae=document.activeElement;                          // typing (incl. #ideasSearch, inside #view)
+		if(ae && (ae.tagName==="INPUT"||ae.tagName==="TEXTAREA"||ae.isContentEditable)) return true;
+		if(_gestureActive) return true;                           // finger down / list still gliding
+		if(Date.now()<(ToastAction._until||0)) return true;        // a live "Deshacer" window
+	}catch(e){}
+	return false;
+}
+/* pure decision helper (mirrors the branches below so it is testable) */
+function SyncVerdict(o){
+	if(!o||!o.valid||!o.remoteUpdatedAt) return "skip";
+	if(o.remoteUpdatedAt<=(o.localUpdatedAt||"")) return "recover";
+	const dirty=!!(o.localUpdatedAt && (!o.localLastSync || o.localUpdatedAt>o.localLastSync));
+	return dirty ? "keep-local" : "adopt";
+}
+/* Replace local state with the cloud copy. Order is load-bearing: the localBook
+   snapshot must be taken BEFORE the overwrite and merged back AFTER it, because
+   `state=payload.state` discards everything merged into the old object — that
+   is exactly how a user recipe was lost once. */
+function AdoptRemote(payload,o){
+	o=o||{};
+	const prev=o.undo? JSON.stringify(state) : null;
+	const localBook={userDishes:state.userDishes,hidden:state.hidden};
+	let scrollY=0; try{ scrollY=window.scrollY||0; }catch(e){}
+	state=payload.state;
+	if(!Array.isArray(state.userDishes)) state.userDishes=[];
+	if(!Array.isArray(state.hidden)) state.hidden=[];
+	if(!Array.isArray(state.extras)) state.extras=[];
+	MergeRecipeBook(state, localBook);                     // keep local-only recipes when adopting remote
+	SanitizeSlots(state);                                  // heal phantom cells coming from an old device
+	state.lastSync=state.updatedAt;                        // it IS the cloud copy → not dirty → no ping-pong
+	RefreshCatalog(); SaveQuiet();
+	ApplyTheme(); BuildManifest();
+	if(!state.current) state.current=MondayOf(TodayISO());
+	EnsureWeek(state.current); Render();
+	if(o.quiet){
+		try{ window.scrollTo(0,scrollY); }catch(e){}         // don't yank a reader's place
+		Toast("Lista actualizada ☁️");
+		// NO "Deshacer" here on purpose: its Save() would stamp a newer time,
+		// clobber the other phone and start a tug-of-war.
+	} else {
 		ToastAction("Actualizado desde la nube ☁️","Deshacer",()=>{
 			try{
 				const p=JSON.parse(prev);
@@ -2201,8 +2239,39 @@ async function CloudPullOnBoot(){
 				Toast("Restaurada tu copia local — se subirá sola");
 			}catch(e){ Toast("No se pudo deshacer"); }
 		});
-	}catch(e){/* offline / rate-limited → keep local, that's the contract */}
+	}
 }
+/* fire-and-forget: never blocks first paint, silent on failure */
+let _pullPending=false, _gestureActive=false;
+async function CloudPull(opts){
+	opts=opts||{};
+	const quiet=!!opts.quiet;
+	if(_cloudBusy) return;                                  // never fight an in-flight save/pull
+	if(quiet && PullDeferred()){ _pullPending=true; return; } // don't even spend the request
+	_cloudBusy=true;                                        // same mutex CloudSave checks (no ⏳ for quiet pulls)
+	try{
+		const {payload}=await CloudGet();
+		if(!payload || !payload.state || !ValidState(payload.state)) return;
+		// re-check AFTER the round-trip: the user may have started typing meanwhile
+		if(quiet && PullDeferred()){ _pullPending=true; return; }
+		const verdict=SyncVerdict({localUpdatedAt:state.updatedAt||"", localLastSync:state.lastSync||"",
+			remoteUpdatedAt:payload.state.updatedAt||payload.savedAt||"", valid:true});
+		if(verdict==="adopt"){ AdoptRemote(payload,{quiet:quiet,undo:!quiet}); return; }
+		// 'recover' and 'keep-local': the cloud may still hold recipes this device
+		// never saw. Union them (never drop a recipe); SaveQuiet → no stamp, so a
+		// mere pull can never outrank a real edit made on the other phone.
+		const before=RecipeBookSize(state);
+		MergeRecipeBook(state, payload.state);
+		if(RecipeBookSize(state)>before){
+			RefreshCatalog();
+			if(quiet){ SaveQuiet(); if(!PullDeferred()) Render(); }
+			else { Save(); Render(); Toast("Recetas recuperadas de la nube ☁️"); }
+		}
+	}catch(e){/* offline / rate-limited → keep local, that's the contract */}
+	finally{ _cloudBusy=false; }
+}
+/* a deferred update should land the moment the blocking UI clears, not 60 s later */
+function FlushPendingPull(){ if(_pullPending){ _pullPending=false; CloudPull({quiet:true}); } }
 
 /* One place for everything that protects your data: cloud status, the access
    token (it expires, so this must never be unreachable) and the manual copy.
@@ -2805,6 +2874,7 @@ function CloseSheet(){
 	picker=null;
 	if(_lastFocus && _lastFocus.focus){ try{_lastFocus.focus()}catch(e){} }
 	_lastFocus = null;
+	FlushPendingPull();              // an update held back while the sheet was open
 }
 
 document.addEventListener("click",e=>{
@@ -3005,7 +3075,7 @@ document.addEventListener("keydown",e=>{
 	BuildManifest();
 	EnsureWeek(state.current);
 	SaveQuiet(); Render();
-	CloudPullOnBoot();               // async, never blocks offline start
+	CloudPull({boot:true});          // async, never blocks offline start
 	/* Swipe left/right on the week to move between weeks: the arrows were the only
 	   way, and they are the smallest targets on the busiest screen. */
 	(function(){
@@ -3026,10 +3096,20 @@ document.addEventListener("keydown",e=>{
 	/* Offline edits used to sit there for ever: ScheduleAutoSync bails when there
 	   is no connection and nothing ever retried. Retry when the network returns
 	   and when the app goes to the background. */
-	window.addEventListener("online",()=>{ if(CloudDirty()) CloudSave(true); });
-	document.addEventListener("visibilitychange",()=>{
-		if(document.visibilityState==="hidden" && CloudDirty()) CloudSave(true);
+	window.addEventListener("online",()=>{
+		if(CloudDirty() && !PushBackedOff()) CloudSave(true);
+		CloudPull({quiet:true});          // the other phone may have edited while we were dark
 	});
+	/* Track the finger so a pull never rebuilds a list mid-flick. iOS keeps
+	   scrolling after touchend, so we also wait for the scroll to go quiet. */
+	let _gestEnd=null;
+	const gestOn=()=>{ _gestureActive=true; clearTimeout(_gestEnd); };
+	const gestOff=()=>{ clearTimeout(_gestEnd); _gestEnd=setTimeout(()=>{ _gestureActive=false; FlushPendingPull(); },450); };
+	window.addEventListener("touchstart",gestOn,{passive:true});
+	window.addEventListener("touchmove",gestOn,{passive:true});
+	window.addEventListener("touchend",gestOff,{passive:true});
+	window.addEventListener("touchcancel",gestOff,{passive:true});
+	window.addEventListener("scroll",gestOff,{passive:true});
 	/* Expose the on-screen keyboard height as --kb so bottom sheets sit ON TOP of
 	   it instead of hiding behind it (iOS doesn't shrink the layout viewport). */
 	const vv=window.visualViewport;
@@ -3038,11 +3118,32 @@ document.addEventListener("keydown",e=>{
 			Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop))+"px");
 		vv.addEventListener("resize",upd); vv.addEventListener("scroll",upd); upd();
 	}
-	// coming back to the PWA after midnight / days later must not leave you in the past
+	/* One handler for everything that must happen on a visibility change:
+	   push what's pending when leaving, and on return roll the week over first
+	   (so the pull's guards run against the final screen) and then pull. */
 	document.addEventListener("visibilitychange",()=>{
-		if(document.visibilityState!=="visible") return;
+		if(document.visibilityState!=="visible"){
+			if(CloudDirty() && !PushBackedOff()) CloudSave(true);
+			return;
+		}
+		// coming back to the PWA after midnight / days later must not leave you in the past
 		if(state.current!==MondayOf(TodayISO())){ GoToThisWeek(); Render(); }
+		CloudPull({quiet:true});          // ← the fix: no need to close and reopen any more
 	});
+	// iOS can restore a frozen PWA without a visibilitychange; pageshow covers it
+	window.addEventListener("pageshow",e=>{ if(e && e.persisted) CloudPull({quiet:true}); });
+	/* Safety net for "both phones open on the kitchen counter": poll while the
+	   app is actually on screen. Unauthenticated reads are 60/h per IP and two
+	   phones share one home router, so throttle hard when there is no token. */
+	let _lastNoTokenPull=0;
+	setInterval(()=>{
+		if(document.visibilityState!=="visible" || navigator.onLine===false || _cloudBusy) return;
+		if(!GhToken()){
+			if(Date.now()-_lastNoTokenPull<300000) return;
+			_lastNoTokenPull=Date.now();
+		}
+		CloudPull({quiet:true});
+	},60000);
 	/* Offline: best-effort SW registration. Silently skipped on file://,
 	   unsupported browsers, or when sw.js is not deployed next to the app. */
 	if("serviceWorker" in navigator){

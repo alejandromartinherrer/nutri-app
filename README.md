@@ -15,7 +15,7 @@ sincronizan entre dispositivos vía GitHub.
 | `index.html` | La app completa (UI + lógica + datos SEED + recetario con recetas) |
 | `sw.js` | Service worker: offline tras la primera visita (opcional pero recomendado) |
 | `data/sync.json` | Copia de la nube — vive en la rama **`data`** (la escribe la propia app) |
-| `test/test.js` | Suite (279 asserts) que se ejecuta contra el HTML publicado, sin build |
+| `test/test.js` | Suite (310 asserts) que se ejecuta contra el HTML publicado, sin build |
 | `.github/workflows/ci.yml` | CI: suite bajo UTC, Europe/Madrid y America/Los_Angeles |
 | `CHANGELOG.md` | Historial de versiones |
 | `recetario/` | Recetario-saludable.xlsx (entrada de datos original) |
@@ -37,6 +37,16 @@ igual, solo pierde la garantía offline.
   ~30 s tras el último cambio, y un punto naranja en ☁️ marca cambios sin
   subir. Al abrir la app con red, se adopta la copia más reciente
   (`updatedAt`, last-write-wins) con opción **Deshacer** durante 8 s.
+- **Refresco automático** (v1.13.0): además del arranque, la app se descarga
+  la copia de la nube al volver a primer plano, al recuperar conexión y cada
+  60 s mientras está en pantalla — ya no hace falta cerrarla y abrirla. Ese
+  refresco es **de solo lectura**: solo adopta si no tienes nada sin subir, y
+  nunca sube ni re-sella la hora, de modo que un móvil desactualizado no puede
+  pisar la copia buena. Y se aplaza mientras escribes, deslizas o tienes una
+  hoja abierta, para no redibujar bajo tus dedos.
+- El repo es público: **descargar funciona sin token, subir no**. Un móvil sin
+  token ve los cambios del otro pero los suyos no salen nunca; el punto hueco
+  del ☁️ lo indica.
 - Si la rama `data` se borrara, hay que recrearla (p. ej.
   `git push origin main:data`); la app no la crea sola.
 - Requiere un **token fine-grained** (solo este repo, permiso *Contents:

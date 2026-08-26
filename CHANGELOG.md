@@ -1,5 +1,40 @@
 # Changelog
 
+## 1.13.0 — 2026-08-26 (La nube se actualiza sola)
+### Sincronización
+- **Ya no hace falta cerrar y abrir la app** para ver los cambios del otro
+  móvil. Hasta ahora solo se descargaba al arrancar (`CloudPullOnBoot`): subía
+  sola, pero nunca volvía a bajar mientras estaba abierta. Ahora baja:
+  - al **volver a la app** (desbloquear, volver del selector de apps),
+  - al **recuperar la conexión**,
+  - y con un **sondeo cada 60 s** mientras está en pantalla, para que dos
+    móviles abiertos a la vez converjan solos.
+- **Nunca te rompe lo que estás haciendo.** El refresco se aplaza si hay una
+  hoja abierta, el selector de plato, estás escribiendo, deslizando la lista o
+  tienes un «Deshacer» vivo; y entra en cuanto sueltas (al cerrar la hoja o
+  salir del buscador), sin esperar al siguiente minuto. Se conserva la posición
+  del scroll para no perder el sitio mientras lees la compra.
+### Seguridad de los datos (lo que este cambio NO hace, a propósito)
+- El refresco automático es **solo de lectura**: adopta la nube únicamente si
+  este móvil no tiene nada sin subir, y **jamás sube ni re-sella la hora**. Un
+  móvil desincronizado (token caducado, sin token o mucho tiempo sin red) no
+  puede así promocionar su copia vieja y borrar la semana del otro.
+- Si tienes cambios sin subir, la pantalla **se queda como está** y los sube el
+  autoguardado de siempre; el criterio «gana el último» resuelve como hasta hoy.
+- Al adoptar se mantienen la **unión del recetario** (nunca se pierde una receta)
+  y la **curación de celdas fantasma**. El refresco automático **no** ofrece
+  «Deshacer» (sellaría una hora nueva y provocaría un tira y afloja entre los
+  dos móviles); sigue estando en el arranque, como siempre.
+- Un **token caducado ya no reintenta subir cada minuto**: el envío se frena de
+  forma progresiva (hasta 5 min). Las descargas nunca se frenan.
+- Sin token, el sondeo baja a 5 min: las lecturas anónimas de GitHub están
+  limitadas por IP y los dos móviles comparten el router de casa.
+### Interno
+- `CloudPullOnBoot` → `CloudPull({boot|quiet})` + `AdoptRemote`: un único camino
+  auditado para arranque y refresco. El pull coge **el mismo candado** que el
+  guardado, antes de la llamada de red, y revalida al volver de ella.
+- Tests: **310 asserts** (antes 279) en 3 husos horarios.
+
 ## 1.12.0 — 2026-07-22 (Cierre de la auditoría: temas 4, 5, 6, 7 y 8)
 ### Planificar
 - **Contador honesto**: «77 comidas planificadas» pasa a «10 de 14 comidas y
