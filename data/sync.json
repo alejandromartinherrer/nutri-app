@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-26T08:23:49.101Z",
+ "savedAt": "2026-08-26T08:24:44.131Z",
  "state": {
   "members": [
    {
@@ -125,15 +125,7 @@
     }
    ]
   },
-  "produce": [
-   {
-    "id": "69ssy8u",
-    "name": "Pepino",
-    "qty": 1,
-    "unit": "ud",
-    "done": false
-   }
-  ],
+  "produce": [],
   "extras": [
    {
     "id": "6kisoi7",
@@ -148,6 +140,26 @@
    {
     "id": "kqkf79m",
     "name": "Jamón tacos",
+    "done": false
+   },
+   {
+    "id": "lx0349i",
+    "name": "Leche fresca",
+    "done": false
+   },
+   {
+    "id": "pdlyunc",
+    "name": "Salchichas",
+    "done": false
+   },
+   {
+    "id": "wqadq6m",
+    "name": "Queso fresco",
+    "done": false
+   },
+   {
+    "id": "7awf38r",
+    "name": "Yogur griego",
     "done": false
    }
   ],
@@ -3781,12 +3793,12 @@
    }
   },
   "current": "2026-08-24",
-  "updatedAt": "2026-08-26T08:23:49.101Z",
-  "lastSync": "2026-08-26T08:23:36.414Z",
+  "updatedAt": "2026-08-26T08:24:44.131Z",
+  "lastSync": "2026-08-26T08:23:59.891Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
-  "shopWeek": "2026-08-17",
+  "shopWeek": "2026-08-24",
   "txtSize": "normal"
  }
 }
