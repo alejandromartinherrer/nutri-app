@@ -1,10 +1,10 @@
 # Nutri APP — Handoff
 
-## Estado actual (v1.13.0 — 2026-08-26)
+## Estado actual (v1.13.1 — 2026-08-26)
 - Repo: `github.com/alejandromartinherrer/nutri-app` (público, Pages activo).
 - App: `https://alejandromartinherrer.github.io/nutri-app/` · HTML único `index.html`.
 - Carpeta local: `C:\claude_projects\web-apps\nutri-app` · Node LTS v24 en el sistema.
-- **310 asserts** en verde (UTC / Europe/Madrid / America/Los_Angeles). CI en cada push.
+- **329 asserts** en verde (UTC / Europe/Madrid / America/Los_Angeles). CI en cada push.
 - Recetario: **200 platos** (166 SEED + 34 Realfooding) + los que añada el usuario.
 - **Auditoría UX cerrada**: los 8 temas resueltos entre v1.8.0 y v1.12.0.
 
@@ -53,6 +53,12 @@
   picker global) · `DishWhenHtml` · `TipoFamily` (6 familias, todas AA).
 - Picker: render **por zonas** (`PaintPickerHead/Filters/List`) — al teclear solo se
   repinta la lista, `#pickSearch` nunca se destruye. Chips "¿Para quién?" (`pwho`).
+  **Modo teclado** (`SyncPickerKb` → clase `.pk-kb` en `.sheet-body`): con el
+  teclado subido se pliegan who/composer/acciones/despensa/filtros y queda
+  `#pickSearchBar` fijo + `#pickList`. Se dispara con la **altura medida** del
+  teclado (no con `focus`): así no compite con un toque en un resultado y se
+  deshace solo. `PickerCtxHtml` (`#pickCtx`) muestra "Eligiendo 2º · 1º: …",
+  lo único que se perdería al plegar el composer.
 - Compra: `PlannedCookDishes` · `IngredientesDe(n,factor)` · `DishScale`
   (`ServingsNeeded`/`RecipeServings`) · `PantryMatch` (sustantivo principal) ·
   `AISLES`/`AisleOf` · `BoughtForPantry`/`SaveBackHome` ("Ya está en casa") ·

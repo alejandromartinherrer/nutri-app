@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.13.1 — 2026-08-26 (El teclado ya no tapa las sugerencias)
+### Selector de plato
+- **Al escribir, el selector se queda en «campo + resultados».** Medido en un
+  iPhone: con el teclado subido la hoja baja a **307 px** y la lista de
+  sugerencias empezaba **314 px por debajo** de lo visible — había que pasar los
+  botones, la despensa y los filtros para llegar a ella. Es decir, **cero
+  resultados a la vista** justo mientras escribías. Ahora, mientras el teclado
+  está arriba se pliegan «¿Para quién?», el composer, los botones, la despensa y
+  los filtros: **el campo queda fijo arriba y los resultados debajo** (3–4 a la
+  vista, y ya no se sale ninguno de la pantalla).
+- **Todo vuelve solo al bajar el teclado**, con Guardar en su sitio. El cambio es
+  puro CSS sobre la altura real del teclado: no re-renderiza, así que **el campo
+  y el cursor sobreviven** y no puede pillarte a mitad de un toque.
+- **Nueva línea de contexto** mientras buscas: «Eligiendo **2º** · 1º: Crema de
+  lentejas rojas», lo único que se perdía al plegar el composer.
+- Tests: **310 → 329 asserts**.
+
 ## 1.13.0 — 2026-08-26 (La nube se actualiza sola)
 ### Sincronización
 - **Ya no hace falta cerrar y abrir la app** para ver los cambios del otro

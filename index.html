@@ -310,6 +310,20 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 /* picker: save/remove/away sit above the long list so you never scroll to save */
 .pick-actions{margin:14px 0 4px;padding-bottom:14px;border-bottom:1px solid var(--line2)}
 .pick-actions .act-row{margin-top:8px}
+#pickSearchBar{margin-top:12px}
+/* Con el teclado abierto la hoja se queda en ~300 px de alto y las sugerencias
+   caían 315 px POR DEBAJO de lo visible: había que pasar los botones, la
+   despensa y los filtros para verlas. Mientras el teclado está subido el
+   selector se reduce a campo + resultados, con el campo fijo arriba. Todo lo
+   demás vuelve solo al cerrar el teclado (sin re-render: el campo nunca muere). */
+.pk-kb .pk-who-lab,.pk-kb #pickWho,.pk-kb #pickComposer,
+.pk-kb .pick-actions,.pk-kb #pickInv,.pk-kb #pickFilters{display:none}
+.pk-kb #pickSearchBar{position:sticky;top:0;z-index:2;margin-top:0;
+	background:var(--card);padding:8px 0 9px;box-shadow:0 8px 10px -9px rgba(0,0,0,.4)}
+.pk-kb .pick-list{margin-top:0}
+.pk-ctx{display:none}
+.pk-kb .pk-ctx{display:block;font-size:12px;font-weight:700;color:var(--muted);margin:0 2px 7px}
+.pk-kb .pk-ctx b{color:var(--ink)}
 .btn{flex:1;height:46px;border-radius:12px;font-weight:800;font-size:14px;display:grid;place-items:center;border:1.5px solid var(--line)}
 .btn.ghost{background:var(--ghost-bg);color:var(--ink)}
 .btn.warn{background:#fff;color:var(--amber);border-color:var(--amber-soft)}
@@ -481,7 +495,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.13.0";
+const APP_VERSION = "1.13.1";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -1771,6 +1785,17 @@ function PickerComposerHtml(){
 			</button>
 		</div>${hint}`;
 }
+/* While the keyboard collapses the composer, this one line keeps the only thing
+   you would otherwise lose: which course you are filling, and what you already
+   picked. Only visible in .pk-kb. */
+function PickerCtxHtml(){
+	if(picker.slot!=="Comida" && picker.slot!=="Cena") return "";
+	const isComida = picker.slot==="Comida";
+	const cur = picker.sub==="pri" ? (isComida?"1º":"plato 1") : (isComida?"2º":"plato 2");
+	const otro = picker.sub==="pri" ? picker.seg : picker.pri;
+	const otroK = picker.sub==="pri" ? (isComida?"2º":"plato 2") : (isComida?"1º":"plato 1");
+	return `Eligiendo <b>${cur}</b>${otro?` · ${otroK}: ${escapeHtml(otro)}`:""}`;
+}
 function PickerBaseLab(){
 	const isComposite = picker.slot==="Comida" || picker.slot==="Cena";
 	if(!isComposite) return "Del recetario";
@@ -1812,10 +1837,25 @@ function PickerListHtml(){
 			${DishRecipe(c.name)?`<span class="pick-book" data-paction="pbook" data-name="${escapeHtml(c.name)}" title="Ver la receta">📖</span>`:''}
 		</button>`).join("");
 }
+/* Collapse the picker to "field + results" while the on-screen keyboard is up.
+   Driven by the measured keyboard height, not by focus: it can't race a tap on a
+   result (blur → keyboard close → the rest returns *after* the click lands) and
+   it heals itself when the keyboard goes away. Pure class toggle: no re-render,
+   so #pickSearch and the caret survive. */
+function SyncPickerKb(kb){
+	const sb=document.querySelector(".sheet-body");
+	if(!sb || !sb.classList) return false;
+	const on = !!picker && kb>60;
+	if(on===sb.classList.contains("pk-kb")) return on;
+	sb.classList.toggle("pk-kb",on);
+	if(on) sb.scrollTop=0;                 // put the field at the top, results under it
+	return on;
+}
 /* zone painters — these never touch #pickSearch */
 function PaintPickerHead(){
 	const w=document.getElementById("pickWho"); if(w) w.innerHTML=PickerWhoHtml();
 	const c=document.getElementById("pickComposer"); if(c) c.innerHTML=PickerComposerHtml();
+	const x=document.getElementById("pickCtx"); if(x) x.innerHTML=PickerCtxHtml();
 }
 function PaintPickerFilters(){
 	const f=document.getElementById("pickFilters"); if(f) f.innerHTML=PickerFiltersHtml();
@@ -1850,9 +1890,9 @@ function RenderPicker(){
 	const inv=[...state.inventory.frigo.map(i=>({...i,loc:"frigo"})),...state.inventory.conge.map(i=>({...i,loc:"conge"}))]
 		.filter(i=>i.qty>0)
 		.sort((a,b)=>(!!InvUrgent(b)-!!InvUrgent(a))||((a.added||"").localeCompare(b.added||"")));
-	const invHtml = inv.length? `<div class="lab">Usar de tu despensa</div>
+	const invHtml = inv.length? `<div id="pickInv"><div class="lab">Usar de tu despensa</div>
 		<div class="inv-row">${inv.map(i=>`<button class="inv-chip ${i.loc==='frigo'?'fridge':''}" data-paction="pinv" data-id="${i.id}">
-			${i.loc==='frigo'?'🧊':'❄️'} ${escapeHtml(i.name)} <span class="q">×${i.qty}</span></button>`).join("")}</div>`:"";
+			${i.loc==='frigo'?'🧊':'❄️'} ${escapeHtml(i.name)} <span class="q">×${i.qty}</span></button>`).join("")}</div></div>`:"";
 
 	document.getElementById("sheetContent").innerHTML = `
 		<div class="grip"></div>
@@ -1861,11 +1901,14 @@ function RenderPicker(){
 			<div class="x" data-action="close-sheet">✕</div>
 		</div>
 		<div class="sheet-body">
-			<div class="lab" style="margin-top:0">¿Para quién?</div>
+			<div class="lab pk-who-lab" style="margin-top:0">¿Para quién?</div>
 			<div id="pickWho">${PickerWhoHtml()}</div>
 			<div id="pickComposer">${PickerComposerHtml()}</div>
-			<input class="field" id="pickSearch" placeholder="Buscar o escribir plato…" value="${escapeHtml(picker.search)}"
-				autocomplete="off" autocorrect="off" enterkeyhint="done" style="margin-top:12px">
+			<div id="pickSearchBar">
+				<div class="pk-ctx" id="pickCtx">${PickerCtxHtml()}</div>
+				<input class="field" id="pickSearch" placeholder="Buscar o escribir plato…" value="${escapeHtml(picker.search)}"
+					autocomplete="off" autocorrect="off" enterkeyhint="done">
+			</div>
 			<div id="pickFree">${PickerFreeHtml()}</div>
 			<div class="pick-actions">
 				${isComposite?`<button class="btn prim" data-paction="psave" style="width:100%">Guardar ${isComida?"comida":"cena"} ✓</button>`:''}
@@ -3114,8 +3157,11 @@ document.addEventListener("keydown",e=>{
 	   it instead of hiding behind it (iOS doesn't shrink the layout viewport). */
 	const vv=window.visualViewport;
 	if(vv){
-		const upd=()=>document.documentElement.style.setProperty("--kb",
-			Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop))+"px");
+		const upd=()=>{
+			const kb=Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
+			document.documentElement.style.setProperty("--kb",kb+"px");
+			SyncPickerKb(kb);            // collapse/restore the picker with the keyboard
+		};
 		vv.addEventListener("resize",upd); vv.addEventListener("scroll",upd); upd();
 	}
 	/* One handler for everything that must happen on a visibility change:

@@ -25,7 +25,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml,DeleteWithUndo,ToastAction,Toast,RecipeServings,ServingsNeeded,DishScale,PantryMatch,ResetWeeklyTicks,BoughtForPantry,SaveBackHome,IngShortName,AisleOf,AisleName,PlannedLabel,TipoFamily,Surprise,UndoSurprise,SurpriseAgain,AssignDishTo,DoCopyDay,DishWhenHtml,THEMES,SyncVerdict,AdoptRemote,PullDeferred,CloudPull,PushBackedOff,FlushPendingPull};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml,DeleteWithUndo,ToastAction,Toast,RecipeServings,ServingsNeeded,DishScale,PantryMatch,ResetWeeklyTicks,BoughtForPantry,SaveBackHome,IngShortName,AisleOf,AisleName,PlannedLabel,TipoFamily,Surprise,UndoSurprise,SurpriseAgain,AssignDishTo,DoCopyDay,DishWhenHtml,THEMES,SyncVerdict,AdoptRemote,PullDeferred,CloudPull,PushBackedOff,FlushPendingPull,SyncPickerKb,RenderPicker,PickerCtxHtml};\n";
 eval(src);
 const A=global.__api;
 
@@ -765,6 +765,44 @@ ok(!/\bCloudSave\s*\(/.test(cuerpoPull),"el pull NUNCA sube: no puede pisar la s
 ok(/if\(quiet\)\{\s*SaveQuiet\(\)/.test(cuerpoPull),"el pull silencioso escribe con SaveQuiet (nunca sella el reloj)");
 ok(cuerpoPull.indexOf("_cloudBusy=true")>0,"el pull coge el mismo candado que el guardado");
 ok(/finally\{\s*_cloudBusy=false/.test(cuerpoPull),"y lo suelta siempre");
+
+// ============ 1.13.0: el teclado ya no tapa las sugerencias ============
+// Medido en un iPhone simulado: con el teclado subido la hoja baja a 307 px y la
+// lista empezaba 314 px POR DEBAJO de lo visible -> 0 resultados a la vista.
+A.state=A.SeedState(); A.RefreshCatalog(); A.GoToThisWeek();
+A.OpenPicker(1,"Comida","nosotros",false);
+ok(A.SyncPickerKb(336)===true,"teclado subido + selector abierto -> modo busqueda");
+ok(A.SyncPickerKb(0)===false,"teclado bajado -> vuelve el selector completo");
+ok(A.SyncPickerKb(30)===false,"una barra pequena no cuenta como teclado");
+A.picker=null;
+ok(A.SyncPickerKb(336)===false,"sin selector abierto no se toca nada");
+// el marcado tiene los ganchos que el CSS necesita
+A.OpenPicker(1,"Comida","nosotros",false);
+A.RenderPicker();
+ok(html.indexOf('id="pickSearchBar"')>0,"el campo va en su propia barra (para poder fijarla)");
+ok(html.indexOf('id="pickInv"')>0,"la despensa es plegable como bloque");
+ok(html.indexOf('pk-who-lab')>0,"la etiqueta «¿Para quien?» se puede plegar");
+// y el CSS pliega justo lo que sobra, dejando campo + resultados
+const cssKb=html.slice(html.indexOf(".pk-kb .pk-who-lab"),html.indexOf(".pk-kb .pick-list")+60);
+["#pickWho","#pickComposer",".pick-actions","#pickInv","#pickFilters"].forEach(sel=>
+	ok(cssKb.indexOf(sel)>0,"con el teclado se pliega "+sel));
+ok(/\.pk-kb #pickSearchBar\{position:sticky/.test(html),"el campo queda fijo arriba mientras buscas");
+ok(cssKb.indexOf("#pickList")<0 && cssKb.indexOf("#pickFree")<0,"la lista y el texto libre NUNCA se ocultan");
+// el modo no re-renderiza: el campo (y el cursor) tienen que sobrevivir
+const cuerpoKb=src.slice(src.indexOf("function SyncPickerKb"),src.indexOf("/* zone painters"));
+ok(cuerpoKb.indexOf("RenderPicker")<0 && cuerpoKb.indexOf("innerHTML")<0,"cambiar de modo no destruye el campo de busqueda");
+// al plegar el composer no puedes perder de vista QUE plato estas eligiendo
+A.OpenPicker(1,"Comida","nosotros",false);
+A.picker.pri=null; A.picker.seg=null; A.picker.sub="pri";
+ok(/Eligiendo <b>1º<\/b>/.test(A.PickerCtxHtml()),"dice que estas eligiendo el 1º");
+A.picker.pri="Crema de lentejas rojas"; A.picker.sub="seg";
+const ctx=A.PickerCtxHtml();
+ok(/Eligiendo <b>2º<\/b>/.test(ctx)&&/1º: Crema de lentejas rojas/.test(ctx),"al pasar al 2º recuerda el 1º elegido");
+A.picker.pri='Pollo "raro" <b>';
+ok(A.PickerCtxHtml().indexOf("<b>P")<0,"el nombre se escapa en la linea de contexto");
+A.OpenPicker(1,"Desayuno","nosotros",false);
+ok(A.PickerCtxHtml()==="","en desayuno/almuerzo no hay 1º y 2º: sin linea");
+A.picker=null;
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if(fail>0) process.exit(1);
