@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-27T07:58:53.657Z",
+ "savedAt": "2026-08-27T08:00:30.379Z",
  "state": {
   "members": [
    {
@@ -3600,17 +3600,17 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
+         "dish": "Empanada",
          "invId": null,
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Empanada",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Empanada",
          "invId": null,
          "away": false
         }
@@ -3784,8 +3784,8 @@
    }
   },
   "current": "2026-08-24",
-  "updatedAt": "2026-08-27T07:58:53.657Z",
-  "lastSync": "2026-08-26T13:54:15.157Z",
+  "updatedAt": "2026-08-27T08:00:30.379Z",
+  "lastSync": "2026-08-27T07:59:04.276Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
