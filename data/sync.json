@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-27T08:00:30.379Z",
+ "savedAt": "2026-08-27T13:56:48.853Z",
  "state": {
   "members": [
    {
@@ -152,6 +152,12 @@
     "name": "Leche",
     "done": false,
     "updatedAt": "2026-08-27T07:58:53.657Z"
+   },
+   {
+    "id": "2ssn8qe",
+    "name": "Garbanzos",
+    "done": false,
+    "updatedAt": "2026-08-27T13:56:48.853Z"
    }
   ],
   "userDishes": [
@@ -3784,8 +3790,8 @@
    }
   },
   "current": "2026-08-24",
-  "updatedAt": "2026-08-27T08:00:30.379Z",
-  "lastSync": "2026-08-27T07:59:04.276Z",
+  "updatedAt": "2026-08-27T13:56:48.853Z",
+  "lastSync": "2026-08-27T08:00:37.458Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
