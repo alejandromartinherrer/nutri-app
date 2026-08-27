@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-26T13:54:06.258Z",
+ "savedAt": "2026-08-27T07:58:53.657Z",
  "state": {
   "members": [
    {
@@ -141,6 +141,17 @@
     "id": "zmgt7xj",
     "name": "Parmesano",
     "done": false
+   },
+   {
+    "id": "jy78fxk",
+    "name": "Otra",
+    "done": false
+   },
+   {
+    "id": "8v5ao9s",
+    "name": "Leche",
+    "done": false,
+    "updatedAt": "2026-08-27T07:58:53.657Z"
    }
   ],
   "userDishes": [
@@ -3773,8 +3784,8 @@
    }
   },
   "current": "2026-08-24",
-  "updatedAt": "2026-08-26T13:54:06.258Z",
-  "lastSync": "2026-08-26T13:54:21.138Z",
+  "updatedAt": "2026-08-27T07:58:53.657Z",
+  "lastSync": "2026-08-26T13:54:15.157Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
