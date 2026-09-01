@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-08-31T17:18:36.894Z",
+ "savedAt": "2026-09-01T11:16:04.848Z",
  "state": {
   "members": [
    {
@@ -125,7 +125,72 @@
     }
    ]
   },
-  "produce": [],
+  "produce": [
+   {
+    "id": "njd0p80",
+    "name": "Kiwi gold",
+    "qty": 6,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-01T11:14:09.554Z"
+   },
+   {
+    "id": "chbx7o5",
+    "name": "Melocotón Teruel",
+    "qty": 3,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-01T11:14:27.993Z"
+   },
+   {
+    "id": "4setao5",
+    "name": "Tomate pera",
+    "qty": 2,
+    "unit": "Kg",
+    "done": false,
+    "updatedAt": "2026-09-01T11:14:45.113Z"
+   },
+   {
+    "id": "z8gh5jy",
+    "name": "Aguacate",
+    "qty": 2,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-01T11:14:58.877Z"
+   },
+   {
+    "id": "gr3javv",
+    "name": "Manzana",
+    "qty": 2,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-01T11:15:15.563Z"
+   },
+   {
+    "id": "f5pz5ix",
+    "name": "Plátano verde",
+    "qty": 10,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-01T11:15:31.428Z"
+   },
+   {
+    "id": "e0slix3",
+    "name": "Paraguayo",
+    "qty": 6,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-01T11:15:41.885Z"
+   },
+   {
+    "id": "4f2r42y",
+    "name": "Cebolla seca",
+    "qty": 5,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-01T11:16:04.848Z"
+   }
+  ],
   "extras": [
    {
     "id": "1hojcez",
@@ -4306,8 +4371,8 @@
    }
   },
   "current": "2026-08-31",
-  "updatedAt": "2026-08-31T17:18:36.894Z",
-  "lastSync": "2026-08-27T13:56:54.670Z",
+  "updatedAt": "2026-09-01T11:16:04.848Z",
+  "lastSync": "2026-08-31T21:56:56.220Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
