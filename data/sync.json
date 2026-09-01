@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-01T20:15:12.777Z",
+ "savedAt": "2026-09-01T21:07:02.909Z",
  "state": {
   "members": [
    {
@@ -127,68 +127,12 @@
   },
   "produce": [
    {
-    "id": "njd0p80",
-    "name": "Kiwi gold",
-    "qty": 6,
+    "id": "8gftc1a",
+    "name": "Prueba",
+    "qty": null,
     "unit": "ud",
     "done": false,
-    "updatedAt": "2026-09-01T11:14:09.554Z"
-   },
-   {
-    "id": "chbx7o5",
-    "name": "Melocotón Teruel",
-    "qty": 3,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-01T11:14:27.993Z"
-   },
-   {
-    "id": "4setao5",
-    "name": "Tomate pera",
-    "qty": 2,
-    "unit": "Kg",
-    "done": false,
-    "updatedAt": "2026-09-01T11:14:45.113Z"
-   },
-   {
-    "id": "z8gh5jy",
-    "name": "Aguacate",
-    "qty": 2,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-01T11:14:58.877Z"
-   },
-   {
-    "id": "gr3javv",
-    "name": "Manzana",
-    "qty": 2,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-01T11:15:15.563Z"
-   },
-   {
-    "id": "f5pz5ix",
-    "name": "Plátano verde",
-    "qty": 10,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-01T11:15:31.428Z"
-   },
-   {
-    "id": "e0slix3",
-    "name": "Paraguayo",
-    "qty": 6,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-01T11:15:41.885Z"
-   },
-   {
-    "id": "4f2r42y",
-    "name": "Cebolla seca",
-    "qty": 5,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-01T11:16:04.848Z"
+    "updatedAt": "2026-09-01T21:07:02.909Z"
    }
   ],
   "extras": [
@@ -218,6 +162,12 @@
     "name": "Garbanzos",
     "done": false,
     "updatedAt": "2026-08-27T13:56:48.853Z"
+   },
+   {
+    "id": "toi4ori",
+    "name": "Servilletas",
+    "done": false,
+    "updatedAt": "2026-09-01T21:06:51.875Z"
    }
   ],
   "userDishes": [
@@ -4366,15 +4316,23 @@
    }
   },
   "current": "2026-08-31",
-  "updatedAt": "2026-09-01T20:15:12.777Z",
-  "lastSync": "2026-09-01T14:59:00.299Z",
+  "updatedAt": "2026-09-01T21:07:02.909Z",
+  "lastSync": "2026-09-01T20:15:19.107Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
   "shopWeek": "2026-08-31",
   "txtSize": "normal",
   "graveyard": {
-   "jy78fxk": "2026-09-01T14:58:55.535Z"
+   "jy78fxk": "2026-09-01T14:58:55.535Z",
+   "njd0p80": "2026-09-01T21:06:40.462Z",
+   "chbx7o5": "2026-09-01T21:06:40.989Z",
+   "4setao5": "2026-09-01T21:06:41.169Z",
+   "z8gh5jy": "2026-09-01T21:06:41.273Z",
+   "gr3javv": "2026-09-01T21:06:41.869Z",
+   "f5pz5ix": "2026-09-01T21:06:42.032Z",
+   "e0slix3": "2026-09-01T21:06:42.198Z",
+   "4f2r42y": "2026-09-01T21:06:42.314Z"
   }
  }
 }
