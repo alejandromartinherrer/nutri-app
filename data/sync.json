@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-01T21:07:02.909Z",
+ "savedAt": "2026-09-01T21:08:12.014Z",
  "state": {
   "members": [
    {
@@ -168,6 +168,12 @@
     "name": "Servilletas",
     "done": false,
     "updatedAt": "2026-09-01T21:06:51.875Z"
+   },
+   {
+    "id": "a0ucmeg",
+    "name": "Queso fresco",
+    "done": false,
+    "updatedAt": "2026-09-01T21:08:12.014Z"
    }
   ],
   "userDishes": [
@@ -4316,8 +4322,8 @@
    }
   },
   "current": "2026-08-31",
-  "updatedAt": "2026-09-01T21:07:02.909Z",
-  "lastSync": "2026-09-01T20:15:19.107Z",
+  "updatedAt": "2026-09-01T21:08:12.014Z",
+  "lastSync": "2026-09-01T21:07:02.909Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
