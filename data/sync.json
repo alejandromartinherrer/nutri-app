@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-01T14:58:55.535Z",
+ "savedAt": "2026-09-01T20:15:12.777Z",
  "state": {
   "members": [
    {
@@ -63,7 +63,7 @@
     {
      "id": "u1ktlpw",
      "name": "Pizza",
-     "qty": 1,
+     "qty": 0,
      "unit": "",
      "cad": null,
      "added": "2026-08-17",
@@ -82,7 +82,7 @@
     {
      "id": "4bugn5e",
      "name": "Verduras",
-     "qty": 1,
+     "qty": 0,
      "unit": "",
      "added": "2026-07-20",
      "pri": false
@@ -4053,17 +4053,17 @@
        },
        "Cena": {
         "nosotros": {
-         "dish": "Pizza con base de coliflor",
+         "dish": "Crema de calabaza y jengibre · Carne",
          "invId": "u1ktlpw",
          "away": false
         },
         "noah": {
-         "dish": "Pizza con base de coliflor",
+         "dish": "Crema de calabaza y jengibre · Carne",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Pizza con base de coliflor",
+         "dish": "Crema de calabaza y jengibre · Carne",
          "invId": null,
          "away": false
         }
@@ -4126,17 +4126,17 @@
        },
        "Cena": {
         "nosotros": {
-         "dish": "Sopa de verduras y lentejas",
+         "dish": "Sandwich mixto",
          "invId": "4bugn5e",
          "away": false
         },
         "noah": {
-         "dish": "Sopa de verduras y lentejas",
+         "dish": "Sandwich mixto",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Sopa de verduras y lentejas",
+         "dish": "Sandwich mixto",
          "invId": null,
          "away": false
         }
@@ -4366,8 +4366,8 @@
    }
   },
   "current": "2026-08-31",
-  "updatedAt": "2026-09-01T14:58:55.535Z",
-  "lastSync": "2026-09-01T11:16:14.067Z",
+  "updatedAt": "2026-09-01T20:15:12.777Z",
+  "lastSync": "2026-09-01T14:59:00.299Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
