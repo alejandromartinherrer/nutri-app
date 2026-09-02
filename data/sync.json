@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-02T16:42:24.798Z",
+ "savedAt": "2026-09-02T16:43:32.367Z",
  "state": {
   "members": [
    {
@@ -116,8 +116,8 @@
    {
     "id": "2ssn8qe",
     "name": "Garbanzos",
-    "done": false,
-    "updatedAt": "2026-08-27T13:56:48.853Z"
+    "done": true,
+    "updatedAt": "2026-09-02T16:43:32.367Z"
    },
    {
     "id": "toi4ori",
@@ -4308,8 +4308,8 @@
    }
   },
   "current": "2026-08-31",
-  "updatedAt": "2026-09-02T16:42:24.798Z",
-  "lastSync": "2026-09-02T16:41:39.156Z",
+  "updatedAt": "2026-09-02T16:43:32.367Z",
+  "lastSync": "2026-09-02T16:42:53.782Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
