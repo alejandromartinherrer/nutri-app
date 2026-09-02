@@ -1,10 +1,10 @@
 # Nutri APP — Handoff
 
-## Estado actual (v1.15.1 — 2026-08-26)
+## Estado actual (v1.16.0 — 2026-08-26)
 - Repo: `github.com/alejandromartinherrer/nutri-app` (público, Pages activo).
 - App: `https://alejandromartinherrer.github.io/nutri-app/` · HTML único `index.html`.
 - Carpeta local: `C:\claude_projects\web-apps\nutri-app` · Node LTS v24 en el sistema.
-- **369 asserts** en verde (UTC / Europe/Madrid / America/Los_Angeles). CI en cada push.
+- **377 asserts** en verde (UTC / Europe/Madrid / America/Los_Angeles). CI en cada push.
 - Recetario: **200 platos** (166 SEED + 34 Realfooding) + los que añada el usuario.
 - **Auditoría UX cerrada**: los 8 temas resueltos entre v1.8.0 y v1.12.0.
 
@@ -32,6 +32,13 @@
    El ingrediente sale de restar `COCINA` al nombre — **no** por frecuencia: medido,
    «pollo» está en el 17 % de los platos y colaba como genérico, y el `tipo` no lo
    tapa porque el pollo se reparte entre Ensaladas/Sopas/Pasta/Pollo.
+   **El tope semanal (`CAP_TIPO`, v1.16.0) cuenta ingrediente Y grupo, nunca solo
+   el grupo**: topar solo `tipo:"Pollo"` desviaba el bonus de despensa al pollo
+   archivado como Pasta/Arroz — medido, 73 % de los 2º seguían llevando pollo con
+   el contador marcando 29 %. Y solo el ingrediente se deja fuera las cenas de
+   huevo («Tortilla de calabacín» no dice huevo). El `tipo` se normaliza
+   (trim+minúsculas) y los contadores son `Map`: es texto libre y `__proto__` como
+   clave rompía el conteo. `Echoes` compara **familias** (`TipoFamily`), no grupos.
 7. El **token de GitHub** vive solo en `localStorage["nutri_gh_token"]`. Jamás en
    `state`, ni en exportaciones, ni en `sync.json`. Hay test que lo cubre.
 8. **El pull automático (`CloudPull({quiet:true})`) es de SOLO LECTURA** (v1.13.0).

@@ -495,7 +495,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.15.1";
+const APP_VERSION = "1.16.0";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -1997,31 +1997,40 @@ function Surprise(){
 		}
 		return null;
 	}
-	/* A dish's main ingredient = its name minus the cooking vocabulary. Measured the
-	   alternative first and it does not work: judging by how often a word appears
-	   ("generic = in >=5% of dishes") calls "pollo" generic, because it is in 17% of
-	   them — and the tipo rule below does NOT cover it, since chicken dishes are
-	   spread across Ensaladas / Sopas / Pasta / Pollo. Result: "Ensalada de pollo ·
-	   Pollo al limón". Ways of cooking, on the other hand, are a small closed set
-	   that does not grow when the recipe book does. */
-	function MainToks(name){ return new Set(Tokens(name).filter(t=>!COCINA.has(t))); }
 	function Echoes(dish,avoid){
 		if(!avoid) return false;
-		if(avoid.tipo && dish.tipo && dish.tipo===avoid.tipo) return true;      // mismo grupo de comida
+		// compare FAMILIES, not groups: Pasta and "Arroz y cereales" are different
+		// groups but the same family, and "Risotto de calabaza · Pad thai" is still
+		// starch on starch. TipoFamily already exists for the colour dots.
+		if(avoid.tipo && dish.tipo){
+			const fa=TipoFamily(dish.tipo), fb=TipoFamily(avoid.tipo);
+			if(dish.tipo===avoid.tipo || (fa&&fb&&fa===fb)) return true;
+		}
 		if(avoid.toks && avoid.toks.size){
 			for(const t of MainToks(dish.name)) if(avoid.toks.has(t)) return true; // mismo ingrediente
 		}
 		return false;
 	}
-	function pickFor(pool,usedNames,prevTipo,avoid){
+	function pickFor(pool,usedNames,prevTipo,avoid,cap){
 		if(!pool.length) return null;
 		const cand=pool.filter(x=>!usedNames.has(x.name.toLowerCase()));
 		let base=cand.length?cand:pool;
-		// hard rule, not a bonus: the pantry bonus below is worth +3/+5 and would
-		// happily serve "berenjena rellena · berenjena rellena" whenever there is an
-		// aubergine in the fridge. Only drop the rule if it leaves nothing to pick.
-		const fresh=base.filter(x=>!Echoes(x,avoid));
-		if(fresh.length) base=fresh;
+		// Two hard rules, not bonuses: the pantry bonus below is worth +3/+5 and
+		// would happily serve "berenjena rellena · berenjena rellena" every day the
+		// fridge has an aubergine. (1) no echo inside the same meal; (2) no food
+		// group more than CAP_TIPO times per week in the SAME course — with a
+		// prioritised pantry the 2nd course used to be chicken 89% of the time.
+		const noEcho=x=>!Echoes(x,avoid);
+		const bajoTope=x=>{
+			if(!cap) return true;
+			for(const k of clavesDe(x.name,x.tipo)) if((cap.counts.get(k)||0)>=cap.max) return false;
+			return true;
+		};
+		// give up the weekly cap before the same-meal rule: repeating a group across
+		// the week is milder than serving the same thing twice in one sitting
+		for(const opcion of [base.filter(x=>noEcho(x)&&bajoTope(x)), base.filter(noEcho), base.filter(bajoTope)]){
+			if(opcion.length){ base=opcion; break; }
+		}
 		// score: inventory match (+3, +2 extra if priority), different tipo from prev (+1), small noise
 		let best=null,bestScore=-1;
 		base.forEach(x=>{
@@ -2034,6 +2043,32 @@ function Surprise(){
 		return best;
 	}
 	const usedComida=new Set(), usedCena=new Set();
+	/* How many times each MAIN INGREDIENT has been used per course this week.
+	   Counting the food group instead does not work: chicken lives under Pollo,
+	   Pasta, Arroz, Ensaladas and Sopas, so capping "Pollo" only pushes the +5
+	   pantry bonus onto "Pad thai de pollo" — measured, the plate still had chicken
+	   73% of the time while the label said 29%. A Map, not an object: tipo/name
+	   tokens are user text and "__proto__" as a key silently broke the counter. */
+	const topePri=new Map(), topeSeg=new Map(), topeCena=new Map();
+	const cap=t=>({counts:t,max:CAP_TIPO});
+	/* Two kinds of key in the same counter: the main ingredients, and "tipo:<group>".
+	   Neither alone is enough — the ingredient misses the egg dinners ("Tortilla de
+	   calabacín" never says huevo, and "tortilla" is cooking vocabulary), the group
+	   misses the chicken filed under Pasta or Arroz. The tipo is user-editable free
+	   text, so it is trimmed and lower-cased: untrimmed, "Pollo"/"pollo "/"Pollo"
+	   were three separate counters and the cap silently tripled. */
+	const tipoKey=t=>"tipo:"+String(t||"").trim().toLowerCase();
+	const clavesDe=(name,tipo)=>{ const k=[...MainToks(name)]; if(tipo) k.push(tipoKey(tipo)); return k; };
+	const anota=(t,name,tipo)=>{ if(name) clavesDe(name,tipo).forEach(k=>t.set(k,(t.get(k)||0)+1)); };
+	// count what is ALREADY planned by hand: the cap is about the week you end up
+	// with, not only about the holes «Sorpréndeme» happens to fill
+	const _m0=state.members[0]&&state.members[0].id;
+	if(_m0) wk.days.forEach(d=>{
+		const c=d.slots.Comida&&d.slots.Comida[_m0], x=d.slots.Cena&&d.slots.Cena[_m0];
+		if(c&&c.dish){ const p=c.dish.split(SEP).map(t=>t.trim());
+			anota(topePri,p[0],DishTipo(p[0])); if(p[1]) anota(topeSeg,p[1],DishTipo(p[1])); }
+		if(x&&x.dish) anota(topeCena,x.dish,DishTipo(x.dish));
+	});
 	let prevCT=null, prevNT=null;
 	let filled=0;
 	wk.days.forEach((d,i)=>{
@@ -2041,12 +2076,12 @@ function Surprise(){
 		// what today's meal has already used, so the day doesn't echo itself
 		let dayToks=new Set(), dayTipo=null;
 		fillSlot(d,"Comida",()=>{
-			const p=pickFor(pri,usedComida,prevCT);
-			if(p){usedComida.add(p.name.toLowerCase()); prevCT=p.tipo;
+			const p=pickFor(pri,usedComida,prevCT,null,cap(topePri));
+			if(p){usedComida.add(p.name.toLowerCase()); prevCT=p.tipo; anota(topePri,p.name,p.tipo);
 				MainToks(p.name).forEach(t=>dayToks.add(t)); dayTipo=p.tipo;}
 			// the 2nd course must not repeat the 1st's group or its main ingredient
-			const s=pickFor(seg,usedComida,p?p.tipo:prevCT,{tipo:dayTipo,toks:dayToks});
-			if(s){usedComida.add(s.name.toLowerCase());
+			const s=pickFor(seg,usedComida,p?p.tipo:prevCT,{tipo:dayTipo,toks:dayToks},cap(topeSeg));
+			if(s){usedComida.add(s.name.toLowerCase()); anota(topeSeg,s.name,s.tipo);
 				MainToks(s.name).forEach(t=>dayToks.add(t));}
 			const chosen=[p,s].filter(Boolean);
 			if(!chosen.length) return null;
@@ -2056,8 +2091,8 @@ function Surprise(){
 		// CENA – family (single dish); avoids repeating today's ingredients, but may
 		// share a food group with lunch (a hard tipo rule here left too little to pick)
 		fillSlot(d,"Cena",()=>{
-			const dish=pickFor(cen,usedCena,prevNT,{toks:dayToks});
-			if(!dish) return null; usedCena.add(dish.name.toLowerCase()); prevNT=dish.tipo;
+			const dish=pickFor(cen,usedCena,prevNT,{toks:dayToks},cap(topeCena));
+			if(!dish) return null; usedCena.add(dish.name.toLowerCase()); prevNT=dish.tipo; anota(topeCena,dish.name,dish.tipo);
 			MainToks(dish.name).forEach(t=>dayToks.add(t));
 			return {name:dish.name, im:invMatch(dish)};
 		});
@@ -2102,6 +2137,21 @@ function Tokens(s){
 		.replace(/[^a-z0-9 ]/g," ").split(/\s+/)
 		.filter(w=>w.length>3 && !["con","las","los","una","del","sin","pan"].includes(w));
 }
+
+/* A dish's main ingredient = its name minus the cooking vocabulary. Measured the
+   alternative first and it does not work: judging by how often a word appears
+   ("generic = in >=5% of dishes") calls "pollo" generic, because it is in 17% of
+   them. Nor does the food group: chicken is spread across Ensaladas / Sopas /
+   Pasta / Arroz / Pollo, so capping the LABEL just re-routes to the chicken filed
+   under another one ("Pad thai de pollo" is tipo Pasta). Ways of cooking, by
+   contrast, are a small closed set that does not grow with the recipe book. */
+function MainToks(name){ return new Set(Tokens(name).filter(t=>!COCINA.has(t))); }
+
+/* Most times one food group may repeat per course in a week. Measured 2 vs 3 over
+   15 weeks with a prioritised pantry: 2 beats 3 on every axis — the top 2nd-course
+   group drops 43%→29% (4→6 groups) and it even uses MORE of the pantry (66%→71%),
+   because it spreads across several items instead of hammering one. */
+const CAP_TIPO = 2;
 
 /* Cooking vocabulary: ways of cooking, formats and fillers. Whatever is left of a
    dish name is its actual ingredient, which is what «Sorpréndeme» must not repeat

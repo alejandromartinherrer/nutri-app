@@ -1,5 +1,37 @@
 # Changelog
 
+## 1.16.0 — 2026-09-02 (Sorpréndeme: un ingrediente, como mucho 2 veces por semana)
+- **Ni un ingrediente ni un grupo se repiten más de 2 veces por semana en el mismo
+  turno.** Con pollo y huevos marcados como urgentes en la despensa salía **pollo
+  en el 87 % de los segundos** y **huevo en el 100 % de las cenas**: el «gasta lo
+  que caduca» vale hasta +5 puntos y arrasaba con todo lo demás.
+- Se cuenta **el ingrediente, no la etiqueta**. Un primer intento topaba el grupo
+  de comida y **no servía**: los platos de pollo están repartidos entre Pollo,
+  Pasta, Arroz y Ensaladas, así que al topar «Pollo» el bonus se iba al pollo
+  escondido bajo otra etiqueta (*«Pad thai de pollo»* es Pasta). El contador decía
+  29 % y en el plato seguía habiendo pollo el 73 % de las veces. Ahora se cuentan
+  las dos cosas, porque ninguna basta sola: el ingrediente se le escapa a las
+  cenas de huevo (*«Tortilla de calabacín»* no dice «huevo» por ninguna parte).
+- Medido sobre el comportamiento real, no sobre la etiqueta:
+
+  | Con pollo y huevos urgentes | Antes | Ahora |
+  |---|---|---|
+  | 2º que **lleva** pollo | 87 % | **29 %** |
+  | Comidas del día con pollo | 100 % | **57 %** |
+  | Cenas que **llevan** huevo | 100 % | **25 %** |
+
+- **El 1º y el 2º ya no comparten familia**, no solo grupo: Pasta y «Arroz y
+  cereales» son grupos distintos pero la misma familia, y *«Risotto de calabaza ·
+  Pad thai»* seguía siendo almidón sobre almidón.
+- **Cuenta también lo que hayas planificado a mano**, no solo lo que rellena él:
+  si ya pusiste pollo dos días, no te añade más.
+- **Cede cuando no hay alternativa**: con el recetario reducido a 3 cenas del
+  mismo grupo —o a una sola— sigue rellenando la semana entera. **Nunca** deja un
+  hueco vacío por culpa del tope.
+- El grupo se normaliza antes de contarlo: es texto libre y editable, y sin
+  recortarlo «Pollo», «pollo» y «Pollo » eran tres contadores distintos.
+- Tests: **369 → 377 asserts**.
+
 ## 1.15.1 — 2026-09-02 (Sorpréndeme ya no repite ingrediente en la misma comida)
 - **El 2º plato ya no repite el ingrediente ni el grupo del 1º.** Salían comidas
   como *«Berenjena rellena de verduras · Berenjena rellena de quinoa y verduras»*:
