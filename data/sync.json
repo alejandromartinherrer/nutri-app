@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-02T16:46:09.113Z",
+ "savedAt": "2026-09-02T16:48:31.086Z",
  "state": {
   "members": [
    {
@@ -94,12 +94,14 @@
    {
     "id": "1hojcez",
     "name": "Caja de Pañuelos",
-    "done": false
+    "done": true,
+    "updatedAt": "2026-09-02T16:48:17.301Z"
    },
    {
     "id": "mxlpfw0",
     "name": "Toallitas cole",
-    "done": false
+    "done": true,
+    "updatedAt": "2026-09-02T16:47:56.316Z"
    },
    {
     "id": "zmgt7xj",
@@ -122,8 +124,8 @@
    {
     "id": "toi4ori",
     "name": "Servilletas",
-    "done": false,
-    "updatedAt": "2026-09-01T21:06:51.875Z"
+    "done": true,
+    "updatedAt": "2026-09-02T16:48:31.086Z"
    },
    {
     "id": "a0ucmeg",
@@ -4308,8 +4310,8 @@
    }
   },
   "current": "2026-08-31",
-  "updatedAt": "2026-09-02T16:46:09.113Z",
-  "lastSync": "2026-09-02T16:43:41.378Z",
+  "updatedAt": "2026-09-02T16:48:31.086Z",
+  "lastSync": "2026-09-02T16:46:41.246Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
