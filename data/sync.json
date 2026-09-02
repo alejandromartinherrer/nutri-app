@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-02T16:39:08.958Z",
+ "savedAt": "2026-09-02T16:41:06.771Z",
  "state": {
   "members": [
    {
@@ -152,8 +152,8 @@
    {
     "id": "zwsk5na",
     "name": "Curry",
-    "done": false,
-    "updatedAt": "2026-09-02T14:40:40.228Z"
+    "done": true,
+    "updatedAt": "2026-09-02T16:41:06.771Z"
    },
    {
     "id": "c5wt4m8",
@@ -4308,8 +4308,8 @@
    }
   },
   "current": "2026-08-31",
-  "updatedAt": "2026-09-02T16:39:08.958Z",
-  "lastSync": "2026-09-02T16:36:02.510Z",
+  "updatedAt": "2026-09-02T16:41:06.771Z",
+  "lastSync": "2026-09-02T16:39:41.064Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
