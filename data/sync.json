@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-01T21:08:12.014Z",
+ "savedAt": "2026-09-02T07:13:38.749Z",
  "state": {
   "members": [
    {
@@ -24,52 +24,7 @@
    }
   ],
   "inventory": {
-   "frigo": [
-    {
-     "id": "i3n9nc7",
-     "name": "Berenjena",
-     "qty": 0,
-     "unit": "",
-     "added": "2026-07-20",
-     "pri": true
-    },
-    {
-     "id": "li8f155",
-     "name": "Pepino",
-     "qty": 1,
-     "unit": "",
-     "cad": null,
-     "added": "2026-08-17",
-     "pri": true
-    },
-    {
-     "id": "nmgbz0n",
-     "name": "Tomate",
-     "qty": 1,
-     "unit": "Kg",
-     "cad": null,
-     "added": "2026-08-17",
-     "pri": true
-    },
-    {
-     "id": "swhgtf9",
-     "name": "Aguacate",
-     "qty": 0,
-     "unit": "",
-     "cad": null,
-     "added": "2026-08-17",
-     "pri": true
-    },
-    {
-     "id": "u1ktlpw",
-     "name": "Pizza",
-     "qty": 0,
-     "unit": "",
-     "cad": null,
-     "added": "2026-08-17",
-     "pri": true
-    }
-   ],
+   "frigo": [],
    "conge": [
     {
      "id": "nth93uf",
@@ -82,7 +37,7 @@
     {
      "id": "4bugn5e",
      "name": "Verduras",
-     "qty": 0,
+     "qty": 1,
      "unit": "",
      "added": "2026-07-20",
      "pri": false
@@ -4322,8 +4277,8 @@
    }
   },
   "current": "2026-08-31",
-  "updatedAt": "2026-09-01T21:08:12.014Z",
-  "lastSync": "2026-09-01T21:07:02.909Z",
+  "updatedAt": "2026-09-02T07:13:38.749Z",
+  "lastSync": "2026-09-01T21:08:12.014Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
