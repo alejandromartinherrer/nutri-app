@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-02T07:13:38.749Z",
+ "savedAt": "2026-09-02T10:03:50.254Z",
  "state": {
   "members": [
    {
@@ -29,7 +29,7 @@
     {
      "id": "nth93uf",
      "name": "Pechugas Pollo",
-     "qty": 2,
+     "qty": 0,
      "unit": "",
      "added": "2026-07-20",
      "pri": false
@@ -37,7 +37,7 @@
     {
      "id": "4bugn5e",
      "name": "Verduras",
-     "qty": 1,
+     "qty": 0,
      "unit": "",
      "added": "2026-07-20",
      "pri": false
@@ -3947,34 +3947,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Ensalada de tomate y mozzarella · Berenjena rellena de quinoa y verduras",
+         "dish": "Fabada",
          "invId": "4bugn5e",
          "away": false
         },
         "noah": {
-         "dish": "Macarrones con tomate",
-         "invId": "nmgbz0n",
+         "dish": "Fabada",
+         "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Ensalada de tomate y mozzarella · Berenjena rellena de quinoa y verduras",
+         "dish": "Fabada",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Crema de calabaza y jengibre · Carne",
+         "dish": "Crema de calabaza y jengibre · Pechugas de pollo",
          "invId": "u1ktlpw",
          "away": false
         },
         "noah": {
-         "dish": "Crema de calabaza y jengibre · Carne",
+         "dish": "Crema de calabaza y jengibre · Pechugas de pollo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Crema de calabaza y jengibre · Carne",
+         "dish": "Crema de calabaza y jengibre · Pechugas de pollo",
          "invId": null,
          "away": false
         }
@@ -4025,8 +4025,8 @@
          "away": false
         },
         "noah": {
-         "dish": "Mini hamburguesas de pollo",
-         "invId": "nth93uf",
+         "dish": "Espaguetis integrales con tomate · Curry rojo de pollo",
+         "invId": null,
          "away": false
         },
         "iria": {
@@ -4098,8 +4098,8 @@
          "away": false
         },
         "noah": {
-         "dish": "Crema de verduras con picatostes integrales",
-         "invId": "4bugn5e",
+         "dish": "Ensalada de lentejas, aguacate y tomate · Pollo al curry",
+         "invId": null,
          "away": false
         },
         "iria": {
@@ -4171,8 +4171,8 @@
          "away": false
         },
         "noah": {
-         "dish": "Bastones de zanahoria y pollo al horno",
-         "invId": "nth93uf",
+         "dish": "Ensalada de garbanzos especiados y pepino · Pinchos morunos de pollo",
+         "invId": null,
          "away": false
         },
         "iria": {
@@ -4244,8 +4244,8 @@
          "away": false
         },
         "noah": {
-         "dish": "Arroz con pollo",
-         "invId": "nth93uf",
+         "dish": "Sopa de pollo y verduras · Muslos de pollo al horno con limón",
+         "invId": null,
          "away": false
         },
         "iria": {
@@ -4277,8 +4277,8 @@
    }
   },
   "current": "2026-08-31",
-  "updatedAt": "2026-09-02T07:13:38.749Z",
-  "lastSync": "2026-09-01T21:08:12.014Z",
+  "updatedAt": "2026-09-02T10:03:50.254Z",
+  "lastSync": "2026-09-02T07:13:46.286Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
