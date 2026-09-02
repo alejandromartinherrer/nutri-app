@@ -495,7 +495,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.14.1";
+const APP_VERSION = "1.15.0";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -1986,7 +1986,7 @@ function Surprise(){
 	_surpriseBak=JSON.stringify(CurWeek());
 	const wk=CurWeek();
 	const byCourse = c=>state.catalog.filter(x=>x.course===c);
-	const pri = byCourse("primero"), seg=byCourse("segundo"), cen=byCourse("cena"), noah=byCourse("noah");
+	const pri = byCourse("primero"), seg=byCourse("segundo"), cen=byCourse("cena");
 	// inventory keyword set for prioritisation
 	const invItems=[...state.inventory.frigo,...state.inventory.conge].filter(i=>i.qty>0);
 	const invTokens = invItems.map(i=>({id:i.id,toks:Tokens(i.name),pri:InvUrgent(i)}));
@@ -2012,8 +2012,8 @@ function Surprise(){
 		});
 		return best;
 	}
-	const usedComida=new Set(), usedCena=new Set(), usedNoah=new Set();
-	let prevCT=null, prevNT=null, prevNoahT=null;
+	const usedComida=new Set(), usedCena=new Set();
+	let prevCT=null, prevNT=null;
 	let filled=0;
 	wk.days.forEach((d,i)=>{
 		// COMIDA = 1º + 2º (family)
@@ -2034,19 +2034,10 @@ function Surprise(){
 			return {name:dish.name, im:invMatch(dish)};
 		});
 	});
-	// Noah differentiation: if his column has options, give him his own comida when family comida exists
-	if(noah.length){
-		wk.days.forEach(d=>{
-			const slot=d.slots["Comida"]; const c=slot["noah"];
-			if(c && c.dish && !c.away){
-				const dish=pickFor(noah,usedNoah,prevNoahT);
-				if(dish){usedNoah.add(dish.name.toLowerCase());prevNoahT=dish.tipo;
-					const im=invMatch(dish);
-					slot["noah"]={dish:dish.name,invId:im?im.id:null,away:false};
-				}
-			}
-		});
-	}
+	// «Sorpréndeme» pone el MISMO menú a toda la familia. Antes sobrescribía
+	// la comida de Noah con un plato de la categoría «Comidas Noah», así que
+	// la semana salía con dos menús distintos. Esa categoría sigue existiendo
+	// en el recetario y en el selector para ponerla a mano cuando se quiera.
 
 	function fillSlot(d,slotName,producer){
 		const slot=d.slots[slotName];

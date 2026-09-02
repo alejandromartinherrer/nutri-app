@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.15.0 — 2026-08-26 (Sorpréndeme: el mismo menú para toda la familia)
+- **«Sorpréndeme con la semana» pone ahora el mismo plato a todos.** Antes, tras
+  rellenar la semana en familia, un último paso **sobrescribía la comida de Noah**
+  con un plato de la categoría «Comidas Noah», así que salían dos menús distintos
+  y había que cocinar dos veces.
+- La categoría **«Comidas Noah» sigue existiendo** en el recetario y al crear o
+  editar un plato: se puede seguir asignando **a mano** cuando interese. Lo que
+  desaparece es que se imponga sola.
+- Sin cambios en el resto: sigue sin pisar lo que hayas puesto a mano, sigue
+  priorizando lo que caduca en la despensa y «Deshacer» funciona igual.
+- Tests: **357 → 363 asserts** (fijan que los tres comensales reciben
+  exactamente el mismo plato en cada hueco).
+
 ## 1.14.1 — 2026-08-26 (Orden de la pestaña Compra)
 - La Compra pasa a ser **🍎 Fruta y verdura → 📝 Otros → 🍳 Ingredientes**
   (antes los ingredientes iban en medio). Quedan juntas arriba las dos listas

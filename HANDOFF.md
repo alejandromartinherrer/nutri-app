@@ -1,10 +1,10 @@
 # Nutri APP — Handoff
 
-## Estado actual (v1.14.1 — 2026-08-26)
+## Estado actual (v1.15.0 — 2026-08-26)
 - Repo: `github.com/alejandromartinherrer/nutri-app` (público, Pages activo).
 - App: `https://alejandromartinherrer.github.io/nutri-app/` · HTML único `index.html`.
 - Carpeta local: `C:\claude_projects\web-apps\nutri-app` · Node LTS v24 en el sistema.
-- **357 asserts** en verde (UTC / Europe/Madrid / America/Los_Angeles). CI en cada push.
+- **363 asserts** en verde (UTC / Europe/Madrid / America/Los_Angeles). CI en cada push.
 - Recetario: **200 platos** (166 SEED + 34 Realfooding) + los que añada el usuario.
 - **Auditoría UX cerrada**: los 8 temas resueltos entre v1.8.0 y v1.12.0.
 
@@ -23,6 +23,9 @@
 5. **`html{touch-action:manipulation}`**: mata el doble toque. El pellizco SÍ debe
    funcionar (se quitó `user-scalable=no` en v1.12.0, a propósito).
 6. **`Surprise()/fillSlot`** solo rellena huecos vacíos; nunca pisa lo puesto a mano.
+   Pone el **mismo menú a todos** (v1.15.0): se quitó el bloque que sobrescribía la
+   comida de Noah con la categoría «Comidas Noah». Esa categoría sigue existiendo
+   para asignarla a mano; no volver a automatizarla.
 7. El **token de GitHub** vive solo en `localStorage["nutri_gh_token"]`. Jamás en
    `state`, ni en exportaciones, ni en `sync.json`. Hay test que lo cubre.
 8. **El pull automático (`CloudPull({quiet:true})`) es de SOLO LECTURA** (v1.13.0).

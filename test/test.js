@@ -878,6 +878,35 @@ ok(A.MergeShopping({extras:[],produce:[]},null).extras.length===0,"MergeShopping
 ok(/\bStamp\(/.test(html.slice(html.indexOf('case "ex-add"'),html.indexOf('case "ex-add"')+400)),"el alta en Otros sella la hora");
 ok(/\bStamp\(x\)/.test(html.slice(html.indexOf('case "ex-done"'),html.indexOf('case "ex-done"')+300)),"marcar comprado sella la hora");
 
+// ============ 1.15.0: Sorprendeme pone el MISMO menu a toda la familia ============
+A.state=A.SeedState(); A.RefreshCatalog();
+const wkMis=A.GoToThisWeek();
+A.state.members.forEach(m=>wkMis.days.forEach(d=>{
+	d.slots.Comida[m.id]={dish:"",invId:null,away:false};
+	d.slots.Cena[m.id]={dish:"",invId:null,away:false};}));
+A.Surprise();
+let discrepan=0, huecos=0;
+A.CurWeek().days.forEach(d=>["Comida","Cena"].forEach(s=>{
+	const platos=A.state.members.map(m=>d.slots[s][m.id].dish);
+	if(platos.some(Boolean)){ huecos++; if(new Set(platos).size>1) discrepan++; }
+}));
+ok(huecos>0,"Sorprendeme rellena la semana");
+ok(discrepan===0,"todos los comensales reciben EXACTAMENTE el mismo plato");
+// en concreto, Noah ya no recibe una comida aparte
+ok(A.CurWeek().days.every(d=>d.slots.Comida.noah.dish===d.slots.Comida.nosotros.dish),
+	"Noah come lo mismo que los adultos (ya no se le asigna «Comidas Noah» solo a el)");
+// pero la categoria sigue existiendo para ponerla A MANO
+ok(A.state.catalog.some(c=>c.course==="noah"),"la categoria «Comidas Noah» sigue en el recetario");
+ok(html.indexOf('{value:"noah",label:"Comidas Noah"}')>0,"y se puede elegir al crear/editar un plato");
+// y se mantiene lo de siempre: no pisa lo puesto a mano
+A.state.members.forEach(m=>wkMis.days.forEach(d=>{
+	d.slots.Comida[m.id]={dish:"",invId:null,away:false};
+	d.slots.Cena[m.id]={dish:"",invId:null,away:false};}));
+A.state.members.forEach(m=>{wkMis.days[2].slots.Comida[m.id]={dish:"A mano",invId:null,away:false};});
+A.Surprise();
+ok(A.state.members.every(m=>A.CurWeek().days[2].slots.Comida[m.id].dish==="A mano"),
+	"Sorprendeme sigue sin pisar lo puesto a mano");
+
 // ============ 1.14.1: orden de la pestana Compra ============
 // primero las dos listas que se escriben a mano, y al final la que calcula la app
 const compraHtml=html.slice(html.indexOf("Lista de la compra"),html.indexOf("RENDER: MACROS"));

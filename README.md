@@ -15,7 +15,7 @@ sincronizan entre dispositivos vía GitHub.
 | `index.html` | La app completa (UI + lógica + datos SEED + recetario con recetas) |
 | `sw.js` | Service worker: offline tras la primera visita (opcional pero recomendado) |
 | `data/sync.json` | Copia de la nube — vive en la rama **`data`** (la escribe la propia app) |
-| `test/test.js` | Suite (357 asserts) que se ejecuta contra el HTML publicado, sin build |
+| `test/test.js` | Suite (363 asserts) que se ejecuta contra el HTML publicado, sin build |
 | `.github/workflows/ci.yml` | CI: suite bajo UTC, Europe/Madrid y America/Los_Angeles |
 | `CHANGELOG.md` | Historial de versiones |
 | `recetario/` | Recetario-saludable.xlsx (entrada de datos original) |
