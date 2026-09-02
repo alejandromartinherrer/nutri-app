@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-02T16:48:31.086Z",
+ "savedAt": "2026-09-02T16:49:09.913Z",
  "state": {
   "members": [
    {
@@ -112,8 +112,8 @@
    {
     "id": "8v5ao9s",
     "name": "Leche",
-    "done": false,
-    "updatedAt": "2026-08-27T07:58:53.657Z"
+    "done": true,
+    "updatedAt": "2026-09-02T16:49:09.913Z"
    },
    {
     "id": "2ssn8qe",
@@ -4310,8 +4310,8 @@
    }
   },
   "current": "2026-08-31",
-  "updatedAt": "2026-09-02T16:48:31.086Z",
-  "lastSync": "2026-09-02T16:46:41.246Z",
+  "updatedAt": "2026-09-02T16:49:09.913Z",
+  "lastSync": "2026-09-02T16:49:02.164Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
