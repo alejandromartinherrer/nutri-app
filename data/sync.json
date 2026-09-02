@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-02T14:40:40.229Z",
+ "savedAt": "2026-09-02T16:14:23.310Z",
  "state": {
   "members": [
    {
@@ -159,6 +159,12 @@
     "name": "Curry",
     "done": false,
     "updatedAt": "2026-09-02T14:40:40.228Z"
+   },
+   {
+    "id": "c5wt4m8",
+    "name": "Papel vegetal",
+    "done": false,
+    "updatedAt": "2026-09-02T16:14:23.310Z"
    }
   ],
   "userDishes": [
@@ -4307,8 +4313,8 @@
    }
   },
   "current": "2026-08-31",
-  "updatedAt": "2026-09-02T14:40:40.229Z",
-  "lastSync": "2026-09-02T13:26:52.118Z",
+  "updatedAt": "2026-09-02T16:14:23.310Z",
+  "lastSync": "2026-09-02T14:40:43.952Z",
   "theme": "fresco",
   "hideDesAlm": true,
   "shopView": "merged",
