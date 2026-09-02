@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.15.1 — 2026-09-02 (Sorpréndeme ya no repite ingrediente en la misma comida)
+- **El 2º plato ya no repite el ingrediente ni el grupo del 1º.** Salían comidas
+  como *«Berenjena rellena de verduras · Berenjena rellena de quinoa y verduras»*:
+  medido, pasaba en el **14 % de las comidas** (≈1 por semana). Ahora es **0 %**.
+- Causa: la prioridad de *gastar lo que caduca* vale +3/+5 puntos y aplastaba al
+  +1 de «varía de grupo». Si había berenjenas en la nevera, arrasaba. Ahora es una
+  **regla, no un punto extra**: el 2º descarta los platos que repiten, y solo cede
+  si no queda ninguna alternativa (verificado: **0 huecos sin rellenar**).
+- La cena también evita los ingredientes ya usados ese día, que es lo que producía
+  días enteros con el mismo producto en las tres comidas.
+- Para saber cuál es el ingrediente se resta del nombre el **vocabulario de
+  cocina** (horno, plancha, ensalada, crema, relleno, verduras…). Probé antes a
+  deducirlo por frecuencia y **no funciona**: «pollo» está en el 17 % de los platos
+  y se colaba como palabra genérica, así que salía *«Ensalada de pollo · Pollo al
+  limón»*. El grupo de comida tampoco lo tapaba, porque los platos de pollo están
+  repartidos entre Ensaladas, Sopas, Pasta y Pollo.
+- Sigue aprovechando la despensa y sin pisar lo puesto a mano.
+- Tests: **363 → 369 asserts**.
+
 ## 1.15.0 — 2026-08-26 (Sorpréndeme: el mismo menú para toda la familia)
 - **«Sorpréndeme con la semana» pone ahora el mismo plato a todos.** Antes, tras
   rellenar la semana en familia, un último paso **sobrescribía la comida de Noah**

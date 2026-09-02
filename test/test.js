@@ -25,7 +25,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml,DeleteWithUndo,ToastAction,Toast,RecipeServings,ServingsNeeded,DishScale,PantryMatch,ResetWeeklyTicks,BoughtForPantry,SaveBackHome,IngShortName,AisleOf,AisleName,PlannedLabel,TipoFamily,Surprise,UndoSurprise,SurpriseAgain,AssignDishTo,DoCopyDay,DishWhenHtml,THEMES,SyncVerdict,AdoptRemote,PullDeferred,CloudPull,PushBackedOff,FlushPendingPull,SyncPickerKb,RenderPicker,PickerCtxHtml,MergeList,MergeShopping,MergeGraves,PruneGraveyard,Stamp,Bury,Unbury,ShopSig,GRAVE_DAYS};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml,DeleteWithUndo,ToastAction,Toast,RecipeServings,ServingsNeeded,DishScale,PantryMatch,ResetWeeklyTicks,BoughtForPantry,SaveBackHome,IngShortName,AisleOf,AisleName,PlannedLabel,TipoFamily,Surprise,UndoSurprise,SurpriseAgain,AssignDishTo,DoCopyDay,DishWhenHtml,THEMES,SyncVerdict,AdoptRemote,PullDeferred,CloudPull,PushBackedOff,FlushPendingPull,SyncPickerKb,RenderPicker,PickerCtxHtml,COCINA,MergeList,MergeShopping,MergeGraves,PruneGraveyard,Stamp,Bury,Unbury,ShopSig,GRAVE_DAYS};\n";
 eval(src);
 const A=global.__api;
 
@@ -906,6 +906,42 @@ A.state.members.forEach(m=>{wkMis.days[2].slots.Comida[m.id]={dish:"A mano",invI
 A.Surprise();
 ok(A.state.members.every(m=>A.CurWeek().days[2].slots.Comida[m.id].dish==="A mano"),
 	"Sorprendeme sigue sin pisar lo puesto a mano");
+
+// ---- y el 1o y el 2o no repiten ingrediente (v1.15.0) ----
+// COCINA separa "como se cocina" de "que se cocina"; lo que queda del nombre es
+// el ingrediente. Medido antes: 14% de las comidas salian tipo "berenjena
+// rellena de verduras . berenjena rellena de quinoa".
+ok(A.COCINA.has("horno")&&A.COCINA.has("plancha")&&A.COCINA.has("ensalada")&&A.COCINA.has("verduras"),
+	"COCINA recoge formas de cocinar y rellenos");
+ok(!A.COCINA.has("pollo")&&!A.COCINA.has("berenjena")&&!A.COCINA.has("lentejas"),
+	"pero NO los ingredientes (fallo real: por frecuencia, «pollo» colaba como generico)");
+const ingr = n => A.Tokens(n).filter(t=>!A.COCINA.has(t));
+let ecos=0, mismoGrupo=0, comidasVistas=0, sinRellenar=0, huecosVistos=0;
+for(let it=0; it<8; it++){
+	A.state=A.SeedState(); A.RefreshCatalog();
+	const wkE=A.GoToThisWeek();
+	A.state.members.forEach(m=>wkE.days.forEach(d=>{
+		d.slots.Comida[m.id]={dish:"",invId:null,away:false};
+		d.slots.Cena[m.id]={dish:"",invId:null,away:false};}));
+	// despensa cargada y prioritaria: es lo que disparaba el fallo (+5 al plato que casa)
+	A.state.inventory.frigo=[{id:"b1",name:"Berenjena",qty:3,pri:true},{id:"b2",name:"Pollo",qty:2,pri:true}];
+	A.Surprise();
+	A.CurWeek().days.forEach(d=>{
+		const c=d.slots.Comida.nosotros.dish, ce=d.slots.Cena.nosotros.dish;
+		huecosVistos+=2; if(!c) sinRellenar++; if(!ce) sinRellenar++;
+		const partes=c.split(A.SEP).map(x=>x.trim()).filter(Boolean);
+		if(partes.length!==2) return;
+		comidasVistas++;
+		const a=ingr(partes[0]), b=new Set(ingr(partes[1]));
+		if(a.some(t=>b.has(t))) ecos++;
+		const t1=A.DishTipo(partes[0]), t2=A.DishTipo(partes[1]);
+		if(t1&&t2&&t1===t2) mismoGrupo++;
+	});
+}
+ok(comidasVistas>30,"hay comidas de dos platos que revisar");
+ok(ecos===0,"el 2o nunca repite el ingrediente principal del 1o, ni con la despensa empujando");
+ok(mismoGrupo===0,"ni el mismo grupo de comida");
+ok(sinRellenar===0,"la regla nunca deja un hueco sin rellenar (cede si no hay alternativa)");
 
 // ============ 1.14.1: orden de la pestana Compra ============
 // primero las dos listas que se escriben a mano, y al final la que calcula la app

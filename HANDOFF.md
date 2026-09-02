@@ -1,10 +1,10 @@
 # Nutri APP — Handoff
 
-## Estado actual (v1.15.0 — 2026-08-26)
+## Estado actual (v1.15.1 — 2026-08-26)
 - Repo: `github.com/alejandromartinherrer/nutri-app` (público, Pages activo).
 - App: `https://alejandromartinherrer.github.io/nutri-app/` · HTML único `index.html`.
 - Carpeta local: `C:\claude_projects\web-apps\nutri-app` · Node LTS v24 en el sistema.
-- **363 asserts** en verde (UTC / Europe/Madrid / America/Los_Angeles). CI en cada push.
+- **369 asserts** en verde (UTC / Europe/Madrid / America/Los_Angeles). CI en cada push.
 - Recetario: **200 platos** (166 SEED + 34 Realfooding) + los que añada el usuario.
 - **Auditoría UX cerrada**: los 8 temas resueltos entre v1.8.0 y v1.12.0.
 
@@ -26,6 +26,12 @@
    Pone el **mismo menú a todos** (v1.15.0): se quitó el bloque que sobrescribía la
    comida de Noah con la categoría «Comidas Noah». Esa categoría sigue existiendo
    para asignarla a mano; no volver a automatizarla.
+   **No repetir ingrediente (v1.15.1) es una REGLA, no un bonus**: el bonus de
+   despensa vale +3/+5 y aplastaría cualquier puntuación. `Echoes()` descarta del
+   pool; solo cede si el filtro deja el pool vacío (probado: 0 huecos sin llenar).
+   El ingrediente sale de restar `COCINA` al nombre — **no** por frecuencia: medido,
+   «pollo» está en el 17 % de los platos y colaba como genérico, y el `tipo` no lo
+   tapa porque el pollo se reparte entre Ensaladas/Sopas/Pasta/Pollo.
 7. El **token de GitHub** vive solo en `localStorage["nutri_gh_token"]`. Jamás en
    `state`, ni en exportaciones, ni en `sync.json`. Hay test que lo cubre.
 8. **El pull automático (`CloudPull({quiet:true})`) es de SOLO LECTURA** (v1.13.0).

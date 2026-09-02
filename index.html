@@ -495,7 +495,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.15.0";
+const APP_VERSION = "1.15.1";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -1997,10 +1997,31 @@ function Surprise(){
 		}
 		return null;
 	}
-	function pickFor(pool,usedNames,prevTipo){
+	/* A dish's main ingredient = its name minus the cooking vocabulary. Measured the
+	   alternative first and it does not work: judging by how often a word appears
+	   ("generic = in >=5% of dishes") calls "pollo" generic, because it is in 17% of
+	   them — and the tipo rule below does NOT cover it, since chicken dishes are
+	   spread across Ensaladas / Sopas / Pasta / Pollo. Result: "Ensalada de pollo ·
+	   Pollo al limón". Ways of cooking, on the other hand, are a small closed set
+	   that does not grow when the recipe book does. */
+	function MainToks(name){ return new Set(Tokens(name).filter(t=>!COCINA.has(t))); }
+	function Echoes(dish,avoid){
+		if(!avoid) return false;
+		if(avoid.tipo && dish.tipo && dish.tipo===avoid.tipo) return true;      // mismo grupo de comida
+		if(avoid.toks && avoid.toks.size){
+			for(const t of MainToks(dish.name)) if(avoid.toks.has(t)) return true; // mismo ingrediente
+		}
+		return false;
+	}
+	function pickFor(pool,usedNames,prevTipo,avoid){
 		if(!pool.length) return null;
 		const cand=pool.filter(x=>!usedNames.has(x.name.toLowerCase()));
-		const base=cand.length?cand:pool;
+		let base=cand.length?cand:pool;
+		// hard rule, not a bonus: the pantry bonus below is worth +3/+5 and would
+		// happily serve "berenjena rellena · berenjena rellena" whenever there is an
+		// aubergine in the fridge. Only drop the rule if it leaves nothing to pick.
+		const fresh=base.filter(x=>!Echoes(x,avoid));
+		if(fresh.length) base=fresh;
 		// score: inventory match (+3, +2 extra if priority), different tipo from prev (+1), small noise
 		let best=null,bestScore=-1;
 		base.forEach(x=>{
@@ -2017,20 +2038,27 @@ function Surprise(){
 	let filled=0;
 	wk.days.forEach((d,i)=>{
 		// COMIDA = 1º + 2º (family)
+		// what today's meal has already used, so the day doesn't echo itself
+		let dayToks=new Set(), dayTipo=null;
 		fillSlot(d,"Comida",()=>{
 			const p=pickFor(pri,usedComida,prevCT);
-			if(p){usedComida.add(p.name.toLowerCase()); prevCT=p.tipo;}
-			const s=pickFor(seg,usedComida,p?p.tipo:prevCT);
-			if(s){usedComida.add(s.name.toLowerCase());}
+			if(p){usedComida.add(p.name.toLowerCase()); prevCT=p.tipo;
+				MainToks(p.name).forEach(t=>dayToks.add(t)); dayTipo=p.tipo;}
+			// the 2nd course must not repeat the 1st's group or its main ingredient
+			const s=pickFor(seg,usedComida,p?p.tipo:prevCT,{tipo:dayTipo,toks:dayToks});
+			if(s){usedComida.add(s.name.toLowerCase());
+				MainToks(s.name).forEach(t=>dayToks.add(t));}
 			const chosen=[p,s].filter(Boolean);
 			if(!chosen.length) return null;
 			const im=(s&&invMatch(s))||(p&&invMatch(p))||null;
 			return {name:chosen.map(x=>x.name).join(SEP), im};
 		});
-		// CENA – family (single dish)
+		// CENA – family (single dish); avoids repeating today's ingredients, but may
+		// share a food group with lunch (a hard tipo rule here left too little to pick)
 		fillSlot(d,"Cena",()=>{
-			const dish=pickFor(cen,usedCena,prevNT);
+			const dish=pickFor(cen,usedCena,prevNT,{toks:dayToks});
 			if(!dish) return null; usedCena.add(dish.name.toLowerCase()); prevNT=dish.tipo;
+			MainToks(dish.name).forEach(t=>dayToks.add(t));
 			return {name:dish.name, im:invMatch(dish)};
 		});
 	});
@@ -2074,6 +2102,17 @@ function Tokens(s){
 		.replace(/[^a-z0-9 ]/g," ").split(/\s+/)
 		.filter(w=>w.length>3 && !["con","las","los","una","del","sin","pan"].includes(w));
 }
+
+/* Cooking vocabulary: ways of cooking, formats and fillers. Whatever is left of a
+   dish name is its actual ingredient, which is what «Sorpréndeme» must not repeat
+   twice in the same meal. Closed set: it does not grow with the recipe book. */
+const COCINA = new Set(("horno plancha parrilla brasa vapor papillote wok sarten cazuela olla " +
+	"ensalada ensaladilla crema cremoso cremosa sopa caldo guiso guisado guisada guisadas " +
+	"salsa salteado salteada salteados tortilla revuelto bowl tosta wrap quesadilla burrito " +
+	"asado asada asados asadas relleno rellena rellenos rellenas gratinado gratinada " +
+	"marinado marinada crujiente ligero ligera casero casera casa fresco fresca integral " +
+	"mini fingers bastones palitos trozos lomos filete filetes rodajas " +
+	"verduras verdura hierbas especias hortalizas guarnicion").split(" "));
 
 /* ============================ CLOUD SYNC (GitHub) ============================
    "Guardar" commits data/sync.json to the app's own repo via the GitHub
