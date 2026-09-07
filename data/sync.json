@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-02T16:49:48.623Z",
+ "savedAt": "2026-09-07T07:50:59.267Z",
  "state": {
   "members": [
    {
@@ -142,8 +142,8 @@
    {
     "id": "scewkfq",
     "name": "Chocolate 85%",
-    "done": false,
-    "updatedAt": "2026-09-02T13:04:47.770Z"
+    "done": true,
+    "updatedAt": "2026-09-05T17:42:27.681Z"
    },
    {
     "id": "turjdaj",
@@ -4307,13 +4307,529 @@
       }
      }
     ]
+   },
+   "2026-09-07": {
+    "monday": "2026-09-07",
+    "days": [
+     {
+      "date": "2026-09-07",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "Lasaña de calabacín · Pollo asado con hierbas",
+         "invId": "wbizxhl",
+         "away": false
+        },
+        "noah": {
+         "dish": "Lasaña de calabacín · Pollo asado con hierbas",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Lasaña de calabacín · Pollo asado con hierbas",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "Wok de tofu y verduras con sésamo",
+         "invId": "n2xyssw",
+         "away": false
+        },
+        "noah": {
+         "dish": "Wok de tofu y verduras con sésamo",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Wok de tofu y verduras con sésamo",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-09-08",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "Sopa de pollo y verduras · Lentejas rojas guisadas con verduras",
+         "invId": "n2xyssw",
+         "away": false
+        },
+        "noah": {
+         "dish": "Sopa de pollo y verduras · Lentejas rojas guisadas con verduras",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Sopa de pollo y verduras · Lentejas rojas guisadas con verduras",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "Frittata de verduras",
+         "invId": "n2xyssw",
+         "away": false
+        },
+        "noah": {
+         "dish": "Frittata de verduras",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Frittata de verduras",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-09-09",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Yogur con fruta y nueces",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Yogur con fruta y nueces",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Yogur con fruta y nueces",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "Espárragos a la plancha · Estofado de ternera con verduras",
+         "invId": "n2xyssw",
+         "away": false
+        },
+        "noah": {
+         "dish": "Espárragos a la plancha · Estofado de ternera con verduras",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Espárragos a la plancha · Estofado de ternera con verduras",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "Tostada integral de aguacate y huevo",
+         "invId": "n2xyssw",
+         "away": false
+        },
+        "noah": {
+         "dish": "Tostada integral de aguacate y huevo",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Tostada integral de aguacate y huevo",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-09-10",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Tostada integral con aceite",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Sándwich integral",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Sándwich integral",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "Quinoa con verduras · Fajitas de pollo",
+         "invId": "wbizxhl",
+         "away": false
+        },
+        "noah": {
+         "dish": "Quinoa con verduras · Fajitas de pollo",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Quinoa con verduras · Fajitas de pollo",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "Salteado de gambas y verduras al ajillo",
+         "invId": "n2xyssw",
+         "away": false
+        },
+        "noah": {
+         "dish": "Salteado de gambas y verduras al ajillo",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Salteado de gambas y verduras al ajillo",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-09-11",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Avena con fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "Ensalada César con pollo · Salteado de tofu y verduras",
+         "invId": "n2xyssw",
+         "away": false
+        },
+        "noah": {
+         "dish": "Ensalada César con pollo · Salteado de tofu y verduras",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Ensalada César con pollo · Salteado de tofu y verduras",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "Sopa de verduras y lentejas",
+         "invId": "n2xyssw",
+         "away": false
+        },
+        "noah": {
+         "dish": "Sopa de verduras y lentejas",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Sopa de verduras y lentejas",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-09-12",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Tostada de tomate",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Tostada de tomate",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Tostada de tomate",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Yogur",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "Alubias con verduras · Noodles de arroz con verduras y gambas",
+         "invId": "n2xyssw",
+         "away": false
+        },
+        "noah": {
+         "dish": "Alubias con verduras · Noodles de arroz con verduras y gambas",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Alubias con verduras · Noodles de arroz con verduras y gambas",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "Brochetas de langostino y verduras",
+         "invId": "n2xyssw",
+         "away": false
+        },
+        "noah": {
+         "dish": "Brochetas de langostino y verduras",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Brochetas de langostino y verduras",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     },
+     {
+      "date": "2026-09-13",
+      "slots": {
+       "Desayuno": {
+        "nosotros": {
+         "dish": "Bizcocho casero",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Bizcocho casero",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Bizcocho casero",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Almuerzo": {
+        "nosotros": {
+         "dish": "",
+         "invId": null,
+         "away": false
+        },
+        "noah": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Fruta",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Comida": {
+        "nosotros": {
+         "dish": "Arroz integral con verduras · Bacalao con pisto de verduras",
+         "invId": "n2xyssw",
+         "away": false
+        },
+        "noah": {
+         "dish": "Arroz integral con verduras · Bacalao con pisto de verduras",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Arroz integral con verduras · Bacalao con pisto de verduras",
+         "invId": null,
+         "away": false
+        }
+       },
+       "Cena": {
+        "nosotros": {
+         "dish": "Quesadilla integral de pollo y verduras",
+         "invId": "n2xyssw",
+         "away": false
+        },
+        "noah": {
+         "dish": "Quesadilla integral de pollo y verduras",
+         "invId": null,
+         "away": false
+        },
+        "iria": {
+         "dish": "Quesadilla integral de pollo y verduras",
+         "invId": null,
+         "away": false
+        }
+       }
+      }
+     }
+    ]
    }
   },
-  "current": "2026-08-31",
-  "updatedAt": "2026-09-02T16:49:48.623Z",
-  "lastSync": "2026-09-02T16:49:15.487Z",
+  "current": "2026-09-07",
+  "updatedAt": "2026-09-07T07:50:59.267Z",
+  "lastSync": "2026-09-02T16:49:53.887Z",
   "theme": "fresco",
-  "hideDesAlm": true,
+  "hideDesAlm": false,
   "shopView": "merged",
   "shopWeek": "2026-08-31",
   "txtSize": "normal",
