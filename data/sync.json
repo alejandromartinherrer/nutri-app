@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-07T07:50:59.267Z",
+ "savedAt": "2026-09-07T13:42:49.122Z",
  "state": {
   "members": [
    {
@@ -95,73 +95,73 @@
     "id": "1hojcez",
     "name": "Caja de Pañuelos",
     "done": true,
-    "updatedAt": "2026-09-02T16:48:17.301Z"
+    "updatedAt": "2026-09-07T13:42:43.375Z"
    },
    {
     "id": "mxlpfw0",
     "name": "Toallitas cole",
     "done": true,
-    "updatedAt": "2026-09-02T16:47:56.316Z"
+    "updatedAt": "2026-09-07T13:42:43.690Z"
    },
    {
     "id": "zmgt7xj",
     "name": "Parmesano",
     "done": true,
-    "updatedAt": "2026-09-02T16:35:55.150Z"
+    "updatedAt": "2026-09-07T13:42:44.373Z"
    },
    {
     "id": "8v5ao9s",
     "name": "Leche",
     "done": true,
-    "updatedAt": "2026-09-02T16:49:09.913Z"
+    "updatedAt": "2026-09-07T13:42:44.723Z"
    },
    {
     "id": "2ssn8qe",
     "name": "Garbanzos",
     "done": true,
-    "updatedAt": "2026-09-02T16:43:32.367Z"
+    "updatedAt": "2026-09-07T13:42:45.090Z"
    },
    {
     "id": "toi4ori",
     "name": "Servilletas",
     "done": true,
-    "updatedAt": "2026-09-02T16:48:31.086Z"
+    "updatedAt": "2026-09-07T13:42:46.180Z"
    },
    {
     "id": "a0ucmeg",
     "name": "Queso fresco",
     "done": true,
-    "updatedAt": "2026-09-02T16:39:08.958Z"
+    "updatedAt": "2026-09-07T13:42:46.579Z"
    },
    {
     "id": "7ke97t1",
     "name": "Harina integral",
     "done": true,
-    "updatedAt": "2026-09-02T16:49:48.622Z"
+    "updatedAt": "2026-09-07T13:42:46.945Z"
    },
    {
     "id": "scewkfq",
     "name": "Chocolate 85%",
     "done": true,
-    "updatedAt": "2026-09-05T17:42:27.681Z"
+    "updatedAt": "2026-09-07T13:42:47.279Z"
    },
    {
     "id": "turjdaj",
     "name": "Patatas",
     "done": true,
-    "updatedAt": "2026-09-02T16:42:24.798Z"
+    "updatedAt": "2026-09-07T13:42:47.611Z"
    },
    {
     "id": "zwsk5na",
     "name": "Curry",
     "done": true,
-    "updatedAt": "2026-09-02T16:41:06.771Z"
+    "updatedAt": "2026-09-07T13:42:48.892Z"
    },
    {
     "id": "c5wt4m8",
     "name": "Papel vegetal",
     "done": true,
-    "updatedAt": "2026-09-02T16:46:09.113Z"
+    "updatedAt": "2026-09-07T13:42:49.122Z"
    }
   ],
   "userDishes": [
@@ -4826,12 +4826,12 @@
    }
   },
   "current": "2026-09-07",
-  "updatedAt": "2026-09-07T07:50:59.267Z",
-  "lastSync": "2026-09-02T16:49:53.887Z",
+  "updatedAt": "2026-09-07T13:42:49.122Z",
+  "lastSync": "2026-09-07T07:51:09.318Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "merged",
-  "shopWeek": "2026-08-31",
+  "shopWeek": "2026-09-07",
   "txtSize": "normal",
   "graveyard": {
    "jy78fxk": "2026-09-01T14:58:55.535Z",
