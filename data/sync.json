@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-08T08:02:10.402Z",
+ "savedAt": "2026-09-08T08:09:38.512Z",
  "state": {
   "members": [
    {
@@ -80,7 +80,16 @@
     }
    ]
   },
-  "produce": [],
+  "produce": [
+   {
+    "id": "mgklq62",
+    "name": "Melon",
+    "qty": 1,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-08T08:09:38.512Z"
+   }
+  ],
   "extras": [],
   "userDishes": [
    {
@@ -4744,8 +4753,8 @@
    }
   },
   "current": "2026-09-07",
-  "updatedAt": "2026-09-08T08:02:10.402Z",
-  "lastSync": "2026-09-08T08:02:09.679Z",
+  "updatedAt": "2026-09-08T08:09:38.512Z",
+  "lastSync": "2026-09-08T08:02:14.383Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "merged",
