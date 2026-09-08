@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-08T08:13:11.016Z",
+ "savedAt": "2026-09-08T08:14:23.308Z",
  "state": {
   "members": [
    {
@@ -104,6 +104,22 @@
     "unit": "Kg",
     "done": false,
     "updatedAt": "2026-09-08T08:13:11.016Z"
+   },
+   {
+    "id": "8a9jgp0",
+    "name": "Paraguayo",
+    "qty": 6,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-08T08:14:03.893Z"
+   },
+   {
+    "id": "o3qdkbj",
+    "name": "Ciruela",
+    "qty": 4,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-08T08:14:23.308Z"
    }
   ],
   "extras": [],
@@ -4769,8 +4785,8 @@
    }
   },
   "current": "2026-09-07",
-  "updatedAt": "2026-09-08T08:13:11.016Z",
-  "lastSync": "2026-09-08T08:10:47.625Z",
+  "updatedAt": "2026-09-08T08:14:23.308Z",
+  "lastSync": "2026-09-08T08:13:42.833Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "merged",
