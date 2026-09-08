@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-08T08:09:38.512Z",
+ "savedAt": "2026-09-08T08:10:15.424Z",
  "state": {
   "members": [
    {
@@ -88,6 +88,14 @@
     "unit": "ud",
     "done": false,
     "updatedAt": "2026-09-08T08:09:38.512Z"
+   },
+   {
+    "id": "9vsbk97",
+    "name": "Melocotón",
+    "qty": 4,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-08T08:10:15.424Z"
    }
   ],
   "extras": [],
@@ -4753,8 +4761,8 @@
    }
   },
   "current": "2026-09-07",
-  "updatedAt": "2026-09-08T08:09:38.512Z",
-  "lastSync": "2026-09-08T08:02:14.383Z",
+  "updatedAt": "2026-09-08T08:10:15.424Z",
+  "lastSync": "2026-09-08T08:09:50.905Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "merged",
