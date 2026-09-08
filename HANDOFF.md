@@ -1,6 +1,6 @@
 # Nutri APP — Handoff
 
-## Estado actual (v1.17.0 — 2026-08-26)
+## Estado actual (v1.17.0 — 2026-09-08)
 - Repo: `github.com/alejandromartinherrer/nutri-app` (público, Pages activo).
 - App: `https://alejandromartinherrer.github.io/nutri-app/` · HTML único `index.html`.
 - Carpeta local: `C:\claude_projects\web-apps\nutri-app` · Node LTS v24 en el sistema.
