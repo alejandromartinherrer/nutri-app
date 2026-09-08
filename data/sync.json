@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-08T08:10:15.424Z",
+ "savedAt": "2026-09-08T08:13:11.016Z",
  "state": {
   "members": [
    {
@@ -96,6 +96,14 @@
     "unit": "ud",
     "done": false,
     "updatedAt": "2026-09-08T08:10:15.424Z"
+   },
+   {
+    "id": "2r57fed",
+    "name": "Uva Moscatel",
+    "qty": 1,
+    "unit": "Kg",
+    "done": false,
+    "updatedAt": "2026-09-08T08:13:11.016Z"
    }
   ],
   "extras": [],
@@ -4761,8 +4769,8 @@
    }
   },
   "current": "2026-09-07",
-  "updatedAt": "2026-09-08T08:10:15.424Z",
-  "lastSync": "2026-09-08T08:09:50.905Z",
+  "updatedAt": "2026-09-08T08:13:11.016Z",
+  "lastSync": "2026-09-08T08:10:47.625Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "merged",
