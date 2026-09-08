@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-08T08:14:23.308Z",
+ "savedAt": "2026-09-08T08:15:39.043Z",
  "state": {
   "members": [
    {
@@ -120,6 +120,38 @@
     "unit": "ud",
     "done": false,
     "updatedAt": "2026-09-08T08:14:23.308Z"
+   },
+   {
+    "id": "3cajd7d",
+    "name": "Pepino",
+    "qty": 2,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-08T08:14:54.249Z"
+   },
+   {
+    "id": "aldm911",
+    "name": "Boniato grande",
+    "qty": 1,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-08T08:15:07.447Z"
+   },
+   {
+    "id": "1fnd69r",
+    "name": "Limón",
+    "qty": 2,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-08T08:15:29.737Z"
+   },
+   {
+    "id": "uhgmp7y",
+    "name": "Puerro",
+    "qty": 3,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-08T08:15:39.043Z"
    }
   ],
   "extras": [],
@@ -4785,8 +4817,8 @@
    }
   },
   "current": "2026-09-07",
-  "updatedAt": "2026-09-08T08:14:23.308Z",
-  "lastSync": "2026-09-08T08:13:42.833Z",
+  "updatedAt": "2026-09-08T08:15:39.043Z",
+  "lastSync": "2026-09-08T08:14:55.129Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "merged",
