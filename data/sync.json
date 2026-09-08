@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-08T08:02:03.820Z",
+ "savedAt": "2026-09-08T08:02:10.402Z",
  "state": {
   "members": [
    {
@@ -80,16 +80,7 @@
     }
    ]
   },
-  "produce": [
-   {
-    "id": "8gftc1a",
-    "name": "Prueba",
-    "qty": null,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-01T21:07:02.909Z"
-   }
-  ],
+  "produce": [],
   "extras": [],
   "userDishes": [
    {
@@ -4753,8 +4744,8 @@
    }
   },
   "current": "2026-09-07",
-  "updatedAt": "2026-09-08T08:02:03.820Z",
-  "lastSync": "2026-09-07T13:42:54.710Z",
+  "updatedAt": "2026-09-08T08:02:10.402Z",
+  "lastSync": "2026-09-08T08:02:09.679Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "merged",
@@ -4782,7 +4773,8 @@
    "scewkfq": "2026-09-08T08:02:03.820Z",
    "turjdaj": "2026-09-08T08:02:03.820Z",
    "zwsk5na": "2026-09-08T08:02:03.820Z",
-   "c5wt4m8": "2026-09-08T08:02:03.820Z"
+   "c5wt4m8": "2026-09-08T08:02:03.820Z",
+   "8gftc1a": "2026-09-08T08:02:10.402Z"
   }
  }
 }
