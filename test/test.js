@@ -25,7 +25,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml,DeleteWithUndo,ToastAction,Toast,RecipeServings,ServingsNeeded,DishScale,PantryMatch,ResetWeeklyTicks,BoughtForPantry,SaveBackHome,IngShortName,AisleOf,AisleName,PlannedLabel,TipoFamily,Surprise,UndoSurprise,SurpriseAgain,AssignDishTo,DoCopyDay,DishWhenHtml,THEMES,SyncVerdict,AdoptRemote,PullDeferred,CloudPull,PushBackedOff,FlushPendingPull,SyncPickerKb,RenderPicker,PickerCtxHtml,COCINA,PendingFirst,ClearListWithUndo,ConfirmSheet,CAP_TIPO,MainToks,TipoFamily,MergeList,MergeShopping,MergeGraves,PruneGraveyard,Stamp,Bury,Unbury,ShopSig,GRAVE_DAYS};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml,DeleteWithUndo,ToastAction,Toast,RecipeServings,ServingsNeeded,DishScale,PantryMatch,ResetWeeklyTicks,BoughtForPantry,SaveBackHome,IngShortName,AisleOf,AisleName,PlannedLabel,TipoFamily,Surprise,UndoSurprise,SurpriseAgain,AssignDishTo,DoCopyDay,DishWhenHtml,THEMES,SyncVerdict,AdoptRemote,PullDeferred,CloudPull,PushBackedOff,FlushPendingPull,SyncPickerKb,RenderPicker,PickerCtxHtml,COCINA,ParseQty,ParseQtyUnit,NiceQty,PendingFirst,ClearListWithUndo,ConfirmSheet,CAP_TIPO,MainToks,TipoFamily,MergeList,MergeShopping,MergeGraves,PruneGraveyard,Stamp,Bury,Unbury,ShopSig,GRAVE_DAYS};\n";
 eval(src);
 const A=global.__api;
 
@@ -1020,6 +1020,39 @@ ok(A.ClearListWithUndo([],"vacia")===0,"vaciar una lista ya vacia no hace nada")
 A.state.graveyard={};
 A.ClearListWithUndo(A.state.inventory.frigo,"frigo");
 ok(Object.keys(A.state.graveyard).length===0,"vaciar la despensa no crea lapidas (solo las listas compartidas)");
+
+// ============ 1.17.1: medio kilo para el frutero ============
+// El campo era type="number" y el navegador BORRABA lo que no entendia: "0,5"
+// (como se escribe en espanol), "1/2" y "½" llegaban vacios y el producto se
+// guardaba SIN cantidad, sin avisar.
+ok(!/if\(f\.type==="number"\)inp\.type/.test(src),"el campo de cantidad ya no es type=number");
+ok(/inp\.type="text"; inp\.inputMode="decimal"/.test(src),"es texto con teclado numerico: no se pierde nada");
+// como lo escribe la gente
+ok(A.ParseQty("0,5")===0.5,"coma decimal (espanol)");
+ok(A.ParseQty("0.5")===0.5,"punto decimal");
+ok(A.ParseQty("1/2")===0.5,"fraccion 1/2");
+ok(A.ParseQty("3/4")===0.75,"fraccion 3/4");
+ok(A.ParseQty("½")===0.5,"simbolo ½");
+ok(A.ParseQty("1 1/2")===1.5,"mixto 1 1/2");
+ok(A.ParseQty("1½")===1.5,"mixto 1½");
+ok(A.ParseQty("2")===2&&A.ParseQty("12")===12,"enteros de siempre");
+ok(A.ParseQty("")===null&&A.ParseQty(null)===null&&A.ParseQty("   ")===null,"vacio -> sin cantidad");
+ok(A.ParseQty("hola")===null,"texto sin numero -> sin cantidad");
+ok(A.ParseQty("1/0")===null||A.ParseQty("1/0")===1,"dividir entre cero no rompe");
+// "0,5 kg" todo en la casilla de cantidad: se queda con las dos cosas
+const qu=A.ParseQtyUnit("0,5 kg");
+ok(qu.qty===0.5&&qu.unit==="kg","«0,5 kg» en una sola casilla conserva la unidad");
+ok(A.ParseQtyUnit("1/2kg").unit==="kg","tambien pegado: «1/2kg»");
+ok(A.ParseQtyUnit("3").unit==="","si solo hay numero, no inventa unidad");
+// y se muestra como se lee en una lista de la compra
+ok(A.NiceQty(0.5)==="½"&&A.NiceQty(1.5)==="1½"&&A.NiceQty(0.75)==="¾","medios y cuartos con simbolo");
+ok(A.NiceQty(3)==="3","los enteros, enteros");
+ok(A.NiceQty(0.3)==="0,3","lo demas, con coma");
+ok(A.NiceQty(null)===""&&A.NiceQty(undefined)==="","sin cantidad no pinta nada");
+// de punta a punta: lo que se manda al frutero
+A.state=A.SeedState(); A.RefreshCatalog(); A.GoToThisWeek();
+A.state.produce=[{id:"q1",name:"Tomates",qty:A.ParseQty("0,5"),unit:"kg",done:false}];
+ok(A.NiceQty(A.state.produce[0].qty)+" kg"==="½ kg","el frutero recibe «½ kg», no «0.5 kg»");
 
 // ============ 1.14.1: orden de la pestana Compra ============
 // primero las dos listas que se escriben a mano, y al final la que calcula la app

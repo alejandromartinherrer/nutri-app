@@ -496,7 +496,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.17.0";
+const APP_VERSION = "1.17.1";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -1075,7 +1075,7 @@ function RenderCompra(){
 	const prodItems = produce.length? produce.map(p=>`
 		<div class="it ${p.done?'done':''}">
 			<button class="check ${p.done?'on':''}" data-action="prod-done" data-id="${p.id}">${p.done?'✓':''}</button>
-			<div class="nm">${escapeHtml(p.name)} ${p.qty?`<small>· ${p.qty} ${escapeHtml(p.unit||'')}</small>`:''}</div>
+			<div class="nm">${escapeHtml(p.name)} ${p.qty?`<small>· ${NiceQty(p.qty)} ${escapeHtml(p.unit||'')}</small>`:''}</div>
 			<button class="del" data-action="prod-del" data-id="${p.id}">✕</button>
 		</div>`).join("") : `<div class="empty-msg">Lista vacía.</div>`;
 
@@ -1696,7 +1696,7 @@ function EditDish(dish,defCourse){
 		{key:"receta",label:"Receta (ingredientes y pasos)",type:"textarea",ph:"Escríbela una vez y quedará guardada…",value:isEdit?(DishRecipe(dish.name)||""):"",fold:1}
 	],onSave:v=>{
 		if(!v.name) return Toast("Pon un nombre");
-		const num=x=>{const n=parseFloat(String(x).replace(",","."));return isFinite(n)?n:undefined};
+		const num=x=>{const n=ParseQty(x);return n===null?undefined:n};
 		const u={name:v.name,course:v.course,tipo:v.tipo||null,estilo:v.estilo||null,batch:v.batch==="1",
 			kcal:num(v.kcal),prot:num(v.prot),carb:num(v.carb),fat:num(v.fat),receta:v.receta||null};
 		const key=v.name.trim().toLowerCase();
@@ -2731,7 +2731,7 @@ function CopyShop(){
 	// same order as the Compra screen: the two lists you write by hand first,
 	// then the ingredients the app works out from the recipes
 	const prod=state.produce.filter(p=>!p.done);
-	if(prod.length){lines.push("🍎 Fruta y verdura");prod.forEach(p=>lines.push(`· ${p.name}${p.qty?` (${p.qty} ${p.unit||""})`:""}`));lines.push("")}
+	if(prod.length){lines.push("🍎 Fruta y verdura");prod.forEach(p=>lines.push(`· ${p.name}${p.qty?` (${NiceQty(p.qty)} ${p.unit||""})`:""}`));lines.push("")}
 	const ex=state.extras.filter(x=>!x.done);
 	if(ex.length){lines.push("📝 Otros");ex.forEach(x=>lines.push(`· ${x.name}`));lines.push("")}
 	const dishes=PlannedCookDishes();
@@ -2797,7 +2797,12 @@ function AddPrompt(opts){
 			ta.rows=6;if(f.value!=null)ta.value=f.value;body2.appendChild(ta);
 		}else{
 			const inp=document.createElement("input");inp.className="field";inp.id="f_"+f.key;inp.placeholder=f.ph||"";
-			inp.type=f.type||"text";if(f.type==="number")inp.inputMode="decimal";
+			// NOT type="number": the browser silently BLANKS anything it dislikes, so
+			// "0,5" (how you write it in Spanish), "1/2" and "½" all arrived as ""
+			// and the product was saved with no quantity at all. text + inputMode
+			// keeps the numeric keypad on the phone and never throws away the value.
+			if(f.type==="number"){ inp.type="text"; inp.inputMode="decimal"; }
+			else inp.type=f.type||"text";
 			if(f.value!=null)inp.value=f.value;body2.appendChild(inp);
 		}
 	});
@@ -2961,7 +2966,39 @@ function ShareWeekImage(){
 	Toast("Imagen guardada — adjúntala en WhatsApp");
 }
 
-function NiceQty(n){return (Math.round(n*100)/100).toString().replace(".",",");}
+/* Quantities the way people actually write them: "0,5" and "0.5", "1/2", "½",
+   "1 1/2", "1½". Returns a number, or null if there is nothing usable. */
+const FRAC_UNI={"½":.5,"¼":.25,"¾":.75,"⅓":1/3,"⅔":2/3,"⅛":.125};
+function ParseQty(txt){
+	const s=String(txt==null?"":txt).trim().toLowerCase().replace(/\s+/g," ");
+	if(!s) return null;
+	let n=null;
+	let m=s.match(/^(\d+)?\s*([½¼¾⅓⅔⅛])/);                       // 1½ · ½
+	if(m) n=(m[1]?parseInt(m[1],10):0)+FRAC_UNI[m[2]];
+	if(n===null && (m=s.match(/^(?:(\d+)\s+)?(\d+)\s*\/\s*(\d+)/)) && +m[3]!==0)
+		n=(m[1]?parseInt(m[1],10):0)+(+m[2])/(+m[3]);              // 1 1/2 · 1/2
+	if(n===null && (m=s.match(/^\d+(?:[.,]\d+)?/)))
+		n=parseFloat(m[0].replace(",","."));                       // 0,5 · 0.5 · 2
+	return (n!==null&&isFinite(n))?n:null;
+}
+/* "0,5 kg" typed all in the quantity box: keep the number, hand back the rest so
+   the unit is not lost either. */
+function ParseQtyUnit(txt){
+	const s=String(txt==null?"":txt).trim();
+	const qty=ParseQty(s);
+	if(qty===null) return {qty:null,unit:""};
+	const resto=s.replace(/^\s*(?:\d+\s+)?(?:\d+\s*\/\s*\d+|\d+(?:[.,]\d+)?|[½¼¾⅓⅔⅛])\s*/,"").trim();
+	return {qty, unit:/^[a-zA-ZáéíóúñÁÉÍÓÚÑ.]{1,10}$/.test(resto)?resto:""};
+}
+/* ½ and ¾ read better than 0,5 and 0,75 on a shopping list — and it is the same
+   style the recipe scaling already uses. */
+function NiceQty(n){
+	if(n==null||!isFinite(n)) return "";
+	const r=Math.round(n*1000)/1000, ent=Math.floor(r), fr=r-ent;
+	for(const [v,ch] of [[.5,"½"],[.25,"¼"],[.75,"¾"],[1/3,"⅓"],[2/3,"⅔"]])
+		if(Math.abs(fr-v)<1e-6) return (ent?ent:"")+ch;
+	return (Math.round(r*100)/100).toString().replace(".",",");
+}
 function RenderShoppingCanvas(){
 	const wk=CurWeek();
 	const W=1080,P=56,cardPad=30;
@@ -3174,15 +3211,18 @@ document.addEventListener("click",e=>{
 			{key:"qty",label:"Cantidad",type:"number",value:"1"},
 			{key:"unit",label:"Unidad (opcional)",ph:"ud, kg, pack…"},
 			{key:"cad",label:"Caducidad (opcional)",type:"date"}
-		],onSave:v=>{if(!v.name)return Toast("Pon un nombre");state.inventory[ds.loc].push({id:Uid(),name:v.name,qty:Math.max(0,parseInt(v.qty||"1")||1),unit:v.unit,cad:v.cad||null,added:TodayISO(),pri:ds.loc==="frigo"});Save();CloseSheet();Render()}}); break;
+		],onSave:v=>{if(!v.name)return Toast("Pon un nombre");
+			const q=ParseQty(v.qty);
+			state.inventory[ds.loc].push({id:Uid(),name:v.name,qty:(q&&q>0)?q:1,unit:v.unit,cad:v.cad||null,added:TodayISO(),pri:ds.loc==="frigo"});Save();CloseSheet();Render()}}); break;
 		case "inv-edit": { const it=InvById(ds.id); if(!it) break;
 			AddPrompt({title:"Editar «"+it.name+"»",fields:[
 				{key:"name",label:"Qué",value:it.name},
-				{key:"qty",label:"Cantidad",type:"number",value:it.qty},
+				{key:"qty",label:"Cantidad",type:"number",value:NiceQty(it.qty)},
 				{key:"unit",label:"Unidad (opcional)",ph:"ud, kg, pack…",value:it.unit||""},
 				{key:"cad",label:"Caducidad (opcional)",type:"date",value:it.cad||""}
 			],onSave:v=>{if(!v.name)return Toast("Pon un nombre");
-				it.name=v.name; it.qty=Math.max(0,parseInt(v.qty||"1")||1); it.unit=v.unit; it.cad=v.cad||null;
+				const q=ParseQty(v.qty);
+				it.name=v.name; it.qty=(q!==null&&q>=0)?q:1; it.unit=v.unit; it.cad=v.cad||null;
 				Save();CloseSheet();Render();Toast("Actualizado")}}); break; }
 		/* produce */
 		case "prod-done": { const p=state.produce.find(x=>x.id===ds.id); if(p){p.done=!p.done; Stamp(p); Save(); Render()} break; }
@@ -3195,7 +3235,11 @@ document.addEventListener("click",e=>{
 			{key:"name",label:"Qué",ph:"p.ej. Manzana Golden"},
 			{key:"qty",label:"Cantidad",type:"number",value:""},
 			{key:"unit",label:"Unidad",ph:"ud / kg",value:"ud"}
-		],onSave:v=>{if(!v.name)return Toast("Pon un nombre");const q=parseFloat(v.qty);state.produce.push(Stamp({id:Uid(),name:v.name,qty:(Number.isFinite(q)&&q>0)?q:null,unit:v.unit||"ud",done:false}));Save();CloseSheet();Render()}}); break;
+		],onSave:v=>{if(!v.name)return Toast("Pon un nombre");
+			const {qty,unit}=ParseQtyUnit(v.qty);
+			// "0,5 kg" written entirely in the quantity box still gets its unit
+			const u=(v.unit&&v.unit!=="ud")?v.unit:(unit||v.unit||"ud");
+			state.produce.push(Stamp({id:Uid(),name:v.name,qty:(qty&&qty>0)?qty:null,unit:u,done:false}));Save();CloseSheet();Render()}}); break;
 		/* extras */
 		case "ex-done": { const x=state.extras.find(z=>z.id===ds.id); if(x){x.done=!x.done; Stamp(x); Save(); Render()} break; }
 		case "ex-del": DeleteWithUndo(state.extras,state.extras.findIndex(z=>z.id===ds.id)); break;

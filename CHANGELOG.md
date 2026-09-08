@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.17.1 — 2026-09-08 (Medio kilo para el frutero)
+- **Ya puedes pedir «0,5 kg» o «1/2 kg».** El campo de cantidad era `type="number"`
+  y el navegador **borraba en silencio** todo lo que no entendía: `0,5` (tal como se
+  escribe en español), `1/2` y `½` llegaban vacíos, y el producto se guardaba **sin
+  cantidad ninguna** sin avisar de nada.
+- Ahora entiende todas las formas naturales: `0,5` · `0.5` · `1/2` · `3/4` · `½` ·
+  `1 1/2` · `1½`. Y si escribes **`0,5 kg` entero en la casilla de cantidad**,
+  también se queda con la unidad.
+- Se muestra como se lee en una lista de la compra: **«½ kg»**, **«1½ kg»** — en
+  pantalla, en el texto que copias y en la imagen que le mandas al frutero.
+- El mismo fallo estaba en la **Despensa** (además redondeaba a números enteros, así
+  que medio kilo de salmón era imposible) y en las **macros** al crear un plato
+  («12,5 g de grasa» se perdía). Arreglado en los tres sitios.
+- El teclado del móvil sigue saliendo numérico.
+- Tests: **386 → 407 asserts**.
+
 ## 1.17.0 — 2026-09-08 (Comprar: lo marcado baja al final, y vaciar la lista de golpe)
 ### Mientras compras
 - **Lo que marcas como comprado baja al final de la lista.** Arriba te queda
