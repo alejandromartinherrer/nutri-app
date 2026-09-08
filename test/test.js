@@ -25,7 +25,7 @@ if(!src){console.error('No <script> block found in '+HTML);process.exit(1);}
 
 // expose new symbols for coverage of this round
 src=src.replace("\"use strict\";","");
-src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml,DeleteWithUndo,ToastAction,Toast,RecipeServings,ServingsNeeded,DishScale,PantryMatch,ResetWeeklyTicks,BoughtForPantry,SaveBackHome,IngShortName,AisleOf,AisleName,PlannedLabel,TipoFamily,Surprise,UndoSurprise,SurpriseAgain,AssignDishTo,DoCopyDay,DishWhenHtml,THEMES,SyncVerdict,AdoptRemote,PullDeferred,CloudPull,PushBackedOff,FlushPendingPull,SyncPickerKb,RenderPicker,PickerCtxHtml,COCINA,CAP_TIPO,MainToks,TipoFamily,MergeList,MergeShopping,MergeGraves,PruneGraveyard,Stamp,Bury,Unbury,ShopSig,GRAVE_DAYS};\n";
+src+="\nglobal.__api={SeedState,Surprise,OpenPicker,ApplyDish,SetAway,ClearCell,DishesNeedingShopping,CountPlanned,MondayOf,AddDays,TodayISO,FmtLong,Ymd,escapeHtml,ValidState,BuildCatalog,RefreshCatalog,MacroIndex,SEP,APP_VERSION,SCHEMA_VERSION,STORE_KEY,LEGACY_STORE_KEY,ShowSheet,CloseSheet,Tokens,CurWeek,EnsureWeek,get state(){return state},set state(v){state=v},get picker(){return picker},CurThemeId,SetTheme,THEMES,SlotSummaryLines,RenderWeekCanvas,DishMacros,MealMacros,MemberWeekMacros,RenderMacros,RenderShoppingCanvas,OpenPicker,SaveComida,get picker(){return picker},set picker(v){picker=v},Load,Save,SaveQuiet,MigrateV1,ApplyTemplate,TemplateDish,DishRecipe,RECETAS,BuildSyncPayload,B64EncodeUtf8,B64DecodeUtf8,PickerCandidates,Norm,RenameDishInWeeks,RecipeParts,ScaleQty,IngredientesDe,Plantilla,DefaultPlantilla,CloudDirty,GH_BRANCH,GH_SYNC_PATH,DaysLeft,InvUrgent,PantryHas,PlannedCookDishes,IngSortKey,MergedIngredients,IsBought,ToggleBought,BoughtMap,REALFOODING_DISHES,DishTipo,MealTipos,DayTipos,TipoColor,MergeRecipeBook,RecipeBookSize,VisibleSlots,PickerTargets,SanitizeSlots,SLOTS,GoToThisWeek,DishNameHtml,get ui(){return ui},PickerWhoHtml,PickerLoadComposer,PickerFreeHtml,PickerListHtml,DeleteWithUndo,ToastAction,Toast,RecipeServings,ServingsNeeded,DishScale,PantryMatch,ResetWeeklyTicks,BoughtForPantry,SaveBackHome,IngShortName,AisleOf,AisleName,PlannedLabel,TipoFamily,Surprise,UndoSurprise,SurpriseAgain,AssignDishTo,DoCopyDay,DishWhenHtml,THEMES,SyncVerdict,AdoptRemote,PullDeferred,CloudPull,PushBackedOff,FlushPendingPull,SyncPickerKb,RenderPicker,PickerCtxHtml,COCINA,PendingFirst,ClearListWithUndo,ConfirmSheet,CAP_TIPO,MainToks,TipoFamily,MergeList,MergeShopping,MergeGraves,PruneGraveyard,Stamp,Bury,Unbury,ShopSig,GRAVE_DAYS};\n";
 eval(src);
 const A=global.__api;
 
@@ -995,6 +995,31 @@ A.Surprise();
 ok(A.CurWeek().days.every(d=>!!d.slots.Cena.nosotros.dish),
 	"con solo 3 cenas posibles del mismo grupo, el tope cede y rellena igual");
 A.state.hidden=[]; A.RefreshCatalog();
+
+// ============ 1.17.0: lo comprado baja al final + vaciar la lista ============
+// --- al marcar algo, baja al final (solo al pintar: el array NO se toca) ---
+const lst=[{id:"a",name:"Peras",done:false},{id:"b",name:"Tomates",done:true},
+           {id:"c",name:"Lechuga",done:false},{id:"d",name:"Ajos",done:true}];
+const vista=A.PendingFirst(lst);
+ok(vista.map(x=>x.name).join()==="Peras,Lechuga,Tomates,Ajos","lo comprado baja al final");
+ok(vista.slice(0,2).every(x=>!x.done)&&vista.slice(2).every(x=>x.done),"pendientes arriba, comprados abajo");
+ok(lst.map(x=>x.name).join()==="Peras,Tomates,Lechuga,Ajos","el array original NO se reordena (la nube fusiona por id)");
+ok(A.PendingFirst([]).length===0&&A.PendingFirst(null).length===0,"lista vacia o nula no rompe");
+// el orden entre iguales se respeta (no baraja la lista a cada toque)
+const est=[{id:"1",name:"A",done:false},{id:"2",name:"B",done:false},{id:"3",name:"C",done:false}];
+ok(A.PendingFirst(est).map(x=>x.name).join()==="A,B,C","sin nada comprado, el orden no cambia");
+
+// --- vaciar la lista entera, con Deshacer y lapidas ---
+A.state=A.SeedState(); A.RefreshCatalog(); A.state.graveyard={};
+A.state.extras=[{id:"x1",name:"Papel",done:true},{id:"x2",name:"Bolsas",done:false}];
+const quitados=A.ClearListWithUndo(A.state.extras,"Otros");
+ok(quitados===2&&A.state.extras.length===0,"vaciar quita todo de una vez");
+ok(!!A.state.graveyard.x1&&!!A.state.graveyard.x2,"deja lapida de cada uno (el otro movil no los resucita)");
+ok(A.ClearListWithUndo([],"vacia")===0,"vaciar una lista ya vacia no hace nada");
+// borrar en bloque en otras listas no ensucia el cementerio
+A.state.graveyard={};
+A.ClearListWithUndo(A.state.inventory.frigo,"frigo");
+ok(Object.keys(A.state.graveyard).length===0,"vaciar la despensa no crea lapidas (solo las listas compartidas)");
 
 // ============ 1.14.1: orden de la pestana Compra ============
 // primero las dos listas que se escriben a mano, y al final la que calcula la app

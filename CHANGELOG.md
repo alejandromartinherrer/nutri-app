@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.17.0 — 2026-09-08 (Comprar: lo marcado baja al final, y vaciar la lista de golpe)
+### Mientras compras
+- **Lo que marcas como comprado baja al final de la lista.** Arriba te queda
+  siempre lo que falta, que es lo único que miras en el súper. Vale para las tres
+  secciones: Fruta y verdura, Otros y los ingredientes (en las dos vistas, «por
+  plato» y «todo junto»).
+- En «todo junto», lo comprado se agrupa al final bajo **«Ya en el carro · N»**,
+  fuera de los pasillos: una vez está en el carro, el pasillo ya da igual.
+- Es solo el **orden en pantalla**: las listas guardadas no se reordenan, porque
+  la nube las fusiona por identificador y moverlas provocaría conflictos entre
+  los dos móviles.
+### Al terminar
+- **Botón «vaciar»** en Fruta y verdura y en Otros: se acabó quitar los productos
+  de uno en uno. Pide confirmación diciendo cuántos son (y cuántos ya estaban
+  comprados) y deja **Deshacer** por si te arrepientes.
+- Al vaciar deja la marca de borrado de cada elemento, así que **el móvil del otro
+  no los resucita** en la siguiente sincronización.
+- Los ingredientes no llevan «vaciar» porque no son una lista tuya: salen de las
+  recetas de la semana. Para desmarcarlos está «limpiar», como hasta ahora.
+- Tests: **377 → 386 asserts**.
+
 ## 1.16.0 — 2026-09-02 (Sorpréndeme: un ingrediente, como mucho 2 veces por semana)
 - **Ni un ingrediente ni un grupo se repiten más de 2 veces por semana en el mismo
   turno.** Con pollo y huevos marcados como urgentes en la despensa salía **pollo

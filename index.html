@@ -308,6 +308,7 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 .act-row{display:flex;gap:8px;margin-top:16px}
 .act-row .btn{flex:1}
 /* picker: save/remove/away sit above the long list so you never scroll to save */
+.aisle.done{color:var(--muted);opacity:.75}
 .pick-actions{margin:14px 0 4px;padding-bottom:14px;border-bottom:1px solid var(--line2)}
 .pick-actions .act-row{margin-top:8px}
 #pickSearchBar{margin-top:12px}
@@ -495,7 +496,7 @@ Object.assign(RECETAS, {"crema de guisantes y espinacas":"Ingredientes (4 racion
 const SLOTS = ["Desayuno","Almuerzo","Comida","Cena"];
 const DOW = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
 const COURSE_LABEL = {todos:"Todas",primero:"Primeros",segundo:"Segundos",cena:"Cenas",noah:"Noah"};
-const APP_VERSION = "1.16.0";
+const APP_VERSION = "1.17.0";
 const SCHEMA_VERSION = 2;          // bump only on breaking state changes
 const STORE_KEY = "menu_semana_v" + SCHEMA_VERSION;
 const LEGACY_STORE_KEY = "menu_semana_v1";   // migrated, kept as safety net
@@ -1070,7 +1071,7 @@ function RenderDespensa(){
 function RenderCompra(){
 	ResetWeeklyTicks();
 	const dishes = PlannedCookDishes();
-	const produce = state.produce;
+	const produce = PendingFirst(state.produce);
 	const prodItems = produce.length? produce.map(p=>`
 		<div class="it ${p.done?'done':''}">
 			<button class="check ${p.done?'on':''}" data-action="prod-done" data-id="${p.id}">${p.done?'✓':''}</button>
@@ -1097,14 +1098,20 @@ function RenderCompra(){
 		const noRec = dishes.filter(n=>!IngredientesDe(n));
 		// grouped by supermarket aisle so the list follows the trolley
 		let last=-1, rows="";
-		merged.forEach(x=>{
+		merged.filter(x=>!IsBought(x)).forEach(x=>{
 			const a=AisleOf(x);
 			if(a!==last){ rows+=`<div class="aisle">${AisleName(a)}</div>`; last=a; }
 			rows+=ingRow(x);
 		});
+		// everything already in the trolley drops below the aisles, out of the way
+		const yaCogido=merged.filter(IsBought);
+		const rowsDone = yaCogido.length
+			? `<div class="aisle done">Ya en el carro · ${yaCogido.length}</div>`+yaCogido.map(ingRow).join("")
+			: "";
 		needBody = `<div class="ing-block merged">
 			${rows}
 			${noRec.map(n=>`<div class="ing-item none">• ${escapeHtml(n)} (plato sin receta)</div>`).join("")}
+			${rowsDone}
 		</div>`;
 	}else{
 		ui.shopClosed = ui.shopClosed || {};
@@ -1113,7 +1120,7 @@ function RenderCompra(){
 			const ing=IngredientesDe(n,f);
 			const closed=!!ui.shopClosed[n];
 			const body = closed ? "" : (ing
-				? `<div class="ing-block">${ing.map(ingRow).join("")}</div>`
+				? `<div class="ing-block">${ing.filter(x=>!IsBought(x)).concat(ing.filter(IsBought)).map(ingRow).join("")}</div>`
 				: `<div class="ing-block"><div class="ing-item none">Sin receta guardada. Escríbela tocando el nombre del plato en la Semana, o añade lo que falte abajo en “Otros”.</div></div>`);
 			const total=ing?ing.length:0, got=ing?ing.filter(IsBought).length:0;
 			const badge = ing ? (got?`${got}/${total} ✓`:`${total}`) : 'sin receta';
@@ -1141,7 +1148,7 @@ function RenderCompra(){
 		${shopView==='dish'?`<button class="sv-all" data-action="shop-toggle-all">${anyOpen?"▴ Contraer":"▾ Expandir"}</button>`:""}
 	</div>` : "";
 
-	const extras = state.extras;
+	const extras = PendingFirst(state.extras);
 	const exItems = extras.length? extras.map(x=>`
 		<div class="it ${x.done?'done':''}">
 			<button class="check ${x.done?'on':''}" data-action="ex-done" data-id="${x.id}">${x.done?'✓':''}</button>
@@ -1153,6 +1160,7 @@ function RenderCompra(){
 		<p class="hint">Los ingredientes salen solos de las recetas, ya escalados para los que coméis. Ve tachando por el súper y, al llegar a casa, pulsa <b>«Ya está en casa»</b> para que entren en tu despensa.</p>
 		<div class="sec">
 			<div class="sec-h"><h3>🍎 Fruta y verdura</h3>
+				${state.produce.length?`<button class="add-x" data-action="prod-clear">vaciar</button>`:""}
 				<button class="add-x" data-action="prod-add">+ añadir</button></div>
 			${prodItems}
 			<div class="sec-foot">
@@ -1161,6 +1169,7 @@ function RenderCompra(){
 		</div>
 		<div class="sec">
 			<div class="sec-h"><h3>📝 Otros</h3>
+				${state.extras.length?`<button class="add-x" data-action="ex-clear">vaciar</button>`:""}
 				<button class="add-x" data-action="ex-add">+ añadir</button></div>
 			${exItems}
 		</div>
@@ -1391,6 +1400,14 @@ function ResetWeeklyTicks(){
 	state.shopWeek=state.current;
 	SaveQuiet();
 	return n;
+}
+/* While you are at the supermarket the only thing that matters is what is still
+   missing, so anything ticked sinks to the bottom. Render-only: the arrays keep
+   their real order, which is what the cloud merges by id. */
+function PendingFirst(list){
+	const l=(list||[]).map((it,i)=>({it,i}));
+	l.sort((a,b)=>(!!a.it.done-!!b.it.done)||(a.i-b.i));
+	return l.map(x=>x.it);
 }
 function BoughtMap(){ return (CurWeek().bought)||{}; }
 function IsBought(x){ return !!BoughtMap()[Norm(x)]; }
@@ -3039,6 +3056,23 @@ function DeleteWithUndo(arr,idx,verb){
 	});
 	return item;
 }
+/* Emptying a whole list, so finishing the shop isn't N taps on ✕. Same contract as
+   the single delete: tombstones so the other phone doesn't resurrect them, and one
+   «Deshacer» that puts every item back exactly as it was. */
+function ClearListWithUndo(arr,label){
+	if(!arr||!arr.length) return 0;
+	const shared = arr===state.extras || arr===state.produce;
+	const copia = arr.slice();
+	if(shared) copia.forEach(it=>Bury(it.id));
+	arr.length=0;
+	Save(); Render();
+	ToastAction("Vaciado "+label+" · "+copia.length,"Deshacer",()=>{
+		if(shared) copia.forEach(it=>{ Unbury(it.id); Stamp(it); });
+		copia.forEach(it=>arr.push(it));
+		Save(); Render(); Toast("Restaurado");
+	});
+	return copia.length;
+}
 /* confirmation sheet for the few actions that really cannot be undone */
 function ConfirmSheet(o){
 	document.getElementById("sheetContent").innerHTML=`
@@ -3153,6 +3187,10 @@ document.addEventListener("click",e=>{
 		/* produce */
 		case "prod-done": { const p=state.produce.find(x=>x.id===ds.id); if(p){p.done=!p.done; Stamp(p); Save(); Render()} break; }
 		case "prod-del": DeleteWithUndo(state.produce,state.produce.findIndex(x=>x.id===ds.id)); break;
+		case "prod-clear": { const n=state.produce.length, hechos=state.produce.filter(p=>p.done).length;
+			ConfirmSheet({title:"Vaciar fruta y verdura",
+				text:`Se quitan los <b>${n}</b> productos de la lista${hechos?` (${hechos} ya comprado${hechos>1?"s":""})`:""}. Podrás deshacerlo.`,
+				okLabel:"Vaciar", onOk:()=>ClearListWithUndo(state.produce,"fruta y verdura")}); break; }
 		case "prod-add": AddPrompt({title:"Añadir fruta/verdura",fields:[
 			{key:"name",label:"Qué",ph:"p.ej. Manzana Golden"},
 			{key:"qty",label:"Cantidad",type:"number",value:""},
@@ -3161,6 +3199,10 @@ document.addEventListener("click",e=>{
 		/* extras */
 		case "ex-done": { const x=state.extras.find(z=>z.id===ds.id); if(x){x.done=!x.done; Stamp(x); Save(); Render()} break; }
 		case "ex-del": DeleteWithUndo(state.extras,state.extras.findIndex(z=>z.id===ds.id)); break;
+		case "ex-clear": { const n=state.extras.length, hechos=state.extras.filter(x=>x.done).length;
+			ConfirmSheet({title:"Vaciar Otros",
+				text:`Se quitan los <b>${n}</b> elementos de la lista${hechos?` (${hechos} ya comprado${hechos>1?"s":""})`:""}. Podrás deshacerlo.`,
+				okLabel:"Vaciar", onOk:()=>ClearListWithUndo(state.extras,"Otros")}); break; }
 		case "ex-add": AddPrompt({title:"Añadir a Otros",fields:[{key:"name",label:"Qué",ph:"p.ej. Papel de horno"}],onSave:v=>{if(!v.name)return;state.extras.push(Stamp({id:Uid(),name:v.name,done:false}));Save();CloseSheet();Render()}}); break;
 		case "need-to-extra": state.extras.push(Stamp({id:Uid(),name:ds.name,done:false})); Save(); Toast("Movido a Otros"); break;
 		/* ideas */
