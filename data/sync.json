@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-08T08:15:39.043Z",
+ "savedAt": "2026-09-12T17:55:41.012Z",
  "state": {
   "members": [
    {
@@ -80,81 +80,15 @@
     }
    ]
   },
-  "produce": [
+  "produce": [],
+  "extras": [
    {
-    "id": "mgklq62",
-    "name": "Melon",
-    "qty": 1,
-    "unit": "ud",
+    "id": "dq2mehv",
+    "name": "Mantequilla",
     "done": false,
-    "updatedAt": "2026-09-08T08:09:38.512Z"
-   },
-   {
-    "id": "9vsbk97",
-    "name": "Melocotón",
-    "qty": 4,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-08T08:10:15.424Z"
-   },
-   {
-    "id": "2r57fed",
-    "name": "Uva Moscatel",
-    "qty": 1,
-    "unit": "Kg",
-    "done": false,
-    "updatedAt": "2026-09-08T08:13:11.016Z"
-   },
-   {
-    "id": "8a9jgp0",
-    "name": "Paraguayo",
-    "qty": 6,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-08T08:14:03.893Z"
-   },
-   {
-    "id": "o3qdkbj",
-    "name": "Ciruela",
-    "qty": 4,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-08T08:14:23.308Z"
-   },
-   {
-    "id": "3cajd7d",
-    "name": "Pepino",
-    "qty": 2,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-08T08:14:54.249Z"
-   },
-   {
-    "id": "aldm911",
-    "name": "Boniato grande",
-    "qty": 1,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-08T08:15:07.447Z"
-   },
-   {
-    "id": "1fnd69r",
-    "name": "Limón",
-    "qty": 2,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-08T08:15:29.737Z"
-   },
-   {
-    "id": "uhgmp7y",
-    "name": "Puerro",
-    "qty": 3,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-08T08:15:39.043Z"
+    "updatedAt": "2026-09-11T08:23:44.364Z"
    }
   ],
-  "extras": [],
   "userDishes": [
    {
     "name": "Chicken Curry (Versión Thermomix)",
@@ -4341,34 +4275,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Lasaña de calabacín · Pollo asado con hierbas",
+         "dish": "Berenjenas a la parmesana ligera · Pollo al ajillo",
          "invId": "wbizxhl",
          "away": false
         },
         "noah": {
-         "dish": "Lasaña de calabacín · Pollo asado con hierbas",
+         "dish": "Berenjenas a la parmesana ligera · Pollo al ajillo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Lasaña de calabacín · Pollo asado con hierbas",
+         "dish": "Berenjenas a la parmesana ligera · Pollo al ajillo",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Wok de tofu y verduras con sésamo",
+         "dish": "Sopa de verduras y lentejas",
          "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "Wok de tofu y verduras con sésamo",
+         "dish": "Sopa de verduras y lentejas",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Wok de tofu y verduras con sésamo",
+         "dish": "Sopa de verduras y lentejas",
          "invId": null,
          "away": false
         }
@@ -4414,34 +4348,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Sopa de pollo y verduras · Lentejas rojas guisadas con verduras",
+         "dish": "Ensalada César con pollo · Lubina al horno con verduras",
          "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "Sopa de pollo y verduras · Lentejas rojas guisadas con verduras",
+         "dish": "Ensalada César con pollo · Lubina al horno con verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Sopa de pollo y verduras · Lentejas rojas guisadas con verduras",
+         "dish": "Ensalada César con pollo · Lubina al horno con verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Frittata de verduras",
+         "dish": "Huevos al plato con verduras",
          "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "Frittata de verduras",
+         "dish": "Huevos al plato con verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Frittata de verduras",
+         "dish": "Huevos al plato con verduras",
          "invId": null,
          "away": false
         }
@@ -4487,34 +4421,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Espárragos a la plancha · Estofado de ternera con verduras",
+         "dish": "Arroz integral con verduras · Bacalao con pisto de verduras",
          "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "Espárragos a la plancha · Estofado de ternera con verduras",
+         "dish": "Arroz integral con verduras · Bacalao con pisto de verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Espárragos a la plancha · Estofado de ternera con verduras",
+         "dish": "Arroz integral con verduras · Bacalao con pisto de verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Tostada integral de aguacate y huevo",
+         "dish": "Wok de tofu y verduras con sésamo",
          "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "Tostada integral de aguacate y huevo",
+         "dish": "Wok de tofu y verduras con sésamo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Tostada integral de aguacate y huevo",
+         "dish": "Wok de tofu y verduras con sésamo",
          "invId": null,
          "away": false
         }
@@ -4560,34 +4494,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Quinoa con verduras · Fajitas de pollo",
-         "invId": "wbizxhl",
+         "dish": "Espinacas salteadas con ajo · Salteado de tofu y verduras",
+         "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "Quinoa con verduras · Fajitas de pollo",
+         "dish": "Espinacas salteadas con ajo · Salteado de tofu y verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Quinoa con verduras · Fajitas de pollo",
+         "dish": "Espinacas salteadas con ajo · Salteado de tofu y verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Salteado de gambas y verduras al ajillo",
+         "dish": "Quesadilla integral de pollo y verduras",
          "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "Salteado de gambas y verduras al ajillo",
+         "dish": "Quesadilla integral de pollo y verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Salteado de gambas y verduras al ajillo",
+         "dish": "Quesadilla integral de pollo y verduras",
          "invId": null,
          "away": false
         }
@@ -4633,34 +4567,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Ensalada César con pollo · Salteado de tofu y verduras",
-         "invId": "n2xyssw",
+         "dish": "Potaje de alubias y verduras · Pavo salteado con brócoli y arroz integral",
+         "invId": "wbizxhl",
          "away": false
         },
         "noah": {
-         "dish": "Ensalada César con pollo · Salteado de tofu y verduras",
+         "dish": "Potaje de alubias y verduras · Pavo salteado con brócoli y arroz integral",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Ensalada César con pollo · Salteado de tofu y verduras",
+         "dish": "Potaje de alubias y verduras · Pavo salteado con brócoli y arroz integral",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Sopa de verduras y lentejas",
+         "dish": "Quiche de verduras integral",
          "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "Sopa de verduras y lentejas",
+         "dish": "Quiche de verduras integral",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Sopa de verduras y lentejas",
+         "dish": "Quiche de verduras integral",
          "invId": null,
          "away": false
         }
@@ -4706,34 +4640,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Alubias con verduras · Noodles de arroz con verduras y gambas",
+         "dish": "Cuscús con verduras · Estofado de ternera con verduras",
          "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "Alubias con verduras · Noodles de arroz con verduras y gambas",
+         "dish": "Cuscús con verduras · Estofado de ternera con verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Alubias con verduras · Noodles de arroz con verduras y gambas",
+         "dish": "Cuscús con verduras · Estofado de ternera con verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Brochetas de langostino y verduras",
+         "dish": "Pizza con base de coliflor",
          "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "Brochetas de langostino y verduras",
+         "dish": "Pizza con base de coliflor",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Brochetas de langostino y verduras",
+         "dish": "Pizza con base de coliflor",
          "invId": null,
          "away": false
         }
@@ -4779,34 +4713,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "Arroz integral con verduras · Bacalao con pisto de verduras",
+         "dish": "Chicken Curry (Versión Thermomix) · Lentejas rojas guisadas con verduras",
          "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "Arroz integral con verduras · Bacalao con pisto de verduras",
+         "dish": "Chicken Curry (Versión Thermomix) · Lentejas rojas guisadas con verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Arroz integral con verduras · Bacalao con pisto de verduras",
+         "dish": "Chicken Curry (Versión Thermomix) · Lentejas rojas guisadas con verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "Quesadilla integral de pollo y verduras",
+         "dish": "Salteado de gambas y verduras al ajillo",
          "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "Quesadilla integral de pollo y verduras",
+         "dish": "Salteado de gambas y verduras al ajillo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "Quesadilla integral de pollo y verduras",
+         "dish": "Salteado de gambas y verduras al ajillo",
          "invId": null,
          "away": false
         }
@@ -4817,8 +4751,8 @@
    }
   },
   "current": "2026-09-07",
-  "updatedAt": "2026-09-08T08:15:39.043Z",
-  "lastSync": "2026-09-08T08:14:55.129Z",
+  "updatedAt": "2026-09-12T17:55:41.012Z",
+  "lastSync": "2026-09-08T08:16:03.219Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "merged",
@@ -4847,7 +4781,16 @@
    "turjdaj": "2026-09-08T08:02:03.820Z",
    "zwsk5na": "2026-09-08T08:02:03.820Z",
    "c5wt4m8": "2026-09-08T08:02:03.820Z",
-   "8gftc1a": "2026-09-08T08:02:10.402Z"
+   "8gftc1a": "2026-09-08T08:02:10.402Z",
+   "mgklq62": "2026-09-11T08:23:38.698Z",
+   "9vsbk97": "2026-09-11T08:23:38.698Z",
+   "2r57fed": "2026-09-11T08:23:38.698Z",
+   "8a9jgp0": "2026-09-11T08:23:38.698Z",
+   "o3qdkbj": "2026-09-11T08:23:38.698Z",
+   "3cajd7d": "2026-09-11T08:23:38.698Z",
+   "aldm911": "2026-09-11T08:23:38.698Z",
+   "1fnd69r": "2026-09-11T08:23:38.698Z",
+   "uhgmp7y": "2026-09-11T08:23:38.698Z"
   }
  }
 }
