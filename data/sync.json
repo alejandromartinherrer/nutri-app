@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-12T17:55:41.012Z",
+ "savedAt": "2026-09-12T17:56:34.505Z",
  "state": {
   "members": [
    {
@@ -80,7 +80,24 @@
     }
    ]
   },
-  "produce": [],
+  "produce": [
+   {
+    "id": "vkopzsf",
+    "name": "Brócoli",
+    "qty": 1,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-12T17:56:22.405Z"
+   },
+   {
+    "id": "picisgv",
+    "name": "Berenjena",
+    "qty": null,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-12T17:56:34.505Z"
+   }
+  ],
   "extras": [
    {
     "id": "dq2mehv",
@@ -4751,8 +4768,8 @@
    }
   },
   "current": "2026-09-07",
-  "updatedAt": "2026-09-12T17:55:41.012Z",
-  "lastSync": "2026-09-08T08:16:03.219Z",
+  "updatedAt": "2026-09-12T17:56:34.505Z",
+  "lastSync": "2026-09-12T17:56:12.814Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "merged",
