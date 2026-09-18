@@ -1,1 +1,3 @@
-.claude/
+# Claude Code: solo se versiona el hook del proyecto; el resto es personal
+.claude/*
+!.claude/settings.json

@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "input=$(cat); echo \"$input\" | grep -qE '\"stop_hook_active\": *true' && exit 0; cd \"${CLAUDE_PROJECT_DIR:-.}\" || exit 0; git status --porcelain 2>/dev/null | grep -qE '(index[.]html|sw[.]js|test/test[.]js)$' || exit 0; out=$(node test/test.js 2>&1) && exit 0; { echo 'node test/test.js FALLA. Corrige antes de terminar el turno:'; echo \"$out\" | tail -25; } >&2; exit 2",
+            "timeout": 120,
+            "statusMessage": "node test/test.js: comprobando que los tests pasan"
+          }
+        ]
+      }
+    ]
+  }
+}
