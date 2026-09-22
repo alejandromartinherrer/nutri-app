@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-22T08:18:40.882Z",
+ "savedAt": "2026-09-22T09:09:01.251Z",
  "state": {
   "members": [
    {
@@ -80,7 +80,96 @@
     }
    ]
   },
-  "produce": [],
+  "produce": [
+   {
+    "id": "o7njsn2",
+    "name": "Tomate rosa",
+    "qty": 1,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-22T09:06:16.748Z"
+   },
+   {
+    "id": "7yimlic",
+    "name": "Melón",
+    "qty": 1,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-22T09:06:29.649Z"
+   },
+   {
+    "id": "fkwvf19",
+    "name": "Manzana golden",
+    "qty": 4,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-22T09:06:41.405Z"
+   },
+   {
+    "id": "6cai713",
+    "name": "Judía verde",
+    "qty": 1,
+    "unit": "Kg",
+    "done": false,
+    "updatedAt": "2026-09-22T09:06:56.227Z"
+   },
+   {
+    "id": "armu73t",
+    "name": "Melocotón",
+    "qty": 5,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-22T09:07:18.133Z"
+   },
+   {
+    "id": "l1dg15c",
+    "name": "Kiwi",
+    "qty": 6,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-22T09:07:27.719Z"
+   },
+   {
+    "id": "bpmsusb",
+    "name": "Pera",
+    "qty": 6,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-22T09:07:43.494Z"
+   },
+   {
+    "id": "n3k7z2x",
+    "name": "Patata Nueva",
+    "qty": 3,
+    "unit": "Kg",
+    "done": false,
+    "updatedAt": "2026-09-22T09:07:56.163Z"
+   },
+   {
+    "id": "0parr33",
+    "name": "Cebolla",
+    "qty": 2,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-22T09:08:25.544Z"
+   },
+   {
+    "id": "5yh01jp",
+    "name": "Aguacate",
+    "qty": 2,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-22T09:08:52.760Z"
+   },
+   {
+    "id": "z4aobh4",
+    "name": "Mango",
+    "qty": 1,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-22T09:09:01.250Z"
+   }
+  ],
   "extras": [],
   "userDishes": [
    {
@@ -5776,8 +5865,8 @@
    }
   },
   "current": "2026-09-21",
-  "updatedAt": "2026-09-22T08:18:40.882Z",
-  "lastSync": "2026-09-12T17:56:54.861Z",
+  "updatedAt": "2026-09-22T09:09:01.251Z",
+  "lastSync": "2026-09-22T08:19:01.732Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "merged",
