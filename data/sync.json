@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-25T13:55:48.269Z",
+ "savedAt": "2026-09-25T13:56:09.651Z",
  "state": {
   "members": [
    {
@@ -5905,7 +5905,7 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
+         "dish": "Alubias con verduras",
          "invId": null,
          "away": false
         },
@@ -6381,8 +6381,8 @@
    }
   },
   "current": "2026-09-28",
-  "updatedAt": "2026-09-25T13:55:48.269Z",
-  "lastSync": "2026-09-22T09:09:20.162Z",
+  "updatedAt": "2026-09-25T13:56:09.651Z",
+  "lastSync": "2026-09-25T13:55:51.613Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "merged",
