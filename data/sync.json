@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-25T13:56:09.651Z",
+ "savedAt": "2026-09-25T20:38:54.732Z",
  "state": {
   "members": [
    {
@@ -80,96 +80,7 @@
     }
    ]
   },
-  "produce": [
-   {
-    "id": "o7njsn2",
-    "name": "Tomate rosa",
-    "qty": 1,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-22T09:06:16.748Z"
-   },
-   {
-    "id": "7yimlic",
-    "name": "Melón",
-    "qty": 1,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-22T09:06:29.649Z"
-   },
-   {
-    "id": "fkwvf19",
-    "name": "Manzana golden",
-    "qty": 4,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-22T09:06:41.405Z"
-   },
-   {
-    "id": "6cai713",
-    "name": "Judía verde",
-    "qty": 1,
-    "unit": "Kg",
-    "done": false,
-    "updatedAt": "2026-09-22T09:06:56.227Z"
-   },
-   {
-    "id": "armu73t",
-    "name": "Melocotón",
-    "qty": 5,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-22T09:07:18.133Z"
-   },
-   {
-    "id": "l1dg15c",
-    "name": "Kiwi",
-    "qty": 6,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-22T09:07:27.719Z"
-   },
-   {
-    "id": "bpmsusb",
-    "name": "Pera",
-    "qty": 6,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-22T09:07:43.494Z"
-   },
-   {
-    "id": "n3k7z2x",
-    "name": "Patata Nueva",
-    "qty": 3,
-    "unit": "Kg",
-    "done": false,
-    "updatedAt": "2026-09-22T09:07:56.163Z"
-   },
-   {
-    "id": "0parr33",
-    "name": "Cebolla",
-    "qty": 2,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-22T09:08:25.544Z"
-   },
-   {
-    "id": "5yh01jp",
-    "name": "Aguacate",
-    "qty": 2,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-22T09:08:52.760Z"
-   },
-   {
-    "id": "z4aobh4",
-    "name": "Mango",
-    "qty": 1,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-22T09:09:01.250Z"
-   }
-  ],
+  "produce": [],
   "extras": [],
   "userDishes": [
    {
@@ -5389,7 +5300,7 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
+         "dish": "Lentejas a la jardinera",
          "invId": null,
          "away": false
         },
@@ -6380,12 +6291,12 @@
     ]
    }
   },
-  "current": "2026-09-28",
-  "updatedAt": "2026-09-25T13:56:09.651Z",
-  "lastSync": "2026-09-25T13:55:51.613Z",
+  "current": "2026-09-21",
+  "updatedAt": "2026-09-25T20:38:54.732Z",
+  "lastSync": "2026-09-25T13:56:35.134Z",
   "theme": "fresco",
   "hideDesAlm": false,
-  "shopView": "merged",
+  "shopView": "dish",
   "shopWeek": "2026-09-21",
   "txtSize": "normal",
   "graveyard": {
@@ -6423,7 +6334,18 @@
    "uhgmp7y": "2026-09-11T08:23:38.698Z",
    "dq2mehv": "2026-09-22T08:18:37.999Z",
    "vkopzsf": "2026-09-22T08:18:40.882Z",
-   "picisgv": "2026-09-22T08:18:40.882Z"
+   "picisgv": "2026-09-22T08:18:40.882Z",
+   "o7njsn2": "2026-09-25T13:56:38.716Z",
+   "7yimlic": "2026-09-25T13:56:38.716Z",
+   "fkwvf19": "2026-09-25T13:56:38.716Z",
+   "6cai713": "2026-09-25T13:56:38.716Z",
+   "armu73t": "2026-09-25T13:56:38.716Z",
+   "l1dg15c": "2026-09-25T13:56:38.716Z",
+   "bpmsusb": "2026-09-25T13:56:38.716Z",
+   "n3k7z2x": "2026-09-25T13:56:38.716Z",
+   "0parr33": "2026-09-25T13:56:38.716Z",
+   "5yh01jp": "2026-09-25T13:56:38.716Z",
+   "z4aobh4": "2026-09-25T13:56:38.716Z"
   }
  }
 }
