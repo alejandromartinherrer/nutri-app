@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-25T20:38:54.732Z",
+ "savedAt": "2026-09-28T09:42:56.032Z",
  "state": {
   "members": [
    {
@@ -5833,17 +5833,17 @@
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Shawarma de pollo en wrap integral",
+         "invId": "wbizxhl",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Shawarma de pollo en wrap integral",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Shawarma de pollo en wrap integral",
          "invId": null,
          "away": false
         }
@@ -5889,34 +5889,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Berenjena rellena de verduras · Bowl de pollo, arroz y verduras",
+         "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Berenjena rellena de verduras · Bowl de pollo, arroz y verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Berenjena rellena de verduras · Bowl de pollo, arroz y verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Espárragos trigueros con jamón y huevo",
+         "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Espárragos trigueros con jamón y huevo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Espárragos trigueros con jamón y huevo",
          "invId": null,
          "away": false
         }
@@ -5962,34 +5962,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Potaje de alubias y verduras · Noodles de arroz con verduras y gambas",
+         "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Potaje de alubias y verduras · Noodles de arroz con verduras y gambas",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Potaje de alubias y verduras · Noodles de arroz con verduras y gambas",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Frittata de verduras",
+         "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Frittata de verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Frittata de verduras",
          "invId": null,
          "away": false
         }
@@ -6035,34 +6035,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Sopa de pollo y verduras · Pavo en salsa de mostaza y miel",
+         "invId": "wbizxhl",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Sopa de pollo y verduras · Pavo en salsa de mostaza y miel",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Sopa de pollo y verduras · Pavo en salsa de mostaza y miel",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Sopa de verduras y lentejas",
+         "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Sopa de verduras y lentejas",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Sopa de verduras y lentejas",
          "invId": null,
          "away": false
         }
@@ -6108,34 +6108,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Quinoa con verduras · Ternera salteada con verduras y soja",
+         "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Quinoa con verduras · Ternera salteada con verduras y soja",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Quinoa con verduras · Ternera salteada con verduras y soja",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Wok de tofu y verduras con sésamo",
+         "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Wok de tofu y verduras con sésamo",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Wok de tofu y verduras con sésamo",
          "invId": null,
          "away": false
         }
@@ -6181,34 +6181,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Pisto de verduras · Quinoa con pollo y verduras al curry",
+         "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Pisto de verduras · Quinoa con pollo y verduras al curry",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Pisto de verduras · Quinoa con pollo y verduras al curry",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Quiche de verduras integral",
+         "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Quiche de verduras integral",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Quiche de verduras integral",
          "invId": null,
          "away": false
         }
@@ -6254,34 +6254,34 @@
        },
        "Comida": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Chicken Curry (Versión Thermomix) · Salteado de tofu y verduras",
+         "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Chicken Curry (Versión Thermomix) · Salteado de tofu y verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Chicken Curry (Versión Thermomix) · Salteado de tofu y verduras",
          "invId": null,
          "away": false
         }
        },
        "Cena": {
         "nosotros": {
-         "dish": "",
-         "invId": null,
+         "dish": "Wrap de hummus y verduras",
+         "invId": "n2xyssw",
          "away": false
         },
         "noah": {
-         "dish": "",
+         "dish": "Wrap de hummus y verduras",
          "invId": null,
          "away": false
         },
         "iria": {
-         "dish": "",
+         "dish": "Wrap de hummus y verduras",
          "invId": null,
          "away": false
         }
@@ -6291,9 +6291,9 @@
     ]
    }
   },
-  "current": "2026-09-21",
-  "updatedAt": "2026-09-25T20:38:54.732Z",
-  "lastSync": "2026-09-25T13:56:35.134Z",
+  "current": "2026-09-28",
+  "updatedAt": "2026-09-28T09:42:56.032Z",
+  "lastSync": "2026-09-25T20:39:27.049Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "dish",
