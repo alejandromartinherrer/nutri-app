@@ -1,5 +1,132 @@
 # Changelog
 
+## 1.18.0 — 2026-09-28 (El plan del nutricionista, dentro de la app)
+### Lo que pide el nutricionista, ahora en la app
+- **Nueva pestaña 📋 Plan** con el plan de Escuela de Salud VIVE para Alex y Jeza:
+  la estrategia, días de entreno y de descanso, la semana del plan con las raciones de
+  cada uno, desayunos, pre-entreno, meriendas, turno de noche de Jeza, las ensaladas
+  del nutricionista, reglas generales, compra saludable e intercambios de alimentos.
+  (El repositorio es público: la suplementación y el objetivo personal del plan se
+  quedan fuera de la app.)
+- **Quién entrena y cuándo, editable**: toca un día para pasar de descanso a entreno
+  de mañana o de tarde. Por defecto, lo del plan: Alex Crossfit lunes y miércoles por
+  la tarde y sábado por la mañana; Jeza Ceps martes y jueves por la mañana. También
+  las noches que Jeza trabaja hasta las 3:00 y si Noah e Iria comen en el cole.
+- **Plan del día (📋 en cada día de la semana)**: para cada uno, pre-entreno o ayuno
+  (el ayuno solo a Alex, que es quien lo tiene pautado), desayuno, comida con su
+  ración, merienda y cena. Las recetas se abren y se vuelve al plan.
+- En la semana, bajo cada comida y cena, **la ración de cada uno y su hidrato**.
+- Un interruptor, **«✨ Seguir el plan del nutricionista»**, lo apaga todo y deja la
+  app como antes; su texto dice exactamente qué cambia.
+### La periodización de hidratos, como regla
+- El plan quita los hidratos densos en descanso y los concentra **después de
+  entrenar**. La app no copia la tabla: aplica la regla (entreno de mañana → hidrato
+  en la comida; de tarde → en la cena), así que si cambian los entrenos las raciones
+  se recolocan solas. Con los entrenos del plan reproduce sus tablas celda a celda.
+- Las raciones siguen al **plato que de verdad está puesto**, y a la opción elegida
+  (el pisto con huevo pide huevos; el de pollo, pollo). Legumbre puesta a mano → «la
+  legumbre es su hidrato».
+- En día de descanso, el aviso **lee la receta**, no el nombre: un pescado con patata,
+  un poke o una paella dicen **«sin arroz, pasta, patata ni pan (o muy poco)»** con su
+  ración de proteína; un plato que es casi todo hidrato (pasta, risotto, quinoa)
+  avisa de que el plan pide proteína y verdura; y una pizza con base de coliflor o
+  una lasaña de calabacín no avisan de nada. La cena libre del sábado es libre.
+- Si Jeza trabaja esa noche, su ración del domingo pasa de 120 a 150 g sola.
+### «Sorpréndeme» sigue el plan
+- Cada hueco se rellena con las opciones que da el plan para ese día (y sus
+  intercambios del mismo grupo): pescado al horno el lunes, wok el martes, legumbre
+  el miércoles, pescado a la plancha con ensalada el jueves, judías verdes el viernes,
+  arroz el sábado con **cena libre**, pollo asado el domingo y ensalada con el pollo
+  que sobra por la noche. Cremas y legumbre caliente de octubre a abril; salmorejo,
+  gazpacho y ensaladas el resto del año.
+- **Pescado azul exactamente 2 veces por semana para Alex y Jeza**, siempre que los
+  huecos lo permitan: medido en 71.250 semanas simuladas (verano, otoño e invierno,
+  271 combinaciones de comer fuera, cole y platos a mano), ninguna por debajo de lo
+  posible. Cuenta **lo que comen ellos**: si comen fuera el jueves, el azul no se
+  gasta en la comida de los niños. Si en la nevera caduca una merluza o un bacalao,
+  sale en su día y los dos azules se buscan en otros huecos. La ensalada empedrada
+  (lleva atún) cuenta como azul.
+- Sigue gastando antes lo que caduca, sin repetir ingrediente en una comida y con el
+  tope semanal. La despensa se enlaza por el **nombre** del plato (los tacos de pavo
+  gastan los «Filetes de pavo», no el «Pollo»), entiende los plurales («Calabacines»
+  vale para la crema de calabacín) y un producto concreto ya no se enlaza a platos
+  que no lo llevan («Carne picada» con un carpaccio). Una bolsa de «Verduras» ya no
+  fija la crema del martes.
+- Las fajitas y los tacos de lechuga se reparten el viernes, y el salmorejo del lunes
+  ya no se repite el martes por la noche.
+- **«Deshacer» y 🎲 solo deshacen lo que puso la tirada**: lo que cambies a mano
+  después (un plato, lo tachado en la compra) se queda. Antes 🎲 lo borraba y no había
+  forma de recuperarlo. «Deshacer» funciona aunque ya estés viendo otra semana.
+- Si los adultos comen fuera y los niños están en el cole, esa comida ya no se
+  rellena ni se cuenta en el aviso.
+### Compra
+- **«Nosotros» son dos personas.** La columna contaba como una, así que se compraba
+  para 3 en vez de para 4 (tacos de pavo: 450 g de carne en vez de 600 g).
+- **Cada parte de un plato compuesto se escala con sus raciones**: «Salmorejo · Pavo
+  a la plancha» compraba pavo para 2. La cabecera lo dice: «para 4 · Salmorejo ×1 ·
+  Pavo ×2».
+- **«Todo junto» suma lo repetido** («1 cebolla ×2»): antes dos platos con una cebolla
+  compraban una (se perdían unas 16 líneas a la semana).
+- Añade el **hidrato post-entreno** de quien entrenó (patata, arroz o boniato, con su
+  cantidad y quién): las recetas base del plan van sin hidrato a propósito. La cena
+  libre no genera compra.
+- El pollo de la ensalada del domingo **sale del asado de la comida** y no se compra
+  dos veces; si la misma ensalada va otro día, ese pollo sí se compra.
+- **Plurales** detrás de cada cantidad: «2 aguacates maduros», «zumo de 2 limones»,
+  «2 peras o 2 manzanas».
+- **Cantidades escritas a mano**: «1/2 kg» ×2 decía «2/4 kg» (la mitad de lo que
+  hacía falta), «1½» ×2 decía «21» y «1.000 g de harina» ×2, «2 g». Ahora «1 kg», «3»
+  y «2000 g». «4/5 tomates» sigue siendo «4 o 5», y los tiempos y temperaturas
+  («cocer 10-12 min», «180-200 °C») no se escalan.
+- Las recetas «(1 ración)» (tortilla francesa, tostada de aguacate) se leían como de 2
+  raciones: se compraba la mitad.
+- **«Ya está en casa»** guarda el producto como lo llama la receta («Limón», no
+  «Limones») y lo suma al que ya tenías, en vez de abrir otra fila.
+- Pasillos: conservas, caldos, vinagres y aliños a la despensa; uvas, eneldo y
+  cebollino a la frutería.
+- En tus recetas, las etiquetas: «Pollo: 500 g» compra «500 g de pollo» (antes, «500 g»
+  de nada), «Salsa de soja: 2 cucharadas» compra «2 cucharadas de salsa de soja»,
+  «Especias: comino» compra «comino», «Cebolla: 1 grande» se queda como está, y
+  «Nota:» u «Horno: 180 °C» ya no salen en la lista. Y el hidrato se reconoce también
+  con medidas de casa («1 taza de arroz», «200 gr de pasta»).
+- Al actualizar, las líneas que cambian de cantidad o de forma (ahora se compra para
+  4) pierden una vez su marca de «comprado».
+### Recetas
+- **43 recetas nuevas** con cantidades para vuestra familia (4 raciones): los platos
+  del plan que faltaban (tacos de solomillo al wok, paellas, judías verdes con
+  almendras, huevo duro y queso de cabra, pescados al horno sobre cama de verduras,
+  hamburguesas de pavo y pollo, pisto con huevo o con pollo, fajitas en hojas de
+  lechuga, César sin salsas…), las ensaladas del nutricionista y sus desayunos y
+  meriendas. Nueva pestaña **📋 Plan** en el Recetario.
+- Las fichas conservan sus apartados («base:», «relleno:», «adobo:»).
+### Sincronización
+- El plan se **fusiona día a día**, como las listas de la compra: cada día de entreno y
+  cada noche de cada uno lleva su propia hora. Si Alex cambia su martes en su móvil y
+  Jeza su jueves en el suyo, se quedan los dos cambios.
+- Un móvil que aún no se ha actualizado (sin plan) **no borra los entrenos** del otro,
+  e importar una copia antigua tampoco. Aun así, **abrid la app en los dos móviles
+  antes de tocar los entrenos**: la copia que sube un móvil todavía en la v1.17 no
+  lleva plan, y el otro no vuelve a subir el suyo hasta su siguiente cambio.
+- Bajar la copia del otro móvil ya no te lleva a la semana que él tenía abierta.
+### Arreglos encontrados por el camino
+- El **salmorejo** metía «sal. Para servir: huevo cocido y jamón» como una línea de
+  la compra (y otras 30 recetas con «; marinada:» o «. Para servir:»).
+- El 📖 de los **desayunos de la rutina** decía «no está en el recetario».
+- Si **uno** comía fuera, «Sorpréndeme» dejaba sin plan a toda la familia.
+- Abrir la compra de la **semana pasada destachaba** la fruta y «Otros» de esta, y el
+  destachado viajaba al otro móvil.
+- **Tema Noche**: los nombres de los días del editor de entrenos eran invisibles
+  (1:1) y el botón «Fuera de casa» era blanco con texto a 2,3:1. En los temas claros,
+  el ámbar, el verde y las notas pequeñas se oscurecen: todo a 5:1 o más.
+- A 320 px con el texto «enorme», la flecha del día, las etiquetas de los entrenos y
+  el ✕ del recetario se salían de la pantalla.
+- La cantidad de la despensa ya se muestra como ½ / 1½.
+- Una copia de la nube o un archivo importado con datos raros en el plan ya no puede
+  estropear los entrenos (ni borrar los tuyos).
+- Tests: **407 → 635 asserts**. Hecho con agentes: cazadores de errores, triaje,
+  arregladores y verificadores independientes, en cuatro rondas; cada arreglo lleva
+  su test, y cada test se ha comprobado deshaciendo el arreglo (mutaciones).
+
 ## 1.17.1 — 2026-09-08 (Medio kilo para el frutero)
 - **Ya puedes pedir «0,5 kg» o «1/2 kg».** El campo de cantidad era `type="number"`
   y el navegador **borraba en silencio** todo lo que no entendía: `0,5` (tal como se

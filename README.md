@@ -3,9 +3,11 @@
 Planificador semanal de comidas familiar. **Un solo HTML**, sin
 dependencias, offline, instalable como PWA en iOS.
 
-Cuatro pestañas: **Semana** (planificar), **Despensa** (con caducidades),
-**Compra** (ingredientes sacados de las recetas, escalados por comensales) y
-**Recetario** (200 platos con macros y receta escalable ×1–×6). Los datos se
+Cinco pestañas: **Semana** (planificar), **Despensa** (con caducidades),
+**Compra** (ingredientes sacados de las recetas, escalados por comensales),
+**Recetario** (236 platos con macros y receta escalable ×1–×6) y **Plan** (el plan
+del nutricionista para los adultos: entrenos, raciones, hidratos post-entreno; con
+él activado, «Sorpréndeme» rellena la semana con las opciones del plan). Los datos se
 sincronizan entre dispositivos vía GitHub.
 
 ## Estructura
@@ -15,7 +17,7 @@ sincronizan entre dispositivos vía GitHub.
 | `index.html` | La app completa (UI + lógica + datos SEED + recetario con recetas) |
 | `sw.js` | Service worker: offline tras la primera visita (opcional pero recomendado) |
 | `data/sync.json` | Copia de la nube — vive en la rama **`data`** (la escribe la propia app) |
-| `test/test.js` | Suite (407 asserts) que se ejecuta contra el HTML publicado, sin build |
+| `test/test.js` | Suite (635 asserts) que se ejecuta contra el HTML publicado, sin build |
 | `.github/workflows/ci.yml` | CI: suite bajo UTC, Europe/Madrid y America/Los_Angeles |
 | `CHANGELOG.md` | Historial de versiones |
 | `recetario/` | Recetario-saludable.xlsx (entrada de datos original) |
@@ -88,6 +90,7 @@ igual, solo pierde la garantía offline.
   manifest van inline; las llamadas a api.github.com no se interceptan).
 - `Sorpréndeme` no propone cena de dos platos (decisión de producto).
 - La nube es last-write-wins por `updatedAt` **para el plan semanal** (uso
-  familiar, aceptado). El **recetario** se fusiona por unión, y **«Otros» y
-  «Fruta y verdura»** se fusionan por id con marcas de borrado, así que las
-  ediciones simultáneas de la compra no se pierden ni resucitan.
+  familiar, aceptado). El **recetario** se fusiona por unión, **«Otros» y
+  «Fruta y verdura»** se fusionan por id con marcas de borrado, y los **ajustes
+  del plan del nutricionista** (entrenos, noches, cole) por clave con su propia
+  hora, así que las ediciones simultáneas no se pierden ni resucitan.
