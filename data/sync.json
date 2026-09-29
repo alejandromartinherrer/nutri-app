@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-28T09:42:56.032Z",
+ "savedAt": "2026-09-29T09:44:35.916Z",
  "state": {
   "members": [
    {
@@ -80,7 +80,32 @@
     }
    ]
   },
-  "produce": [],
+  "produce": [
+   {
+    "id": "h2sfxzy",
+    "name": "Judía verde",
+    "qty": 1,
+    "unit": "Kg",
+    "done": false,
+    "updatedAt": "2026-09-29T09:43:44.219Z"
+   },
+   {
+    "id": "e0wh2a8",
+    "name": "Manzana Golden",
+    "qty": 4,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-29T09:44:08.934Z"
+   },
+   {
+    "id": "h2h8nqc",
+    "name": "Plátano canario (verdecito)",
+    "qty": 10,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-29T09:44:35.916Z"
+   }
+  ],
   "extras": [],
   "userDishes": [
    {
@@ -6292,12 +6317,12 @@
    }
   },
   "current": "2026-09-28",
-  "updatedAt": "2026-09-28T09:42:56.032Z",
-  "lastSync": "2026-09-25T20:39:27.049Z",
+  "updatedAt": "2026-09-29T09:44:35.916Z",
+  "lastSync": "2026-09-28T09:43:29.049Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "dish",
-  "shopWeek": "2026-09-21",
+  "shopWeek": "2026-09-28",
   "txtSize": "normal",
   "graveyard": {
    "jy78fxk": "2026-09-01T14:58:55.535Z",
@@ -6346,6 +6371,25 @@
    "0parr33": "2026-09-25T13:56:38.716Z",
    "5yh01jp": "2026-09-25T13:56:38.716Z",
    "z4aobh4": "2026-09-25T13:56:38.716Z"
+  },
+  "plan": {
+   "activo": true,
+   "entrenos": {
+    "alex": {
+     "0": "tarde",
+     "2": "tarde",
+     "5": "mañana"
+    },
+    "jeza": {
+     "1": "mañana",
+     "3": "mañana"
+    }
+   },
+   "noches": {
+    "alex": [],
+    "jeza": []
+   },
+   "ninosCole": false
   }
  }
 }
