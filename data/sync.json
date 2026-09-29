@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-29T09:44:35.916Z",
+ "savedAt": "2026-09-29T09:46:17.298Z",
  "state": {
   "members": [
    {
@@ -104,6 +104,46 @@
     "unit": "ud",
     "done": false,
     "updatedAt": "2026-09-29T09:44:35.916Z"
+   },
+   {
+    "id": "sdnvii3",
+    "name": "Tomate pera",
+    "qty": 1,
+    "unit": "Kg",
+    "done": false,
+    "updatedAt": "2026-09-29T09:45:25.468Z"
+   },
+   {
+    "id": "is4wicm",
+    "name": "Calabacin",
+    "qty": 2,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-29T09:45:45.698Z"
+   },
+   {
+    "id": "4zb7mqd",
+    "name": "Pimiento verde",
+    "qty": 2,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-29T09:45:57.266Z"
+   },
+   {
+    "id": "gjksi0b",
+    "name": "Pimiento rojo",
+    "qty": 1,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-29T09:46:04.483Z"
+   },
+   {
+    "id": "qunpgrr",
+    "name": "Puerro",
+    "qty": 3,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-09-29T09:46:17.298Z"
    }
   ],
   "extras": [],
@@ -6317,8 +6357,8 @@
    }
   },
   "current": "2026-09-28",
-  "updatedAt": "2026-09-29T09:44:35.916Z",
-  "lastSync": "2026-09-28T09:43:29.049Z",
+  "updatedAt": "2026-09-29T09:46:17.298Z",
+  "lastSync": "2026-09-29T09:44:57.093Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "dish",
@@ -6389,7 +6429,8 @@
     "alex": [],
     "jeza": []
    },
-   "ninosCole": false
+   "ninosCole": false,
+   "at": {}
   }
  }
 }
