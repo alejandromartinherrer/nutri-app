@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-09-29T09:46:17.298Z",
+ "savedAt": "2026-10-02T06:29:36.247Z",
  "state": {
   "members": [
    {
@@ -80,73 +80,21 @@
     }
    ]
   },
-  "produce": [
+  "produce": [],
+  "extras": [
    {
-    "id": "h2sfxzy",
-    "name": "Judía verde",
-    "qty": 1,
-    "unit": "Kg",
+    "id": "0p4r0g2",
+    "name": "Garrafas agua",
     "done": false,
-    "updatedAt": "2026-09-29T09:43:44.219Z"
+    "updatedAt": "2026-10-02T06:29:28.937Z"
    },
    {
-    "id": "e0wh2a8",
-    "name": "Manzana Golden",
-    "qty": 4,
-    "unit": "ud",
+    "id": "vohykw0",
+    "name": "Bebida avena",
     "done": false,
-    "updatedAt": "2026-09-29T09:44:08.934Z"
-   },
-   {
-    "id": "h2h8nqc",
-    "name": "Plátano canario (verdecito)",
-    "qty": 10,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-29T09:44:35.916Z"
-   },
-   {
-    "id": "sdnvii3",
-    "name": "Tomate pera",
-    "qty": 1,
-    "unit": "Kg",
-    "done": false,
-    "updatedAt": "2026-09-29T09:45:25.468Z"
-   },
-   {
-    "id": "is4wicm",
-    "name": "Calabacin",
-    "qty": 2,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-29T09:45:45.698Z"
-   },
-   {
-    "id": "4zb7mqd",
-    "name": "Pimiento verde",
-    "qty": 2,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-29T09:45:57.266Z"
-   },
-   {
-    "id": "gjksi0b",
-    "name": "Pimiento rojo",
-    "qty": 1,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-29T09:46:04.483Z"
-   },
-   {
-    "id": "qunpgrr",
-    "name": "Puerro",
-    "qty": 3,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-09-29T09:46:17.298Z"
+    "updatedAt": "2026-10-02T06:29:36.247Z"
    }
   ],
-  "extras": [],
   "userDishes": [
    {
     "name": "Chicken Curry (Versión Thermomix)",
@@ -6357,8 +6305,8 @@
    }
   },
   "current": "2026-09-28",
-  "updatedAt": "2026-09-29T09:46:17.298Z",
-  "lastSync": "2026-09-29T09:44:57.093Z",
+  "updatedAt": "2026-10-02T06:29:36.247Z",
+  "lastSync": "2026-09-29T09:46:45.942Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "dish",
@@ -6410,7 +6358,15 @@
    "n3k7z2x": "2026-09-25T13:56:38.716Z",
    "0parr33": "2026-09-25T13:56:38.716Z",
    "5yh01jp": "2026-09-25T13:56:38.716Z",
-   "z4aobh4": "2026-09-25T13:56:38.716Z"
+   "z4aobh4": "2026-09-25T13:56:38.716Z",
+   "h2sfxzy": "2026-10-02T06:29:07.828Z",
+   "e0wh2a8": "2026-10-02T06:29:07.828Z",
+   "h2h8nqc": "2026-10-02T06:29:07.828Z",
+   "sdnvii3": "2026-10-02T06:29:07.828Z",
+   "is4wicm": "2026-10-02T06:29:07.828Z",
+   "4zb7mqd": "2026-10-02T06:29:07.828Z",
+   "gjksi0b": "2026-10-02T06:29:07.828Z",
+   "qunpgrr": "2026-10-02T06:29:07.828Z"
   },
   "plan": {
    "activo": true,
