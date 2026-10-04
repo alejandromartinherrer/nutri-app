@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-10-02T06:29:36.247Z",
+ "savedAt": "2026-10-04T09:19:28.708Z",
  "state": {
   "members": [
    {
@@ -83,16 +83,16 @@
   "produce": [],
   "extras": [
    {
-    "id": "0p4r0g2",
-    "name": "Garrafas agua",
+    "id": "aww7ila",
+    "name": "Papel cocina",
     "done": false,
-    "updatedAt": "2026-10-02T06:29:28.937Z"
+    "updatedAt": "2026-10-04T09:19:23.373Z"
    },
    {
-    "id": "vohykw0",
-    "name": "Bebida avena",
+    "id": "uzprv2e",
+    "name": "Arena Balu",
     "done": false,
-    "updatedAt": "2026-10-02T06:29:36.247Z"
+    "updatedAt": "2026-10-04T09:19:28.708Z"
    }
   ],
   "userDishes": [
@@ -6305,8 +6305,8 @@
    }
   },
   "current": "2026-09-28",
-  "updatedAt": "2026-10-02T06:29:36.247Z",
-  "lastSync": "2026-09-29T09:46:45.942Z",
+  "updatedAt": "2026-10-04T09:19:28.708Z",
+  "lastSync": "2026-10-02T06:29:44.455Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "dish",
@@ -6366,7 +6366,9 @@
    "is4wicm": "2026-10-02T06:29:07.828Z",
    "4zb7mqd": "2026-10-02T06:29:07.828Z",
    "gjksi0b": "2026-10-02T06:29:07.828Z",
-   "qunpgrr": "2026-10-02T06:29:07.828Z"
+   "qunpgrr": "2026-10-02T06:29:07.828Z",
+   "0p4r0g2": "2026-10-03T10:39:01.123Z",
+   "vohykw0": "2026-10-03T10:39:01.123Z"
   },
   "plan": {
    "activo": true,
