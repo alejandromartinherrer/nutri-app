@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-10-07T14:43:43.366Z",
+ "savedAt": "2026-10-07T17:55:06.221Z",
  "state": {
   "members": [
    {
@@ -85,8 +85,8 @@
    {
     "id": "aww7ila",
     "name": "Papel cocina",
-    "done": false,
-    "updatedAt": "2026-10-04T09:19:23.373Z"
+    "done": true,
+    "updatedAt": "2026-10-07T17:54:59.409Z"
    },
    {
     "id": "uzprv2e",
@@ -105,12 +105,6 @@
     "name": "Amoniaco",
     "done": false,
     "updatedAt": "2026-10-04T12:48:41.550Z"
-   },
-   {
-    "id": "oe8bv8h",
-    "name": "PapelDe cocina",
-    "done": false,
-    "updatedAt": "2026-10-04T22:41:59.875Z"
    },
    {
     "id": "dlluatp",
@@ -6851,8 +6845,8 @@
    }
   },
   "current": "2026-10-05",
-  "updatedAt": "2026-10-07T14:43:43.366Z",
-  "lastSync": "2026-10-06T20:27:46.898Z",
+  "updatedAt": "2026-10-07T17:55:06.221Z",
+  "lastSync": "2026-10-07T14:43:47.776Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "dish",
@@ -6914,7 +6908,8 @@
    "gjksi0b": "2026-10-02T06:29:07.828Z",
    "qunpgrr": "2026-10-02T06:29:07.828Z",
    "0p4r0g2": "2026-10-03T10:39:01.123Z",
-   "vohykw0": "2026-10-03T10:39:01.123Z"
+   "vohykw0": "2026-10-03T10:39:01.123Z",
+   "oe8bv8h": "2026-10-07T17:55:06.221Z"
   },
   "plan": {
    "activo": true,
