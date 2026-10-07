@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-10-07T17:55:06.221Z",
+ "savedAt": "2026-10-07T17:56:00.448Z",
  "state": {
   "members": [
    {
@@ -97,8 +97,8 @@
    {
     "id": "gu272nk",
     "name": "Vinagre de limpieza",
-    "done": false,
-    "updatedAt": "2026-10-04T12:48:34.939Z"
+    "done": true,
+    "updatedAt": "2026-10-07T17:55:41.741Z"
    },
    {
     "id": "n8bkfa9",
@@ -115,8 +115,8 @@
    {
     "id": "c54zyuc",
     "name": "Zanahiria",
-    "done": false,
-    "updatedAt": "2026-10-07T14:43:43.366Z"
+    "done": true,
+    "updatedAt": "2026-10-07T17:56:00.448Z"
    }
   ],
   "userDishes": [
@@ -6845,8 +6845,8 @@
    }
   },
   "current": "2026-10-05",
-  "updatedAt": "2026-10-07T17:55:06.221Z",
-  "lastSync": "2026-10-07T14:43:47.776Z",
+  "updatedAt": "2026-10-07T17:56:00.448Z",
+  "lastSync": "2026-10-07T17:55:39.977Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "dish",
