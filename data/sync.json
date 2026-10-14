@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-10-14T11:03:35.753Z",
+ "savedAt": "2026-10-14T11:05:42.074Z",
  "state": {
   "members": [
    {
@@ -96,6 +96,54 @@
     "unit": "ud",
     "done": false,
     "updatedAt": "2026-10-14T11:03:35.753Z"
+   },
+   {
+    "id": "1w1ze3v",
+    "name": "Brócoli",
+    "qty": 1,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-10-14T11:04:35.483Z"
+   },
+   {
+    "id": "jpfzg3x",
+    "name": "Ciruela",
+    "qty": 6,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-10-14T11:04:53.579Z"
+   },
+   {
+    "id": "2bu4im7",
+    "name": "Peras conferencia",
+    "qty": 6,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-10-14T11:05:04.006Z"
+   },
+   {
+    "id": "lad0b9n",
+    "name": "Plátano verdecito",
+    "qty": 10,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-10-14T11:05:15.064Z"
+   },
+   {
+    "id": "q88l3ez",
+    "name": "Manzana royal",
+    "qty": 4,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-10-14T11:05:32.447Z"
+   },
+   {
+    "id": "nchmso5",
+    "name": "Calabaza",
+    "qty": 1,
+    "unit": "ud",
+    "done": false,
+    "updatedAt": "2026-10-14T11:05:42.074Z"
    }
   ],
   "extras": [],
@@ -7341,8 +7389,8 @@
    }
   },
   "current": "2026-10-12",
-  "updatedAt": "2026-10-14T11:03:35.753Z",
-  "lastSync": "2026-10-07T17:56:51.749Z",
+  "updatedAt": "2026-10-14T11:05:42.074Z",
+  "lastSync": "2026-10-14T11:04:08.189Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "dish",
