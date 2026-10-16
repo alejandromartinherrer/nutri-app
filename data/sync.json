@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-10-16T08:20:32.810Z",
+ "savedAt": "2026-10-16T12:37:10.354Z",
  "state": {
   "members": [
    {
@@ -81,7 +81,26 @@
    ]
   },
   "produce": [],
-  "extras": [],
+  "extras": [
+   {
+    "id": "z2fe9ls",
+    "name": "Tomate triturado",
+    "done": false,
+    "updatedAt": "2026-10-16T12:36:47.652Z"
+   },
+   {
+    "id": "w4fqdml",
+    "name": "Champú seco",
+    "done": false,
+    "updatedAt": "2026-10-16T12:37:03.446Z"
+   },
+   {
+    "id": "ojn7hkn",
+    "name": "Desodorante",
+    "done": false,
+    "updatedAt": "2026-10-16T12:37:10.354Z"
+   }
+  ],
   "userDishes": [
    {
     "name": "Chicken Curry (Versión Thermomix)",
@@ -7324,8 +7343,8 @@
    }
   },
   "current": "2026-10-12",
-  "updatedAt": "2026-10-16T08:20:32.810Z",
-  "lastSync": "2026-10-16T06:26:24.281Z",
+  "updatedAt": "2026-10-16T12:37:10.354Z",
+  "lastSync": "2026-10-16T08:20:32.810Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "dish",
