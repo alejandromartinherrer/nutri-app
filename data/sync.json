@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-10-16T06:26:14.915Z",
+ "savedAt": "2026-10-16T08:20:32.810Z",
  "state": {
   "members": [
    {
@@ -81,26 +81,7 @@
    ]
   },
   "produce": [],
-  "extras": [
-   {
-    "id": "3b1poki",
-    "name": "Mermelada",
-    "done": false,
-    "updatedAt": "2026-10-16T06:25:58.123Z"
-   },
-   {
-    "id": "0fdt4po",
-    "name": "Pan se molde",
-    "done": false,
-    "updatedAt": "2026-10-16T06:26:07.568Z"
-   },
-   {
-    "id": "kn5jo96",
-    "name": "Papel higiénico",
-    "done": false,
-    "updatedAt": "2026-10-16T06:26:14.915Z"
-   }
-  ],
+  "extras": [],
   "userDishes": [
    {
     "name": "Chicken Curry (Versión Thermomix)",
@@ -7343,8 +7324,8 @@
    }
   },
   "current": "2026-10-12",
-  "updatedAt": "2026-10-16T06:26:14.915Z",
-  "lastSync": "2026-10-14T11:06:10.750Z",
+  "updatedAt": "2026-10-16T08:20:32.810Z",
+  "lastSync": "2026-10-16T06:26:24.281Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "dish",
@@ -7421,7 +7402,10 @@
    "2bu4im7": "2026-10-16T06:25:52.419Z",
    "lad0b9n": "2026-10-16T06:25:52.419Z",
    "q88l3ez": "2026-10-16T06:25:52.419Z",
-   "nchmso5": "2026-10-16T06:25:52.419Z"
+   "nchmso5": "2026-10-16T06:25:52.419Z",
+   "3b1poki": "2026-10-16T08:20:32.039Z",
+   "0fdt4po": "2026-10-16T08:20:32.207Z",
+   "kn5jo96": "2026-10-16T08:20:32.810Z"
   },
   "plan": {
    "activo": true,
