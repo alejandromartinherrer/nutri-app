@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-10-16T12:37:10.354Z",
+ "savedAt": "2026-10-16T13:06:46.986Z",
  "state": {
   "members": [
    {
@@ -99,6 +99,12 @@
     "name": "Desodorante",
     "done": false,
     "updatedAt": "2026-10-16T12:37:10.354Z"
+   },
+   {
+    "id": "pra9fl4",
+    "name": "Jabón pedazo manos",
+    "done": false,
+    "updatedAt": "2026-10-16T13:06:46.986Z"
    }
   ],
   "userDishes": [
@@ -7343,8 +7349,8 @@
    }
   },
   "current": "2026-10-12",
-  "updatedAt": "2026-10-16T12:37:10.354Z",
-  "lastSync": "2026-10-16T08:20:32.810Z",
+  "updatedAt": "2026-10-16T13:06:46.986Z",
+  "lastSync": "2026-10-16T12:37:10.354Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "dish",
