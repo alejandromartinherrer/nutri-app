@@ -1,7 +1,7 @@
 {
  "app": "nutri-app",
  "schema": 2,
- "savedAt": "2026-10-14T11:05:42.074Z",
+ "savedAt": "2026-10-16T06:26:14.915Z",
  "state": {
   "members": [
    {
@@ -80,73 +80,27 @@
     }
    ]
   },
-  "produce": [
+  "produce": [],
+  "extras": [
    {
-    "id": "g3myrzv",
-    "name": "Judías verdes",
-    "qty": 1,
-    "unit": "Kg",
+    "id": "3b1poki",
+    "name": "Mermelada",
     "done": false,
-    "updatedAt": "2026-10-14T11:03:18.969Z"
+    "updatedAt": "2026-10-16T06:25:58.123Z"
    },
    {
-    "id": "qa28m6s",
-    "name": "Melocotón bajo aragon",
-    "qty": 4,
-    "unit": "ud",
+    "id": "0fdt4po",
+    "name": "Pan se molde",
     "done": false,
-    "updatedAt": "2026-10-14T11:03:35.753Z"
+    "updatedAt": "2026-10-16T06:26:07.568Z"
    },
    {
-    "id": "1w1ze3v",
-    "name": "Brócoli",
-    "qty": 1,
-    "unit": "ud",
+    "id": "kn5jo96",
+    "name": "Papel higiénico",
     "done": false,
-    "updatedAt": "2026-10-14T11:04:35.483Z"
-   },
-   {
-    "id": "jpfzg3x",
-    "name": "Ciruela",
-    "qty": 6,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-10-14T11:04:53.579Z"
-   },
-   {
-    "id": "2bu4im7",
-    "name": "Peras conferencia",
-    "qty": 6,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-10-14T11:05:04.006Z"
-   },
-   {
-    "id": "lad0b9n",
-    "name": "Plátano verdecito",
-    "qty": 10,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-10-14T11:05:15.064Z"
-   },
-   {
-    "id": "q88l3ez",
-    "name": "Manzana royal",
-    "qty": 4,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-10-14T11:05:32.447Z"
-   },
-   {
-    "id": "nchmso5",
-    "name": "Calabaza",
-    "qty": 1,
-    "unit": "ud",
-    "done": false,
-    "updatedAt": "2026-10-14T11:05:42.074Z"
+    "updatedAt": "2026-10-16T06:26:14.915Z"
    }
   ],
-  "extras": [],
   "userDishes": [
    {
     "name": "Chicken Curry (Versión Thermomix)",
@@ -7389,8 +7343,8 @@
    }
   },
   "current": "2026-10-12",
-  "updatedAt": "2026-10-14T11:05:42.074Z",
-  "lastSync": "2026-10-14T11:04:08.189Z",
+  "updatedAt": "2026-10-16T06:26:14.915Z",
+  "lastSync": "2026-10-14T11:06:10.750Z",
   "theme": "fresco",
   "hideDesAlm": false,
   "shopView": "dish",
@@ -7459,7 +7413,15 @@
    "gu272nk": "2026-10-07T18:30:34.981Z",
    "n8bkfa9": "2026-10-07T18:30:34.981Z",
    "dlluatp": "2026-10-07T18:30:34.981Z",
-   "c54zyuc": "2026-10-07T18:30:34.981Z"
+   "c54zyuc": "2026-10-07T18:30:34.981Z",
+   "g3myrzv": "2026-10-16T06:25:52.419Z",
+   "qa28m6s": "2026-10-16T06:25:52.419Z",
+   "1w1ze3v": "2026-10-16T06:25:52.419Z",
+   "jpfzg3x": "2026-10-16T06:25:52.419Z",
+   "2bu4im7": "2026-10-16T06:25:52.419Z",
+   "lad0b9n": "2026-10-16T06:25:52.419Z",
+   "q88l3ez": "2026-10-16T06:25:52.419Z",
+   "nchmso5": "2026-10-16T06:25:52.419Z"
   },
   "plan": {
    "activo": true,
