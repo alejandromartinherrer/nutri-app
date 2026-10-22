@@ -1,0 +1,744 @@
+# Changelog
+
+## 1.20.0 — 2026-10-21 (Los nombres y el plan personal, fuera del código)
+- **La parte personal del plan sale del código.** Quién es quién en el plan, sus
+  entrenos por defecto, sus raciones, desayunos, meriendas y las horas del turno de
+  noche viven ahora en `data/plan.json` del repo privado `nutri-app-data`. La app lo
+  descarga con el token (al abrir la app y, con ella abierta, como mucho una vez por
+  hora), lo guarda en el móvil y lo aplica al arrancar, así que funciona sin red. Sin el fichero, la pestaña 📋 Plan lo
+  explica en vez de mostrar un plan vacío. Un perfil o una ración sin la forma esperada
+  no entra (la copia se guarda en el móvil: una mal escrita rompería la pestaña), y sus
+  textos se pintan escapados, como los nombres de los miembros.
+- **Ningún nombre de la familia en la web pública.** Los miembros nuevos se llaman
+  «Nosotros», «Peque 1» y «Peque 2» (cada uno los renombra); los textos que nombran a
+  los peques o a los adultos («Comidas peques», «Sirve 150 g de pollo a…», el aviso del
+  cole) se escriben con los nombres de los datos. Los móviles que ya tenían la app
+  conservan sus miembros, sus nombres y sus colores: nada se migra.
+- La categoría de comidas de los niños se llama **«Comidas peques»**; un plato guardado
+  con la categoría antigua cae en ella.
+- Los tests usan un **plan de ejemplo** con personas y horarios inventados
+  (`test/plan-ejemplo.json`).
+
+## 1.19.0 — 2026-10-21 (Los datos de la familia, a un repo privado)
+- **La nube se muda al repo privado `nutri-app-data`.** Hasta ahora `data/sync.json`
+  vivía en la rama `data` de este repo, que es público: cualquiera podía leer la semana,
+  la compra y el plan de entrenos. Además, el token compartido (Contents: write sobre
+  este repo) podía escribir también en `main`, la web que se ejecuta en los dos móviles.
+  El token nuevo solo vale para `nutri-app-data`: ni ve ni toca la web.
+- **Sin token no se lee nada** (`CloudGet` ni siquiera llama a GitHub). Con token, un 404
+  pregunta por el repo: si no lo ve (por ejemplo, el token viejo), es un error de acceso
+  y la app avisa en vez de subir un fichero nuevo encima de una copia que no ve.
+- **Nombres y colores de los miembros, escapados** al pintarlos (`SlotRows`,
+  `RenderSemana`, `RenderMacros`, `PlanDayBadges`): llegan del estado sincronizado, que
+  escribe cualquiera con el token. El color, además, solo pasa si es `#hex` o
+  `var(--…)` (`SafeColor`): dentro de `style=""` escapar no basta para frenar CSS.
+- **Los ids sincronizados** (despensa, compra, extras, ideas, recetas, miembros), escapados
+  en los atributos `data-*`.
+- Fuera de `main` la copia vieja `data/sync.json` (de julio, ya no la leía nadie).
+
+## 1.18.0 — 2026-09-28 (El plan del nutricionista, dentro de la app)
+### Lo que pide el nutricionista, ahora en la app
+- **Nueva pestaña 📋 Plan** con el plan de Escuela de Salud VIVE para los dos adultos:
+  la estrategia, días de entreno y de descanso, la semana del plan con las raciones de
+  cada uno, desayunos, pre-entreno, meriendas, turno de noche, las ensaladas
+  del nutricionista, reglas generales, compra saludable e intercambios de alimentos.
+  (El repositorio es público: la suplementación y el objetivo personal del plan se
+  quedan fuera de la app.)
+- **Quién entrena y cuándo, editable**: toca un día para pasar de descanso a entreno
+  de mañana o de tarde. Por defecto, los días del plan. También las noches de turno
+  y si los peques comen en el cole.
+- **Plan del día (📋 en cada día de la semana)**: para cada uno, pre-entreno o ayuno
+  (el ayuno solo a quien lo tiene pautado), desayuno, comida con su
+  ración, merienda y cena. Las recetas se abren y se vuelve al plan.
+- En la semana, bajo cada comida y cena, **la ración de cada uno y su hidrato**.
+- Un interruptor, **«✨ Seguir el plan del nutricionista»**, lo apaga todo y deja la
+  app como antes; su texto dice exactamente qué cambia.
+### La periodización de hidratos, como regla
+- El plan quita los hidratos densos en descanso y los concentra **después de
+  entrenar**. La app no copia la tabla: aplica la regla (entreno de mañana → hidrato
+  en la comida; de tarde → en la cena), así que si cambian los entrenos las raciones
+  se recolocan solas. Con los entrenos del plan reproduce sus tablas celda a celda.
+- Las raciones siguen al **plato que de verdad está puesto**, y a la opción elegida
+  (el pisto con huevo pide huevos; el de pollo, pollo). Legumbre puesta a mano → «la
+  legumbre es su hidrato».
+- En día de descanso, el aviso **lee la receta**, no el nombre: un pescado con patata,
+  un poke o una paella dicen **«sin arroz, pasta, patata ni pan (o muy poco)»** con su
+  ración de proteína; un plato que es casi todo hidrato (pasta, risotto, quinoa)
+  avisa de que el plan pide proteína y verdura; y una pizza con base de coliflor o
+  una lasaña de calabacín no avisan de nada. La cena libre del sábado es libre.
+- Si alguien trabaja esa noche, su ración de la cena se ajusta sola.
+### «Sorpréndeme» sigue el plan
+- Cada hueco se rellena con las opciones que da el plan para ese día (y sus
+  intercambios del mismo grupo): pescado al horno el lunes, wok el martes, legumbre
+  el miércoles, pescado a la plancha con ensalada el jueves, judías verdes el viernes,
+  arroz el sábado con **cena libre**, pollo asado el domingo y ensalada con el pollo
+  que sobra por la noche. Cremas y legumbre caliente de octubre a abril; salmorejo,
+  gazpacho y ensaladas el resto del año.
+- **Pescado azul exactamente 2 veces por semana para los adultos**, siempre que los
+  huecos lo permitan: medido en 71.250 semanas simuladas (verano, otoño e invierno,
+  271 combinaciones de comer fuera, cole y platos a mano), ninguna por debajo de lo
+  posible. Cuenta **lo que comen ellos**: si comen fuera el jueves, el azul no se
+  gasta en la comida de los niños. Si en la nevera caduca una merluza o un bacalao,
+  sale en su día y los dos azules se buscan en otros huecos. La ensalada empedrada
+  (lleva atún) cuenta como azul.
+- Sigue gastando antes lo que caduca, sin repetir ingrediente en una comida y con el
+  tope semanal. La despensa se enlaza por el **nombre** del plato (los tacos de pavo
+  gastan los «Filetes de pavo», no el «Pollo»), entiende los plurales («Calabacines»
+  vale para la crema de calabacín) y un producto concreto ya no se enlaza a platos
+  que no lo llevan («Carne picada» con un carpaccio). Una bolsa de «Verduras» ya no
+  fija la crema del martes.
+- Las fajitas y los tacos de lechuga se reparten el viernes, y el salmorejo del lunes
+  ya no se repite el martes por la noche.
+- **«Deshacer» y 🎲 solo deshacen lo que puso la tirada**: lo que cambies a mano
+  después (un plato, lo tachado en la compra) se queda. Antes 🎲 lo borraba y no había
+  forma de recuperarlo. «Deshacer» funciona aunque ya estés viendo otra semana.
+- Si los adultos comen fuera y los niños están en el cole, esa comida ya no se
+  rellena ni se cuenta en el aviso.
+### Compra
+- **«Nosotros» son dos personas.** La columna contaba como una, así que se compraba
+  para 3 en vez de para 4 (tacos de pavo: 450 g de carne en vez de 600 g).
+- **Cada parte de un plato compuesto se escala con sus raciones**: «Salmorejo · Pavo
+  a la plancha» compraba pavo para 2. La cabecera lo dice: «para 4 · Salmorejo ×1 ·
+  Pavo ×2».
+- **«Todo junto» suma lo repetido** («1 cebolla ×2»): antes dos platos con una cebolla
+  compraban una (se perdían unas 16 líneas a la semana).
+- Añade el **hidrato post-entreno** de quien entrenó (patata, arroz o boniato, con su
+  cantidad y quién): las recetas base del plan van sin hidrato a propósito. La cena
+  libre no genera compra.
+- El pollo de la ensalada del domingo **sale del asado de la comida** y no se compra
+  dos veces; si la misma ensalada va otro día, ese pollo sí se compra.
+- **Plurales** detrás de cada cantidad: «2 aguacates maduros», «zumo de 2 limones»,
+  «2 peras o 2 manzanas».
+- **Cantidades escritas a mano**: «1/2 kg» ×2 decía «2/4 kg» (la mitad de lo que
+  hacía falta), «1½» ×2 decía «21» y «1.000 g de harina» ×2, «2 g». Ahora «1 kg», «3»
+  y «2000 g». «4/5 tomates» sigue siendo «4 o 5», y los tiempos y temperaturas
+  («cocer 10-12 min», «180-200 °C») no se escalan.
+- Las recetas «(1 ración)» (tortilla francesa, tostada de aguacate) se leían como de 2
+  raciones: se compraba la mitad.
+- **«Ya está en casa»** guarda el producto como lo llama la receta («Limón», no
+  «Limones») y lo suma al que ya tenías, en vez de abrir otra fila.
+- Pasillos: conservas, caldos, vinagres y aliños a la despensa; uvas, eneldo y
+  cebollino a la frutería.
+- En tus recetas, las etiquetas: «Pollo: 500 g» compra «500 g de pollo» (antes, «500 g»
+  de nada), «Salsa de soja: 2 cucharadas» compra «2 cucharadas de salsa de soja»,
+  «Especias: comino» compra «comino», «Cebolla: 1 grande» se queda como está, y
+  «Nota:» u «Horno: 180 °C» ya no salen en la lista. Y el hidrato se reconoce también
+  con medidas de casa («1 taza de arroz», «200 gr de pasta»).
+- Al actualizar, las líneas que cambian de cantidad o de forma (ahora se compra para
+  4) pierden una vez su marca de «comprado».
+### Recetas
+- **43 recetas nuevas** con cantidades para vuestra familia (4 raciones): los platos
+  del plan que faltaban (tacos de solomillo al wok, paellas, judías verdes con
+  almendras, huevo duro y queso de cabra, pescados al horno sobre cama de verduras,
+  hamburguesas de pavo y pollo, pisto con huevo o con pollo, fajitas en hojas de
+  lechuga, César sin salsas…), las ensaladas del nutricionista y sus desayunos y
+  meriendas. Nueva pestaña **📋 Plan** en el Recetario.
+- Las fichas conservan sus apartados («base:», «relleno:», «adobo:»).
+### Sincronización
+- El plan se **fusiona día a día**, como las listas de la compra: cada día de entreno y
+  cada noche de cada uno lleva su propia hora. Si un adulto cambia su martes en su móvil y
+  el otro su jueves en el suyo, se quedan los dos cambios.
+- Un móvil que aún no se ha actualizado (sin plan) **no borra los entrenos** del otro,
+  e importar una copia antigua tampoco. Aun así, **abrid la app en los dos móviles
+  antes de tocar los entrenos**: la copia que sube un móvil todavía en la v1.17 no
+  lleva plan, y el otro no vuelve a subir el suyo hasta su siguiente cambio.
+- Bajar la copia del otro móvil ya no te lleva a la semana que él tenía abierta.
+### Arreglos encontrados por el camino
+- El **salmorejo** metía «sal. Para servir: huevo cocido y jamón» como una línea de
+  la compra (y otras 30 recetas con «; marinada:» o «. Para servir:»).
+- El 📖 de los **desayunos de la rutina** decía «no está en el recetario».
+- Si **uno** comía fuera, «Sorpréndeme» dejaba sin plan a toda la familia.
+- Abrir la compra de la **semana pasada destachaba** la fruta y «Otros» de esta, y el
+  destachado viajaba al otro móvil.
+- **Tema Noche**: los nombres de los días del editor de entrenos eran invisibles
+  (1:1) y el botón «Fuera de casa» era blanco con texto a 2,3:1. En los temas claros,
+  el ámbar, el verde y las notas pequeñas se oscurecen: todo a 5:1 o más.
+- A 320 px con el texto «enorme», la flecha del día, las etiquetas de los entrenos y
+  el ✕ del recetario se salían de la pantalla.
+- La cantidad de la despensa ya se muestra como ½ / 1½.
+- Una copia de la nube o un archivo importado con datos raros en el plan ya no puede
+  estropear los entrenos (ni borrar los tuyos).
+- Tests: **407 → 635 asserts**. Hecho con agentes: cazadores de errores, triaje,
+  arregladores y verificadores independientes, en cuatro rondas; cada arreglo lleva
+  su test, y cada test se ha comprobado deshaciendo el arreglo (mutaciones).
+
+## 1.17.1 — 2026-09-08 (Medio kilo para el frutero)
+- **Ya puedes pedir «0,5 kg» o «1/2 kg».** El campo de cantidad era `type="number"`
+  y el navegador **borraba en silencio** todo lo que no entendía: `0,5` (tal como se
+  escribe en español), `1/2` y `½` llegaban vacíos, y el producto se guardaba **sin
+  cantidad ninguna** sin avisar de nada.
+- Ahora entiende todas las formas naturales: `0,5` · `0.5` · `1/2` · `3/4` · `½` ·
+  `1 1/2` · `1½`. Y si escribes **`0,5 kg` entero en la casilla de cantidad**,
+  también se queda con la unidad.
+- Se muestra como se lee en una lista de la compra: **«½ kg»**, **«1½ kg»** — en
+  pantalla, en el texto que copias y en la imagen que le mandas al frutero.
+- El mismo fallo estaba en la **Despensa** (además redondeaba a números enteros, así
+  que medio kilo de salmón era imposible) y en las **macros** al crear un plato
+  («12,5 g de grasa» se perdía). Arreglado en los tres sitios.
+- El teclado del móvil sigue saliendo numérico.
+- Tests: **386 → 407 asserts**.
+
+## 1.17.0 — 2026-09-08 (Comprar: lo marcado baja al final, y vaciar la lista de golpe)
+### Mientras compras
+- **Lo que marcas como comprado baja al final de la lista.** Arriba te queda
+  siempre lo que falta, que es lo único que miras en el súper. Vale para las tres
+  secciones: Fruta y verdura, Otros y los ingredientes (en las dos vistas, «por
+  plato» y «todo junto»).
+- En «todo junto», lo comprado se agrupa al final bajo **«Ya en el carro · N»**,
+  fuera de los pasillos: una vez está en el carro, el pasillo ya da igual.
+- Es solo el **orden en pantalla**: las listas guardadas no se reordenan, porque
+  la nube las fusiona por identificador y moverlas provocaría conflictos entre
+  los dos móviles.
+### Al terminar
+- **Botón «vaciar»** en Fruta y verdura y en Otros: se acabó quitar los productos
+  de uno en uno. Pide confirmación diciendo cuántos son (y cuántos ya estaban
+  comprados) y deja **Deshacer** por si te arrepientes.
+- Al vaciar deja la marca de borrado de cada elemento, así que **el móvil del otro
+  no los resucita** en la siguiente sincronización.
+- Los ingredientes no llevan «vaciar» porque no son una lista tuya: salen de las
+  recetas de la semana. Para desmarcarlos está «limpiar», como hasta ahora.
+- Tests: **377 → 386 asserts**.
+
+## 1.16.0 — 2026-09-02 (Sorpréndeme: un ingrediente, como mucho 2 veces por semana)
+- **Ni un ingrediente ni un grupo se repiten más de 2 veces por semana en el mismo
+  turno.** Con pollo y huevos marcados como urgentes en la despensa salía **pollo
+  en el 87 % de los segundos** y **huevo en el 100 % de las cenas**: el «gasta lo
+  que caduca» vale hasta +5 puntos y arrasaba con todo lo demás.
+- Se cuenta **el ingrediente, no la etiqueta**. Un primer intento topaba el grupo
+  de comida y **no servía**: los platos de pollo están repartidos entre Pollo,
+  Pasta, Arroz y Ensaladas, así que al topar «Pollo» el bonus se iba al pollo
+  escondido bajo otra etiqueta (*«Pad thai de pollo»* es Pasta). El contador decía
+  29 % y en el plato seguía habiendo pollo el 73 % de las veces. Ahora se cuentan
+  las dos cosas, porque ninguna basta sola: el ingrediente se le escapa a las
+  cenas de huevo (*«Tortilla de calabacín»* no dice «huevo» por ninguna parte).
+- Medido sobre el comportamiento real, no sobre la etiqueta:
+
+  | Con pollo y huevos urgentes | Antes | Ahora |
+  |---|---|---|
+  | 2º que **lleva** pollo | 87 % | **29 %** |
+  | Comidas del día con pollo | 100 % | **57 %** |
+  | Cenas que **llevan** huevo | 100 % | **25 %** |
+
+- **El 1º y el 2º ya no comparten familia**, no solo grupo: Pasta y «Arroz y
+  cereales» son grupos distintos pero la misma familia, y *«Risotto de calabaza ·
+  Pad thai»* seguía siendo almidón sobre almidón.
+- **Cuenta también lo que hayas planificado a mano**, no solo lo que rellena él:
+  si ya pusiste pollo dos días, no te añade más.
+- **Cede cuando no hay alternativa**: con el recetario reducido a 3 cenas del
+  mismo grupo —o a una sola— sigue rellenando la semana entera. **Nunca** deja un
+  hueco vacío por culpa del tope.
+- El grupo se normaliza antes de contarlo: es texto libre y editable, y sin
+  recortarlo «Pollo», «pollo» y «Pollo » eran tres contadores distintos.
+- Tests: **369 → 377 asserts**.
+
+## 1.15.1 — 2026-09-02 (Sorpréndeme ya no repite ingrediente en la misma comida)
+- **El 2º plato ya no repite el ingrediente ni el grupo del 1º.** Salían comidas
+  como *«Berenjena rellena de verduras · Berenjena rellena de quinoa y verduras»*:
+  medido, pasaba en el **14 % de las comidas** (≈1 por semana). Ahora es **0 %**.
+- Causa: la prioridad de *gastar lo que caduca* vale +3/+5 puntos y aplastaba al
+  +1 de «varía de grupo». Si había berenjenas en la nevera, arrasaba. Ahora es una
+  **regla, no un punto extra**: el 2º descarta los platos que repiten, y solo cede
+  si no queda ninguna alternativa (verificado: **0 huecos sin rellenar**).
+- La cena también evita los ingredientes ya usados ese día, que es lo que producía
+  días enteros con el mismo producto en las tres comidas.
+- Para saber cuál es el ingrediente se resta del nombre el **vocabulario de
+  cocina** (horno, plancha, ensalada, crema, relleno, verduras…). Probé antes a
+  deducirlo por frecuencia y **no funciona**: «pollo» está en el 17 % de los platos
+  y se colaba como palabra genérica, así que salía *«Ensalada de pollo · Pollo al
+  limón»*. El grupo de comida tampoco lo tapaba, porque los platos de pollo están
+  repartidos entre Ensaladas, Sopas, Pasta y Pollo.
+- Sigue aprovechando la despensa y sin pisar lo puesto a mano.
+- Tests: **363 → 369 asserts**.
+
+## 1.15.0 — 2026-08-26 (Sorpréndeme: el mismo menú para toda la familia)
+- **«Sorpréndeme con la semana» pone ahora el mismo plato a todos.** Antes, tras
+  rellenar la semana en familia, un último paso **sobrescribía la comida del mayor de los peques**
+  con un plato de la categoría de los niños, así que salían dos menús distintos
+  y había que cocinar dos veces.
+- La categoría **de comidas de los niños sigue existiendo** en el recetario y al crear o
+  editar un plato: se puede seguir asignando **a mano** cuando interese. Lo que
+  desaparece es que se imponga sola.
+- Sin cambios en el resto: sigue sin pisar lo que hayas puesto a mano, sigue
+  priorizando lo que caduca en la despensa y «Deshacer» funciona igual.
+- Tests: **357 → 363 asserts** (fijan que los tres comensales reciben
+  exactamente el mismo plato en cada hueco).
+
+## 1.14.1 — 2026-08-26 (Orden de la pestaña Compra)
+- La Compra pasa a ser **🍎 Fruta y verdura → 📝 Otros → 🍳 Ingredientes**
+  (antes los ingredientes iban en medio). Quedan juntas arriba las dos listas
+  que se escriben a mano, y al final la que calcula la app sola.
+- **📋 Copiar lista completa** sigue el mismo orden que la pantalla; antes
+  mandaba «Otros» al final y no coincidían.
+- «Enviar al frutero» sigue colgando de Fruta y verdura.
+
+## 1.14.0 — 2026-08-26 (La lista de la compra ya no se pisa entre móviles)
+### Compra
+- **«Otros» y «Fruta y verdura» se fusionan** en vez de sobrescribirse. Eran las
+  dos únicas listas que los dos editáis a la vez y seguían con «gana el último»:
+  si ella añadía algo mientras tú añadías otra cosa, **la última subida borraba
+  la del otro**. Ahora se unen igual que el recetario y no se pierde nada.
+- **Y borrar sigue funcionando.** Unir listas sin más rompe el borrado: lo que
+  uno quita **reaparece** en la siguiente sincronización (la unión lo devuelve
+  tanto al bajar como al subir). Por eso cada borrado deja una marca que viaja
+  con los datos, y **la marca manda siempre**: si tú borras «Leche» y ella la
+  marca como comprada sin haberse enterado, **no resucita** (verificado — era
+  justo el fallo que encontró la revisión adversaria). Volver a añadirla a
+  propósito crea un elemento nuevo, así que nada intencionado se pierde.
+- **«Deshacer» retira la marca**, de modo que lo restaurado se queda.
+- Entre dos toques al mismo producto **gana el más reciente**: des-marcar algo
+  puede ganar a marcarlo, cosa que un «manda el comprado» habría impedido.
+- Las marcas de borrado se podan a los **90 días** (aguantan de sobra un móvil
+  apagado semanas) y no ensucian el resto: borrar en la Despensa o en el
+  Recetario no las genera.
+- Cambio **compatible**: una copia antigua sin marcas sigue siendo válida.
+- Tests: **329 → 353 asserts**.
+
+## 1.13.1 — 2026-08-26 (El teclado ya no tapa las sugerencias)
+### Selector de plato
+- **Al escribir, el selector se queda en «campo + resultados».** Medido en un
+  iPhone: con el teclado subido la hoja baja a **307 px** y la lista de
+  sugerencias empezaba **314 px por debajo** de lo visible — había que pasar los
+  botones, la despensa y los filtros para llegar a ella. Es decir, **cero
+  resultados a la vista** justo mientras escribías. Ahora, mientras el teclado
+  está arriba se pliegan «¿Para quién?», el composer, los botones, la despensa y
+  los filtros: **el campo queda fijo arriba y los resultados debajo** (3–4 a la
+  vista, y ya no se sale ninguno de la pantalla).
+- **Todo vuelve solo al bajar el teclado**, con Guardar en su sitio. El cambio es
+  puro CSS sobre la altura real del teclado: no re-renderiza, así que **el campo
+  y el cursor sobreviven** y no puede pillarte a mitad de un toque.
+- **Nueva línea de contexto** mientras buscas: «Eligiendo **2º** · 1º: Crema de
+  lentejas rojas», lo único que se perdía al plegar el composer.
+- Tests: **310 → 329 asserts**.
+
+## 1.13.0 — 2026-08-26 (La nube se actualiza sola)
+### Sincronización
+- **Ya no hace falta cerrar y abrir la app** para ver los cambios del otro
+  móvil. Hasta ahora solo se descargaba al arrancar (`CloudPullOnBoot`): subía
+  sola, pero nunca volvía a bajar mientras estaba abierta. Ahora baja:
+  - al **volver a la app** (desbloquear, volver del selector de apps),
+  - al **recuperar la conexión**,
+  - y con un **sondeo cada 60 s** mientras está en pantalla, para que dos
+    móviles abiertos a la vez converjan solos.
+- **Nunca te rompe lo que estás haciendo.** El refresco se aplaza si hay una
+  hoja abierta, el selector de plato, estás escribiendo, deslizando la lista o
+  tienes un «Deshacer» vivo; y entra en cuanto sueltas (al cerrar la hoja o
+  salir del buscador), sin esperar al siguiente minuto. Se conserva la posición
+  del scroll para no perder el sitio mientras lees la compra.
+### Seguridad de los datos (lo que este cambio NO hace, a propósito)
+- El refresco automático es **solo de lectura**: adopta la nube únicamente si
+  este móvil no tiene nada sin subir, y **jamás sube ni re-sella la hora**. Un
+  móvil desincronizado (token caducado, sin token o mucho tiempo sin red) no
+  puede así promocionar su copia vieja y borrar la semana del otro.
+- Si tienes cambios sin subir, la pantalla **se queda como está** y los sube el
+  autoguardado de siempre; el criterio «gana el último» resuelve como hasta hoy.
+- Al adoptar se mantienen la **unión del recetario** (nunca se pierde una receta)
+  y la **curación de celdas fantasma**. El refresco automático **no** ofrece
+  «Deshacer» (sellaría una hora nueva y provocaría un tira y afloja entre los
+  dos móviles); sigue estando en el arranque, como siempre.
+- Un **token caducado ya no reintenta subir cada minuto**: el envío se frena de
+  forma progresiva (hasta 5 min). Las descargas nunca se frenan.
+- Sin token, el sondeo baja a 5 min: las lecturas anónimas de GitHub están
+  limitadas por IP y los dos móviles comparten el router de casa.
+### Interno
+- `CloudPullOnBoot` → `CloudPull({boot|quiet})` + `AdoptRemote`: un único camino
+  auditado para arranque y refresco. El pull coge **el mismo candado** que el
+  guardado, antes de la llamada de red, y revalida al volver de ella.
+- Tests: **310 asserts** (antes 279) en 3 husos horarios.
+
+## 1.12.0 — 2026-07-22 (Cierre de la auditoría: temas 4, 5, 6, 7 y 8)
+### Planificar
+- **Contador honesto**: «77 comidas planificadas» pasa a «10 de 14 comidas y
+  cenas». Antes contaba por comensal y por hueco, incluidos los «fuera de casa»
+  y los desayunos que tienes ocultos, así que una semana vacía ya marcaba 42.
+- **«Sorpréndeme» es reversible**: aviso con **Deshacer** y un botón **🎲** que
+  deshace y vuelve a tirar. Antes rellenaba 14 comidas sin marcha atrás salvo
+  vaciar la semana entera (perdiendo también lo puesto a mano).
+- **Copiar un día a otro** (⧉ en la cabecera del día): el domingo cocinas para
+  el lunes. Elige varios días, avisa de cuáles se sustituyen y deja Deshacer.
+- **Deslizar el dedo** cambia de semana; las flechas dejan de ser el único modo.
+### Recetario
+- **📖 también en la Compra y dentro del selector**: consultas la receta
+  *antes* de elegir, y «← Volver a elegir» te devuelve al selector donde estabas.
+- **kcal en el selector**: al elegir plato ves las calorías. Antes había que
+  planificar a ciegas y mirar las macros en otra pestaña después.
+- **«📅 Planificar» desde la ficha del plato**, y la ficha avisa de dónde está
+  ya esa semana («📅 Ya esta semana: Mié · Cena»).
+- **Alta rápida de plato**: 5 campos a la vista; macros y receta quedan
+  plegadas en «Macros y receta (opcional)». Antes eran 10 campos en columna.
+- Fuera la palabra «catálogo» (nombre de variable interna) de la pantalla de
+  Macros.
+### Pantalla
+- **~119 px de cabecera recuperados** en Despensa y Recetario: el selector de
+  semana y el botón amarillo de «Sorpréndeme» ya no aparecen donde no sirven.
+- **Macros sale de la barra** y se abre desde la cabecera de la semana; la barra
+  queda en 4 pestañas (25 % más grandes) y «Ideas» pasa a llamarse **Recetario**.
+- **«🥣 Rutina» a la vista** en la Semana, en vez de enterrada en el menú.
+### Legibilidad
+- **El tema Noche está completo**: la bandera «es oscuro» existía desde el
+  primer día y nadie la leía. La barra inferior era blanca y, al escribir en un
+  campo, el fondo se volvía blanco con el texto claro — **no veías lo que
+  escribías**. Corregido junto con interruptores, papeleras y botones.
+- **Colores de grupo de verdad distinguibles**: de 12 tonos (que eran 4
+  familias: «lentejas» y «arroz» el mismo marrón) a **6 familias**, con fondo
+  suave y tinta oscura. Los 12 pasan ahora contraste AA (peor caso 5,3:1 frente
+  al 3,11 anterior) y el texto sube de 9,5 px a 11 px.
+- Los puntos del día plegado llevan **inicial** dentro: la información ya no
+  depende solo del color. Se muestran 3 y un «+N».
+- **El zoom vuelve a funcionar** (el doble toque sigue desactivado, que era lo
+  que molestaba) y hay **«Tamaño del texto: Normal / Grande / Muy grande»** en
+  Opciones.
+- La etiqueta del comensal deja de gritar más que el nombre del plato.
+### Nube
+- **Reintento automático al volver la conexión** y al dejar la app en segundo
+  plano. Antes, un cambio hecho sin cobertura no subía jamás si no volvías a
+  tocar la app.
+- **Cuatro estados distintos** en el botón ☁️: sin configurar (hueco),
+  pendiente (naranja), ha fallado (rojo) y al día — antes «naranja» significaba
+  a la vez «pendiente» y «lleva tres días fallando».
+- Tests: 279 asserts.
+
+## 1.11.0 — 2026-07-21 (Menú de opciones: 7 entradas → 4)
+- Las cuatro entradas de nube y copias se funden en **una sola: «🔐 Copia de
+  seguridad»**, que además dice su propio estado en el menú («al día» /
+  «cambios sin subir» / «sin configurar»), así que no hay que abrirla para mirar.
+  - Fuera **«Guardar en la nube ahora»**: era exactamente el botón ☁️ de la cabecera.
+  - **Exportar** e **importar** pasan dentro de esa pantalla, junto al token.
+- **El token caducado ya no te deja tirado.** Antes el aviso decía «Opciones →
+  Nube», que era una entrada de menú; ahora **abre la pantalla directamente**
+  con el aviso y el campo listo. El token caduca cada 90 días: esto no podía
+  depender de recordar dónde estaba la opción.
+- **Importar ahora avisa antes de sustituir**: dice cuántas semanas y platos
+  trae el archivo, pide confirmación y deja **Deshacer**. Antes reemplazaba
+  todo tu estado en cuanto elegías el fichero.
+- Mensajes de nube en cristiano: «Otro dispositivo subió cambios antes. Pulsa
+  ☁️ otra vez.» y «No se ha subido. Tus datos están en el móvil y se
+  reintentará» en vez de textos venidos de códigos HTTP.
+
+## 1.10.0 — 2026-07-21 (Temas 1 y 3 de la auditoría)
+### Nada se borra sin vuelta atrás (tema 1)
+- **Deshacer en todos los borrados** de despensa, fruta/verdura y otros: el
+  aviso trae un botón «Deshacer» durante 8 s que devuelve el elemento **a su
+  posición exacta**. Antes desaparecía en silencio y para siempre.
+- **Confirmación al borrar un plato con receta tuya escrita** — lo único que no
+  se puede reconstruir. Si no tiene receta propia, se borra con Deshacer.
+- Un aviso normal ya no puede pisar un «Deshacer» que estés a punto de pulsar.
+- **Verbos honestos**: «Quitar» significaba dos cosas opuestas con el mismo
+  rojo. Ahora es «Dejar vacío» (vaciar un hueco) y «Borrar del recetario».
+### Compra y Despensa cierran el círculo (tema 3)
+- **Botón «✅ Ya está en casa»**: al volver del súper, una hoja con todo lo que
+  tachaste, un toque por producto para decir si va al frigo o al congelador, y
+  entra en tu despensa. Los nombres se limpian solos («250 g de lentejas» →
+  «Lentejas»). Al guardar se vacían los tachados de la semana.
+  Antes no existía ningún camino de vuelta: planificar sí descontaba stock, así
+  que la despensa se desfasaba y arrastraba a «ya tienes» y «Sorpréndeme».
+- **Ingredientes escalados de verdad**: la receta es para 2 y coméis 4, o el
+  plato se repite dos días → las cantidades se multiplican. El factor se
+  muestra siempre («para 6 · ×1,5»), nunca es magia silenciosa.
+- **Los tachados se reinician al cambiar de semana**. Antes el lunes abrías con
+  la lista de la semana pasada tachada y mandabas al frutero un pedido
+  incompleto sin enterarte.
+- **«ya tienes» ya no se equivoca**: se compara el sustantivo principal del
+  producto. «Caldo de pollo» dejó de marcar «400 g de pechuga de pollo», y
+  ahora se lee qué producto concreto lo cubre («ya tienes: Caldo de pollo»).
+- **La lista combinada va por pasillos del súper** (fruta y verdura · carne y
+  pescado · frescos · despensa · congelados) en vez de por orden alfabético.
+- **Badge honesto**: contaba 3 cuando quedaban 25 ingredientes por comprar.
+- Renombrada a «🍳 Ingredientes de tus comidas y cenas».
+- Tests: 251 asserts.
+
+## 1.9.0 — 2026-07-21 (El selector de plato, rehecho — tema 2 de la auditoría)
+### Nuevo
+- **Chips «¿Para quién?»: Todos · Nosotros · cada peque.** Sustituyen al
+  interruptor «Aplicar a todos». Antes, si los tres comían lo mismo **no había
+  forma de cambiar solo el plato de un peque**: la fila abría siempre en modo «para
+  todos» y al apagar el interruptor caías en «Nosotros». Ahora eliges el
+  comensal de un toque y el composer carga **su** plato actual.
+- **Pista tras elegir el 1º**: «Elige un 2º si quieres, o pulsa Guardar ✓».
+  La diferencia entre Desayuno (un toque) y Comida/Cena (componer + guardar)
+  ya no hay que adivinarla.
+- **Pista de texto libre siempre visible**: con el buscador vacío se lee
+  «➕ ¿No está en la lista? Escríbelo y se usa tal cual».
+### Corregido
+- **El buscador ya no se destruye al teclear.** El selector se redibuja **por
+  zonas**: al escribir solo se repinta la lista, no la hoja entera. El teclado
+  del iPhone deja de parpadear, sobreviven autocorrector y dictado, y **el
+  scroll se queda donde estaba** (verificado: 250 px → 250 px).
+- **La hoja se apoya sobre el teclado** en vez de esconderse detrás: la altura
+  del teclado se expone como `--kb` desde `visualViewport` y el sheet la
+  descuenta. Antes quedaban ~250 px útiles con todo lo buscado tapado.
+- Al elegir un plato, la hoja vuelve arriba, que es donde están el composer y
+  el botón Guardar.
+
+## 1.8.0 — 2026-07-21 (Primera tanda de la auditoría UX)
+### Nuevo
+- **La app abre siempre en la semana de hoy, con solo el día de hoy desplegado.**
+  Antes se quedaba en la semana que dejaste abierta (si el domingo planificabas
+  la siguiente, el lunes aterrizabas en la equivocada). Además se corrige al
+  volver a la app tras pasar de medianoche. `GoToThisWeek()`.
+- **Tocar el nombre de un plato en la Semana abre su receta**, con sus macros y
+  el escalado ×1/×2/×4/×6. Un 📖 discreto marca qué nombres son pulsables; el
+  resto de la fila sigue abriendo el selector para cambiar el plato. En las
+  comidas de dos platos, cada parte abre la suya. El texto libre (sin receta)
+  no es pulsable.
+- **El buscador del recetario manda sobre la pestaña**: si escribes, busca en
+  los 201 platos y cada resultado muestra su categoría. Antes, buscar «salmón»
+  desde la pestaña *Primeros* daba «Nada aquí todavía» teniendo 8 platos de
+  salmón — el camino directo a crear duplicados.
+### Corregido
+- **Zonas táctiles al mínimo de Apple.** Antes había controles de 18–30 px: la
+  casilla de tachar en el súper (24), la estrella de la despensa (23), los
+  botones de borrar (30), «para todos ›» (18), «+ añadir» (19) y la propia fila
+  para añadir una comida (30). Ahora el mínimo real es 38–44 px en todo, sin
+  mover el diseño (relleno compensado con margen negativo, y área de toque
+  invisible alrededor de las casillas).
+- **Los filtros de tipo se ven enteros**: los 9 chips y las 5 pestañas del
+  recetario pasan a varias líneas en vez de esconderse en un scroll horizontal
+  que no se intuía (antes se veían 3 de 9).
+- El nombre del plato ahora pesa más que la etiqueta del comensal (15,5 px / 600).
+### Eliminado
+- **«Reiniciar con los datos de ejemplo».** Borraba todo sin confirmación y
+  estaba pegada a «Acerca de». La app ya no la necesita.
+
+## 1.7.3 — 2026-07-21 (Texto libre también sin scrollear)
+- El botón **«➕ Usar «…» tal cual»** sale ahora **justo debajo del buscador**,
+  donde acabas de escribir, en vez de al principio de la lista de platos (que
+  queda más abajo). Visible sin scrollear.
+- Si no hay coincidencias, la lista lo dice («Sin coincidencias en el
+  recetario») en vez de quedarse vacía.
+
+## 1.7.2 — 2026-07-21 (Guardar sin scrollear)
+- En el selector de plato, **Guardar / Quitar / Fuera de casa** pasan a estar
+  **encima de «Usar de tu despensa»**, justo debajo del buscador, en vez de al
+  final de toda la lista de platos. Antes había que bajar ~3000 px para
+  guardar; ahora el botón queda visible sin scrollear (y como el panel se
+  redibuja arriba al elegir un plato, lo tienes delante al terminar).
+- «Quitar» a la izquierda y «Fuera de casa» a la derecha, con separador bajo
+  el bloque de acciones.
+
+## 1.7.1 — 2026-07-21 (Fix crítico: platos que se guardaban en un miembro fantasma)
+### Corregido
+- **«No me deja meter comidas y cenas».** Si abrías el selector con
+  **«para todos ›»** y después apagabas el interruptor *Aplicar a todos*,
+  `picker.member` seguía siendo `null`: el plato se escribía en una celda
+  fantasma con clave `"null"` en vez de en un miembro real. La app parecía
+  ignorar lo que añadías y el plato «desaparecía» (afectaba también a
+  *Quitar* y *Fuera de casa*).
+  - `PickerTargets()` ya nunca devuelve un miembro inexistente.
+  - Al apagar *Aplicar a todos* se selecciona automáticamente un miembro real.
+- **Auto-reparación de datos ya corruptos**: `SanitizeSlots()` se ejecuta al
+  cargar y al adoptar la copia de la nube. Elimina las celdas fantasma y, si
+  el plato solo estaba ahí (los miembros reales vacíos), **lo recupera** para
+  todos antes de borrar la celda. Nada se pierde.
+- Tests: 186 asserts (13 nuevos que cubren el fallo y la reparación).
+
+## 1.7.0 — 2026-07-20 (Desayuno y almuerzo opcionales en la semana)
+- Nuevo interruptor junto a «Contraer todos»: **🍳 Desayuno y almuerzo /
+  Solo comida y cena**. Permite ocultar/mostrar las filas de desayuno y
+  almuerzo al planear la semana, para cuando solo quieres programar comida y
+  cena. La preferencia se recuerda (por dispositivo) y no borra nada: al
+  reactivarlo vuelven a aparecer. `VisibleSlots()` filtra los slots.
+- Tests: 173 asserts.
+
+## 1.6.1 — 2026-07-20 (Fix crítico: recetas ya no se pierden al sincronizar)
+### Corregido
+- **Pérdida de recetas entre dispositivos.** La sincronización era
+  «último-que-guarda-gana» sobre todo el estado, así que una receta añadida
+  en un dispositivo desaparecía si otro dispositivo (que nunca la tuvo)
+  guardaba después. Ahora el «recetario» (`userDishes` + borrados `hidden`)
+  se **fusiona por unión** en ambos sentidos:
+  - Al subir: se une lo que hay en la nube antes de escribir (no se pisa una
+    receta de otro dispositivo).
+  - Al bajar: si lo local es más nuevo, igualmente se recuperan las recetas
+    que solo están en la nube (antes se ignoraban); al adoptar la nube se
+    conservan las recetas que solo estaban en local.
+  - Los borrados siguen mandando (una receta borrada no «revive»).
+  El plan semanal sigue siendo último-que-guarda-gana (correcto ahí).
+- Recuperada la receta «Chicken Curry (Versión Thermomix)» desde el historial.
+- Tests: 169 asserts.
+
+## 1.6.0 — 2026-07-08 (Grupos de alimentos a la vista + más Realfooding)
+### Nuevo
+- **Etiquetas de tipo en la semana**: cada plato planificado muestra su grupo
+  (Legumbres, Verduras, Pescado, Pollo, Carne, Huevos, Pasta…) con un color,
+  para ver de un vistazo qué estás metiendo al planear. Las comidas «1º · 2º»
+  muestran ambos grupos.
+- **Resumen por día**: los días plegados enseñan puntos de color con los grupos
+  de esa comida/cena, así ves «lo que toca» sin abrir el día.
+- **+17 recetas Realfooding** (segunda tanda): cremas, ensaladas, curris de
+  garbanzos, merluza al horno, sopa de miso, crepes de avena… El recetario
+  pasa de 183 a 200 platos.
+- Tests: 162 asserts.
+
+## 1.5.0 — 2026-07-08 (Tachar comprados + recetas Realfooding)
+### Nuevo
+- **Marcar comprados** en «Para los platos de la semana»: toca un ingrediente
+  para tacharlo (✓). Funciona en las dos vistas (Por plato y Todo junto) y el
+  mismo ingrediente se tacha en todas partes. La cabecera muestra «X por
+  comprar» y hay un botón **limpiar** para desmarcar todo.
+  - El estado se guarda **por semana** (se reinicia solo al cambiar de semana)
+    y viaja con la nube.
+  - «Copiar lista» exporta solo **lo que falta** (excluye lo ya comprado).
+  - En vista Por plato, cada plato muestra su progreso «comprados/total».
+- **17 recetas Realfooding** (comida real, mínimamente procesada) añadidas al
+  recetario, con macros y receta completa, estilo «Realfooding»: bowls,
+  cremas, legumbres, pescados al horno, wok de tofu, tortitas de avena, etc.
+  El recetario pasa de 166 a 183 platos.
+- Tests: 153 asserts.
+
+## 1.4.0 — 2026-07-08 (Dos vistas de la compra)
+- «Para los platos de la semana» con conmutador **Por plato / Todo junto**:
+  - **Por plato**: cada comida/cena con sus ingredientes desplegables (como
+    en 1.3.2), con Expandir/Contraer todos.
+  - **Todo junto**: una única lista con **todos los ingredientes de la semana**,
+    sin repetir (dedupe sin tildes/mayúsculas) y ordenados por el nombre del
+    ingrediente (no por la cantidad), para recorrer el súper de un tirón. Los
+    platos sin receta se listan aparte para no perderlos.
+- La vista elegida se recuerda (por dispositivo) y «Copiar lista» respeta la
+  vista activa.
+- Tests: 141 asserts.
+
+## 1.3.2 — 2026-07-08 (La compra ahora sí muestra los ingredientes)
+### Corregido
+- «Para los platos de la semana» **rehecha**. Antes mostraba solo nombres de
+  platos y, por un bug, ocultaba casi todos: un único enlace a la despensa
+  (que «Sorpréndeme» ponía en la celda de la 1ª persona) marcaba el plato
+  entero como «cubierto» y lo escondía. Resultado: solo se veían los
+  desayunos. Ahora aparecen **todas** las comidas y cenas planificadas, cada
+  una con **sus ingredientes** sacados de la receta.
+### Nuevo comportamiento
+- Cada plato es una fila plegable (número de ingredientes a la derecha); botón
+  «▾ Ingredientes / ▴ Contraer» para abrir o cerrar todos a la vez.
+- Los ingredientes que coinciden con algo de tu **despensa** se marcan
+  «✓ ya tienes» (pista difusa, sin ocultar: si el nombre no cuadra, no se
+  marca y no pasa nada).
+- «Copiar lista» incluye ahora los ingredientes por plato (con «ya tienes»).
+- El badge de la pestaña Compra cuenta lo que compras a mano (fruta/verdura +
+  otros), no los platos.
+- Solo comidas y cenas: desayunos/almuerzos son rutina (fruta, yogur…) y
+  siguen en Fruta y verdura / Otros.
+- Tests: 132 asserts.
+
+## 1.3.1 — 2026-07-08
+- «Enviar al frutero» ahora vive justo debajo de la sección Fruta y verdura
+  (antes al final de la página); abajo queda solo «Copiar lista completa».
+
+## 1.3.0 — 2026-07-08 (Caducidades, texto libre visible, expandir todo)
+- **Caducidad en la despensa**: campo de fecha opcional al añadir; tocar un
+  alimento lo edita (nombre/cantidad/unidad/caducidad). A ≤2 días se marca
+  solo como «usar pronto» (con "caduca hoy/mañana/en 2 días"), en rojo si ya
+  caducó, y pasa al grupo urgente: primero en despensa, en el picker y en
+  «Sorpréndeme» (`DaysLeft`/`InvUrgent`).
+- **Texto libre visible en el picker**: al escribir algo que no existe
+  aparece un botón «➕ Usar “…” tal cual» (antes solo funcionaba pulsando
+  Enter, indescubrible en móvil). Vale para 1º/2º/cenas y slots simples.
+- **▾ Expandir / ▴ Contraer todos** los días de la semana con un botón sobre
+  la lista.
+- Tests: 122 asserts.
+
+## 1.2.0 — 2026-07-08 (Sync sin fricción + recetas escalables)
+### Características
+- **Raciones escalables**: en la ficha de cada plato, chips ×1/×2/×4/×6 que
+  multiplican las cantidades de los ingredientes (tiempos, temperaturas y
+  porcentajes no se tocan). Fracciones bonitas (½, ¼, 1½).
+- **Ingredientes en la compra**: cada plato «sin stock» tiene un botón 🧾 que
+  despliega sus ingredientes (las composiciones 1º·2º suman ambos platos).
+- **Rutina semanal editable**: Opciones → 🥣 Rutina semanal. 7 días ×
+  (desayuno todos / almuerzo niños / almuerzo adultos). Vacío = no rellenar;
+  «Restaurar original» vuelve a la rutina del SEED. Viaja con la nube.
+- **Auto-guardado en la nube**: ~30 s después del último cambio (con token y
+  con red), en silencio. El botón ☁️ sigue como acción manual.
+- **Punto naranja en ☁️** cuando hay cambios sin subir (`updatedAt` >
+  `lastSync`). Solo con token configurado.
+- **Deshacer al adoptar la nube**: si al abrir llega una copia más reciente,
+  el aviso lleva botón «Deshacer» (8 s) que restaura tu copia local y la
+  marca como más nueva (se re-sube sola).
+- **Los datos viven en la rama `data`**: los guardados ya no reconstruyen
+  Pages ni ensucian el historial de `main`.
+
+### Implementación
+- `RecipeParts()` parsea la propia receta (sin duplicar datos);
+  `ScaleQty()` escala cantidades respetando h/min/°C/%/días;
+  `IngredientesDe()` fusiona composiciones.
+- `state.plantilla` (opcional) con fallback a `DefaultPlantilla()` del SEED;
+  `TemplateDish()` mantiene su firma.
+- `CloudDirty()`/`UpdateCloudDot()`/`ScheduleAutoSync()`; adopción de nube
+  fija `lastSync=updatedAt` para no marcar sucio lo recién bajado.
+- Rama `data` creada desde `main` (incluye el último sync.json).
+- Tests: **114 asserts** (28 nuevos).
+
+## 1.1.1 — 2026-07-08 (Fixes móvil + auditoría)
+- **Fix scroll en sheets (móvil)**: el contenido largo (fichas de receta,
+  editor de platos) se salía por debajo de la pantalla sin poder llegar a
+  «Guardar». Causa: `#sheetContent` sin `min-height:0` dentro del flex.
+  Ahora el cuerpo scrollea dentro del sheet (88dvh máx.) y los campos se
+  centran al enfocarse (teclado iOS).
+- **Icono 📖 en Ideas**: cada plato con receta lo muestra junto al nombre —
+  invita a tocar la fila para abrir la ficha.
+- **Búsqueda sin tildes**: «atun» encuentra «Atún» (Ideas y picker).
+- **Renombrar un plato actualiza las semanas planificadas** (también dentro
+  de composiciones «1º · 2º»); antes quedaban referencias huérfanas cuyas
+  macros dejaban de contar en silencio.
+- Tests: 86 asserts (6 nuevos).
+
+## 1.1.0 — 2026-07-07 (Recetario vivo + Nube)
+### Características
+- **Recetario editable**: tocar un plato en Ideas abre su ficha (macros +
+  receta); botón Editar para cambiar nombre, categoría, macros y receta.
+  Los cambios viven en `state.userDishes` y sobreviven a cada arranque.
+- **Recetas incluidas**: las 166 fichas traen receta (ingredientes + pasos),
+  también las rutinas de desayuno/almuerzo. La receta escrita por el usuario
+  siempre gana a la incluida.
+- **Desayunos y almuerzos fijos**: cada semana nueva llega pre-rellenada con
+  la rutina semanal (avena/tostada/yogur; fruta/yogur/sándwich niños).
+  La plantilla nunca pisa celdas editadas ni «fuera de casa».
+- **Guardar en la nube (☁️)**: commit de `data/sync.json` al propio repo vía
+  GitHub API con token fine-grained (solo este repo, Contents: write).
+  Al abrir con red, gana la copia más reciente (`updatedAt`). El token vive
+  solo en `localStorage` (clave aparte) y nunca se exporta ni se sube.
+- **Macros por día y por semana**: cada macro muestra g/día (negrita) y
+  g/semana (atenuado); nota explicativa actualizada.
+- **Buscar en todas las categorías**: pestaña «Todas» en Ideas y conmutador
+  «Solo X / Todas las categorías» en el picker de Comida/Cena.
+- Botón **Hoy** rediseñado (píldora con texto; resaltado al estar en otra
+  semana) y ahora persiste el salto (faltaba `Save()`).
+- Sin zoom por doble toque (viewport + `touch-action: manipulation`).
+- Retirada la mención a Futurlife21 en «Acerca de».
+
+### Implementación
+- `SCHEMA_VERSION 2` (`menu_semana_v2`) con migración automática desde v1
+  (añade `userDishes[]`, rellena rutinas vacías; la clave v1 se conserva).
+- `RefreshCatalog()` sigue siendo el punto único de invalidación:
+  `catalog = (SEED ∪ userDishes por nombre) − hidden`.
+- `Save()` estampa `updatedAt`; `SaveQuiet()` para escrituras de arranque
+  y adopción de nube (una simple apertura nunca gana a una edición real).
+- Fix: `test/test.js` apuntaba a `planificador-comidas.html` (roto desde el
+  rename a index.html) y tenía un error de sintaxis en la línea 44 — la
+  suite nunca había compilado. Corregida y ampliada: **80 asserts** en verde
+  en UTC / Europe/Madrid / America/Los_Angeles.
+
+## 1.0.0 — 2026-07-02 (Nutri APP Launch)
+### Características
+- Planificador semanal (lun–dom), 4 slots: Desayuno, Almuerzo, Comida, Cena.
+- **Comida:** 1º + 2º (ambos opcionales, cursos distintos) — composición `" · "`.
+- **Cena:** 1–2 platos (igual compositor que comida).
+- Despensa (frigo+conge), compra (produce+dishes needing shopping).
+- Macros por persona: Nosotros (adulto ×1), los peques (×0,6).
+- Recetario: 166 platos (75 originales + 91 Futurlife21: sabores mundo, caprichos sanos, batch cooking).
+- Export/Import JSON, WhatsApp (menú + frutero), Sorpréndeme, 5 temas.
+- PWA instalable iOS, offline (Service Worker), no dependencias.
+
+### Implementación
+- Fechas: `Ymd()` (local, sin UTC round-trip) — fix para Madrid UTC+1/+2.
+- Catálogo: `RefreshCatalog()` (singular invalidation point) — actualizaciones llegan a usuarios instalados.
+- Macros: `MacroIndex` (Map memoizado, O(1)) + `MealMacros` (suma composición `" · "`).
+- User deletions: `state.hidden` (array, persisted) — sobreviven re-seed.
+- Accesibilidad: zoom habilitado, botones reales, dialog (role + aria-modal + focus trap + Esc).
+- Validación: `ValidState()` — load/import robusto.
+- SW: network-first (online = always refresh cache; offline = fallback).
+- Tests: 95 (UTC, Europe/Madrid, America/Los_Angeles).
+- CI: GitHub Actions, auto-run en 3 zonas horarias.
+
+### Breaking changes (vs. Planificador v1.1.0)
+- Store key: `menu_semana_v1` → `nutri_app_v1`.
+- App version: 1.1.0 → 1.0.0 (fresh start).
+- Name: Planificador → Nutri APP.
