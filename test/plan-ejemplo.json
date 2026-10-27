@@ -1,0 +1,221 @@
+{
+	"version": 1,
+	"nota": "Plan de EJEMPLO para los tests (personas y horarios inventados). El real vive en el repo privado de datos.",
+	"perfiles": [
+		{
+			"id": "ana",
+			"nombre": "Ana",
+			"deporte": "Running",
+			"entrenos": {
+				"1": "tarde",
+				"2": "tarde",
+				"5": "mañana"
+			},
+			"hidratoPor": {
+				"patata": "150–180 g de patata o boniato",
+				"arroz": "50 g de arroz en crudo (≈125 g cocido) o 150 g de patatas gajo",
+				"boniato": "150–180 g de boniato o 50 g de arroz en crudo",
+				"tortilla": "tortillas integrales o 150 g de patata"
+			},
+			"compra": {
+				"patata": "180 g de patata",
+				"arroz": "50 g de arroz",
+				"boniato": "180 g de boniato",
+				"tortilla": "2 tortillas integrales"
+			},
+			"domingoPatata": "150–180 g (1 patata mediana)",
+			"protComida": "200 g",
+			"protCena": "150–200 g",
+			"huevos": 2,
+			"ayuno": "Café solo, sin límite. Mínimo 3 días a la semana, ayuno hasta la comida.",
+			"pre": {
+				"mañana": "Plátano y café solo.",
+				"tarde": "La merienda de entreno te hace de pre-entreno."
+			},
+			"desayunos": [
+				"Huevos poché con tomate en tostada",
+				"Huevos revueltos sobre tostada con fruta",
+				"Porridge de avena con semillas y fruta"
+			],
+			"desayunoNota": "Solo los días que quieras desayunar (huevos x2).",
+			"meriendaEntreno": [
+				"Fruta con tostada y crema de cacahuete",
+				"Tortitas de arroz con crema de cacahuete y plátano"
+			],
+			"meriendaEntrenoNota": "El café, siempre bien.",
+			"meriendaDescanso": [
+				"Yogur proteico con canela y almendras"
+			],
+			"meriendaDescansoNota": "O infusión/café + 1 yogur proteico o un puñado de nueces."
+		},
+		{
+			"id": "bea",
+			"nombre": "Bea",
+			"deporte": "Natación",
+			"entrenos": {
+				"0": "mañana",
+				"3": "mañana"
+			},
+			"hidratoPor": {
+				"patata": "150 g de patata o boniato",
+				"arroz": "40 g de arroz en crudo (≈125 g cocido) o 150 g de patatas gajo",
+				"boniato": "150 g de boniato al vapor o 40 g de arroz en crudo",
+				"tortilla": "1 tortilla integral o 150 g de patata"
+			},
+			"compra": {
+				"patata": "150 g de patata",
+				"arroz": "40 g de arroz",
+				"boniato": "150 g de boniato",
+				"tortilla": "1 tortilla integral"
+			},
+			"domingoPatata": "100 g (1 patata pequeña)",
+			"protComida": "150 g",
+			"protCena": "150 g",
+			"huevos": 1,
+			"ayuno": null,
+			"pre": {
+				"mañana": "Fruta (p. ej. plátano) + tostada pequeña con crema de cacahuete, o 2–3 tortitas de arroz.",
+				"tarde": "Fruta (p. ej. plátano) + tostada pequeña con crema de cacahuete, o 2–3 tortitas de arroz."
+			},
+			"desayunos": [
+				"Bowl de arroz inflado con bebida vegetal, fruta y proteína",
+				"Huevos poché con tomate en tostada",
+				"Huevos revueltos sobre tostada con fruta"
+			],
+			"desayunoNota": "El bowl es el prioritario; en las opciones con huevo, 1 huevo.",
+			"meriendaEntreno": [
+				"Yogur proteico con canela y almendras"
+			],
+			"meriendaEntrenoNota": "O un puñado de frutos secos + infusión o café.",
+			"meriendaDescanso": [
+				"Yogur proteico con canela y almendras"
+			],
+			"meriendaDescansoNota": "O un puñado de frutos secos + infusión o café.",
+			"turnoNoche": {
+				"cena": "Esa noche, cena a las 21:00.",
+				"entreno": "Día de entreno: deja preparada una opción fácil de digerir para antes de ir a trabajar o al volver (p. ej. crema de verdura con patata + proteína magra).",
+				"descanso": "Día de descanso: a las 02:00, solo infusión y 1 yogur o un puñado de frutos secos si llegas con hambre, para no romper el sueño.",
+				"horaCena": "21:00",
+				"horaFin": "2:00"
+			}
+		}
+	],
+	"semana": [
+		{
+			"Comida": {
+				"rac": {
+					"ana": "200 g",
+					"bea": "150 g"
+				}
+			},
+			"Cena": {
+				"rac": {
+					"ana": "150–200 g",
+					"bea": "150 g"
+				}
+			}
+		},
+		{
+			"Comida": {
+				"rac": {
+					"ana": "200 g",
+					"bea": "150 g"
+				}
+			},
+			"Cena": {
+				"rac": {
+					"ana": "150 g",
+					"bea": "150 g"
+				}
+			}
+		},
+		{
+			"Comida": {
+				"rac": {
+					"ana": "plato normal",
+					"bea": "plato normal"
+				}
+			},
+			"Cena": {
+				"rac": {
+					"ana": "150–200 g",
+					"bea": "150 g"
+				}
+			}
+		},
+		{
+			"Comida": {
+				"rac": {
+					"ana": "200 g",
+					"bea": "150 g"
+				}
+			},
+			"Cena": {
+				"rac": {
+					"ana": "2 huevos o 150 g de pollo",
+					"bea": "1 huevo y/o pollo"
+				},
+				"racPor": {
+					"Pisto con huevo": {
+						"ana": "2 huevos",
+						"bea": "1 huevo"
+					},
+					"Pisto con pollo desmigado": {
+						"ana": "150 g de pollo",
+						"bea": "pollo (y/o 1 huevo)"
+					}
+				}
+			}
+		},
+		{
+			"Comida": {
+				"rac": {
+					"ana": "2 huevos + 1 puñado de frutos secos (o 150–170 g de pollo)",
+					"bea": "1 huevo + ½ puñado (o 150 g de pollo)"
+				},
+				"racPor": {
+					"Judías verdes salteadas con almendras, huevo duro y queso de cabra": {
+						"ana": "2 huevos + 1 puñado de frutos secos",
+						"bea": "1 huevo + ½ puñado de frutos secos"
+					},
+					"Judías verdes salteadas con pollo": {
+						"ana": "150–170 g de pollo",
+						"bea": "150 g de pollo"
+					}
+				}
+			},
+			"Cena": {
+				"rac": {
+					"ana": "150 g",
+					"bea": "150 g"
+				}
+			}
+		},
+		{
+			"Comida": {
+				"rac": {
+					"ana": "un plato normal",
+					"bea": "un plato normal"
+				}
+			},
+			"Cena": {}
+		},
+		{
+			"Comida": {
+				"rac": {
+					"ana": "pollo sin medir",
+					"bea": "pollo sin medir"
+				}
+			},
+			"Cena": {
+				"rac": {
+					"ana": "150 g",
+					"bea": {
+						"base": "120 g",
+						"noche": "150 g"
+					}
+				}
+			}
+		}
+	]
+}

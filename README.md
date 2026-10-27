@@ -1,0 +1,94 @@
+# Nutri APP
+
+Planificador semanal de comidas familiar. **Un solo HTML**, sin
+dependencias, offline, instalable como PWA en iOS.
+
+Cinco pestañas: **Semana** (planificar), **Despensa** (con caducidades),
+**Compra** (ingredientes sacados de las recetas, escalados por comensales),
+**Recetario** (236 platos con macros y receta escalable ×1–×6) y **Plan** (el plan
+del nutricionista para los adultos: entrenos, raciones, hidratos post-entreno; con
+él activado, «Sorpréndeme» rellena la semana con las opciones del plan). Los datos se
+sincronizan entre dispositivos vía GitHub.
+
+## Estructura
+
+| Archivo | Rol |
+|---|---|
+| `index.html` | La app completa (UI + lógica + datos SEED + recetario con recetas) |
+| `sw.js` | Service worker: offline tras la primera visita (opcional pero recomendado) |
+| `test/test.js` | Suite (635 asserts) que se ejecuta contra el HTML publicado, sin build |
+| `.github/workflows/ci.yml` | CI: suite bajo UTC, Europe/Madrid y America/Los_Angeles |
+| `recetario/` | Recetario-saludable.xlsx (entrada de datos original) |
+
+## Despliegue (GitHub Pages, también desde iPhone)
+
+1. Sube `index.html` y `sw.js` a la raíz del repo.
+2. Settings → Pages → Deploy from branch → `main` → `/ (root)`.
+3. Abre la URL en Safari → Compartir → **Añadir a pantalla de inicio**.
+
+El SW requiere HTTPS (Pages lo es). Si falta `sw.js`, la app funciona
+igual, solo pierde la garantía offline.
+
+## Sincronización entre dispositivos (☁️)
+
+- El botón **☁️** del encabezado sube el estado a `data/sync.json` del repo
+  **privado `nutri-app-data`** vía GitHub API (desde la v1.19.0; antes, rama
+  `data` de este repo, que es público). Además hay **auto-guardado**
+  ~30 s tras el último cambio, y un punto naranja en ☁️ marca cambios sin
+  subir. Al abrir la app con red, se adopta la copia más reciente
+  (`updatedAt`, last-write-wins) con opción **Deshacer** durante 8 s.
+- **Refresco automático** (v1.13.0): además del arranque, la app se descarga
+  la copia de la nube al volver a primer plano, al recuperar conexión y cada
+  60 s mientras está en pantalla — ya no hace falta cerrarla y abrirla. Ese
+  refresco es **de solo lectura**: solo adopta si no tienes nada sin subir, y
+  nunca sube ni re-sella la hora, de modo que un móvil desactualizado no puede
+  pisar la copia buena. Y se aplaza mientras escribes, deslizas o tienes una
+  hoja abierta, para no redibujar bajo tus dedos.
+- Los datos son privados: **sin token no se descarga ni se sube nada**; el
+  punto hueco del ☁️ lo indica y los datos se quedan en el móvil.
+- Requiere un **token fine-grained** (solo el repo `nutri-app-data`, permiso
+  *Contents: Read and write*, con caducidad), que se pega en Opciones → Nube
+  (GitHub). Un token que no ve ese repo (el viejo, de `nutri-app`) cuenta como
+  caducado: la app avisa y no sube nada.
+- El token vive solo en `localStorage` del dispositivo (clave
+  `nutri_gh_token`), separado del estado: **nunca** viaja en exportaciones
+  ni en `sync.json`.
+- Riesgo asumido: quien tenga el dispositivo desbloqueado puede leer el
+  token y leer o escribir los datos (solo `nutri-app-data`: la web no).
+  Mitigación: alcance mínimo + caducidad.
+
+## Flujo de cambios
+
+1. Edita el HTML. Si cambias comportamiento: sube `APP_VERSION`
+   (semver) y anota el cambio en el historial de versiones. `SCHEMA_VERSION` solo si rompe
+   el estado guardado (añade migración en `Load()`).
+2. `node test/test.js` en local (idealmente `TZ=Europe/Madrid`).
+3. Push → la Action debe quedar en verde (3 zonas horarias).
+4. Pages publica. Los usuarios reciben la nueva versión en la primera
+   visita con red (estrategia network-first del SW).
+
+## Datos y trazabilidad
+
+- El **recetario base** es dato de referencia embebido (SEED + RECETAS):
+  se reconstruye en cada arranque; actualizarlo = editar SEED + release.
+- Las **ediciones del usuario** (`state.userDishes`, upsert por nombre)
+  y los borrados (`state.hidden`) se aplican encima del SEED en
+  `RefreshCatalog()` — punto único de invalidación — y persisten.
+- El **estado del usuario** (semanas, despensa, compra, platos editados,
+  tema) vive en `localStorage` (`menu_semana_v2`; migración automática
+  desde `menu_semana_v1`). Backup: menú ⋯ → Exportar copia.
+- Macros: estimación por ración estándar de adulto (niños ≈ ×0,6);
+  no es medición.
+
+## Límites conocidos
+
+- Render por `innerHTML` completo: al re-renderizar se pierde
+  foco/scroll. Aceptable al tamaño actual; rediseñar si crece.
+- El SW cachea solo navegaciones (la app no tiene más assets: icono y
+  manifest van inline; las llamadas a api.github.com no se interceptan).
+- `Sorpréndeme` no propone cena de dos platos (decisión de producto).
+- La nube es last-write-wins por `updatedAt` **para el plan semanal** (uso
+  familiar, aceptado). El **recetario** se fusiona por unión, **«Otros» y
+  «Fruta y verdura»** se fusionan por id con marcas de borrado, y los **ajustes
+  del plan del nutricionista** (entrenos, noches, cole) por clave con su propia
+  hora, así que las ediciones simultáneas no se pierden ni resucitan.

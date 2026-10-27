@@ -1,0 +1,7 @@
+# Claude Code: solo se versiona el hook del proyecto; el resto es personal
+.claude/*
+!.claude/settings.json
+# Documentos: viven en docs/ del repo privado de datos, nunca aqui (27/10/2026)
+CLAUDE.md
+HANDOFF.md
+CHANGELOG.md
